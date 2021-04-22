@@ -1,4 +1,4 @@
-import { TestText } from  './TestText'
+import { TestText } from './TestText'
 import { TestButton } from './TestButton'
 
 export {

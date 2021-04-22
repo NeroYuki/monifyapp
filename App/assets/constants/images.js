@@ -1,6 +1,6 @@
-export const plant1 = require('../images/tools-icon.png');
+export const backgroundBlue = require('../images/background-blue.png');
 
 export default {
-    plant1,
+    backgroundBlue
 
 };

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { Login, TestScreen } from '../screen';
+import { Login, TestScreen, BudgetScreen } from '../screen';
 import { COLORS, icons, SIZES } from '../assets/constants/';
 import { Image, Text, View } from 'react-native';
 
@@ -93,7 +93,7 @@ const AppNavigator = () => {
       })}
     >
       <Tab.Screen name='Overview' component={TestScreen} />
-      <Tab.Screen name='Budget' component={TestScreen} />
+      <Tab.Screen name='Budget' component={BudgetScreen} />
       <Tab.Screen name='CreateInput' component={TestScreen} />
       <Tab.Screen name='Profile' component={TestScreen} />
       <Tab.Screen name='Tools' component={TestScreen} />

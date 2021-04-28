@@ -1,4 +1,4 @@
-import { TestText } from  './TestText'
+import { TestText } from './TestText'
 import { TestButton } from './TestButton'
 import { TransactionEditor } from './TransactionEditor'
 import { WalletHeader } from './WalletHeader'

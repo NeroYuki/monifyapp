@@ -19,36 +19,57 @@ export const TaiKhoanSchema = {
     thoigiantao: 'date',
     idnguoidung: 'NguoiDung',
     loaitaikhoan: {
-      tieudung: {
-        sotien: 'double?',
-      },
-      tietkiem: {
-        sotien: 'double?',
-        laisuattietkiem: 'double?',
-        laisuattruochan: 'string?',
-        idtkduocthuhuong: 'int?',
-        kyhantietkiem: 'int?', // đơn vị tháng
-        loaitietkiem: {
-          ruttatca: {type: 'bool', default: false}, //Rút tất cả gốc lẫn lãi
-          tieptuc: {type: 'bool', default: false}, //Tiếp tục tiết kiệm cả gốc lẫn lãi
-          rutlai: {type: 'bool', default: false}, //Tiếp tục nhưng rút lãi
-        },
-        ngaybatdau: 'date?',
-        ngayrutdukien: 'date?',
-        sotiencodukien: 'double?',
-      },
-      no: {
-        sotien: 'double?',
-        laisuatno: 'double?',
-        kyhanno: 'int?',
-        ngaybatdauno: 'date?',
-        ngaytradukien: 'date?',
-        sotientradukien: 'double?',
-      },
+      tieudung:'TKTieuDung',
+      tietkiem:'TKTietKiem',
+      no:'TKNo',
     },
   },
   primaryKey: 'idtaikhoan',
 };
+
+export const TKTieuDungSchema = {
+  name: 'TKTieuDung',
+  properties: {
+    idtktieudung: 'objectId',
+    sotien: 'double?',
+  },
+  primaryKey: 'idtktieudung',
+}
+
+export const TKTietKiemSchema = {
+  name: 'TKTietKiem',
+  properties: {
+    idtktietkiem: 'objectId',
+    sotien: 'double?',
+    laisuattietkiem: 'double?',
+    laisuattruochan: 'string?',
+    idtkduocthuhuong: 'int?',
+    kyhantietkiem: 'int?', // đơn vị tháng
+    loaitietkiem: {
+      ruttatca: { type: 'bool', default: false }, //Rút tất cả gốc lẫn lãi
+      tieptuc: { type: 'bool', default: false }, //Tiếp tục tiết kiệm cả gốc lẫn lãi
+      rutlai: { type: 'bool', default: false }, //Tiếp tục nhưng rút lãi
+    },
+    ngaybatdau: 'date?',
+    ngayrutdukien: 'date?',
+    sotiencodukien: 'double?',
+  },
+  primaryKey: 'idtktietkiem',
+}
+
+export const TKNoSchema = {
+  name: 'TKNo',
+  properties: {
+    idtkno: 'objectId',
+    sotien: 'double?',
+    laisuatno: 'double?',
+    kyhanno: 'int?',
+    ngaybatdauno: 'date?',
+    ngaytradukien: 'date?',
+    sotientradukien: 'double?',
+  },
+  primaryKey: 'idtkno',
+}
 
 export const GiaoDichSchema = {
   name: 'GiaoDich',
@@ -60,15 +81,27 @@ export const GiaoDichSchema = {
     idtaikhoannhan: 'TaiKhoan?',
     sotientieudung: 'double',
     sotienthunhap: 'double',
-
-    giaodichtheochuky: {
-      loaihangmucgd: 'HangMucTaiChinh',
-      chukygiaodichtheongay: 'int',
-      chukygiaodichtheothang: 'int',
-    },
+    loaihangmucgd: 'HangMucGiaoDich',
   },
   primaryKey: 'idgiaodich',
 };
+
+export const GiaoDichTheoCKSchema={
+  name:'GiaoDichTheoCK',
+  properties:{
+    idgiaodichtheochuky:'objectId',
+    idnguoidung: 'NguoiDung',
+    thoigian: 'date',
+    idtaikhoanchuyen: 'TaiKhoan?',
+    idtaikhoannhan: 'TaiKhoan?',
+    sotientieudung: 'double?',
+    sotienthunhap: 'double?',
+    loaihangmucgd: 'HangMucGiaoDich',
+    chukygiaodichtheongay: 'int',
+    chukygiaodichtheothang: 'int',
+  },
+  primaryKey:'idgiaodichtheochuky',
+}
 
 export const MucTieuCaNhanSchema = {
   name: 'MucTieuCaNhan',
@@ -77,33 +110,30 @@ export const MucTieuCaNhanSchema = {
     idnguoidung: 'NguoiDung',
     thoigiantao: 'date',
     loaimuctieu: {
-      tietkiemdenmuc: {type: 'bool', default: false},
-      tieudungquamuc: {type: 'bool', default: false},
-      sodutoithieu: {type: 'bool', default: false},
+      tietkiemdenmuc: { type: 'bool', default: false },
+      tieudungquamuc: { type: 'bool', default: false },
+      sodutoithieu: { type: 'bool', default: false },
     },
     sotienmuctieu: 'double',
     ngaybatdau: 'date',
     ngayketthuc: 'date',
-    phantrammuctieuhoanthanh: 'double',
-    songayconlai: 'date',
-    khanangmuctieuhoanthanh: 'double',
   },
   primaryKey: 'idmuctieu',
 };
-export const HangMucTaiChinhSchema = {
-  name: 'HangMucTaiChinh',
+export const HangMucGiaoDichSchema = {
+  name: 'HangMucGiaoDich',
   properties: {
-    idhangmuctaichinh: 'objectId',
+    idhangmucgiaodich: 'objectId',
     idnguoidung: 'NguoiDung',
     thoigiantao: 'date',
     tenhangmuc: 'string',
     loaihangmuc: {
-      chitieu: {type: 'bool', default: false},
-      thunhap: {type: 'bool', default: false},
+      chitieu: { type: 'bool', default: false },
+      thunhap: { type: 'bool', default: false },
     },
     iconhangmuc: 'string',
   },
-  primaryKey: 'idmuctieu',
+  primaryKey: 'idhangmucgiaodich',
 };
 
 export const CaiDatSchema = {

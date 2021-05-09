@@ -1,4 +1,4 @@
-import Realm from 'realm';
+import Realm, { schemaVersion } from 'realm';
 
 export const NguoiDungSchema = {
   name: 'NguoiDung',
@@ -149,3 +149,9 @@ export const CaiDatSchema = {
   },
   primaryKey: 'idcaidat',
 };
+
+export const monifydata = {
+  path:'monifydata',
+  schema:[CaiDatSchema,GiaoDichSchema,HangMucGiaoDichSchema,MucTieuCaNhanSchema,GiaoDichTheoCKSchema,TKNoSchema,TKTietKiemSchema,TKTieuDungSchema,TaiKhoanSchema,NguoiDungSchema],
+  schemaVersion:0,
+}

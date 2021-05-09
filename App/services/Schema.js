@@ -2,6 +2,7 @@ import Realm, { schemaVersion } from 'realm';
 
 export const NguoiDungSchema = {
   name: 'NguoiDung',
+  embeded: true,
   properties: {
     idnguoidung: 'objectId',
     pass: 'string',
@@ -11,6 +12,7 @@ export const NguoiDungSchema = {
 
 export const TaiKhoanSchema = {
   name: 'TaiKhoan',
+  embeded: true,
   properties: {
     idtaikhoan: 'objectId',
     tentaikhoan: 'string',
@@ -18,17 +20,23 @@ export const TaiKhoanSchema = {
     bieutuong: 'string',
     thoigiantao: 'date',
     idnguoidung: 'NguoiDung',
-    loaitaikhoan: {
-      tieudung:'TKTieuDung',
-      tietkiem:'TKTietKiem',
-      no:'TKNo',
-    },
+    loaitaikhoan: 'LoaiTaiKhoanConfig',
   },
   primaryKey: 'idtaikhoan',
 };
+export const LoaiTaiKhoanConfigSchema = {
+  name: 'LoaiTaiKhoanConfig',
+  embeded: true,
+  properties:{
+    tieudung:'TKTieuDung',
+    tietkiem:'TKTietKiem',
+    no:'TKNo',
+  }
+}
 
 export const TKTieuDungSchema = {
   name: 'TKTieuDung',
+  embeded: true,
   properties: {
     idtktieudung: 'objectId',
     sotien: 'double?',
@@ -38,6 +46,7 @@ export const TKTieuDungSchema = {
 
 export const TKTietKiemSchema = {
   name: 'TKTietKiem',
+  embeded: true,
   properties: {
     idtktietkiem: 'objectId',
     sotien: 'double?',
@@ -45,11 +54,7 @@ export const TKTietKiemSchema = {
     laisuattruochan: 'string?',
     idtkduocthuhuong: 'int?',
     kyhantietkiem: 'int?', // đơn vị tháng
-    loaitietkiem: {
-      ruttatca: { type: 'bool', default: false }, //Rút tất cả gốc lẫn lãi
-      tieptuc: { type: 'bool', default: false }, //Tiếp tục tiết kiệm cả gốc lẫn lãi
-      rutlai: { type: 'bool', default: false }, //Tiếp tục nhưng rút lãi
-    },
+    loaitietkiem: 'LoaiTietKiemConfig',
     ngaybatdau: 'date?',
     ngayrutdukien: 'date?',
     sotiencodukien: 'double?',
@@ -57,8 +62,19 @@ export const TKTietKiemSchema = {
   primaryKey: 'idtktietkiem',
 }
 
+export const LoaiTietKiemConfigSchema = {
+  name: "LoaiTietKiemConfig",
+  embeded: true,
+  properties: {
+    ruttatca: { type: 'bool', default: false }, //Rút tất cả gốc lẫn lãi
+    tieptuc: { type: 'bool', default: false }, //Tiếp tục tiết kiệm cả gốc lẫn lãi
+    rutlai: { type: 'bool', default: false }, //Tiếp tục nhưng rút lãi
+  }
+}
+
 export const TKNoSchema = {
   name: 'TKNo',
+  embeded: true,
   properties: {
     idtkno: 'objectId',
     sotien: 'double?',
@@ -73,6 +89,7 @@ export const TKNoSchema = {
 
 export const GiaoDichSchema = {
   name: 'GiaoDich',
+  embeded: true,
   properties: {
     idgiaodich: 'objectId',
     idnguoidung: 'NguoiDung',
@@ -88,6 +105,7 @@ export const GiaoDichSchema = {
 
 export const GiaoDichTheoCKSchema={
   name:'GiaoDichTheoCK',
+  embeded: true,
   properties:{
     idgiaodichtheochuky:'objectId',
     idnguoidung: 'NguoiDung',
@@ -105,39 +123,51 @@ export const GiaoDichTheoCKSchema={
 
 export const MucTieuCaNhanSchema = {
   name: 'MucTieuCaNhan',
+  embeded: true,
   properties: {
     idmuctieu: 'objectId',
     idnguoidung: 'NguoiDung',
     thoigiantao: 'date',
-    loaimuctieu: {
-      tietkiemdenmuc: { type: 'bool', default: false },
-      tieudungquamuc: { type: 'bool', default: false },
-      sodutoithieu: { type: 'bool', default: false },
-    },
+    loaimuctieu:  'LoaiMucTieuConfig',
     sotienmuctieu: 'double',
     ngaybatdau: 'date',
     ngayketthuc: 'date',
   },
   primaryKey: 'idmuctieu',
 };
+export const LoaiMucTieuConfigSchema = {
+  name: 'LoaiMucTieuConfig',
+  embeded: true,
+  properties: {
+    tietkiemdenmuc: { type: 'bool', default: false },
+    tieudungquamuc: { type: 'bool', default: false },
+    sodutoithieu: { type: 'bool', default: false },
+  }
+}
 export const HangMucGiaoDichSchema = {
   name: 'HangMucGiaoDich',
+  embeded: true,
   properties: {
     idhangmucgiaodich: 'objectId',
     idnguoidung: 'NguoiDung',
     thoigiantao: 'date',
     tenhangmuc: 'string',
-    loaihangmuc: {
-      chitieu: { type: 'bool', default: false },
-      thunhap: { type: 'bool', default: false },
-    },
+    loaihangmuc: 'LoaiHangMucConfig',
     iconhangmuc: 'string',
   },
   primaryKey: 'idhangmucgiaodich',
 };
-
+export const LoaiHangMucConfigSchema = {
+  name : 'LoaiHangMucConfig',
+  embeded: true,
+  properties:{
+    chitieu: { type: 'bool', default: false },
+    thunhap: { type: 'bool', default: false },
+  }
+}
 export const CaiDatSchema = {
   name: 'CaiDat',
+  embeded: true,
   properties: {
     idcaidat: 'objectId',
     idnguoidung: 'string',
@@ -151,7 +181,21 @@ export const CaiDatSchema = {
 };
 
 export const monifydata = {
-  path:'monifydata',
-  schema:[CaiDatSchema,GiaoDichSchema,HangMucGiaoDichSchema,MucTieuCaNhanSchema,GiaoDichTheoCKSchema,TKNoSchema,TKTietKiemSchema,TKTieuDungSchema,TaiKhoanSchema,NguoiDungSchema],
+  path:'monifydata.realm',
+  schema:[
+    CaiDatSchema,
+    GiaoDichSchema,
+    HangMucGiaoDichSchema,
+    MucTieuCaNhanSchema,
+    GiaoDichTheoCKSchema,
+    TKNoSchema,
+    TKTietKiemSchema,
+    TKTieuDungSchema,
+    TaiKhoanSchema,
+    NguoiDungSchema,
+    LoaiTaiKhoanConfigSchema,
+    LoaiTietKiemConfigSchema,
+    LoaiMucTieuConfigSchema,
+    LoaiHangMucConfigSchema],
   schemaVersion:0,
 }

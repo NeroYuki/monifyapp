@@ -6,7 +6,7 @@
     "android": "react-native run-android",
     "ios": "react-native run-ios",
     "start": "react-native start",
-    "test": "jest",
+    "test": "jest --testTimeout=30000",
     "lint": "eslint ."
   },
   "dependencies": {
@@ -42,11 +42,13 @@
   },
   "jest": {
     "preset": "react-native",
+    "timers": "fake",
+    "testEnvironment": "jsdom",
     "transform": {
       "^.+\\.js?$": "babel-jest"
     },
     "transformIgnorePatterns": [
-      "!/node_modules/react-native-iphone-x-helper"
+      "/node_modules/(!(jest-)react-native|react-clone-referenced-element|@react-native-community|react-navigation-header-buttons|react-navigation-stack|@react-navigation)"
     ]
   }
 }

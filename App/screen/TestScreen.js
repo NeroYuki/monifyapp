@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { View } from "react-native";
 import { Button, Modal } from "react-native-paper";
 
-import { TestText, WalletHeader, TransactionEditor } from '../components'
+import { TestText, WalletHeader, TransactionEditor, TabSwitcher } from '../components'
 import GlobalStyle from '../styles/GlobalStyle'
 
 export class TestScreen extends Component {
@@ -36,6 +36,7 @@ export class TestScreen extends Component {
                 </View>
                 <View style={{flex: 1}}>
                     <TestText></TestText>
+                    <TabSwitcher></TabSwitcher>
                     <Button onPress={() => {this.setState({visible: true})}}>Click me</Button>
                     <Modal visible={this.state.visible} onDismiss={() => {this.setState({visible: false})}} contentContainerStyle={containerStyle} style={style}>
                         <TransactionEditor></TransactionEditor>

@@ -1,12 +1,14 @@
 import React, { Component } from "react";
+import { stylesheet } from './style'
 import { Text, View } from "react-native";
 import { Button, Divider } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { stylesheet } from './style'
+
 
 export class TransactionEditor extends Component {
     render() {
         const style = stylesheet
+        //console.log(Icon)
         return (
             <View style={style.container}>
                 <View style={style.header}>

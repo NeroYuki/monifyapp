@@ -32,7 +32,8 @@ export class WalletHeader extends Component {
                 </View>
                 <View style={style.button_group}>
                     <Button icon="format-list-bulleted" mode="contained" contentStyle={style.button_content} style={style.button} labelStyle={style.button_label}>List</Button>
-                    <Button icon="chart-donut" mode="contained" contentStyle={style.button_content} style={style.button} labelStyle={style.button_label}>Categories</Button>
+                    <Button icon="chart-donut" mode="contained" contentStyle={style.button_content} style={style.button} labelStyle={style.button_label} 
+                        onPress={(this.props.onCategoriesPress)? this.props.onCategoriesPress : () => {console.log('default handler')}}>Categories</Button>
                 </View>
             </Surface>
         )

@@ -11,7 +11,7 @@ export class TabSwitcher extends Component {
             <View style={style.button}>
                 <TouchableOpacity><Icon name="chevron-left" size={25}></Icon></TouchableOpacity>
                 <TouchableOpacity style={style.button_content}>
-                <Text style={style.button_label}>May 2021</Text>
+                <Text style={style.button_label}>{this.props.text}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity><Icon name="chevron-right" size={25}></Icon></TouchableOpacity>
             </View>

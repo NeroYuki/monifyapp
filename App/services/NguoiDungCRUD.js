@@ -4,7 +4,7 @@ import {NguoiDungSchema,monifydata} from './Schema'
 
 
 export const insertNewNguoiDung = newNguoiDung => new Promise((resolve,reject)=> {
-    console.log(JSON.stringify(monifydata))
+    //console.log(JSON.stringify(monifydata))
     Realm.open(monifydata).then(realm => {
         realm.write(()=> {
             realm.create(NguoiDungSchema.name,newNguoiDung);

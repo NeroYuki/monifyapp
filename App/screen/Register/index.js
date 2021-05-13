@@ -3,30 +3,35 @@ import { Text, View } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { stylesheet } from './style'
 
-export class Login extends React.Component {
+export class Register extends React.Component {
     constructor(props) {
         super(props)
         this.state = {
             txtEmail: "",
             txtPassword: "",
+            txtUsername: "",
         }
     }
 
     render() {
         const style = stylesheet
-
+        
         return (
             <View style={style.container}>
                 <View style={style.header}>
                     <Text style={style.header_text_big}>
-                        Welcome,
+                        Create account
                     </Text>
                     <Text style={style.header_text}>
-                        Sign in to continue {"\n"}
-                        Get your money under control
+                        Sign up to get started
                     </Text>
                 </View>
-                    <View style={style.input_field}>
+                <View style={style.input_field}>
+                    <TextInput
+                        label="Username"
+                        value={this.state.txtUsername}
+                        onChangeText={t => this.setState({txtUsername: t})}
+                    />
                     <TextInput
                         label="Email"
                         value={this.state.txtEmail}
@@ -37,16 +42,13 @@ export class Login extends React.Component {
                         value={this.state.txtPassword}
                         onChangeText={t => this.setState({txtPassword: t})}
                     />
-                    <Text style={style.input_field_forgot_password}>
-                        Forgot password?
-                    </Text>
                 </View>
                 <View style={style.footer}>
                     <Button mode="contained" contentStyle={style.footer_button_content} style={style.footer_button}>
-                        Sign In
+                        Create account
                     </Button>
                     <Text style={style.footer_text}>
-                        Don't have an account? <Text>Create an account</Text>
+                        Already have an account? <Text>Sign in</Text>
                     </Text>
                 </View>
             </View>

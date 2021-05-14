@@ -2,7 +2,7 @@ import React from 'react';
 import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS, icons, images, SIZES } from '../../assets/constants';
 import { FONTS } from '../../assets/constants/theme';
-import { BudgetHeader } from '../../components';
+import { BudgetHeader, TabSwitcher } from '../../components';
 import { Greet } from '../../components/Budget/Greet';
 import { Messages } from '../../components/Budget/Messages';
 
@@ -27,7 +27,9 @@ export class BudgetScreen extends React.Component {
 
                 {/* Detail of Budget */}
                 <View style={styles.detailBudget}>
-                    <Greet name='This' />
+                    <TabSwitcher text="MARCH 2021"></TabSwitcher>
+
+                    <Greet name='this' />
                     <Greet name='is' />
                     <Greet name='Props' />
 

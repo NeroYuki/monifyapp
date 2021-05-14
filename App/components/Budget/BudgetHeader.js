@@ -19,7 +19,7 @@ export class BudgetHeader extends Component {
 
         return (
             <View style={styles.header}>
-                <View style={{ flexDirection: 'row' }}>
+                <View style={{ flexDirection: 'row', flex: 1 }}>
                     <TouchableOpacity style={{ width: 25, height: 25, alignItems: 'center', justifyContent: 'center' }}
                         onPress={() => console.log("Cài đặt Budget")}
                     >
@@ -35,6 +35,7 @@ export class BudgetHeader extends Component {
                     </TouchableOpacity>
                 </View>
 
+                {/* Donut Chart */}
                 <View style={{ height: 272, flex: 1, flexDirection: 'row' }}>
                     <View style={{ flex: 1 }}></View>
                     <View style={{ top: 16, width: this.radius * 2, height: this.radius * 2 }}>
@@ -66,8 +67,22 @@ export class BudgetHeader extends Component {
                                 />
                             </G>
                         </Svg>
+                        <View style={[
+                            StyleSheet.absoluteFillObject,
+                            { justifyContent: 'center', alignItems: 'center', flex: 1 }
+                        ]}>
+                            <Image
+                                source={icons.setting}
+                                resizeMode='contain'
+                            />
+                        </View>
                     </View>
                     <View style={{ flex: 1 }}></View>
+                </View>
+
+                <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+                    <Text>5.000.000 VND</Text>
+                    <Text style={{ top: 16 }}>LEFT TO SPEND</Text>
                 </View>
 
             </View >

@@ -3,6 +3,7 @@ const { width, height } = Dimensions.get('window');
 
 export const COLORS = {
     pink: '#FF83A0',
+    lightPink: 'rgba(255, 131, 160, 0.7)',
     blue: '#00A9EA',
 
     black: '#000000',

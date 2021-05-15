@@ -4,14 +4,14 @@ import { COLORS } from '../../assets/constants'
 export const stylesheet = StyleSheet.create({
     button: {
         borderRadius: 70,
-        margin: 10,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'white',
         flexDirection: 'row',
         justifyContent: 'space-between',
-        paddingLeft: 20,
-        paddingRight: 20,
+        marginLeft: 20,
+        marginTop: 20,
+        marginRight: 20,
 
         // Shadow 
         shadowColor: "#000",

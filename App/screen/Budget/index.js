@@ -41,14 +41,20 @@ export class BudgetScreen extends React.Component {
                         <View style={styles.detailBudget}>
                             <TabSwitcher text="MARCH 2021"></TabSwitcher>
 
-                            <IncomeReportView current={this.state.income.current} total={this.state.income.total} />
+                            <IncomeReportView
+                                current={this.state.income.current}
+                                total={this.state.income.total}
+                            />
 
                             <ExpenseReportView />
 
                         </View>
 
                         {/* Render Header */}
-                        <BudgetHeader current={this.state.income.current} total={this.state.income.total} />
+                        <BudgetHeader
+                            current={this.state.income.current}
+                            total={this.state.income.total}
+                        />
                     </ScrollView>
 
                 </View >

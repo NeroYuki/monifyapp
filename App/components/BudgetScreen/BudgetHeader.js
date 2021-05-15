@@ -5,7 +5,7 @@ import Svg, { G, Circle, Line, } from 'react-native-svg';
 
 export class BudgetHeader extends Component {
 
-    percentage = 75
+    percentage = 100
     radius = 120
     strokeWidth = 20
     duration = 500
@@ -36,7 +36,7 @@ export class BudgetHeader extends Component {
                 </View>
 
                 {/* Donut Chart */}
-                <View style={{ height: 272, flex: 1, flexDirection: 'row' }}>
+                <View style={{ height: 270, flex: 1, flexDirection: 'row' }}>
                     <View style={{ flex: 1 }}></View>
                     <View style={{ top: 16, width: this.radius * 2, height: this.radius * 2 }}>
                         <Svg

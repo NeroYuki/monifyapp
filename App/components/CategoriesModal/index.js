@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Modal, Text, TouchableHighlight, TouchableOpacity } from "react-native";
+import { View, Modal, Text, TouchableHighlight, TouchableOpacity, SafeAreaView } from "react-native";
 import { Divider, Avatar, Modal as PModal } from "react-native-paper"
 import { stylesheet } from './style'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -21,6 +21,7 @@ export class CategoriesModal extends Component {
     }
 
     onAddCategoryPress() {
+        console.log('Add Category')
         this.setState({
             isAddCategoryPromptVisible: true,
         })
@@ -65,32 +66,35 @@ export class CategoriesModal extends Component {
                 onRequestClose={this.props.onRequestClose}
 
             >
-                <View style={style.modal_view}>
-                    <View style={style.header}>
-                        <TouchableOpacity onPress={this.props.onRequestClose}>
-                            <Icon name="close" size={25} color="#fff"></Icon>
-                        </TouchableOpacity>
-                        <Text style={[style.modal_text, style.modal_text_header]}>CATEGORIES</Text>
-                        <Icon name="square-edit-outline" size={25} color="#fff"></Icon>
-                        <TouchableHighlight onPress={this.onAddCategoryPress}>
-                            <Icon name="plus" size={25} color="#fff"></Icon>
-                        </TouchableHighlight>
-                    </View>
-                    <View style={style.tab_switcher}>
-                        <View style={style.tab_switcher_frame}>
-                            <TouchableHighlight style={expense_type_style} onPress={() => { this.setState({ typeSelection: 1 }) }}><Text style={expense_text_style}>Expense</Text></TouchableHighlight>
-                            <TouchableHighlight style={income_type_style} onPress={() => { this.setState({ typeSelection: 2 }) }}><Text style={income_text_style}>Income</Text></TouchableHighlight>
+                <SafeAreaView style={{ flex: 1 }}>
+                    <View style={style.modal_view}>
+                        <View style={style.header}>
+                            <TouchableOpacity onPress={this.props.onRequestClose}>
+                                <Icon name="close" size={25} color="#fff"></Icon>
+                            </TouchableOpacity>
+                            <Text style={[style.modal_text, style.modal_text_header]}>CATEGORIES</Text>
+                            <Icon name="square-edit-outline" size={25} color="#fff"></Icon>
+                            <TouchableHighlight onPress={this.onAddCategoryPress}>
+                                <Icon name="plus" size={25} color="#fff"></Icon>
+                            </TouchableHighlight>
                         </View>
+                        <View style={style.tab_switcher}>
+                            <View style={style.tab_switcher_frame}>
+                                <TouchableHighlight style={expense_type_style} onPress={() => { this.setState({ typeSelection: 1 }) }}><Text style={expense_text_style}>Expense</Text></TouchableHighlight>
+                                <TouchableHighlight style={income_type_style} onPress={() => { this.setState({ typeSelection: 2 }) }}><Text style={income_text_style}>Income</Text></TouchableHighlight>
+                            </View>
+                        </View>
+                        <Divider style={{ backgroundColor: 'white', marginTop: 10 }}></Divider>
+                        <View style={style.content_list}>
+                            {content_list}
+                        </View>
+                        <PModal visible={this.state.isAddCategoryPromptVisible} onDismiss={() => { this.setState({ isAddCategoryPromptVisible: false }) }} onRequestClose={() => { this.setState({ isAddCategoryPromptVisible: false }) }}
+                            contentContainerStyle={style.transaction_container} style={style.transaction}>
+                            <CategoryEditor></CategoryEditor>
+                        </PModal>
                     </View>
-                    <Divider style={{ backgroundColor: 'white', marginTop: 10 }}></Divider>
-                    <View style={style.content_list}>
-                        {content_list}
-                    </View>
-                    <PModal visible={this.state.isAddCategoryPromptVisible} onDismiss={() => { this.setState({ isAddCategoryPromptVisible: false }) }} onRequestClose={() => { this.setState({ isAddCategoryPromptVisible: false }) }}
-                        contentContainerStyle={style.transaction_container} style={style.transaction}>
-                        <CategoryEditor></CategoryEditor>
-                    </PModal>
-                </View>
+                </SafeAreaView>
+
             </Modal>
         )
     }

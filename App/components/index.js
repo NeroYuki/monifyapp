@@ -7,6 +7,10 @@ import { CategoriesModal } from './CategoriesModal'
 import { TimespanDefaultFragment } from './TimespanPicker/TimespanDefaultFragment'
 import { CustomTimespanFragment } from './TimespanPicker/CustomTimespanFragment'
 import { TimespanPicker } from './TimespanPicker' 
+import { GenericIconList } from './GenericIconList'
+import { DescriptiveButton } from './DescriptiveButton'
+import { CreateModal } from './CreateModal'
+import { CategoryEditor } from './CategoryEditor'
 
 export {
     TabSwitcher,
@@ -18,4 +22,8 @@ export {
     TimespanDefaultFragment,
     CustomTimespanFragment,
     TimespanPicker,
+    GenericIconList,
+    DescriptiveButton,
+    CreateModal,
+    CategoryEditor,
 }

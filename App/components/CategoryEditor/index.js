@@ -15,7 +15,7 @@ export class CategoryEditor extends Component {
                     <Text style={style.header_text}>NEW CATEGORY</Text>
                 </View>
                 <View style={style.icon_field}>
-                    <Icon name="question_mark" size={50}></Icon>
+                    <Icon name="wallet" size={50}></Icon>
                     <View>
                         <Text style={{marginBottom: 10}}>question_mark</Text>
                         <Button mode="contained">

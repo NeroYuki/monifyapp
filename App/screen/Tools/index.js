@@ -12,9 +12,9 @@ export class Tools extends Component {
                     <Text style={style.header_text}>TOOLS</Text>
                 </View>
                 <View style={style.button_grid}>
-                    <DescriptiveButton icon="wallet-outline" title="Categories" desc="Create, edit, or even remove any of your categories" style={style.button_entry} height={220} width={180}></DescriptiveButton>
-                    <DescriptiveButton icon="eye-outline" title="Appearance" desc="Create, edit, or even remove any of your categories" style={style.button_entry} height={220} width={180}></DescriptiveButton>
-                    <DescriptiveButton icon="cloud-sync-outline" title="Sync Data" desc="Create, edit, or even remove any of your categories" style={style.button_entry} height={220} width={180}></DescriptiveButton>
+                    <DescriptiveButton icon="wallet-outline" title="Categories" desc="Create, edit, or even remove any of your categories" style={style.button_entry} ></DescriptiveButton>
+                    <DescriptiveButton icon="eye-outline" title="Appearance" desc="Create, edit, or even remove any of your categories" style={style.button_entry} ></DescriptiveButton>
+                    <DescriptiveButton icon="cloud-sync-outline" title="Sync Data" desc="Create, edit, or even remove any of your categories" style={style.button_entry} ></DescriptiveButton>
                 </View>
             </View>
         )

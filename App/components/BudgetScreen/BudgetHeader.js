@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS, icons, SIZES, FONTS } from '../../assets/constants';
-import Svg, { G, Circle, } from 'react-native-svg';
+import Svg, { G, Circle, Line, } from 'react-native-svg';
 
 export class BudgetHeader extends Component {
 

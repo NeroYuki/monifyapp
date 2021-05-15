@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         height: 200,
-        top: 40,
+        marginTop: 20,
         backgroundColor: COLORS.white
     },
     constraint: {

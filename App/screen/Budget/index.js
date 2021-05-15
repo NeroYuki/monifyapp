@@ -11,6 +11,14 @@ import { Messages } from '../../components/BudgetScreen/Messages';
 export class BudgetScreen extends React.Component {
     constructor(props) {
         super(props)
+
+        this.state = {
+            income: {
+                current: '320.000',
+                total: '600.000'
+            }
+        }
+
     }
     render() {
         return (
@@ -33,7 +41,7 @@ export class BudgetScreen extends React.Component {
                         <View style={styles.detailBudget}>
                             <TabSwitcher text="MARCH 2021"></TabSwitcher>
 
-                            <IncomeReportView color='white' />
+                            <IncomeReportView current={this.state.income.current} total={this.state.income.total} />
 
                             <ExpenseReportView />
 

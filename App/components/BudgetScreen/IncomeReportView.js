@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 import { COLORS } from '../../assets/constants';
+import { ProgressBar } from 'react-native-paper'
 
 export class IncomeReportView extends Component {
     render() {
@@ -11,11 +12,11 @@ export class IncomeReportView extends Component {
                 <View style={styles.constraint}>
                     <Text style={styles.title}> Income </Text>
 
-                    <Text style={styles.reportText}> 450.000 added of 500.000 </Text>
+                    <Text style={styles.reportText}> {this.props.current} added of {this.props.total} </Text>
                 </View>
 
                 <View style={styles.constraint} >
-
+                    <View style={{ flex: 1, backgroundColor: 'red' }}></View>
                 </View>
             </View>
         )
@@ -25,8 +26,8 @@ export class IncomeReportView extends Component {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        height: 77,
-        top: 20,
+        height: 100,
+        marginTop: 20,
         backgroundColor: COLORS.white
     },
     constraint: {

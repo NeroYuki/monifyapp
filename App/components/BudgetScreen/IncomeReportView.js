@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet } from 'react-native';
+import { Text, View, StyleSheet, Dimensions } from 'react-native';
 import { COLORS } from '../../assets/constants';
-import { ProgressBar } from 'react-native-paper'
+import * as Progress from 'react-native-progress';
+
 
 export class IncomeReportView extends Component {
     render() {
@@ -16,7 +17,15 @@ export class IncomeReportView extends Component {
                 </View>
 
                 <View style={styles.constraint} >
-                    <View style={{ flex: 1, backgroundColor: 'red' }}></View>
+                    <View style={{ flex: 1 }}>
+                        <Progress.Bar
+                            style={styles.progressBar}
+                            progress={this.props.current / this.props.total}
+                            color={COLORS.blueProgress}
+                            unfilledColor={COLORS.ligtBlueProgress}
+                            borderWidth={0}
+                        />
+                    </View>
                 </View>
             </View>
         )
@@ -46,5 +55,10 @@ const styles = StyleSheet.create({
         top: 16,
         fontSize: 17,
         fontWeight: 'normal'
+    },
+    progressBar: {
+        width: '100%',
+        marginTop: 16,
+        justifyContent: 'center',
     }
 })

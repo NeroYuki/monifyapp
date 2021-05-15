@@ -48,7 +48,7 @@ export class BudgetScreen extends React.Component {
                         </View>
 
                         {/* Render Header */}
-                        <BudgetHeader />
+                        <BudgetHeader current={this.state.income.current} total={this.state.income.total} />
                     </ScrollView>
 
                 </View >

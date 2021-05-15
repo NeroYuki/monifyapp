@@ -62,7 +62,9 @@ export class BudgetHeader extends Component {
                                     r={this.radius}
                                     fill='transparent'
                                     strokeDasharray={cirleCircumFerence}
-                                    strokeDashoffset={cirleCircumFerence / 2}
+
+                                    // Set Progress data
+                                    strokeDashoffset={cirleCircumFerence * (this.props.current / this.props.total)}
                                     strokeLinecap='round'
                                 />
                             </G>
@@ -85,7 +87,7 @@ export class BudgetHeader extends Component {
                         fontSize: 24,
                         color: COLORS.white,
                         fontWeight: 'bold'
-                    }}>5.000.000 VND</Text>
+                    }}> {this.props.total} VND</Text>
                     <Text style={{
                         top: 8,
                         fontSize: 17,

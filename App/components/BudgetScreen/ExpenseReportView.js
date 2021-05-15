@@ -119,6 +119,8 @@ export class ExpenseReportView extends Component {
                 </View>
                 <View style={styles.constraint}>
                     <FlatList
+                        scrollEnabled={false}
+                        nestedScrollEnabled={true}
                         data={this.formatRow(this.state.data, this.state.numColumns)}
                         style={styles.flatListStyle}
                         renderItem={this.renderItem}

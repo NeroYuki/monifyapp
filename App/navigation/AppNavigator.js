@@ -5,6 +5,7 @@ import { Login, TestScreen, BudgetScreen } from '../screen';
 import { COLORS, icons, SIZES } from '../assets/constants/';
 import { Image, Text, View } from 'react-native';
 import { ProfileScreen } from '../screen/Profile';
+import { BudgetSetting } from '../screen/BudgetSetting';
 
 const Tab = createBottomTabNavigator();
 
@@ -87,6 +88,7 @@ const AppNavigator = () => {
                     }}
                   />
                   <Text style={{ color: tintColor, paddingTop: 5 }}> Tools </Text>
+                  <Text> </Text>
                 </View>
               );
           }
@@ -95,7 +97,7 @@ const AppNavigator = () => {
     >
       <Tab.Screen name='Overview' component={TestScreen} />
       <Tab.Screen name='Budget' component={BudgetScreen} />
-      <Tab.Screen name='CreateInput' component={TestScreen} />
+      <Tab.Screen name='CreateInput' component={BudgetSetting} />
       <Tab.Screen name='Profile' component={ProfileScreen} />
       <Tab.Screen name='Tools' component={TestScreen} />
     </Tab.Navigator>

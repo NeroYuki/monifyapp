@@ -5,6 +5,7 @@ export const COLORS = {
     pink: '#FF83A0',
     lightPink: 'rgba(255, 131, 160, 0.7)',
     blue: '#00A9EA',
+    blueText: '#007AFF',
 
     black: '#000000',
     white: '#FFFFFF',

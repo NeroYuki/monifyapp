@@ -1,11 +1,12 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { Login, TestScreen, BudgetScreen } from '../screen';
+import { Login, TestScreen, BudgetScreen, Tools } from '../screen';
 import { COLORS, icons, SIZES } from '../assets/constants/';
-import { Image, Text, View } from 'react-native';
 import { ProfileScreen } from '../screen/Profile';
 import { BudgetSetting } from '../screen/BudgetSetting';
+import { Image, Text, TouchableOpacity, View } from 'react-native';
+import { CreateModal, TransactionEditor } from '../components';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,15 +17,17 @@ const tabOptions = {
   },
 }
 
-const CreateInput = () => {
+const CreateInput = (props) => {
   return (
-    <View style={{ alignItems: 'center', justifyContent: 'center', width: 38, height: 38, borderRadius: 19, backgroundColor: COLORS.yellow }}>
+    <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', width: 38, height: 38, borderRadius: 19, backgroundColor: COLORS.yellow }} onPress={props.onPress}>
       <Image source={icons.plus} resizeMode='contain' style={{ height: 19, width: 19 }} />
-    </View>
+    </TouchableOpacity>
   )
 }
 
 const AppNavigator = () => {
+  const [showCreateModal, setShowCreateModal] = React.useState(false)
+  //console.log(showCreateModal)
   return (
     <Tab.Navigator
       tabBarOptions={tabOptions}
@@ -62,7 +65,10 @@ const AppNavigator = () => {
               );
             case 'CreateInput':
               return (
-                <CreateInput />
+                <View>
+                  <CreateModal isVisible={showCreateModal} onRequestClose={() => { console.log('close'); setShowCreateModal(false) }}></CreateModal>
+                  <CreateInput onPress={() => { setShowCreateModal(true) }} />
+                </View>
               );
             case 'Profile':
               return (
@@ -97,10 +103,10 @@ const AppNavigator = () => {
     >
       <Tab.Screen name='Overview' component={TestScreen} />
       <Tab.Screen name='Budget' component={BudgetScreen} />
-      <Tab.Screen name='CreateInput' component={BudgetSetting} />
+      <Tab.Screen name='CreateInput' component={TestScreen} />
       <Tab.Screen name='Profile' component={ProfileScreen} />
-      <Tab.Screen name='Tools' component={TestScreen} />
-    </Tab.Navigator>
+      <Tab.Screen name='Tools' component={Tools} />
+    </Tab.Navigator >
   );
 }
 

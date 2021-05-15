@@ -1,19 +1,29 @@
 import React, { Component } from "react";
 import { View, Modal, Text, TouchableHighlight, TouchableOpacity } from "react-native";
-import { Divider, Avatar } from "react-native-paper"
+import { Divider, Avatar, Modal as PModal } from "react-native-paper"
 import { stylesheet } from './style'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { CategoryEditor } from "../CategoryEditor";
 
 export class CategoriesModal extends Component {
     constructor(props) {
         super(props)
         this.state = {
             isVisible: this.props.isVisible,
+            isAddCategoryPromptVisible: false,
             typeSelection: 1,
             //placeholder, replace with props
             income_cat_list: ["Salary", "Bonus", "Interest", "Gift", "Others"],
             expense_cat_list: ["Food", "Clothes", "Utility", "Travel", "Entertainment", "Others"],
         }
+
+        this.onAddCategoryPress = this.onAddCategoryPress.bind(this)
+    }
+
+    onAddCategoryPress() {
+        this.setState({
+            isAddCategoryPromptVisible: true,
+        })
     }
 
     render() {
@@ -25,9 +35,9 @@ export class CategoriesModal extends Component {
         const expense_text_style = (this.state.typeSelection == 1) ? { color: '#000000' } : { color: 'white' }
 
         const content_list = (this.state.typeSelection === 1) ?
-            (this.state.expense_cat_list.map((val) => {
+            (this.state.expense_cat_list.map((val, index) => {
                 return (
-                    <View style={style.category_entry}>
+                    <View style={style.category_entry} key={index}>
                         <View style={style.category_entry_content}>
                             <Avatar.Icon size={20} style={{ backgroundColor: "red" }} />
                             <Text style={[style.modal_text, style.content_list_text]}>{val}</Text>
@@ -36,14 +46,13 @@ export class CategoriesModal extends Component {
                     </View>
                 )
             }))
-            : (this.state.income_cat_list.map((val) => {
+            : (this.state.income_cat_list.map((val, index) => {
                 return (
-                    <View style={style.category_entry}>
+                    <View style={style.category_entry} key={index}>
                         <View style={style.category_entry_content}>
                             <Avatar.Icon size={20} style={{ backgroundColor: "green" }} />
                             <Text style={[style.modal_text, style.content_list_text]}>{val}</Text>
                         </View>
-                        <Divider style={{ backgroundColor: 'white' }}></Divider>
                     </View>
                 )
             }))
@@ -63,7 +72,9 @@ export class CategoriesModal extends Component {
                         </TouchableOpacity>
                         <Text style={[style.modal_text, style.modal_text_header]}>CATEGORIES</Text>
                         <Icon name="square-edit-outline" size={25} color="#fff"></Icon>
-                        <Icon name="plus" size={25} color="#fff"></Icon>
+                        <TouchableHighlight onPress={this.onAddCategoryPress}>
+                            <Icon name="plus" size={25} color="#fff"></Icon>
+                        </TouchableHighlight>
                     </View>
                     <View style={style.tab_switcher}>
                         <View style={style.tab_switcher_frame}>
@@ -75,6 +86,10 @@ export class CategoriesModal extends Component {
                     <View style={style.content_list}>
                         {content_list}
                     </View>
+                    <PModal visible={this.state.isAddCategoryPromptVisible} onDismiss={() => { this.setState({ isAddCategoryPromptVisible: false }) }} onRequestClose={() => { this.setState({ isAddCategoryPromptVisible: false }) }}
+                        contentContainerStyle={style.transaction_container} style={style.transaction}>
+                        <CategoryEditor></CategoryEditor>
+                    </PModal>
                 </View>
             </Modal>
         )

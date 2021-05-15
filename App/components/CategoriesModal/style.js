@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native'
+import { COLORS } from '../../assets/constants'
 
 export const stylesheet = StyleSheet.create({
     modal_view: {
@@ -72,5 +73,18 @@ export const stylesheet = StyleSheet.create({
     },
     content_list_text: {
         marginLeft: 20
-    }
+    },
+    transaction_container: {
+        padding: 10, 
+        height: "50%", 
+        width: "90%", 
+        backgroundColor: COLORS.white,
+        elevation: 20,
+    },
+    transaction: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        elevation: 20,
+    },
 })

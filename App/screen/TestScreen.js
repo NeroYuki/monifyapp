@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View } from "react-native";
+import { SafeAreaView, View } from "react-native";
 import { Button, Modal } from "react-native-paper";
 
 import { TestText, WalletHeader, TransactionEditor, TabSwitcher, CategoriesModal } from '../components'
@@ -38,24 +38,27 @@ export class TestScreen extends Component {
         };
 
         return (
-            <View style={GlobalStyle.header}>
-                <View>
-                    <WalletHeader></WalletHeader>
+            <SafeAreaView style={{ flex: 1 }}>
+                <View style={GlobalStyle.header}>
+                    <View>
+                        <WalletHeader></WalletHeader>
+                    </View>
+                    <View style={{ flex: 1 }}>
+                        <TestText></TestText>
+                        <TabSwitcher text="May 2021"></TabSwitcher>
+                        <Button onPress={() => { this.setState({ visible: true }) }}>Click me</Button>
+                        <Button onPress={() => { this.setState({ categoriesVisible: !this.state.CategoriesModal }) }}>Click me 2</Button>
+
+                        <Modal visible={this.state.visible} onDismiss={() => { this.setState({ visible: false }) }} contentContainerStyle={containerStyle} style={style}>
+                            <TransactionEditor></TransactionEditor>
+                        </Modal>
+
+                        <CategoriesModal isVisible={this.state.categoriesVisible} onRequestClose={() => { this.setState({ categoriesVisible: false }) }}></CategoriesModal>
+                    </View>
+
                 </View>
-                <View style={{ flex: 1 }}>
-                    <TestText></TestText>
-                    <TabSwitcher text="May 2021"></TabSwitcher>
-                    <Button onPress={() => { this.setState({ visible: true }) }}>Click me</Button>
-                    <Button onPress={() => { this.setState({ categoriesVisible: !this.state.CategoriesModal }) }}>Click me 2</Button>
+            </SafeAreaView>
 
-                    <Modal visible={this.state.visible} onDismiss={() => { this.setState({ visible: false }) }} contentContainerStyle={containerStyle} style={style}>
-                        <TransactionEditor></TransactionEditor>
-                    </Modal>
-
-                    <CategoriesModal isVisible={this.state.categoriesVisible} onRequestClose={() => { this.setState({ categoriesVisible: false }) }}></CategoriesModal>
-                </View>
-
-            </View>
         )
     }
 }

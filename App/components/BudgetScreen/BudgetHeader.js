@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS, icons, SIZES, FONTS } from '../../assets/constants';
 import Svg, { G, Circle, } from 'react-native-svg';
 
@@ -81,8 +81,16 @@ export class BudgetHeader extends Component {
                 </View>
 
                 <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-                    <Text>5.000.000 VND</Text>
-                    <Text style={{ top: 16 }}>LEFT TO SPEND</Text>
+                    <Text style={{
+                        fontSize: 24,
+                        color: COLORS.white,
+                        fontWeight: 'bold'
+                    }}>5.000.000 VND</Text>
+                    <Text style={{
+                        top: 8,
+                        fontSize: 17,
+                        color: COLORS.lightText
+                    }}>LEFT TO SPEND</Text>
                 </View>
 
             </View >
@@ -96,7 +104,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         left: SIZES.padding16,
         right: SIZES.padding16,
-        top: 50,
+        top: 16
     }
 })
 

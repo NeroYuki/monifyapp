@@ -1,10 +1,12 @@
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS, icons, images, SIZES } from '../../assets/constants';
 import { FONTS } from '../../assets/constants/theme';
 import { BudgetHeader, TabSwitcher } from '../../components';
-import { Greet } from '../../components/Budget/Greet';
-import { Messages } from '../../components/Budget/Messages';
+import { ExpenseReportView } from '../../components/BudgetScreen/ExpenseReportView';
+import { Greet } from '../../components/BudgetScreen/Greet';
+import { IncomeReportView } from '../../components/BudgetScreen/IncomeReportView';
+import { Messages } from '../../components/BudgetScreen/Messages';
 
 export class BudgetScreen extends React.Component {
     constructor(props) {
@@ -12,34 +14,38 @@ export class BudgetScreen extends React.Component {
     }
     render() {
         return (
-            <View style={styles.container}>
-                {/* Banner Photo */}
-                <View style={{ height: '55%' }}>
-                    <Image
-                        source={images.backgroundBlue}
-                        resizeMode='cover'
-                        style={{
-                            height: '100%',
-                            width: '100%'
-                        }}
-                    />
-                </View>
+            <SafeAreaView style={styles.container}>
+                <View style={styles.container}>
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        {/* Banner Photo */}
+                        <View style={{ height: 400 }}>
+                            <Image
+                                source={images.backgroundBlue}
+                                resizeMode='cover'
+                                style={{
+                                    height: '100%',
+                                    width: '100%'
+                                }}
+                            />
+                        </View>
 
-                {/* Detail of Budget */}
-                <View style={styles.detailBudget}>
-                    <TabSwitcher text="MARCH 2021"></TabSwitcher>
+                        {/* Detail of Budget */}
+                        <View style={styles.detailBudget}>
+                            <TabSwitcher text="MARCH 2021"></TabSwitcher>
 
-                    <Greet name='this' />
-                    <Greet name='is' />
-                    <Greet name='Props' />
+                            <IncomeReportView color='white' />
 
-                    <Messages />
+                            <ExpenseReportView />
 
-                </View>
+                        </View>
 
-                {/* Render Header */}
-                <BudgetHeader />
-            </View >
+                        {/* Render Header */}
+                        <BudgetHeader />
+                    </ScrollView>
+
+                </View >
+            </SafeAreaView>
+
         )
     }
 }

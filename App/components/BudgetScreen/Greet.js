@@ -6,7 +6,7 @@ export class Greet extends Component {
 
         console.log(this.props)
         return (
-            <Text> Hello {this.props.name}</Text>
+            <Text style={{ top: 50 }}> Hello {this.props.name}</Text>
         )
     }
 }

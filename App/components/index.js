@@ -1,6 +1,6 @@
 import { TestText } from './TestText'
 import { TestButton } from './TestButton'
-import { BudgetHeader } from './Budget/BudgetHeader'
+import { BudgetHeader } from './BudgetScreen/BudgetHeader'
 import { TransactionEditor } from './TransactionEditor'
 import { WalletHeader } from './WalletHeader'
 import { TabSwitcher } from './TabSwitcher'

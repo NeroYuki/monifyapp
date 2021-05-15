@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native'
+import { COLORS } from '../../assets/constants'
 
 export const stylesheet = StyleSheet.create({
     button: {
@@ -11,6 +12,17 @@ export const stylesheet = StyleSheet.create({
         justifyContent: 'space-between',
         paddingLeft: 20,
         paddingRight: 20,
+
+        // Shadow 
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2,
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 3.84,
+
+        elevation: 5,
     },
     button_content: {
         width: 150,

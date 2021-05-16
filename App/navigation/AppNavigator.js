@@ -94,7 +94,6 @@ const AppNavigator = () => {
                     }}
                   />
                   <Text style={{ color: tintColor, paddingTop: 5 }}> Tools </Text>
-                  <Text> </Text>
                 </View>
               );
           }

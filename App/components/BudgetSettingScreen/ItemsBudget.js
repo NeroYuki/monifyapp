@@ -45,7 +45,11 @@ export class ItemsBudget extends Component {
                     source={icons.foodIcon}
                     resizeMode='contain'
                 />
-                <Text style={[styles.title, { marginLeft: 16 }]}>{items.key}</Text>
+                <View style={{ flex: 1, marginLeft: 16, flexDirection: 'row', justifyContent: 'space-between' }}>
+                    <Text style={styles.title}>{items.key}</Text>
+                    <Text style={styles.title}>{items.money}</Text>
+                </View>
+
             </View>
             <View style={{ height: 1, backgroundColor: COLORS.separateLine }}></View>
         </View>
@@ -111,7 +115,6 @@ const styles = StyleSheet.create({
         height: 48,
         justifyContent: 'space-between'
     },
-
     item: {
         flex: 1,
         height: 48,

@@ -16,7 +16,7 @@ export class CreateModal extends Component {
 
     render() {
         const style = stylesheet
-        //console.log('show')
+        console.log('show')
         return (
             <Modal
                 animationType="fade"

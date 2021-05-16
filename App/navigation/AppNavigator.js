@@ -3,6 +3,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import { Login, TestScreen, BudgetScreen, Tools } from '../screen';
 import { COLORS, icons, SIZES } from '../assets/constants/';
+import { ProfileScreen } from '../screen/Profile';
+import { BudgetSetting } from '../screen/BudgetSetting';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { CreateModal, TransactionEditor } from '../components';
 
@@ -64,8 +66,8 @@ const AppNavigator = () => {
             case 'CreateInput':
               return (
                 <View>
-                  <CreateModal isVisible={showCreateModal}  onRequestClose={() => {console.log('close'); setShowCreateModal(false)}}></CreateModal>
-                  <CreateInput onPress={() => {setShowCreateModal(true)}}/>
+                  <CreateModal isVisible={showCreateModal} onRequestClose={() => { console.log('close'); setShowCreateModal(false) }}></CreateModal>
+                  <CreateInput onPress={() => { setShowCreateModal(true) }} />
                 </View>
               );
             case 'Profile':
@@ -92,6 +94,7 @@ const AppNavigator = () => {
                     }}
                   />
                   <Text style={{ color: tintColor, paddingTop: 5 }}> Tools </Text>
+                  <Text> </Text>
                 </View>
               );
           }
@@ -101,9 +104,9 @@ const AppNavigator = () => {
       <Tab.Screen name='Overview' component={TestScreen} />
       <Tab.Screen name='Budget' component={BudgetScreen} />
       <Tab.Screen name='CreateInput' component={TestScreen} />
-      <Tab.Screen name='Profile' component={TestScreen} />
+      <Tab.Screen name='Profile' component={ProfileScreen} />
       <Tab.Screen name='Tools' component={Tools} />
-    </Tab.Navigator>
+    </Tab.Navigator >
   );
 }
 

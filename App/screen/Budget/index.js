@@ -1,51 +1,65 @@
 import React from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS, icons, images, SIZES } from '../../assets/constants';
 import { FONTS } from '../../assets/constants/theme';
+import { BudgetHeader, TabSwitcher } from '../../components';
+import { ExpenseReportView } from '../../components/BudgetScreen/ExpenseReportView';
+import { Greet } from '../../components/BudgetScreen/Greet';
+import { IncomeReportView } from '../../components/BudgetScreen/IncomeReportView';
+import { Messages } from '../../components/BudgetScreen/Messages';
 
 export class BudgetScreen extends React.Component {
     constructor(props) {
         super(props)
 
-    }
+        this.state = {
+            income: {
+                current: '320.000',
+                total: '600.000'
+            }
+        }
 
+    }
     render() {
         return (
-            <View style={styles.container}>
-                {/* Banner Photo */}
-                <View style={{ height: '40%' }}>
-                    <Image
-                        source={images.backgroundBlue}
-                        resizeMode='cover'
-                        style={{
-                            height: '100%',
-                            width: '100%'
-                        }}
-                    />
-                </View>
-
-                {/* Detail of Budget */}
-                <View style={styles.detailBudget}></View>
-
-                {/* Render Header */}
-                <View style={styles.header}>
-                    <View style={{ flexDirection: 'row', top: 50 }}>
-                        <TouchableOpacity style={{ width: 25, height: 25, alignItems: 'center', justifyContent: 'center' }}
-                            onPress={() => console.log("Cài đặt Budget")}
-                        >
+            <SafeAreaView style={styles.container}>
+                <View style={styles.container}>
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        {/* Banner Photo */}
+                        <View style={{ height: 400 }}>
                             <Image
-                                source={icons.setting}
-                                resizeMode="contain"
-                                style={{ flex: 1 }}
+                                source={images.backgroundBlue}
+                                resizeMode='cover'
+                                style={{
+                                    height: '100%',
+                                    width: '100%'
+                                }}
                             />
-                        </TouchableOpacity>
+                        </View>
 
-                        <TouchableOpacity style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                            <Text style={{ color: COLORS.white, ...FONTS.body2 }}> Budget: My Wallet </Text>
-                        </TouchableOpacity>
-                    </View>
-                </View>
-            </View >
+                        {/* Detail of Budget */}
+                        <View style={styles.detailBudget}>
+                            <TabSwitcher text="MARCH 2021"></TabSwitcher>
+
+                            <IncomeReportView
+                                current={this.state.income.current}
+                                total={this.state.income.total}
+                            />
+
+                            <ExpenseReportView />
+
+                        </View>
+
+                        {/* Render Header */}
+                        <BudgetHeader
+                            current={this.state.income.current}
+                            total={this.state.income.total}
+                        />
+                    </ScrollView>
+
+                </View >
+            </SafeAreaView>
+
         )
     }
 }
@@ -58,11 +72,4 @@ const styles = StyleSheet.create({
     detailBudget: {
         flex: 1,
     },
-
-    header: {
-        position: 'absolute',
-        left: SIZES.padding16,
-        right: SIZES.padding16,
-        height: '40%',
-    }
 })

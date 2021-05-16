@@ -104,7 +104,7 @@ const AppNavigator = () => {
       <Tab.Screen name='Overview' component={TestScreen} />
       <Tab.Screen name='Budget' component={BudgetScreen} />
       <Tab.Screen name='CreateInput' component={TestScreen} />
-      <Tab.Screen name='Profile' component={ProfileScreen} />
+      <Tab.Screen name='Profile' component={BudgetSetting} />
       <Tab.Screen name='Tools' component={Tools} />
     </Tab.Navigator >
   );

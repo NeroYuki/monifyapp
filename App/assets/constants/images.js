@@ -3,5 +3,5 @@ export const backgroundYellow = require('../images/background-yellow.png')
 
 export default {
     backgroundBlue,
-    backgroundYellow
+    backgroundYellow,
 };

@@ -10,7 +10,7 @@ export class BudgetSetting extends React.Component {
             <SafeAreaView style={styles.container}>
 
                 {/* Header */}
-                <View style={{ alignItems: 'center', flexDirection: 'row', height: 48, backgroundColor: 'red' }}>
+                <View style={{ alignItems: 'center', flexDirection: 'row', height: 48, backgroundColor: COLORS.white }}>
                     <TouchableOpacity style={{ marginLeft: 16, height: 32, width: 32 }} >
                         <Icon size={32} name='close' />
                     </TouchableOpacity>
@@ -47,6 +47,7 @@ export class BudgetSetting extends React.Component {
                     </TouchableOpacity>
                 </View>
 
+                {/* INCOME/EXPENSE Item List */}
                 <ItemsBudget />
 
             </SafeAreaView >

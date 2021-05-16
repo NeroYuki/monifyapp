@@ -15,6 +15,8 @@ export const COLORS = {
     lightGray: '#F8F8F8',
     lightText: 'rgba(255, 255, 255, 0.7)',
 
+    separateLine: '#E7E7E7',
+
     blueProgress: '#00B9FF',
     ligtBlueProgress: 'rgba(0, 185, 255, 0.2)',
 };

@@ -4,6 +4,8 @@ import { Register } from './Register'
 import { BudgetScreen } from './Budget/index'
 import { Tools } from './Tools'
 import { SyncData } from './SyncData'
+import { ToolsContainer } from './ToolsContainer'
+import { AppearanceSetting } from './AppearanceSetting'
 
 export {
     TestScreen,
@@ -12,4 +14,6 @@ export {
     BudgetScreen,
     Tools,
     SyncData,
+    ToolsContainer,
+    AppearanceSetting,
 }

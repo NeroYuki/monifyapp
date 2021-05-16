@@ -12,6 +12,8 @@ import { GenericIconList } from './GenericIconList'
 import { DescriptiveButton } from './DescriptiveButton'
 import { CreateModal } from './CreateModal'
 import { CategoryEditor } from './CategoryEditor'
+import { GenericSettingField } from './GenericSettingField'
+import { GenericSelectionModal } from './GenericSelectionModal'
 
 export {
     TabSwitcher,
@@ -28,4 +30,6 @@ export {
     DescriptiveButton,
     CreateModal,
     CategoryEditor,
+    GenericSettingField,
+    GenericSelectionModal,
 }

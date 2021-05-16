@@ -14,14 +14,9 @@ export const stylesheet = StyleSheet.create({
         backgroundColor: COLORS.lightGray
     },
     main_view_tab :{
-        flexDirection: 'row',
-        padding: 10,
-        justifyContent: 'space-evenly'
-    },
-    main_view_button_container: {
-        marginHorizontal: 5,
-        height: 175,
-        width: "48%",
+        flexDirection: 'column',
+        justifyContent: 'space-evenly',
+        alignSelf: 'stretch'
     },
     main_view_header: {
         backgroundColor: "white",
@@ -29,18 +24,12 @@ export const stylesheet = StyleSheet.create({
         padding: 10,
         color: 'grey',
     },
-    transaction_container: {
-        padding: 10, 
-        height: "90%", 
-        width: "90%", 
-        backgroundColor: COLORS.white, 
-        color: COLORS.white,
-        elevation: 20,
+    selection_entry: {
+        
     },
-    transaction: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        elevation: 20,
-    },
+    selection_entry_text: {
+        paddingVertical: 20,
+        paddingHorizontal: 20,
+        fontSize: 18,
+    }
 })

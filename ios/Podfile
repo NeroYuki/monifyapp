@@ -13,6 +13,8 @@ target 'Monifyapp' do
   )
 
 
+  pod 'RNGestureHandler', :path => '../node_modules/react-native-gesture-handler'
+
   target 'MonifyappTests' do
     inherit! :complete
     # Pods for testing

@@ -2,11 +2,12 @@ import React from 'react';
 import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS, icons, images, SIZES } from '../../assets/constants';
 import { FONTS } from '../../assets/constants/theme';
-import { BudgetHeader, TabSwitcher } from '../../components';
+import { BudgetHeader, CategoriesModal, TabSwitcher } from '../../components';
 import { ExpenseReportView } from '../../components/BudgetScreen/ExpenseReportView';
 import { Greet } from '../../components/BudgetScreen/Greet';
 import { IncomeReportView } from '../../components/BudgetScreen/IncomeReportView';
 import { Messages } from '../../components/BudgetScreen/Messages';
+import { BudgetSettingModal } from '../../components/BudgetSettingScreen/BudgetSettingModel';
 
 export class BudgetScreen extends React.Component {
     constructor(props) {
@@ -16,10 +17,18 @@ export class BudgetScreen extends React.Component {
             income: {
                 current: '320.000',
                 total: '600.000'
-            }
+            },
+            settingVisible: false,
         }
 
     }
+
+    showSettingScreen = () => {
+        this.setState({
+            settingVisible: !this.state.settingVisible
+        })
+    }
+
     render() {
         return (
             <SafeAreaView style={styles.container}>
@@ -54,8 +63,17 @@ export class BudgetScreen extends React.Component {
                         <BudgetHeader
                             current={this.state.income.current}
                             total={this.state.income.total}
+                            onClick={this.showSettingScreen}
                         />
+
+                        <BudgetSettingModal
+                            isVisible={this.state.settingVisible}
+                            onRequestClose={() => { this.setState({ settingVisible: false }) }}
+                        ></BudgetSettingModal>
+
                     </ScrollView>
+
+
 
                 </View >
             </SafeAreaView>

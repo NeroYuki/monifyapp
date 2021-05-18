@@ -119,7 +119,7 @@ const AppNavigator = () => {
           e.preventDefault();
         },
       }} />
-      <Tab.Screen name='Profile' component={BudgetSetting} />
+      <Tab.Screen name='Profile' component={ProfileScreen} />
       <Tab.Screen name='Tools' component={ToolsContainer} />
     </Tab.Navigator >
   );

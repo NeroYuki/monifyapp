@@ -125,10 +125,8 @@ const styles = StyleSheet.create({
         fontSize: 17
     },
     titleHeader: {
-        fontSize: 17,
         marginTop: 16,
         marginLeft: 20,
-        fontSize: 17,
         color: COLORS.blueText
     },
     titleFooter: {

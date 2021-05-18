@@ -21,9 +21,7 @@ export class BudgetHeader extends Component {
             <View style={styles.header}>
                 <View style={{ flexDirection: 'row', flex: 1 }}>
                     <TouchableOpacity style={{ width: 25, height: 25, alignItems: 'center', justifyContent: 'center' }}
-                        onPress={() => {
-                            console.log("Cai Dat Bugdet")
-                        }}
+                        onPress={this.props.onClick}
                     >
                         <Image
                             source={icons.setting}

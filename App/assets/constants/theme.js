@@ -8,6 +8,9 @@ export const COLORS = {
     blueText: '#007AFF',
 
     black: '#000000',
+
+    blackBlur: 'rgba(0, 0, 0, 0.2)',
+
     white: '#FFFFFF',
     yellow: '#FFBE61',
 

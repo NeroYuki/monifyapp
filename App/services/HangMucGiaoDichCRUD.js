@@ -43,8 +43,8 @@ export const insertHangMucGiaoDich = (newHangMucGiaoDich,LoaiHangMuc) =>
         newHangMucGiaoDich.loaihangmuc=JSON.parse(JSON.stringify(LoaiHangMucObj))
       }
       realm.write(() => {
-        realm.create(HangMucGiaoDichSchema.name, newHangMucGiaoDich)
-        resolve(newHangMucGiaoDich)
+        let HangMuc=realm.create(HangMucGiaoDichSchema.name, newHangMucGiaoDich)
+        resolve(HangMuc)
       })
     }).catch((error)=>reject(error))
   })
@@ -77,28 +77,28 @@ export const deleteHangMucGiaoDich=HangMucGiaoDich=> new Promise((resolve,reject
     }).catch((error)=>reject(error))
 })
 
-export const queryHangMucGiaoDich=(thoigiantao,tenhangmuc,loaihangmuc,id)=> new Promise((resolve,reject)=>{
+export const queryHangMucGiaoDich=(option)=> new Promise((resolve,reject)=>{
   Realm.open(data).then(realm=>{
     let Taget = realm.objects(HangMucGiaoDichSchema.name)
-    if(thoigiantao)
+    if(option.thoigiantao)
     {
-      Taget=Taget.filtered('thoigiantao==$0',thoigiantao)
+      Taget=Taget.filtered('thoigiantao==$0',option.thoigiantao)
     }
-    if(tenhangmuc)
+    if(option.tenhangmuc)
     {
-      Taget=Taget.filtered('tenhangmuc==$0',tenhangmuc)
+      Taget=Taget.filtered('tenhangmuc==$0',option.tenhangmuc)
     }
-    if(loaihangmuc&&loaihangmuc=='ChiTieu')
+    if(option.loaihangmuc&&option.loaihangmuc=='ChiTieu')
     {
       Taget=Taget.filtered('loaihangmuc.chitieu==$0',true)
     }
-    if(loaihangmuc&&loaihangmuc=='ThuNhap')
+    if(option.loaihangmuc&&option.loaihangmuc=='ThuNhap')
     {
       Taget=Taget.filtered('loaihangmuc.thunhap==$0',true)
     }
-    if(id)
+    if(option.id)
     {
-      Taget=Taget.filtered('idnguoidung.idnguoidung==$0',id)
+      Taget=Taget.filtered('idnguoidung.idnguoidung==$0',option.id)
     }
     resolve(Taget)
   }).catch((error)=>reject(error))

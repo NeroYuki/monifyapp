@@ -31,7 +31,7 @@ hangmucgiaodich= {
 test('testing insert HangMucGiaoDich', async () => {
     // console.log(await insertHangMucGiaoDich(hangmucgiaodich,'chitieu'))
     // console.log(hangmucgiaodichtest)
-   expect(await insertHangMucGiaoDich(hangmucgiaodich,'chitieu')).toStrictEqual(hangmucgiaodichtest)
+   expect(JSON.parse(JSON.stringify(await insertHangMucGiaoDich(hangmucgiaodich,'chitieu')))).toStrictEqual(JSON.parse(JSON.stringify(hangmucgiaodichtest)))
 })
 hangmucgiaodichtestupdate= {
     idhangmucgiaodich: idhangmuc,
@@ -66,5 +66,5 @@ test('testing delete HangMucGiaoDich', async () => {
 })
 test('testing querry HangMucGiaoDich', async () => {
     //console.log(JSON.parse(JSON.stringify(await queryHangMucGiaoDich(thoigiantao=date,tenhangmuc='Sắm tết',loaihangmuc='ChiTieu',id=new BSON.ObjectID('609e4dcdec7920f2c5a218a3')))))
-    expect(JSON.parse(JSON.stringify(await queryHangMucGiaoDich(thoigiantao=date,tenhangmuc='Sắm tết',loaihangmuc='ChiTieu',id=new BSON.ObjectID('609e4dcdec7920f2c5a218a3'))))).toStrictEqual(JSON.parse(JSON.stringify(hangmuctestquery)))
+    expect(JSON.parse(JSON.stringify(await queryHangMucGiaoDich({thoigiantao:date,tenhangmuc:'Sắm tết',loaihangmuc:'ChiTieu',id:new BSON.ObjectID('609e4dcdec7920f2c5a218a3')})))).toStrictEqual(JSON.parse(JSON.stringify(hangmuctestquery)))
 })

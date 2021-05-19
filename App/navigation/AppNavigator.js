@@ -8,6 +8,7 @@ import { BudgetSetting } from '../screen/BudgetSetting';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { CreateModal, TransactionEditor } from '../components';
 import { Component } from 'react';
+import { OverviewScreen } from '../screen/Overview/OverviewScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -110,7 +111,7 @@ const AppNavigator = () => {
         }
       })}
     >
-      <Tab.Screen name='Overview' component={TestScreen} />
+      <Tab.Screen name='Overview' component={OverviewScreen} />
       <Tab.Screen name='Budget' component={BudgetScreen} />
       <Tab.Screen name='CreateInput' component={CreateModalWrapper} listeners={{
         tabPress: e => {

@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, SectionList, Image } from 'react-native';
+import { View, StyleSheet, SectionList, Text, Image } from 'react-native';
 import { COLORS, icons } from '../../assets/constants';
 
-export class ItemsBudget extends Component {
+
+export class ItemsOverView extends Component {
 
     constructor(props) {
         super(props)
@@ -10,23 +11,34 @@ export class ItemsBudget extends Component {
         this.state = {
             data: [
                 {
-                    title: "INCOME",
+                    title: "TUESDAY, 5 MAR",
+                    total: '+350.000',
                     data: [
                         {
-                            key: 'Food',
-                            money: '200.000'
+                            key: 'Salary',
+                            money: '450.000',
+                            describe: '',
                         },
                         {
-                            key: 'Entertainment',
-                            money: '300.000'
+                            key: 'Food',
+                            money: '300.000',
+                            describe: 'Chocolate + Milk'
                         },
+                    ]
+                },
+                {
+                    title: "TUESDAY, 3 MAR",
+                    total: '-250.000',
+                    data: [
                         {
                             key: 'Internet',
-                            money: '400.000'
+                            money: '200.000',
+                            describe: '',
                         },
                         {
-                            key: 'Coffee',
-                            money: '600.000'
+                            key: 'Food',
+                            money: '50.000',
+                            describe: ''
                         },
                     ]
                 },
@@ -47,6 +59,7 @@ export class ItemsBudget extends Component {
                 />
                 <View style={{ flex: 1, marginLeft: 16, flexDirection: 'row', justifyContent: 'space-between' }}>
                     <Text style={styles.title}>{items.key}</Text>
+                    <Text> </Text>
                     <Text style={styles.title}>{items.money}</Text>
                 </View>
 
@@ -57,37 +70,26 @@ export class ItemsBudget extends Component {
 
     Header = ({ section }) => (
         <View style={styles.header}>
-            <Text style={styles.titleHeader}>{section.title}</Text>
+            <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
+                <Text style={styles.titleHeader}>{section.title}</Text>
+                <Text style={styles.totalHeader}>{section.total}</Text>
+            </View>
+
             <View style={{ height: 1, backgroundColor: COLORS.separateLine }}></View>
         </View>
-
     );
 
     Footer = () => (
-        <View style={styles.item}>
-            <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
-                <Image
-                    style={{
-                        height: 32,
-                        width: 32
-                    }}
-                    source={icons.plusUnfill}
-                    resizeMode='contain'
-                />
-                <Text style={[styles.title, { marginLeft: 16 }]}>Add new category</Text>
-            </View>
-            <View style={{ height: 1, backgroundColor: COLORS.separateLine }}></View>
+        <View style={styles.footer}>
         </View>
 
     );
 
-
     render() {
-        // console.log(this.props)
         return (
             <View style={styles.container}>
                 <SectionList
-                    style={styles.sectionlist}
+                    style={styles.selectionList}
                     scrollEnabled={false}
                     sections={this.state.data}
                     renderItem={({ item }) => <this.Item items={item} />}
@@ -101,17 +103,16 @@ export class ItemsBudget extends Component {
 
 const styles = StyleSheet.create({
     container: {
-        minHeight: 200,
         marginTop: 20,
+        minHeight: 60,
+        width: '100%',
         backgroundColor: COLORS.white
     },
 
-    sectionlist: {
-        marginBottom: 20,
+    selectionList: {
     },
 
     header: {
-        flex: 1,
         height: 48,
         justifyContent: 'space-between'
     },
@@ -129,11 +130,16 @@ const styles = StyleSheet.create({
         marginLeft: 20,
         color: COLORS.blueText
     },
-    titleFooter: {
-        fontSize: 17,
+
+    totalHeader: {
         marginTop: 16,
-        marginLeft: 20,
-        fontSize: 17,
-        color: COLORS.black
+        marginRight: 20,
+        color: COLORS.pink
+    },
+
+    footer: {
+        flex: 1,
+        height: 20,
+        backgroundColor: '#f2f2f2'
     }
 })

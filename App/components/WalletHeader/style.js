@@ -4,7 +4,7 @@ export const stylesheet = StyleSheet.create({
     surface: {
         height: 150,
         backgroundColor: "#ff92a7",
-        flexDirection: "column",    
+        flexDirection: "column",
         elevation: 12,
     },
     selector: {

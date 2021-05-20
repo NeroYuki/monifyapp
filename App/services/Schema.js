@@ -51,8 +51,8 @@ export const TKTietKiemSchema = {
     idtktietkiem: 'objectId',
     sotien: 'double?',
     laisuattietkiem: 'double?',
-    laisuattruochan: 'string?',
-    idtkduocthuhuong: 'int?',
+    laisuattruochan: 'double?',
+    idtkduocthuhuong: 'string?',
     kyhantietkiem: 'int?', // đơn vị tháng
     loaitietkiem: 'LoaiTietKiemConfig',
     ngaybatdau: 'date?',
@@ -171,7 +171,7 @@ export const CaiDatSchema = {
   properties: {
     idcaidat: 'objectId',
     idnguoidung: 'string',
-    thoigiantao: 'string',
+    thoigiantao: 'date',
     loaitien: 'string',
     chedo: 'string',
     ngonngu: 'string',
@@ -197,5 +197,5 @@ export const monifydata = {
     LoaiTietKiemConfigSchema,
     LoaiMucTieuConfigSchema,
     LoaiHangMucConfigSchema],
-  schemaVersion:0,
+  schemaVersion:2,
 }

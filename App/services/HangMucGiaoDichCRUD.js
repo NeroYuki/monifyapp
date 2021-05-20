@@ -8,7 +8,7 @@ export const insertHangMucGiaoDich = (newHangMucGiaoDich,LoaiHangMuc) =>
   new Promise((resolve, reject) => {
     Realm.open(data).then(realm => {
       let LoaiHangMucObj
-      if(realm.objects(LoaiHangMucConfigSchema.name).filtered("chitieu==true")[0] == "undefined"&&LoaiHangMuc=='chitieu')
+      if(realm.objects(LoaiHangMucConfigSchema.name).filtered("chitieu==true")[0] == undefined&&LoaiHangMuc=='chitieu')
       {
         realm.write(()=>{
           LoaiHangMucObj=realm.create(LoaiHangMucConfigSchema.name,{
@@ -17,11 +17,11 @@ export const insertHangMucGiaoDich = (newHangMucGiaoDich,LoaiHangMuc) =>
           })
         })
       }
-      else if(realm.objects(LoaiHangMucConfigSchema.name).filtered("chitieu==true")[0]!="undefined"&&LoaiHangMuc=='chitieu')
+      else if(realm.objects(LoaiHangMucConfigSchema.name).filtered("chitieu==true")[0]!=undefined&&LoaiHangMuc=='chitieu')
       {
         LoaiHangMucObj=realm.objects(LoaiHangMucConfigSchema.name).filtered("chitieu==true")[0]
       }
-      if(realm.objects(LoaiHangMucConfigSchema.name).filtered("thunhap==true")[0]=="undefined"&&LoaiHangMuc=='thunhap')
+      if(realm.objects(LoaiHangMucConfigSchema.name).filtered("thunhap==true")[0]==undefined&&LoaiHangMuc=='thunhap')
       {
         realm.write(()=>{
           LoaiHangMucObj=realm.create(LoaiHangMucConfigSchema.name,{
@@ -30,11 +30,11 @@ export const insertHangMucGiaoDich = (newHangMucGiaoDich,LoaiHangMuc) =>
           })
         })
       }
-      else if(realm.objects(LoaiHangMucConfigSchema.name).filtered("thunhap==true")[0]!="undefined"&&LoaiHangMuc=='thunhap')
+      else if(realm.objects(LoaiHangMucConfigSchema.name).filtered("thunhap==true")[0]!=undefined&&LoaiHangMuc=='thunhap')
       {
         LoaiHangMucObj=realm.objects(LoaiHangMucConfigSchema.name).filtered("thunhap==true")[0]
       }
-      if(typeof newHangMucGiaoDich.loaihangmuc=='undefined'){
+      if(typeof newHangMucGiaoDich.loaihangmuc==undefined){
         newHangMucGiaoDich.__proto__="loaihangmuc"
         newHangMucGiaoDich.loaihangmuc=JSON.parse(JSON.stringify(LoaiHangMucObj))
       }

@@ -19,7 +19,7 @@ export const TaiKhoanSchema = {
 
     bieutuong: 'string',
     thoigiantao: 'date',
-    idnguoidung: 'NguoiDung',
+    idnguoidung: 'objectId',
     loaitaikhoan: 'LoaiTaiKhoanConfig',
   },
   primaryKey: 'idtaikhoan',
@@ -38,45 +38,46 @@ export const TKTieuDungSchema = {
   name: 'TKTieuDung',
   embeded: true,
   properties: {
-    idtktieudung: 'objectId',
+ //   idtktieudung: 'objectId',
     sotien: 'double?',
   },
-  primaryKey: 'idtktieudung',
+ //primaryKey: 'idtktieudung',
 }
 
 export const TKTietKiemSchema = {
   name: 'TKTietKiem',
   embeded: true,
   properties: {
-    idtktietkiem: 'objectId',
+  //  idtktietkiem: 'objectId',
     sotien: 'double?',
     laisuattietkiem: 'double?',
     laisuattruochan: 'double?',
     idtkduocthuhuong: 'string?',
     kyhantietkiem: 'int?', // đơn vị tháng
-    loaitietkiem: 'LoaiTietKiemConfig',
+    //loaitietkiem: 'LoaiTietKiemConfig',
     ngaybatdau: 'date?',
     ngayrutdukien: 'date?',
     sotiencodukien: 'double?',
-  },
-  primaryKey: 'idtktietkiem',
-}
-
-export const LoaiTietKiemConfigSchema = {
-  name: "LoaiTietKiemConfig",
-  embeded: true,
-  properties: {
     ruttatca: { type: 'bool', default: false }, //Rút tất cả gốc lẫn lãi
     tieptuc: { type: 'bool', default: false }, //Tiếp tục tiết kiệm cả gốc lẫn lãi
     rutlai: { type: 'bool', default: false }, //Tiếp tục nhưng rút lãi
-  }
+  },
+  //primaryKey: 'idtktietkiem',
 }
+
+// export const LoaiTietKiemConfigSchema = {
+//   name: "LoaiTietKiemConfig",
+//   embeded: true,
+//   properties: {
+    
+//   }
+// }
 
 export const TKNoSchema = {
   name: 'TKNo',
   embeded: true,
   properties: {
-    idtkno: 'objectId',
+  //  idtkno: 'objectId',
     sotien: 'double?',
     laisuatno: 'double?',
     kyhanno: 'int?',
@@ -84,7 +85,7 @@ export const TKNoSchema = {
     ngaytradukien: 'date?',
     sotientradukien: 'double?',
   },
-  primaryKey: 'idtkno',
+  //primaryKey: 'idtkno',
 }
 
 export const GiaoDichSchema = {
@@ -194,7 +195,7 @@ export const monifydata = {
     TaiKhoanSchema,
     NguoiDungSchema,
     LoaiTaiKhoanConfigSchema,
-    LoaiTietKiemConfigSchema,
+    //LoaiTietKiemConfigSchema,
     LoaiMucTieuConfigSchema,
     LoaiHangMucConfigSchema],
   schemaVersion:2,

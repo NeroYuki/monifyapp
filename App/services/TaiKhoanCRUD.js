@@ -1,52 +1,130 @@
 import Realm, { schemaVersion } from 'realm';
 import {TaiKhoanSchema,monifydata,LoaiTaiKhoanConfigSchema} from './Schema'
+import {BSON} from 'realm'
 
+const data = monifydata;
 
+export const insertTaiKhoan = newTaiKhoan => 
+  new Promise((resolve,reject)=> {
+    Realm.open(data).then(realm=>{
+      realm.write(()=>{
+        let tk = realm.create(TaiKhoanSchema.name,newTaiKhoan);
+        console.log(tk)
+        resolve(tk);
+      })
+    }).catch((error)=> reject(error));
+  });
 
-export const insertNewTaiKhoan = newTaiKhoan => new Promise((resolve,reject)=> {
-    // console.log(JSON.stringify(monifydata))
-    Realm.open(monifydata).then(realm => {
-        realm.write(()=> {
-            realm.create(TaiKhoanSchema.name,newTaiKhoan);
-            resolve(newTaiKhoan);
-        });
+export const updateTaiKhoan =  updateTaiKhoan => 
+  new Promise((resolve,reject)=>{
+    Realm.open(data).then(realm => {
+      let taiKhoanUpdated = realm.objectForPrimaryKey(TaiKhoanSchema.name,updateTaiKhoan.idtaikhoan)
+      taiKhoanUpdated.tentaikhoan=updateTaiKhoan.tentaikhoan;
+      taiKhoanUpdated.bieutuong = updateTaiKhoan.bieutuong;
+      if(taiKhoanUpdated.loaitaikhoan != null) {
+        Object.assign(taiKhoanUpdated.loaitaikhoan, updateTaiKhoan.loaitaikhoan)
+        // if(taiKhoanUpdated.loaitaikhoan.tieudung != null  {
+        //   taiKhoanUpdated.loaitaikhoan.tieudung = updateTaiKhoan.loaitaikhoan.tieudung
+        // }
+        // else if(taiKhoanUpdated.loaitaikhoan.tietkiem != null){
+
+        // }
+        // else if(taiKhoanUpdated.loaitaikhoan.no != null){
+
+        // }
+      }     
+      resolve(taiKhoanUpdated) 
     }).catch((error)=> reject(error));
-});
-export const updateTaiKhoan = taiKhoan => new Promise((resolve,reject)=> {
-    Realm.open(monifydata).then(realm => {
-        realm.write(()=> {
-            let updatingTaiKhoan =realm.objectForPrimaryKey(TaiKhoanSchema.name,taiKhoan.idtaikhoan);
-            updatingTaiKhoan.tentaikhoan=taiKhoan.tentaikhoan;
-            updatingTaiKhoan.bieutuong = taiKhoan.bieutuong;
-            updatingTaiKhoan.idnguoidung = taiKhoan.idnguoidung;
-            updatingTaiKhoan.loaitaikhoan = taiKhoan.loaitaikhoan;
-            resolve();
-        });
-    }).catch((error)=> reject(error));
-});
-export const deleteNguoiDung = nguoiDungId => new Promise((resolve,reject)=>{
-    Realm.open(monifydata).then(realm => {
-        realm.write(()=> {
-            let deleteintNguoiDung =realm.objectForPrimaryKey(NguoiDungSchema.name,nguoiDungId);
-            realm.delete(deleteintNguoiDung);
-            resolve();
-        });
-    }).catch((error)=> reject(error));
+  });
+export const queryTaiKhoan = (taiKhoanId,loaiTaiKhoanQuery,sotien1,sotien2,date1,date2) =>
+  new Promise((resolve,reject)=> {
+    Realm.open(data).then(realm => {
+      let AllTaiKhoan = realm.objects(TaiKhoanSchema.name).filtered()
+        
+    })
+  })
+export const deleteTaiKhoan = taiKhoanID => new Promise((resolve,reject)=>{
+  Realm.open(monifydata).then(realm => {
+      realm.write(()=> {
+          let deletedTaiKhoan =realm.objectForPrimaryKey(TaiKhoanSchema.name,taiKhoanID);
+          realm.delete(deletedTaiKhoan);
+          resolve(deletedTaiKhoan);
+      });
+  }).catch((error)=> reject(error));
 }); 
-export const deleteAllNguoiDung = () => new Promise((resolve,reject)=>{
-    Realm.open(monifydata).then(realm => {
-        realm.write(()=> {
-            let delAllNguoiDungs =realm.objects(NguoiDungSchema.name);
-            realm.delete(delAllNguoiDungs);
-            resolve(delAllNguoiDungs);
-        });
-    }).catch((error)=> reject(error));
-}); 
 
-export const queryAllNguoiDung = () =>new Promise((resolve,reject)=>{
-    Realm.open(monifydata).then(realm => {
-        let allNguoiDungs = realm.objects(NguoiDungSchema.name);
-        resolve(allNguoiDungs);
-    }).catch((error)=> reject(error));
-});
 
+
+
+
+
+
+
+
+// //HangMucGiaoDichSchema
+// export const insertHangMucGiaoDich = (newHangMucGiaoDich,LoaiHangMuc) =>
+//   new Promise((resolve, reject) => {
+//     Realm.open(data).then(realm => {
+//       let LoaiHangMucObj
+//       if(realm.objects(LoaiHangMucConfigSchema.name).filtered("chitieu=true")[0] == "undefined"&&LoaiHangMuc=='chitieu')
+//       {
+//         realm.write(()=>{
+//           LoaiHangMucObj=realm.create(LoaiHangMucConfigSchema.name,{
+//             chitieu:true,
+//             thunhap:false,
+//           })
+//         })
+//       }
+//       else if(realm.objects(LoaiHangMucConfigSchema.name).filtered("chitieu=true")[0]!="undefined"&&LoaiHangMuc=='chitieu')
+//       {
+//         LoaiHangMucObj=realm.objects(LoaiHangMucConfigSchema.name).filtered("chitieu=true")[0]
+//       }
+//       if(realm.objects(LoaiHangMucConfigSchema.name).filtered("thunhap=true")[0]=="undefined"&&LoaiHangMuc=='thunhap')
+//       {
+//         realm.write(()=>{
+//           LoaiHangMucObj=realm.create(LoaiHangMucConfigSchema.name,{
+//             chitieu:false,
+//             thunhap:true,
+//           })
+//         })
+//       }
+//       else if(realm.objects(LoaiHangMucConfigSchema.name).filtered("thunhap=true")[0]!="undefined"&&LoaiHangMuc=='thunhap')
+//       {
+//         LoaiHangMucObj=realm.objects(LoaiHangMucConfigSchema.name).filtered("thunhap=true")[0]
+//       }
+//       if(typeof newHangMucGiaoDich.loaihangmuc=='undefined'){
+//         newHangMucGiaoDich.__proto__="loaihangmuc"
+//         newHangMucGiaoDich.loaihangmuc=JSON.parse(JSON.stringify(LoaiHangMucObj))
+//       }
+//       else
+//       {  
+//         newHangMucGiaoDich.loaihangmuc=JSON.parse(JSON.stringify(LoaiHangMucObj))
+//       }
+//       realm.write(() => {
+//         realm.create(HangMucGiaoDichSchema.name, newHangMucGiaoDich)
+//         resolve(newHangMucGiaoDich)
+//       })
+//     }).catch((error)=>reject(error))
+//   })
+
+// export const updateHangMucGiaoDich=HangMucGiaoDich=> new Promise((resolve,reject)=>{
+//     Realm.open(data).then(realm=>{
+//         realm.write(()=>{
+//             let updateHangMucGiaoDich=realm.objectForPrimaryKey(HangMucGiaoDich,HangMucGiaoDich.idhangmucgiaodich)
+//             updateHangMucGiaoDich.tenhangmuc=HangMucGiaoDich.tenhangmuc
+//             updateHangMucGiaoDich.loaihangmuc.chitieu=HangMucGiaoDich.chitieu
+//             updateHangMucGiaoDich.loaihangmuc.thunhap=HangMucGiaoDich.thunhap
+//             updateHangMucGiaoDich.iconhangmuc=HangMucGiaoDich.iconhangmuc
+//             resolve()
+//         })
+//     }).catch((error)=>reject(error))
+// })
+// export const deleteHangMucGiaoDich=HangMucGiaoDich=> new Promise((resolve,reject)=>{
+//     Realm.open(data).then(realm=>{
+//         realm.write(()=>{
+//             let deleteHangMucGiaoDich=realm.objectForPrimaryKey(HangMucGiaoDich,HangMucGiaoDich.idhangmucgiaodich)
+//             realm.delete(deleteHangMucGiaoDich)
+//             resolve()
+//         })
+//     }).catch((error)=>reject(error))
+// })

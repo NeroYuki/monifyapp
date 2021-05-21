@@ -11,11 +11,13 @@ export class BudgetSettingPeriodModal extends Component {
         super(props)
 
         this.state = {
-            selectedType: this.props.period
+            selectedType: this.props.periodCurrent
         }
     }
 
     render() {
+
+        console.log("PERIOD", this.state.selectedType)
         return (
             <Modal
                 animationType="fade"
@@ -36,7 +38,11 @@ export class BudgetSettingPeriodModal extends Component {
                         <Text style={styles.title}> BUDGET PERIOD </Text>
 
                         <TouchableWithoutFeedback
-                            onPress={this.props.closePeriod}
+                            onPress={(this.props.changePeriod) ?
+                                () => this.props.changePeriod(this.state.selectedType)
+                                :
+                                () => { console.log(this.state.selectedType) }}
+
                         >
                             <Icon name='check' size={25} />
                         </TouchableWithoutFeedback>

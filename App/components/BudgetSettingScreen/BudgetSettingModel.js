@@ -17,8 +17,19 @@ export class BudgetSettingModal extends Component {
         this.state = {
 
             periodVisible: false,
-            period: "Weekly"
+
+            periodOptions: ["Weekly, Monthly, Yearly"],
+            periodCurrent: "Weekly",
         }
+
+        this.changePeriod = this.changePeriod.bind(this)
+    }
+
+    changePeriod(val) {
+        this.setState({
+            periodCurrent: val,
+            periodVisible: false
+        })
     }
 
     render() {
@@ -48,7 +59,7 @@ export class BudgetSettingModal extends Component {
                             <View style={{ justifyContent: 'center', flex: 1, marginLeft: 20 }}>
                                 <TextInput
                                     style={{
-                                        height: 32,
+                                        height: '100%',
                                         fontSize: 17
                                     }}
                                     placeholder="Type here to translate!"
@@ -72,7 +83,7 @@ export class BudgetSettingModal extends Component {
                                 }}
                             >
                                 <View style={{ justifyContent: 'center', flex: 1 }}>
-                                    <Text style={{ marginLeft: 20, fontSize: 17 }}> {this.state.period} Budget </Text>
+                                    <Text style={{ marginLeft: 20, fontSize: 17 }}> {this.state.periodCurrent} Budget </Text>
                                 </View>
                             </TouchableOpacity>
                         </View>
@@ -87,14 +98,10 @@ export class BudgetSettingModal extends Component {
                                 this.setState({ periodVisible: false })
                             }}
 
-                            period={this.state.period}
+                            periodCurrent={this.state.periodCurrent}
+                            selectionList={this.state.periodOptions}
 
-                            saveSelected={() => {
-                                this.setState({
-                                    periodVisible: false,
-                                    period: this.state.period
-                                })
-                            }}
+                            changePeriod={this.changePeriod}
                         />
                     </ScrollView>
 

@@ -58,8 +58,10 @@ export class ItemsOverView extends Component {
                     resizeMode='contain'
                 />
                 <View style={{ flex: 1, marginLeft: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
-                    <Text style={styles.title}>{items.key}</Text>
-                    <Text> {items.describe} </Text>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Text style={styles.title}>{items.key}</Text>
+                        <Text style={styles.describe}>   {items.describe}  </Text>
+                    </View>
                     <Text style={styles.title}>{items.money}</Text>
                 </View>
 
@@ -125,6 +127,10 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 17
     },
+    describe: {
+        fontSize: 15,
+        color: COLORS.gray
+    },
     titleHeader: {
         marginTop: 16,
         marginLeft: 20,
@@ -137,9 +143,4 @@ const styles = StyleSheet.create({
         color: COLORS.pink
     },
 
-    footer: {
-        flex: 1,
-        height: 20,
-        backgroundColor: '#f2f2f2'
-    }
 })

@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { GenericSelectionModal, GenericSettingField } from "../../components";
 import { stylesheet } from './style'
-import {FAB} from 'react-native-paper'
+import { FAB } from 'react-native-paper'
 
 export class AppearanceSetting extends Component {
     constructor(props) {
@@ -58,18 +58,37 @@ export class AppearanceSetting extends Component {
 
     render() {
         const style = stylesheet
-        return(
-            
+        return (
+
             <View style={style.container}>
                 <ScrollView>
-                    <GenericSettingField style={style.setting_entry} title="App theme" value={this.state.appThemeCurrent} description="Change whether your app will use Dark or Light theme" 
-                        onPress={() => {this.setState({appThemeModalVisible: true})}}/>
-                    <GenericSettingField style={style.setting_entry} title="Language" value={this.state.languageCurrent} description="Change the language shown by the app"
-                        onPress={() => {this.setState({languageModalVisible: true})}}/>
-                    <GenericSettingField style={style.setting_entry} title="Currency" value={this.state.currencyCurrent} description="Change which currency to be shown after the value number, this does not convert your value to the respective currency"
-                        onPress={() => {this.setState({currencyModalVisible: true})}}/>
-                    <GenericSettingField style={style.setting_entry} title="Strict Mode" value={this.state.strictModeCurrent} description="Toggle 'strict mode' that enforce a certain rule to your budget"
-                        onPress={() => {this.setState({strictModeModalVisible: true})}}/>
+                    <GenericSettingField
+                        style={style.setting_entry}
+                        title="App theme"
+                        value={this.state.appThemeCurrent}
+                        description="Change whether your app will use Dark or Light theme"
+                        onPress={() => { this.setState({ appThemeModalVisible: true }) }} />
+
+                    <GenericSettingField
+                        style={style.setting_entry}
+                        title="Language"
+                        value={this.state.languageCurrent}
+                        description="Change the language shown by the app"
+                        onPress={() => { this.setState({ languageModalVisible: true }) }} />
+
+                    <GenericSettingField
+                        style={style.setting_entry}
+                        title="Currency"
+                        value={this.state.currencyCurrent}
+                        description="Change which currency to be shown after the value number, this does not convert your value to the respective currency"
+                        onPress={() => { this.setState({ currencyModalVisible: true }) }} />
+
+                    <GenericSettingField
+                        style={style.setting_entry}
+                        title="Strict Mode"
+                        value={this.state.strictModeCurrent}
+                        description="Toggle 'strict mode' that enforce a certain rule to your budget"
+                        onPress={() => { this.setState({ strictModeModalVisible: true }) }} />
                 </ScrollView>
                 <FAB
                     style={style.fab}
@@ -77,10 +96,30 @@ export class AppearanceSetting extends Component {
                     icon="content-save"
                     onPress={() => console.log('Pressed')}
                 />
-                <GenericSelectionModal isVisible={this.state.appThemeModalVisible} onRequestClose={() => {this.setState({appThemeModalVisible: false})}} selectionEntry={this.state.appThemeOption} onSelection={this.onAppThemeChange}></GenericSelectionModal>
-                <GenericSelectionModal isVisible={this.state.languageModalVisible} onRequestClose={() => {this.setState({languageModalVisible: false})}} selectionEntry={this.state.languageOption} onSelection={this.onLanguageChange}></GenericSelectionModal>
-                <GenericSelectionModal isVisible={this.state.currencyModalVisible} onRequestClose={() => {this.setState({currencyModalVisible: false})}} selectionEntry={this.state.currencyOption} onSelection={this.onCurrencyChange}></GenericSelectionModal>
-                <GenericSelectionModal isVisible={this.state.strictModeModalVisible} onRequestClose={() => {this.setState({strictModeModalVisible: false})}} selectionEntry={this.state.strictModeOption} onSelection={this.onStrictModeChange}></GenericSelectionModal>
+
+                <GenericSelectionModal
+                    isVisible={this.state.appThemeModalVisible}
+                    onRequestClose={() => { this.setState({ appThemeModalVisible: false }) }}
+                    selectionEntry={this.state.appThemeOption}
+                    onSelection={this.onAppThemeChange} />
+
+                <GenericSelectionModal
+                    isVisible={this.state.languageModalVisible}
+                    onRequestClose={() => { this.setState({ languageModalVisible: false }) }}
+                    selectionEntry={this.state.languageOption}
+                    onSelection={this.onLanguageChange} />
+
+                <GenericSelectionModal
+                    isVisible={this.state.currencyModalVisible}
+                    onRequestClose={() => { this.setState({ currencyModalVisible: false }) }}
+                    selectionEntry={this.state.currencyOption}
+                    onSelection={this.onCurrencyChange} />
+
+                <GenericSelectionModal
+                    isVisible={this.state.strictModeModalVisible}
+                    onRequestClose={() => { this.setState({ strictModeModalVisible: false }) }}
+                    selectionEntry={this.state.strictModeOption}
+                    onSelection={this.onStrictModeChange} />
             </View>
         )
     }

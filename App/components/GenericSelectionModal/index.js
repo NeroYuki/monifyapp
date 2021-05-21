@@ -7,11 +7,16 @@ export class GenericSelectionModal extends Component {
     render() {
         const style = stylesheet
 
-        const selectionList = (this.props.selectionEntry)? (this.props.selectionEntry.map((val, index) => {
+        const selectionList = (this.props.selectionEntry) ? (this.props.selectionEntry.map((val, index) => {
             //TODO: overload an onSelection here
             return (
                 <View key={index} style={style.selection_entry}>
-                    <TouchableHighlight onPress={(this.props.onSelection)? () => this.props.onSelection(val) : () => {console.log(val)}} underlayColor="#00000030">
+                    <TouchableHighlight
+                        onPress={(this.props.onSelection) ?
+                            () => this.props.onSelection(val)
+                            :
+                            () => { console.log(val) }} underlayColor="#00000030"
+                    >
                         <Text style={style.selection_entry_text}>{val}</Text>
                     </TouchableHighlight>
                     <Divider></Divider>
@@ -34,7 +39,7 @@ export class GenericSelectionModal extends Component {
                     transparent={true}
                     visible={this.props.isVisible}
                     onRequestClose={this.props.onRequestClose}
-                    // onDismiss={this.props.onRequestClose}
+                // onDismiss={this.props.onRequestClose}
                 >
                     <View style={style.main_view}>
                         <Text style={style.main_view_header}>Select one...</Text>

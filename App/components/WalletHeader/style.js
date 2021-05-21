@@ -59,7 +59,6 @@ export const stylesheet = StyleSheet.create({
         marginBottom: 10,
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'white',
     },
     button_content: {
         width: 150,

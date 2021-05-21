@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { SafeAreaView, ScrollView, View } from "react-native";
 import { Button, Modal } from "react-native-paper";
 import { TabSwitcher, WalletHeader } from "../../components";
+import { ChartOverview } from "../../components/OverviewScreen/ChartOverview";
 import { ItemsOverView } from "../../components/OverviewScreen/ItemsOverview";
 
 export class OverviewScreen extends Component {
@@ -15,14 +16,29 @@ export class OverviewScreen extends Component {
 
         this.onCategoriesPress = this.onCategoriesPress.bind(this)
         this.onTimeTextPress = this.onTimeTextPress.bind(this)
+        this.onListPress = this.onListPress.bind(this)
     }
 
     onCategoriesPress() {
-        this.setState({ categoriesVisible: !this.state.CategoriesModal })
+        this.setState({ categoriesVisible: true })
+    }
+
+    onListPress() {
+        this.setState({ categoriesVisible: false })
     }
 
     onTimeTextPress() {
         this.setState({ periodVisible: !this.state.periodVisible })
+    }
+
+
+    reportView = () => {
+        return (
+            (!this.state.categoriesVisible) ?
+                <ItemsOverView />
+                :
+                <ChartOverview />
+        )
     }
 
     render() {
@@ -30,11 +46,18 @@ export class OverviewScreen extends Component {
             <SafeAreaView style={{ flex: 1 }}>
                 <ScrollView style={{ flex: 1 }}>
                     <View style={{ flex: 1 }}>
-                        <WalletHeader />
+
+                        <WalletHeader
+                            currentTab={this.state.categoriesVisible}
+                            onCategoriesPress={this.onCategoriesPress}
+                            onListPress={this.onListPress}
+                        />
+
                         <View style={{ flex: 1 }}>
                             <TabSwitcher text="May 2021" onTimeTextPress={this.onTimeTextPress}></TabSwitcher>
 
-                            <ItemsOverView />
+                            <this.reportView />
+
 
                             {/* <Button onPress={() => { this.setState({ visible: true }) }}>Click me</Button>
                     <Button onPress={() => { this.setState({ categoriesVisible: !this.state.categoriesModal }) }}>Click me 2</Button>

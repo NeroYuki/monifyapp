@@ -57,9 +57,9 @@ export class ItemsOverView extends Component {
                     source={icons.foodIcon}
                     resizeMode='contain'
                 />
-                <View style={{ flex: 1, marginLeft: 16, flexDirection: 'row', justifyContent: 'space-between' }}>
+                <View style={{ flex: 1, marginLeft: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Text style={styles.title}>{items.key}</Text>
-                    <Text> </Text>
+                    <Text> {items.describe} </Text>
                     <Text style={styles.title}>{items.money}</Text>
                 </View>
 

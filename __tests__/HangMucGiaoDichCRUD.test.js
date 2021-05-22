@@ -6,10 +6,7 @@ let idnguoidung=new BSON.ObjectID()
 let date= new Date('2011-04-11T10:20:30.000Z')
 hangmucgiaodichtest= {
     idhangmucgiaodich: idhangmuc,
-    idnguoidung:{
-        idnguoidung:idnguoidung,
-        pass:'123456'
-    },
+    idnguoidung:idnguoidung,
     thoigiantao: date,
     tenhangmuc: 'Sắm tết',
     iconhangmuc: '123456###',
@@ -20,10 +17,7 @@ hangmucgiaodichtest= {
 }
 hangmucgiaodich= {
     idhangmucgiaodich: idhangmuc,
-    idnguoidung:{
-        idnguoidung:idnguoidung,
-        pass:'123456'
-    },
+    idnguoidung:idnguoidung,
     thoigiantao: date,
     tenhangmuc: 'Sắm tết',
     iconhangmuc: '123456###',
@@ -35,10 +29,7 @@ test('testing insert HangMucGiaoDich', async () => {
 })
 hangmucgiaodichtestupdate= {
     idhangmucgiaodich: idhangmuc,
-    idnguoidung:{
-        idnguoidung:idnguoidung,
-        pass:'123456'
-    },
+    idnguoidung:idnguoidung,
     thoigiantao: date,
     tenhangmuc: 'Sắm tết 3',
     iconhangmuc: '123456###',
@@ -48,10 +39,10 @@ hangmucgiaodichtestupdate= {
     },
 }
 hangmuctestquery=[{
-    idhangmucgiaodich: new BSON.ObjectID('609e4dcdec7920f2c5a218a2'),
-    idnguoidung: { idnguoidung: new BSON.ObjectID('609e4dcdec7920f2c5a218a3'), pass: '123456' },
+    idhangmucgiaodich: idhangmuc,
+    idnguoidung: idnguoidung,
     thoigiantao: '2011-04-11T10:20:30.000Z',
-    tenhangmuc: 'Sắm tết',
+    tenhangmuc: 'Sắm tết 3',
     loaihangmuc: { chitieu: true, thunhap: false },
     iconhangmuc: '123456###'
   }]
@@ -61,10 +52,10 @@ test('testing update HangMucGiaoDich', async () => {
      expect(JSON.parse(JSON.stringify(await updateHangMucGiaoDich(hangmucgiaodichtestupdate)))).toStrictEqual(JSON.parse(JSON.stringify(hangmucgiaodichtestupdate)))
     // expect(EJSON.parse(EJSON.stringify(await updateHangMucGiaoDich(hangmucgiaodichtestupdate)))).toStrictEqual(hangmucgiaodichtestupdate)
 })
-test('testing delete HangMucGiaoDich', async () => {
-    expect(await deleteHangMucGiaoDich(hangmucgiaodichtestupdate)).toStrictEqual('ThanhCong')
-})
 test('testing querry HangMucGiaoDich', async () => {
     //console.log(JSON.parse(JSON.stringify(await queryHangMucGiaoDich(thoigiantao=date,tenhangmuc='Sắm tết',loaihangmuc='ChiTieu',id=new BSON.ObjectID('609e4dcdec7920f2c5a218a3')))))
-    expect(JSON.parse(JSON.stringify(await queryHangMucGiaoDich({thoigiantao:date,tenhangmuc:'Sắm tết',loaihangmuc:'ChiTieu',id:new BSON.ObjectID('609e4dcdec7920f2c5a218a3')})))).toStrictEqual(JSON.parse(JSON.stringify(hangmuctestquery)))
+    expect(JSON.parse(JSON.stringify(await queryHangMucGiaoDich({idhangmucgiaodich: idhangmuc,thoigiantao:date,tenhangmuc:'Sắm tết 3',loaihangmuc:'ChiTieu',id:idnguoidung,iconhangmuc: '123456###'})))).toStrictEqual(JSON.parse(JSON.stringify(hangmuctestquery)))
+})
+test('testing delete HangMucGiaoDich', async () => {
+    expect(await deleteHangMucGiaoDich(hangmucgiaodichtestupdate)).toStrictEqual('ThanhCong')
 })

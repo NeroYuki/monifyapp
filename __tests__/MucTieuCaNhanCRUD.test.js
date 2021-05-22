@@ -8,10 +8,7 @@ let dateend= new Date('2011-05-11T10:20:30.000Z')
 
 let muctieucanhantest={
     idmuctieu: idmuctieu,
-    idnguoidung:{
-        idnguoidung:idnguoidung,
-        pass:"123456***",
-    },
+    idnguoidung:idnguoidung,
     thoigiantao: datestart,
     sotienmuctieu: 200000,
     ngaybatdau: datestart,
@@ -19,10 +16,7 @@ let muctieucanhantest={
 }
 let muctieucanhan={
     idmuctieu: idmuctieu,
-    idnguoidung:{
-        idnguoidung:idnguoidung,
-        pass:"123456***",
-    },
+    idnguoidung:idnguoidung,
     thoigiantao: datestart,
     loaimuctieu:{
         tietkiemdenmuc: true,
@@ -40,10 +34,7 @@ test('testing insert MucTieuCaNhan', async () => {
 })
 let muctieucanhantestupdate={
     idmuctieu: idmuctieu,
-    idnguoidung:{
-        idnguoidung:idnguoidung,
-        pass:"123456***",
-    },
+    idnguoidung:idnguoidung,
     thoigiantao: datestart,
     loaimuctieu:{
         tietkiemdenmuc: false,
@@ -56,10 +47,7 @@ let muctieucanhantestupdate={
 }
 let muctieucanhantestquery=[{
     idmuctieu: idmuctieu,
-    idnguoidung:{
-        idnguoidung:idnguoidung,
-        pass:"123456***",
-    },
+    idnguoidung:idnguoidung,
     thoigiantao: datestart,
     loaimuctieu:{
         tietkiemdenmuc: false,
@@ -78,7 +66,7 @@ test('testing update MucTieuCaNhan', async () => {
 test('testing query MucTieuCaNhan', async () => {
     // console.log(JSON.parse(JSON.stringify(await insertMucTieuCaNhan(muctieucanhantest,'TietKiemDenMuc'))))
     // console.log(JSON.parse(JSON.stringify(await queryMucTieuCaNhan({ngaybatdau:datestart,ngayketthuc:datestart,loaimuctieu:'TieuDungQuaMuc',thoigiantao:datestart,id:idnguoidung,sotienmuctieu:500000}))))
-   expect(JSON.parse(JSON.stringify(await queryMucTieuCaNhan({ngaybatdau:datestart,ngayketthuc:datestart,loaimuctieu:'TieuDungQuaMuc',thoigiantao:datestart,id:idnguoidung,sotienmuctieu:500000})))).toStrictEqual(JSON.parse(JSON.stringify(muctieucanhantestquery)))
+   expect(JSON.parse(JSON.stringify(await queryMucTieuCaNhan({idmuctieu: idmuctieu,ngaybatdau:datestart,ngayketthuc:datestart,loaimuctieu:'TieuDungQuaMuc',thoigiantao:datestart,id:idnguoidung,sotienmuctieu:500000})))).toStrictEqual(JSON.parse(JSON.stringify(muctieucanhantestquery)))
 })
 test('testing delete MucTieuCaNhan', async () => {
     // console.log(JSON.parse(JSON.stringify(await insertMucTieuCaNhan(muctieucanhantest,'TietKiemDenMuc'))))

@@ -3,7 +3,6 @@ import Realm, { schemaVersion,BSON } from 'realm';
 
 const data = monifydata;
 
-//HangMucGiaoDichSchema
 export const insertCaiDat = (newCaiDat) =>
   new Promise((resolve, reject) => {
     Realm.open(data).then(realm => {
@@ -18,10 +17,22 @@ export const updateCaiDat=CaiDat=> new Promise((resolve,reject)=>{
     Realm.open(data).then(realm=>{
         realm.write(()=>{
             let updateCaiDat=realm.objectForPrimaryKey(CaiDatSchema.name,CaiDat.idcaidat)
-            updateCaiDat.loaitien=CaiDat.loaitien
-            updateCaiDat.chedo=CaiDat.chedo
-            updateCaiDat.ngonngu=CaiDat.ngonngu
-            updateCaiDat.chedonghiemngat=CaiDat.chedonghiemngat
+            if(CaiDat.loaitien)
+            {
+              updateCaiDat.loaitien=CaiDat.loaitien
+            }
+            if(CaiDat.chedo)
+            {
+              updateCaiDat.chedo=CaiDat.chedo
+            }
+            if(CaiDat.ngonngu)
+            {
+              updateCaiDat.ngonngu=CaiDat.ngonngu
+            }
+            if(CaiDat.chedonghiemngat)
+            {
+              updateCaiDat.chedonghiemngat=CaiDat.chedonghiemngat
+            }
             resolve(updateCaiDat)
         })
     }).catch((error)=>reject(error))
@@ -46,6 +57,10 @@ export const deleteCaiDat=CaiDat=> new Promise((resolve,reject)=>{
 export const queryCaiDat=(option)=> new Promise((resolve,reject)=>{
   Realm.open(data).then(realm=>{
     let Taget = realm.objects(CaiDatSchema.name)
+    if(option.idcaidat)
+    {
+      Taget=Taget.filtered('idcaidat==$0',option.idcaidat)
+    }
     if(option.thoigiantao)
     {
       Taget=Taget.filtered('thoigiantao==$0',option.thoigiantao)

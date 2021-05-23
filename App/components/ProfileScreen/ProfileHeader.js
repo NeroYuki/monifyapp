@@ -7,24 +7,22 @@ export class ProfileHeader extends Component {
     render() {
 
         return (
-            <View style={styles.header}>
+            <View style={[styles.header, this.props.style]}>
                 <View style={{ flexDirection: 'row', flex: 1 }}>
-                    <TouchableOpacity style={{ width: 25, height: 25, alignItems: 'center', justifyContent: 'center' }}
-                        onPress={() => console.log("Cài đặt Budget")}
+                    <TouchableOpacity style={{position: 'absolute', padding: 16, zIndex: 2,}}
+                        onPress={() => console.log("Cài đặt user")}
                     >
                         <Image
                             source={icons.setting}
                             resizeMode="contain"
-                            style={{ flex: 1 }}
+                            style={{ flex: 1, height: 30, width: 30 }}
                         />
                     </TouchableOpacity>
 
-                    <TouchableOpacity style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                    <TouchableOpacity style={{ flex: 1, justifyContent: 'center', alignItems: 'center', paddingVertical: 10,}}>
                         <Text style={{ color: COLORS.white, ...FONTS.body2 }}> Profile </Text>
                     </TouchableOpacity>
                 </View>
-
-                {/* Donut Chart */}
 
             </View >
         )
@@ -33,11 +31,8 @@ export class ProfileHeader extends Component {
 
 const styles = StyleSheet.create({
     header: {
-        flex: 1,
-        position: 'absolute',
-        left: SIZES.padding16,
-        right: SIZES.padding16,
-        top: 50,
+        minHeight: 50,
+        width: '100%',
     }
 })
 

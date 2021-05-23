@@ -1,12 +1,10 @@
 import React from 'react';
-import {
-    StyleSheet,
-    Text,
-    Image,
-    View,
-} from 'react-native';
+import { Text, Image, View, ImageBackground, } from 'react-native';
+import { stylesheet } from './style'
 import { images } from '../../assets/constants';
 import { ProfileHeader } from '../../components/ProfileScreen/ProfileHeader';
+import { Avatar } from 'react-native-paper';
+import { DescriptiveButton } from '../../components';
 
 export class ProfileScreen extends React.Component {
     constructor(props) {
@@ -14,40 +12,40 @@ export class ProfileScreen extends React.Component {
     }
 
     render() {
+        const style = stylesheet
+
         return (
-            <View style={styles.container}>
+            <View style={style.container}>
                 {/* Banner Photo */}
-                <View style={{ height: 400 }}>
-                    <Image
+                <View style={style.header}>
+                    <ImageBackground
                         source={images.backgroundYellow}
                         resizeMode='cover'
-                        style={{
-                            height: '100%',
-                            width: '100%'
-                        }}
-                    />
+                        style={style.header_background}
+                    >
+                        
+                        <View style={style.header_content}>
+                            {/* Render Header */}
+                            <ProfileHeader style={style.header_title} />
+                            <Avatar.Image style={style.header_avatar} size={100} source={images.avatarPlaceholder}/>
+                            <Text style={style.header_username_text}>UsernameX</Text>
+                        </View>
+                    </ImageBackground>                    
                 </View>
+
+                
 
                 {/* Detail of Budget */}
-                <View style={styles.allWallet}>
-
+                <View style={style.allWallet}>
+                    <DescriptiveButton icon="wallet-outline" title="Wallet" style={style.button_entry} onPress={() => { this.props.navigation.push("Wallet") }}></DescriptiveButton>
+                    <DescriptiveButton icon="piggy-bank" title="Saving" style={style.button_entry} onPress={() => { this.props.navigation.push("Saving") }}></DescriptiveButton>
+                    <DescriptiveButton icon="account-cash-outline" title="Loan" style={style.button_entry} onPress={() => { this.props.navigation.push("Loan") }}></DescriptiveButton>
+                    <DescriptiveButton icon="repeat" title="Recurring Bills" style={style.button_entry} onPress={() => { this.props.navigation.push("RecurringBill") }}></DescriptiveButton>
                 </View>
 
-                {/* Render Header */}
-                <ProfileHeader />
+                
 
             </View >
         );
     }
 }
-
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-    },
-
-    allWallet: {
-        flex: 1,
-        backgroundColor: 'red'
-    },
-});

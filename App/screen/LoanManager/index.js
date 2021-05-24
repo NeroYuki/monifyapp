@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { Searchbar } from "react-native-paper";
+import { FAB, Searchbar } from "react-native-paper";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { LoanEntry, LoanSearchModal } from "../../components";
 import { stylesheet } from './style'
@@ -37,9 +37,9 @@ export class LoanManager extends Component {
         const loanDisplay = this.state.loanList.map((val) => {
             return <LoanEntry
                 key={val.id} style={[style.loan_entry, {backgroundColor: val.color}]} name={val.name} due_duration={val.due_duratuion} amount={val.amount} interest_string={val.interest_string}
-                onViewPress={() => {}}
+                onViewPress={() => {this.props.navigation.navigate("LoanEditor")}}
                 onDeletePress={() => {}}
-                onEditPress={() => {}}
+                onEditPress={() => {this.props.navigation.navigate("LoanEditor")}}
             ></LoanEntry>
         })
 
@@ -52,7 +52,14 @@ export class LoanManager extends Component {
                         <Icon name="menu-down" size={40}></Icon>
                     </TouchableOpacity>
                 </View>
-                {loanDisplay}
+                <ScrollView>
+                    {loanDisplay}
+                </ScrollView>
+                <FAB style={style.fab}
+                    big
+                    icon="plus"
+                    onPress={() => {this.props.navigation.navigate("LoanEditor")}}
+                />
                 <LoanSearchModal isVisible={this.state.advanceSearchVisible} 
                     onRequestClose={() => {this.setState({advanceSearchVisible: false})}} 
                     onFilterRequest={(data) => {console.log(data); }}>

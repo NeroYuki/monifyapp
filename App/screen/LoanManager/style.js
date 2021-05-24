@@ -6,10 +6,16 @@ export const stylesheet = StyleSheet.create({
         margin: 10,
     },
     container: {
-
+        flex: 1,
     },
     search_bar: {
         padding: 10,
         flexDirection: 'row',
+    },
+    fab: {
+        position: 'absolute',
+        margin: 16,
+        right: 0,
+        bottom: 0,
     }
 })

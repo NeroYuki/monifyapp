@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { ScrollView, Text, View, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Searchbar } from "react-native-paper";
+import { FAB, Searchbar } from "react-native-paper";
 import { SavingEntry, SavingSearchModal } from "../../components";
 import { stylesheet } from './style'
 
@@ -37,9 +37,9 @@ export class SavingManager extends Component {
         const savingDisplay = this.state.savingList.map((val) => {
             return <SavingEntry
                 key={val.id} style={[style.saving_entry, {backgroundColor: val.color}]} name={val.name} due_duration={val.due_duratuion} amount={val.amount} interest_string={val.interest_string}
-                onViewPress={() => {}}
+                onViewPress={() => {this.props.navigation.navigate("SavingEditor")}}
                 onDeletePress={() => {}}
-                onEditPress={() => {}}
+                onEditPress={() => {this.props.navigation.navigate("SavingEditor")}}
             ></SavingEntry>
         })
 
@@ -52,7 +52,14 @@ export class SavingManager extends Component {
                         <Icon name="menu-down" size={40}></Icon>
                     </TouchableOpacity>
                 </View>
-                {savingDisplay}
+                <ScrollView>
+                    {savingDisplay}
+                </ScrollView>
+                <FAB style={style.fab}
+                    big
+                    icon="plus"
+                    onPress={() => {this.props.navigation.navigate("SavingEditor")}}
+                />
                 <SavingSearchModal isVisible={this.state.advanceSearchVisible} 
                     onRequestClose={() => {this.setState({advanceSearchVisible: false})}} 
                     onFilterRequest={(data) => {console.log(data); }}>

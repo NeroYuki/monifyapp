@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { ScrollView, Text, View, TouchableOpacity } from "react-native";
-import { Searchbar } from "react-native-paper";
+import { FAB, Searchbar } from "react-native-paper";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RecurringBillEntry, RecurringBillSearchModal } from "../../components";
 import { stylesheet } from './style'
@@ -23,7 +23,7 @@ export class RecurringBillManager extends Component {
                     id: '2',
                     name: 'Electricity Bill',
                     next_tran: '8 days',
-                    amount: 'Custom',
+                    amount: '0 đ',
                     desc: 'Monthly electricity bill',
                     color: '#ddffdd',
                 },
@@ -37,9 +37,9 @@ export class RecurringBillManager extends Component {
         const billDisplay = this.state.billList.map((val) => {
             return <RecurringBillEntry
                 key={val.id} style={[style.bill_entry, {backgroundColor: val.color}]} name={val.name} next_tran={val.next_tran} amount={val.amount} desc={val.desc}
-                onViewPress={() => {}}
+                onViewPress={() => {this.props.navigation.navigate("RecurringBillEditor")}}
                 onDeletePress={() => {}}
-                onEditPress={() => {}}
+                onEditPress={() => {this.props.navigation.navigate("RecurringBillEditor")}}
             ></RecurringBillEntry>
         })
 
@@ -52,8 +52,14 @@ export class RecurringBillManager extends Component {
                         <Icon name="menu-down" size={40}></Icon>
                     </TouchableOpacity>
                 </View>
-                
-                {billDisplay}
+                <ScrollView>
+                    {billDisplay}
+                </ScrollView>
+                <FAB style={style.fab}
+                    big
+                    icon="plus"
+                    onPress={() => {this.props.navigation.navigate("RecurringBillEditor")}}
+                />
                 <RecurringBillSearchModal isVisible={this.state.advanceSearchVisible} 
                     onRequestClose={() => {this.setState({advanceSearchVisible: false})}} 
                     onFilterRequest={(data) => {console.log(data); }}>

@@ -33,9 +33,9 @@ export class WalletEntry extends Component {
                         anchor={<TouchableOpacity onPress={() => {this.setState({visible: true})}}><Icon name='dots-vertical' size={24}></Icon></TouchableOpacity>}>
                             <Menu.Item onPress={() => {}} icon="cash-refund" title="Transfer" />
                             <Divider></Divider>
-                            <Menu.Item onPress={() => {}} icon="eye" title="View" />
-                            <Menu.Item onPress={() => {}} icon="file-edit" title="Edit" />
-                            <Menu.Item onPress={() => {}} icon="delete" title="Delete" />
+                            <Menu.Item onPress={() => {this.setState({visible: false}); (this.props.onViewPress)? this.props.onViewPress() : () => {}}} icon="eye" title="View" />
+                            <Menu.Item onPress={() => {this.setState({visible: false}); (this.props.onEditPress)? this.props.onEditPress() : () => {}}} icon="file-edit" title="Edit" />
+                            <Menu.Item onPress={() => {this.setState({visible: false}); (this.props.onDeletePress)? this.props.onDeletePress() : () => {}}} icon="delete" title="Delete" />
                     </Menu>
                 </View>
             </View>

@@ -13,6 +13,10 @@ import { LoanManager } from './LoanManager'
 import { SavingManager } from './SavingManager'
 import { RecurringBillManager } from './RecurringBillManager'
 import { WalletManager } from './WalletManager' 
+import { WalletEditor } from './WalletEditor'
+import { SavingEditor } from './SavingEditor'
+import { RecurringBillEditor } from './RecurringBillEditor'
+import { LoanEditor } from './LoanEditor'
 
 export {
     TestScreen,
@@ -30,4 +34,8 @@ export {
     SavingManager,
     WalletManager,
     RecurringBillManager,
+    WalletEditor,
+    SavingEditor,
+    RecurringBillEditor,
+    LoanEditor,
 }

@@ -2,15 +2,22 @@ import { StyleSheet } from 'react-native'
 import { COLORS } from '../../assets/constants'
 
 export const stylesheet = StyleSheet.create({
-    bill_entry: {
-        margin: 10,
-    },
     container: {
         flex: 1,
+        flexDirection: 'column',
     },
-    search_bar: {
-        padding: 10,
-        flexDirection: 'row',
+    header: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'white',
+    },
+    header_text: {
+        fontSize: 20,
+        fontWeight: '700'
+    },
+    setting_entry: {
+        marginBottom: 10,
     },
     fab: {
         position: 'absolute',

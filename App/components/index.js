@@ -22,6 +22,8 @@ import { SavingEntry } from './SavingManager/SavingEntry'
 import { SavingSearchModal } from './SavingManager/SavingSearchModal'
 import { RecurringBillEntry } from './RecurringBillManager/RecurringBillEntry' 
 import { RecurringBillSearchModal } from './RecurringBillManager/RecurringBillSearchModal'
+import { GenericInputModal } from './GenericInputModal'
+import { ColorPickerModal } from './ColorPickerModal'
  
 export {
     TabSwitcher,
@@ -48,4 +50,6 @@ export {
     SavingSearchModal,
     RecurringBillEntry,
     RecurringBillSearchModal,
+    GenericInputModal,
+    ColorPickerModal,
 }

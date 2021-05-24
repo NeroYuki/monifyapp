@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { Searchbar } from "react-native-paper";
+import { FAB, Searchbar } from "react-native-paper";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { WalletEntry, WalletSearchModal } from "../../components";
 import { stylesheet } from './style'
@@ -42,9 +42,9 @@ export class WalletManager extends Component {
         const walletDisplay = this.state.walletList.map((val) => {
             return <WalletEntry 
                 key={val.id} style={[style.wallet_entry, {backgroundColor: val.color}]} name={val.name} last_tran={val.last_tran} amount={val.amount}
-                onViewPress={() => {}}
+                onViewPress={() => {this.props.navigation.navigate("WalletEditor")}}
                 onDeletePress={() => {}}
-                onEditPress={() => {}}
+                onEditPress={() => {this.props.navigation.navigate("WalletEditor")}}
             ></WalletEntry>
         })
 
@@ -57,8 +57,14 @@ export class WalletManager extends Component {
                         <Icon name="menu-down" size={40}></Icon>
                     </TouchableOpacity>
                 </View>
-                
-                {walletDisplay}
+                <ScrollView>
+                    {walletDisplay}
+                </ScrollView>
+                <FAB style={style.fab}
+                    big
+                    icon="plus"
+                    onPress={() => {this.props.navigation.navigate("WalletEditor")}}
+                />
                 <WalletSearchModal isVisible={this.state.advanceSearchVisible} 
                     onRequestClose={() => {this.setState({advanceSearchVisible: false})}} 
                     onFilterRequest={(data) => {console.log(data); }}>

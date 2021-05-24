@@ -1,7 +1,8 @@
 import React, { Component } from "react";
-import { SafeAreaView, ScrollView, View } from "react-native";
+import { SafeAreaView, ScrollView, View, StyleSheet } from "react-native";
 import { Button, Modal } from "react-native-paper";
-import { TabSwitcher, WalletHeader } from "../../components";
+import { COLORS } from "../../assets/constants";
+import { TabSwitcher, TransactionEditor, WalletHeader } from "../../components";
 import { ChartOverview } from "../../components/OverviewScreen/ChartOverview";
 import { ItemsOverView } from "../../components/OverviewScreen/ItemsOverview";
 
@@ -17,6 +18,7 @@ export class OverviewScreen extends Component {
         this.onCategoriesPress = this.onCategoriesPress.bind(this)
         this.onTimeTextPress = this.onTimeTextPress.bind(this)
         this.onListPress = this.onListPress.bind(this)
+        this.onPressTransactionEditor = this.onPressTransactionEditor.bind(this)
     }
 
     onCategoriesPress() {
@@ -31,11 +33,15 @@ export class OverviewScreen extends Component {
         this.setState({ periodVisible: !this.state.periodVisible })
     }
 
+    onPressTransactionEditor() {
+        this.setState({ visible: !this.state.visible })
+    }
+
 
     reportView = () => {
         return (
             (!this.state.categoriesVisible) ?
-                <ItemsOverView />
+                <ItemsOverView onPressTransactionEditor={this.onPressTransactionEditor} />
                 :
                 <ChartOverview />
         )
@@ -53,7 +59,7 @@ export class OverviewScreen extends Component {
                             onListPress={this.onListPress}
                         />
 
-                        <View style={{ flex: 1 }}>
+                        <SafeAreaView style={{ flex: 1 }}>
                             <TabSwitcher text="May 2021" onTimeTextPress={this.onTimeTextPress}></TabSwitcher>
 
                             <this.reportView />
@@ -69,11 +75,35 @@ export class OverviewScreen extends Component {
                     <TimespanPicker isVisible={this.state.periodVisible} onRequestClose={() => { this.setState({ periodVisible: false }) }}></TimespanPicker>
 
                     <CategoriesModal isVisible={this.state.categoriesVisible} onRequestClose={() => { this.setState({ categoriesVisible: false }) }}></CategoriesModal> */}
-                        </View>
+                        </SafeAreaView>
                     </View>
-                </ScrollView>
 
+
+                </ScrollView>
+                <Modal
+                    visible={this.state.visible}
+                    onDismiss={() => { this.setState({ visible: false }) }}
+                    contentContainerStyle={styles.containerStyle}
+                    style={styles.modalStyle}
+                >
+
+                    <TransactionEditor />
+
+                </Modal>
             </SafeAreaView>
         )
     }
 }
+
+const styles = StyleSheet.create({
+    containerStyle: {
+        height: "70%",
+        width: "90%",
+        backgroundColor: 'white',
+    },
+    modalStyle: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center"
+    }
+})

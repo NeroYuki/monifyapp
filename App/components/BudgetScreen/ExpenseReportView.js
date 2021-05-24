@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, FlatList, Dimensions, Image } from 'react-native';
+import { Text, View, StyleSheet, FlatList, Dimensions, Image, SafeAreaView } from 'react-native';
 import { COLORS, icons } from '../../assets/constants';
 import Svg, { G, Circle, Line, } from 'react-native-svg';
 
@@ -117,7 +117,7 @@ export class ExpenseReportView extends Component {
                 <View style={styles.header}>
                     <Text style={styles.title}> Expense </Text>
                 </View>
-                <View style={styles.constraint}>
+                <SafeAreaView style={styles.constraint}>
                     <FlatList
                         scrollEnabled={false}
                         nestedScrollEnabled={true}
@@ -126,7 +126,7 @@ export class ExpenseReportView extends Component {
                         renderItem={this.renderItem}
                         numColumns={this.state.numColumns}
                     />
-                </View>
+                </SafeAreaView>
             </View>
         )
     }

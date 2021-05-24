@@ -6,6 +6,7 @@ export const plus = require('../images/plus-icon.png')
 export const setting = require('../images/setting-icon.png')
 export const foodIcon = require('../images/food-icon.png')
 export const plusUnfill = require('../images/add-icon-unfill.png')
+export const trash = require('../images/trash-icon.png')
 
 export default {
     overview,
@@ -16,4 +17,5 @@ export default {
     setting,
     foodIcon,
     plusUnfill,
+    trash
 }

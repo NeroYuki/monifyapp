@@ -119,6 +119,12 @@ const styles = StyleSheet.create({
         height: 48,
         justifyContent: 'space-between'
     },
+
+    footer: {
+        height: 48,
+        backgroundColor: COLORS.grayBackground,
+        marginTop: -1
+    },
     item: {
         flex: 1,
         minHeight: 70,

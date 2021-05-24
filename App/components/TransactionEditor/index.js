@@ -1,8 +1,9 @@
 import React, { Component } from "react";
 import { stylesheet } from './style'
-import { Text, View } from "react-native";
+import { Text, View, StyleSheet, TouchableOpacity, Image, TextInput } from "react-native";
 import { Button, Divider } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { COLORS, icons } from "../../assets/constants";
 
 
 export class TransactionEditor extends Component {
@@ -10,44 +11,113 @@ export class TransactionEditor extends Component {
         const style = stylesheet
         //console.log(Icon)
         return (
-            <View style={style.container}>
-                <View style={style.header}>
-                    <Icon name="close" size={20}></Icon>
-                    <Text style={style.header_text}>NEW TRANSACTION</Text>
+            <View style={styles.container}>
+
+                <View style={styles.header}>
+                    <Icon name='close' size={24} />
+                    <Text style={styles.textHeader}>EDIT TRANACTIONS</Text>
                 </View>
-                <View style={style.amount_field}>
-                    <Text style={style.amount_field_text}>200.000 đ</Text>
+
+                <View style={styles.moneyTitle}>
+                    <Text style={{ fontSize: 40 }}>200.000</Text>
                 </View>
+
                 <View style={style.info_field}>
                     <View style={style.info_field_item}>
-                        <Icon name="sack" size={20}></Icon>
+                        <Icon name="sack" size={24} />
                         <Text style={style.info_field_item_text}>Category</Text>
                     </View>
-                    <Divider></Divider>
+                    <Divider style={{ height: 1 }} />
                     <View style={style.info_field_item}>
-                        <Icon name="notebook" size={20}></Icon>
-                        <Text style={style.info_field_item_text}>Note</Text>          
+                        <Icon name="notebook" size={24} />
+                        <TextInput
+                            style={{
+                                height: '100%',
+                                fontSize: 17,
+                                marginLeft: 16,
+                            }}
+                            placeholder="Note"
+                            onChangeText={text => console.log(text)}
+                        />
                     </View>
-                    <Divider></Divider>
+                    <Divider style={{ height: 1 }} />
                     <View style={style.info_field_item}>
-                        <Icon name="calendar" size={20}></Icon>
-                        <Text style={style.info_field_item_text}>Tuesday, 5 Mar</Text>            
+                        <Icon name="calendar" size={24} />
+                        <Text style={style.info_field_item_text}>Tuesday, 5 Mar</Text>
                     </View>
-                    <Divider></Divider>
+                    <Divider style={{ height: 1 }} />
                     <View style={style.info_field_item}>
-                        <Icon name="repeat" size={20}></Icon>
+                        <Icon name="repeat" size={24} />
                         <Text style={style.info_field_item_text}>Make Recurring</Text>
                     </View>
-                    <Divider></Divider>
+                    <Divider style={{ height: 1 }} />
                 </View>
-                <View style={style.footer}>
+
+                {/* <View style={style.footer}>
                     <Button mode="contained" contentStyle={style.footer_button_content} style={style.footer_button}>
                         Save
                     </Button>
+                </View> */}
+                <View style={{ height: 64, marginBottom: 16, flexDirection: 'row' }}>
+                    <TouchableOpacity style={{ height: 64, width: 64, marginLeft: 16 }}>
+                        <Image
+                            source={icons.trash}
+                            resizeMode='cover'
+                            style={{
+                                width: 64,
+                                height: 64,
+                            }}
+                        />
+                    </TouchableOpacity>
+                    <TouchableOpacity style={{ flex: 1, justifyContent: 'center', marginRight: 16 }}>
+                        <View style={styles.button}>
+                            <Text style={{ fontSize: 17, color: COLORS.white }}> SAVE </Text>
+                        </View>
+                    </TouchableOpacity>
                 </View>
-            </View>
+            </View >
         )
 
     }
 }
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+    },
+    header: {
+        marginLeft: 16,
+        marginRight: 16,
+        height: 48,
+        flexDirection: 'row',
+        alignItems: 'center',
+    },
+    textHeader: {
+        flex: 1,
+        fontSize: 17,
+        fontWeight: '300',
+        textAlign: 'center',
+    },
+    moneyTitle: {
+        height: 100,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    button: {
+        height: 48,
+        backgroundColor: COLORS.yellow,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+
+        // Shadow 
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 1,
+        },
+        shadowOpacity: 0.15,
+        shadowRadius: 10,
+    }
+})
 

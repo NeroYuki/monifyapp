@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, SectionList, Text, Image } from 'react-native';
+import { View, StyleSheet, SectionList, Text, Image, TouchableOpacity } from 'react-native';
 import { COLORS, icons } from '../../assets/constants';
 
 
@@ -46,8 +46,12 @@ export class ItemsOverView extends Component {
         };
     }
 
+
     Item = ({ items }) => (
-        <View style={styles.item}>
+        <TouchableOpacity
+            style={styles.item}
+            onPress={this.props.onPressTransactionEditor}
+        >
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                 <Image
                     style={{
@@ -67,7 +71,7 @@ export class ItemsOverView extends Component {
 
             </View>
             <View style={{ height: 1, backgroundColor: COLORS.separateLine }}></View>
-        </View>
+        </TouchableOpacity>
     );
 
     Header = ({ section }) => (
@@ -112,11 +116,17 @@ const styles = StyleSheet.create({
     },
 
     selectionList: {
+
     },
 
     header: {
         height: 48,
         justifyContent: 'space-between'
+    },
+    footer: {
+        height: 48,
+        backgroundColor: COLORS.grayBackground,
+        marginTop: -1
     },
     item: {
         flex: 1,

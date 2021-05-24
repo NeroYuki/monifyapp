@@ -64,7 +64,6 @@ export class CategoriesModal extends Component {
                 transparent={true}
                 visible={this.props.isVisible}
                 onRequestClose={this.props.onRequestClose}
-
             >
                 <SafeAreaView style={{ flex: 1 }}>
                     <View style={style.modal_view}>

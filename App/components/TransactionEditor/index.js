@@ -15,24 +15,39 @@ export class TransactionEditor extends Component {
 
                 <View style={styles.header}>
                     <Icon name='close' size={24} />
-                    <Text style={styles.textHeader}>EDIT TRANACTIONS</Text>
+                    <Text style={styles.textHeader}>EDIT TRANSACTION</Text>
                 </View>
 
                 <View style={styles.moneyTitle}>
-                    <Text style={{ fontSize: 40 }}>200.000</Text>
+                    <TextInput
+                        style={{
+                            height: '100%',
+                            fontSize: 40,
+                            fontWeight: '300'
+                        }}
+                        defaultValue='200.000'
+                        placeholder='0'
+                        onChangeText={text => console.log(text)}
+                    />
                 </View>
 
                 <View style={style.info_field}>
-                    <View style={style.info_field_item}>
-                        <Icon name="sack" size={24} />
-                        <Text style={style.info_field_item_text}>Category</Text>
-                    </View>
+                    <TouchableOpacity
+                        onPress={this.props.onCategoriesPress}
+                    >
+                        <View style={style.info_field_item}>
+                            <Icon name="sack" size={24} />
+                            <Text style={style.info_field_item_text}>Category</Text>
+                        </View>
+                    </TouchableOpacity>
                     <Divider style={{ height: 1 }} />
+
                     <View style={style.info_field_item}>
                         <Icon name="notebook" size={24} />
                         <TextInput
                             style={{
                                 height: '100%',
+                                width: '100%',
                                 fontSize: 17,
                                 marginLeft: 16,
                             }}
@@ -41,15 +56,22 @@ export class TransactionEditor extends Component {
                         />
                     </View>
                     <Divider style={{ height: 1 }} />
+
                     <View style={style.info_field_item}>
                         <Icon name="calendar" size={24} />
                         <Text style={style.info_field_item_text}>Tuesday, 5 Mar</Text>
                     </View>
                     <Divider style={{ height: 1 }} />
-                    <View style={style.info_field_item}>
-                        <Icon name="repeat" size={24} />
-                        <Text style={style.info_field_item_text}>Make Recurring</Text>
-                    </View>
+
+                    <TouchableOpacity
+                        onPress={this.props.onRecurringPress}
+                    >
+                        <View style={style.info_field_item}>
+                            <Icon name="repeat" size={24} />
+                            <Text style={style.info_field_item_text}>Make Recurring</Text>
+                        </View>
+                    </TouchableOpacity>
+
                     <Divider style={{ height: 1 }} />
                 </View>
 

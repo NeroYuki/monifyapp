@@ -2,9 +2,10 @@ import React, { Component } from "react";
 import { SafeAreaView, ScrollView, View, StyleSheet } from "react-native";
 import { Button, Modal } from "react-native-paper";
 import { COLORS } from "../../assets/constants";
-import { TabSwitcher, TransactionEditor, WalletHeader } from "../../components";
+import { CategoriesModal, TabSwitcher, TransactionEditor, WalletHeader } from "../../components";
 import { ChartOverview } from "../../components/OverviewScreen/ChartOverview";
 import { ItemsOverView } from "../../components/OverviewScreen/ItemsOverview";
+import { RecurringModal } from "../../components/TransactionEditor/RecurringModal";
 
 export class OverviewScreen extends Component {
     constructor(props) {
@@ -16,8 +17,8 @@ export class OverviewScreen extends Component {
         }
 
         this.onCategoriesPress = this.onCategoriesPress.bind(this)
-        this.onTimeTextPress = this.onTimeTextPress.bind(this)
-        this.onListPress = this.onListPress.bind(this)
+        this.onRecurringPress = this.onRecurringPress.bind(this)
+        this.onHideRecurring = this.onHideRecurring.bind(this)
         this.onPressTransactionEditor = this.onPressTransactionEditor.bind(this)
     }
 
@@ -25,16 +26,16 @@ export class OverviewScreen extends Component {
         this.setState({ categoriesVisible: true })
     }
 
-    onListPress() {
-        this.setState({ categoriesVisible: false })
-    }
-
-    onTimeTextPress() {
-        this.setState({ periodVisible: !this.state.periodVisible })
+    onHideRecurring() {
+        this.setState({ periodVisible: false })
     }
 
     onPressTransactionEditor() {
         this.setState({ visible: !this.state.visible })
+    }
+
+    onRecurringPress() {
+        this.setState({ periodVisible: !this.state.periodVisible })
     }
 
 
@@ -87,10 +88,27 @@ export class OverviewScreen extends Component {
                     style={styles.modalStyle}
                 >
 
-                    <TransactionEditor />
+                    <TransactionEditor
+                        onCategoriesPress={this.onCategoriesPress}
+                        onRecurringPress={this.onRecurringPress}
+
+                    />
 
                 </Modal>
+
+                <CategoriesModal
+                    isVisible={this.state.categoriesVisible}
+                    onRequestClose={() => { this.setState({ categoriesVisible: false }) }}
+                />
+
+                <RecurringModal
+                    isVisible={this.state.periodVisible}
+                    closePeriod={() => {
+                        this.setState({ periodVisible: false })
+                    }}
+                />
             </SafeAreaView>
+
         )
     }
 }

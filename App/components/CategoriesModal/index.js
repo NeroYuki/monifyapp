@@ -43,7 +43,7 @@ export class CategoriesModal extends Component {
                             <Avatar.Icon size={20} style={{ backgroundColor: "red" }} />
                             <Text style={[style.modal_text, style.content_list_text]}>{val}</Text>
                         </View>
-                        <Divider style={{ backgroundColor: 'white' }}></Divider>
+                        <Divider style={{ height: 1, backgroundColor: 'white' }}></Divider>
                     </View>
                 )
             }))
@@ -54,13 +54,14 @@ export class CategoriesModal extends Component {
                             <Avatar.Icon size={20} style={{ backgroundColor: "green" }} />
                             <Text style={[style.modal_text, style.content_list_text]}>{val}</Text>
                         </View>
+                        <Divider style={{ height: 1, backgroundColor: 'white' }}></Divider>
                     </View>
                 )
             }))
 
         return (
             <Modal
-                animationType="slide"
+                animationType='slide'
                 transparent={true}
                 visible={this.props.isVisible}
                 onRequestClose={this.props.onRequestClose}

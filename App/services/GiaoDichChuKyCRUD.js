@@ -54,7 +54,10 @@ export const updateGiaoDichChuKy=GiaoDichChuKy=> new Promise((resolve,reject)=>{
               {
                 updateGiaoDichChuKy.loaihangmucgd=GiaoDichChuKy.loaihangmucgd
               }
-
+              if(GiaoDichChuKy.ghichu)
+              {
+                updateGiaoDichChuKy.ghichu=GiaoDichChuKy.ghichu
+              }
               updateGiaoDichChuKy.chukygiaodichtheongay=GiaoDichChuKy.chukygiaodichtheongay
               updateGiaoDichChuKy.chukygiaodichtheothang=GiaoDichChuKy.chukygiaodichtheothang
               resolve(updateGiaoDichChuKy)
@@ -81,6 +84,10 @@ export const updateGiaoDichChuKy=GiaoDichChuKy=> new Promise((resolve,reject)=>{
               if(GiaoDichChuKy.loaihangmucgd)
               {
                 updateGiaoDichChuKy.loaihangmucgd=GiaoDichChuKy.loaihangmucgd
+              }
+              if(GiaoDichChuKy.ghichu)
+              {
+                updateGiaoDichChuKy.ghichu=GiaoDichChuKy.ghichu
               }
               resolve(updateGiaoDichChuKy)
             }
@@ -154,6 +161,10 @@ export const queryGiaoDichChuKy=(option)=> new Promise((resolve,reject)=>{
     if(option.chukygiaodichtheothang)
     {
       Taget=Taget.filtered('chukygiaodichtheothang==$0',option.chukygiaodichtheothang)
+    }
+    if(option.ghichu)
+    {
+      Taget=Taget.filtered('ghichu==$0',option.ghichu)
     }
     resolve(Taget)
   }).catch((error)=>reject(error))

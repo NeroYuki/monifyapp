@@ -43,6 +43,10 @@ export const updateGiaoDich=GiaoDich=> new Promise((resolve,reject)=>{
               {
                 updateGiaoDich.loaihangmucgd=GiaoDich.loaihangmucgd
               }
+              if(GiaoDich.ghichu)
+              {
+                updateGiaoDich.ghichu=GiaoDich.ghichu
+              }
               resolve(updateGiaoDich)
               // console.log(JSON.parse(JSON.stringify(updateGiaoDichChuKy)))
             }
@@ -103,6 +107,10 @@ export const queryGiaoDich=(option)=> new Promise((resolve,reject)=>{
     if(option.loaihangmucgd)
     {
       Taget=Taget.filtered('loaihangmucgd==$0',option.loaihangmucgd)
+    }
+    if(option.ghichu)
+    {
+      Taget=Taget.filtered('ghichu==$0',option.ghichu)
     }
     resolve(Taget)
   }).catch((error)=>reject(error))

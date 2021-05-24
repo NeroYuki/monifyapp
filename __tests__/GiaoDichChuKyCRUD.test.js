@@ -19,6 +19,7 @@ let GiaoDichTheoChuKy={
     loaihangmucgd:loaihangmuc,
     chukygiaodichtheongay:60,
     chukygiaodichtheothang:null,
+    ghichu:'Tiền chơi coin',
 }
 
 test('testing insert GiaoDichTheoChuKy', async () => {
@@ -37,6 +38,7 @@ let GiaoDichTheoChuKytestupdate={
     loaihangmucgd:loaihangmuc,
     chukygiaodichtheongay:120,
     chukygiaodichtheothang:null,
+    ghichu:'Tiền chơi đá',
 }
 let GiaoDichTheoChuKytestquery=[{
     idgiaodichtheochuky:idgiaodichtheochuky,
@@ -49,6 +51,7 @@ let GiaoDichTheoChuKytestquery=[{
     loaihangmucgd:loaihangmuc,
     chukygiaodichtheongay:120,
     chukygiaodichtheothang:null,
+    ghichu:'Tiền chơi đá',
 }]
 test('testing update GiaoDichTheoChuKy', async () => {
     // console.log(await insertGiaoDichChuKy(GiaoDichTheoChuKy))
@@ -68,6 +71,7 @@ test('testing querry GiaoDichTheoChuKy', async () => {
         loaihangmucgd:loaihangmuc,
         chukygiaodichtheongay:120,
         chukygiaodichtheothang:null,
+        ghichu:'Tiền chơi đá',
     })))).toStrictEqual(JSON.parse(JSON.stringify(GiaoDichTheoChuKytestquery)))
 })
 test('testing delete GiaoDichTheoChuKy', async () => {

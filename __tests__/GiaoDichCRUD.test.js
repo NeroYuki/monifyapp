@@ -17,6 +17,7 @@ let GiaoDich={
     sotientieudung:2000,
     sotienthunhap:null,
     loaihangmucgd:loaihangmuc,
+    ghichu:'Tiền chơi coin',
 }
 
 test('testing insert GiaoDich', async () => {
@@ -33,6 +34,7 @@ let GiaoDichtestupdate={
     sotientieudung:6000,
     sotienthunhap:null,
     loaihangmucgd:loaihangmuc,
+    ghichu:'Tiền chơi đá',
 }
 let GiaoDichtestquery=[{
     idgiaodich:idgiaodich,
@@ -43,6 +45,7 @@ let GiaoDichtestquery=[{
     sotientieudung:6000,
     sotienthunhap:null,
     loaihangmucgd:loaihangmuc,
+    ghichu:'Tiền chơi đá',
 }]
 test('testing update GiaoDich', async () => {
     // console.log(await insertGiaoDichChuKy(GiaoDichTheoChuKy))
@@ -60,6 +63,7 @@ test('testing querry GiaoDich', async () => {
         sotientieudung:6000,
         sotienthunhap:null,
         loaihangmucgd:loaihangmuc,
+        ghichu:'Tiền chơi đá',
     })))).toStrictEqual(JSON.parse(JSON.stringify(GiaoDichtestquery)))
 })
 test('testing delete GiaoDich', async () => {

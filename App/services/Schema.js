@@ -99,6 +99,7 @@ export const GiaoDichSchema = {
     sotientieudung: 'double?',
     sotienthunhap: 'double?',
     loaihangmucgd: 'objectId',
+    ghichu:'string',
   },
   primaryKey: 'idgiaodich',
 };
@@ -117,6 +118,7 @@ export const GiaoDichTheoCKSchema={
     loaihangmucgd: 'objectId',
     chukygiaodichtheongay: 'int?',
     chukygiaodichtheothang: 'int?',
+    ghichu:'string',
   },
   primaryKey:'idgiaodichtheochuky',
 }
@@ -197,5 +199,5 @@ export const monifydata = {
     LoaiTietKiemConfigSchema,
     LoaiMucTieuConfigSchema,
     LoaiHangMucConfigSchema],
-  schemaVersion:4,
+  schemaVersion:5,
 }

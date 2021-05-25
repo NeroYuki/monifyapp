@@ -1,4 +1,5 @@
 import { StyleSheet } from 'react-native'
+import { COLORS } from '../../assets/constants'
 
 export const stylesheet = StyleSheet.create({
     overlay: {
@@ -7,18 +8,20 @@ export const stylesheet = StyleSheet.create({
         elevation: 1
     },
     main_view: {
-        height: "40%", 
+        height: "40%",
         marginTop: 'auto',
         elevation: 20,
     },
-    main_view_tab :{
+    main_view_tab: {
 
     },
     main_view_header: {
         backgroundColor: "white",
         textAlign: 'center',
         padding: 10,
-        color: 'grey',
+        fontSize: 17,
+        fontWeight: '400',
+        color: COLORS.gray,
     },
     period_selection: {
 
@@ -41,7 +44,7 @@ export const stylesheet = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'white',
-        
+
     },
     custom_selection_row_text: {
         marginBottom: 20,

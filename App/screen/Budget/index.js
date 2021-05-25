@@ -21,6 +21,7 @@ export class BudgetScreen extends React.Component {
             settingVisible: false,
         }
 
+        this.showSettingScreen = this.showSettingScreen.bind(this)
     }
 
     showSettingScreen = () => {
@@ -48,7 +49,7 @@ export class BudgetScreen extends React.Component {
 
                         {/* Detail of Budget */}
                         <View style={styles.detailBudget}>
-                            <TabSwitcher text="MARCH 2021"></TabSwitcher>
+                            <TabSwitcher text="March 2021"></TabSwitcher>
 
                             <IncomeReportView
                                 current={this.state.income.current}
@@ -72,8 +73,6 @@ export class BudgetScreen extends React.Component {
                         ></BudgetSettingModal>
 
                     </ScrollView>
-
-
 
                 </View >
             </SafeAreaView>

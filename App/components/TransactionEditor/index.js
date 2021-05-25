@@ -80,7 +80,7 @@ export class TransactionEditor extends Component {
                 </View>
 
                 <View style={{ height: 64, marginBottom: 16, flexDirection: 'row' }}>
-                    <TouchableOpacity style={{ height: 64, width: 64, marginLeft: 16 }}>
+                    <TouchableOpacity style={{ height: 64, width: 64 }}>
                         <Image
                             source={icons.trash}
                             resizeMode='cover'
@@ -90,7 +90,7 @@ export class TransactionEditor extends Component {
                             }}
                         />
                     </TouchableOpacity>
-                    <TouchableOpacity style={{ flex: 1, justifyContent: 'center', marginRight: 16 }}>
+                    <TouchableOpacity style={{ flex: 1, justifyContent: 'center', marginRight: 20 }}>
                         <View style={styles.button}>
                             <Text style={{ fontSize: 17, color: COLORS.white }}> SAVE </Text>
                         </View>

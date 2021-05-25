@@ -30,7 +30,7 @@ export class TimespanPicker extends Component {
                         </TouchableOpacity>
                     </View>
                     <View style={style.main_view}>
-                        <Text style={style.main_view_header}>Budget Period</Text>
+                        <Text style={style.main_view_header}>BUDGET PERIOD</Text>
                         <TimespanPickerNavigation />
                     </View>
 

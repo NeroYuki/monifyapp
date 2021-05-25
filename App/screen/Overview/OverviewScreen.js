@@ -151,10 +151,11 @@ const styles = StyleSheet.create({
         height: "70%",
         width: "90%",
         backgroundColor: 'white',
+        borderRadius: 20,
     },
     modalStyle: {
         flex: 1,
         justifyContent: "center",
-        alignItems: "center"
+        alignItems: "center",
     }
 })

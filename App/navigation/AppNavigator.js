@@ -1,14 +1,11 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { Login, TestScreen, BudgetScreen, ToolsContainer } from '../screen';
+import { Login, TestScreen, BudgetScreen, ToolsContainer, OverviewScreen, ProfileContainer } from '../screen';
 import { COLORS, icons, SIZES } from '../assets/constants/';
-import { ProfileScreen } from '../screen/Profile';
-import { BudgetSetting } from '../screen/BudgetSetting';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { CreateModal, TransactionEditor } from '../components';
 import { Component } from 'react';
-import { OverviewScreen } from '../screen/Overview/OverviewScreen';
 
 const Tab = createBottomTabNavigator();
 
@@ -34,8 +31,8 @@ const AppNavigator = () => {
   const CreateModalWrapper = ({ navigation }) => {
 
     return (
-      <View>
-        <TestScreen />
+      <View style={{flex: 1}}>
+        <OverviewScreen />
         <CreateModal isVisible={showCreateModal} onRequestClose={() => { console.log('close'); setShowCreateModal(false) }}></CreateModal>
       </View>
     )
@@ -120,7 +117,7 @@ const AppNavigator = () => {
           e.preventDefault();
         },
       }} />
-      <Tab.Screen name='Profile' component={ProfileScreen} />
+      <Tab.Screen name='Profile' component={ProfileContainer} />
       <Tab.Screen name='Tools' component={ToolsContainer} />
     </Tab.Navigator >
   );

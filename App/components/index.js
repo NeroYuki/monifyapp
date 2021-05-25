@@ -14,7 +14,17 @@ import { CreateModal } from './CreateModal'
 import { CategoryEditor } from './CategoryEditor'
 import { GenericSettingField } from './GenericSettingField'
 import { GenericSelectionModal } from './GenericSelectionModal'
-
+import { WalletEntry } from './WalletManager/WalletEntry'
+import { WalletSearchModal } from './WalletManager/WalletSearchModal' 
+import { LoanEntry } from './LoanManager/LoanEntry'
+import { LoanSearchModal } from './LoanManager/LoanSearchModal'
+import { SavingEntry } from './SavingManager/SavingEntry'
+import { SavingSearchModal } from './SavingManager/SavingSearchModal'
+import { RecurringBillEntry } from './RecurringBillManager/RecurringBillEntry' 
+import { RecurringBillSearchModal } from './RecurringBillManager/RecurringBillSearchModal'
+import { GenericInputModal } from './GenericInputModal'
+import { ColorPickerModal } from './ColorPickerModal'
+ 
 export {
     TabSwitcher,
     WalletHeader,
@@ -32,4 +42,14 @@ export {
     CategoryEditor,
     GenericSettingField,
     GenericSelectionModal,
+    WalletEntry,
+    WalletSearchModal,
+    LoanEntry,
+    LoanSearchModal,
+    SavingEntry,
+    SavingSearchModal,
+    RecurringBillEntry,
+    RecurringBillSearchModal,
+    GenericInputModal,
+    ColorPickerModal,
 }

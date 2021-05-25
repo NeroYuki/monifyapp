@@ -27,28 +27,25 @@ export class GenericSelectionModal extends Component {
         )
 
         return (
-            <Modal
-                animationType="fade"
-                transparent={true}
-                visible={this.props.isVisible}
-                onRequestClose={this.props.onRequestClose}
-            >
-                <View style={{ backgroundColor: "#00000070", height: "70%" }}></View>
                 <Modal
-                    animationType="slide"
+                    animationType="fade"
                     transparent={true}
                     visible={this.props.isVisible}
                     onRequestClose={this.props.onRequestClose}
                 // onDismiss={this.props.onRequestClose}
                 >
+                    <View style={{backgroundColor: '#00000060', height: "70%"}}>
+                        
+                    </View>
                     <View style={style.main_view}>
                         <Text style={style.main_view_header}>Select one...</Text>
-                        <ScrollView contentContainerStyle={style.main_view_tab}>
-                            {selectionList}
-                        </ScrollView>
+                        <View style={{flex: 1}}>
+                            <ScrollView contentContainerStyle={{flexGrow: 1 }}>
+                                {selectionList}
+                            </ScrollView>
+                        </View>
                     </View>
                 </Modal>
-            </Modal>
         )
     }
 }

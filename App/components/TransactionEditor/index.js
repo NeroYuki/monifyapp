@@ -14,7 +14,10 @@ export class TransactionEditor extends Component {
             <View style={styles.container}>
 
                 <View style={styles.header}>
-                    <Icon name='close' size={24} />
+                    <TouchableOpacity onPress={this.props.onRequestClose}>
+                        <Icon name='close' size={24} />
+                    </TouchableOpacity>
+
                     <Text style={styles.textHeader}>EDIT TRANSACTION</Text>
                 </View>
 
@@ -25,7 +28,7 @@ export class TransactionEditor extends Component {
                             fontSize: 40,
                             fontWeight: '300'
                         }}
-                        defaultValue='200.000'
+                        defaultValue={this.props.currentData.money}
                         placeholder='0'
                         onChangeText={text => console.log(text)}
                     />
@@ -37,7 +40,7 @@ export class TransactionEditor extends Component {
                     >
                         <View style={style.info_field_item}>
                             <Icon name="sack" size={24} />
-                            <Text style={style.info_field_item_text}>Category</Text>
+                            <Text style={style.info_field_item_text}>{this.props.currentData.key}</Text>
                         </View>
                     </TouchableOpacity>
                     <Divider style={{ height: 1 }} />
@@ -51,6 +54,7 @@ export class TransactionEditor extends Component {
                                 fontSize: 17,
                                 marginLeft: 16,
                             }}
+                            defaultValue={this.props.currentData.describe}
                             placeholder="Note"
                             onChangeText={text => console.log(text)}
                         />
@@ -75,11 +79,6 @@ export class TransactionEditor extends Component {
                     <Divider style={{ height: 1 }} />
                 </View>
 
-                {/* <View style={style.footer}>
-                    <Button mode="contained" contentStyle={style.footer_button_content} style={style.footer_button}>
-                        Save
-                    </Button>
-                </View> */}
                 <View style={{ height: 64, marginBottom: 16, flexDirection: 'row' }}>
                     <TouchableOpacity style={{ height: 64, width: 64, marginLeft: 16 }}>
                         <Image

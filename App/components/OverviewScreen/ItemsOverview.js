@@ -50,7 +50,11 @@ export class ItemsOverView extends Component {
     Item = ({ items }) => (
         <TouchableOpacity
             style={styles.item}
-            onPress={this.props.onPressTransactionEditor}
+            // onPress={this.props.onPressTransactionEditor}
+            onPress={(this.props.onPressTransactionEditor) ?
+                () => this.props.onPressTransactionEditor(items)
+                :
+                () => { console.log(items) }}
         >
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                 <Image
@@ -124,7 +128,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     footer: {
-        height: 48,
+        height: 20,
         backgroundColor: COLORS.grayBackground,
         marginTop: -1
     },

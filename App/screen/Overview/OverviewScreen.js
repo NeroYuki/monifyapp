@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { SafeAreaView, ScrollView, View, StyleSheet } from "react-native";
 import { Button, Modal } from "react-native-paper";
 import { COLORS } from "../../assets/constants";
-import { CategoriesModal, TabSwitcher, TransactionEditor, WalletHeader } from "../../components";
+import { CategoriesModal, TabSwitcher, TimespanPicker, TransactionEditor, WalletHeader } from "../../components";
 import { ChartOverview } from "../../components/OverviewScreen/ChartOverview";
 import { ItemsOverView } from "../../components/OverviewScreen/ItemsOverview";
 import { RecurringModal } from "../../components/TransactionEditor/RecurringModal";
@@ -13,35 +13,60 @@ export class OverviewScreen extends Component {
         this.state = {
             visible: false,
             categoriesVisible: false,
+            recurringVisible: false,
+            chartView: false,
             periodVisible: false,
+
+            // Tap on item report then set data on this
+            currentData: {
+
+            }
         }
 
         this.onCategoriesPress = this.onCategoriesPress.bind(this)
+        this.onListPress = this.onListPress.bind(this)
+        this.onChartCategoriesPress = this.onChartCategoriesPress.bind(this)
         this.onRecurringPress = this.onRecurringPress.bind(this)
         this.onHideRecurring = this.onHideRecurring.bind(this)
         this.onPressTransactionEditor = this.onPressTransactionEditor.bind(this)
+        this.onTimeTextPress = this.onTimeTextPress.bind(this)
     }
 
     onCategoriesPress() {
         this.setState({ categoriesVisible: true })
     }
 
-    onHideRecurring() {
-        this.setState({ periodVisible: false })
+    onChartCategoriesPress() {
+        this.setState({ chartView: true })
     }
 
-    onPressTransactionEditor() {
-        this.setState({ visible: !this.state.visible })
+    onListPress() {
+        this.setState({ chartView: false })
+    }
+
+    onHideRecurring() {
+        this.setState({ recurringVisible: false })
+    }
+
+    onPressTransactionEditor(val) {
+        console.log(val)
+        this.setState({
+            currentData: val,
+            visible: !this.state.visible,
+        })
     }
 
     onRecurringPress() {
+        this.setState({ recurringVisible: !this.state.recurringVisible })
+    }
+
+    onTimeTextPress() {
         this.setState({ periodVisible: !this.state.periodVisible })
     }
 
-
     reportView = () => {
         return (
-            (!this.state.categoriesVisible) ?
+            (!this.state.chartView) ?
                 <ItemsOverView onPressTransactionEditor={this.onPressTransactionEditor} />
                 :
                 <ChartOverview />
@@ -55,8 +80,8 @@ export class OverviewScreen extends Component {
                     <View style={{ flex: 1 }}>
 
                         <WalletHeader
-                            currentTab={this.state.categoriesVisible}
-                            onCategoriesPress={this.onCategoriesPress}
+                            currentTab={this.state.chartView}
+                            onCategoriesPress={this.onChartCategoriesPress}
                             onListPress={this.onListPress}
                         />
 
@@ -89,9 +114,10 @@ export class OverviewScreen extends Component {
                 >
 
                     <TransactionEditor
+                        currentData={this.state.currentData}
                         onCategoriesPress={this.onCategoriesPress}
                         onRecurringPress={this.onRecurringPress}
-
+                        onRequestClose={this.onPressTransactionEditor}
                     />
 
                 </Modal>
@@ -102,8 +128,15 @@ export class OverviewScreen extends Component {
                 />
 
                 <RecurringModal
-                    isVisible={this.state.periodVisible}
+                    isVisible={this.state.recurringVisible}
                     closePeriod={() => {
+                        this.setState({ recurringVisible: false })
+                    }}
+                />
+
+                <TimespanPicker
+                    isVisible={this.state.periodVisible}
+                    onRequestClose={() => {
                         this.setState({ periodVisible: false })
                     }}
                 />

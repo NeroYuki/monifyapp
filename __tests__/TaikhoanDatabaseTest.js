@@ -18,7 +18,7 @@ test('insert taikhoan test', async () => {
     await insertTaiKhoan(taikhoanTest1,'no').then((tk) => {
        // console.log(JSON.parse(JSON.stringify(tk)))
         queryTaiKhoan({idtaikhoan:taikhoanTest1.idtaikhoan}).then((taikhoanTest2)=> {
-            console.log(taikhoanTest2[0])
+            //console.log(taikhoanTest2[0])
             taikhoantest3 = {
                 idtaikhoan: taikhoanTest2[0].idtaikhoan,
                 tentaikhoan: taikhoanTest2[0].tentaikhoan,  
@@ -30,7 +30,7 @@ test('insert taikhoan test', async () => {
                 no:taikhoanTest2[0].no,
             }
             taikhoantest3.tentaikhoan = 'fuckkkkkkkk'
-            console.log(JSON.parse(JSON.stringify(taikhoantest3)))
+            //console.log(JSON.parse(JSON.stringify(taikhoantest3)))
             updateTaiKhoan(taikhoantest3).then((tkx) => {
                 console.log(JSON.parse(JSON.stringify(tkx)))
             })

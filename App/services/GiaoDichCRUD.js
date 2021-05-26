@@ -47,6 +47,10 @@ export const updateGiaoDich=GiaoDich=> new Promise((resolve,reject)=>{
               {
                 updateGiaoDich.ghichu=GiaoDich.ghichu
               }
+              if(GiaoDich.name)
+              {
+                updateGiaoDich.name=GiaoDich.name
+              }
               resolve(updateGiaoDich)
               // console.log(JSON.parse(JSON.stringify(updateGiaoDichChuKy)))
             }

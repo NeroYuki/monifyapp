@@ -17,9 +17,11 @@ let GiaoDichTheoChuKy={
     sotientieudung:null,
     sotienthunhap:5000,
     loaihangmucgd:loaihangmuc,
+    name:'okay',
     chukygiaodichtheongay:60,
     chukygiaodichtheothang:null,
     ghichu:'Tiền chơi coin',
+    thoigianbatdau: null,
 }
 
 test('testing insert GiaoDichTheoChuKy', async () => {
@@ -36,9 +38,11 @@ let GiaoDichTheoChuKytestupdate={
     sotientieudung:null,
     sotienthunhap:15000,
     loaihangmucgd:loaihangmuc,
+    name:'okay',
     chukygiaodichtheongay:120,
     chukygiaodichtheothang:null,
     ghichu:'Tiền chơi đá',
+    thoigianbatdau: null,
 }
 let GiaoDichTheoChuKytestquery=[{
     idgiaodichtheochuky:idgiaodichtheochuky,
@@ -49,9 +53,11 @@ let GiaoDichTheoChuKytestquery=[{
     sotientieudung:null,
     sotienthunhap:15000,
     loaihangmucgd:loaihangmuc,
+    name:'okay',
     chukygiaodichtheongay:120,
     chukygiaodichtheothang:null,
     ghichu:'Tiền chơi đá',
+    thoigianbatdau: null,
 }]
 test('testing update GiaoDichTheoChuKy', async () => {
     // console.log(await insertGiaoDichChuKy(GiaoDichTheoChuKy))
@@ -69,9 +75,11 @@ test('testing querry GiaoDichTheoChuKy', async () => {
         sotientieudung:null,
         sotienthunhap:15000,
         loaihangmucgd:loaihangmuc,
+        name:'okay',
         chukygiaodichtheongay:120,
         chukygiaodichtheothang:null,
         ghichu:'Tiền chơi đá',
+        thoigianbatdau: null,
     })))).toStrictEqual(JSON.parse(JSON.stringify(GiaoDichTheoChuKytestquery)))
 })
 test('testing delete GiaoDichTheoChuKy', async () => {

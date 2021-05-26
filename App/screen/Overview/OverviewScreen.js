@@ -6,6 +6,7 @@ import { CategoriesModal, TabSwitcher, TimespanPicker, TransactionEditor, Wallet
 import { ChartOverview } from "../../components/OverviewScreen/ChartOverview";
 import { ItemsOverView } from "../../components/OverviewScreen/ItemsOverview";
 import { RecurringModal } from "../../components/TransactionEditor/RecurringModal";
+import { TransactionModal } from "../../components/TransactionEditor/TransactionModal";
 
 export class OverviewScreen extends Component {
     constructor(props) {
@@ -106,7 +107,7 @@ export class OverviewScreen extends Component {
 
 
                 </ScrollView>
-                <Modal
+                {/* <Modal
                     visible={this.state.visible}
                     onDismiss={() => { this.setState({ visible: false }) }}
                     contentContainerStyle={styles.containerStyle}
@@ -120,7 +121,15 @@ export class OverviewScreen extends Component {
                         onRequestClose={this.onPressTransactionEditor}
                     />
 
-                </Modal>
+                </Modal> */}
+
+                <TransactionModal
+                    isVisible={this.state.visible}
+                    onRequestClose={() => this.setState({ visible: false })}
+                    currentData={this.state.currentData}
+                    onCategoriesPress={this.onCategoriesPress}
+                    onRecurringPress={this.onRecurringPress}
+                />
 
                 <CategoriesModal
                     isVisible={this.state.categoriesVisible}
@@ -148,7 +157,7 @@ export class OverviewScreen extends Component {
 
 const styles = StyleSheet.create({
     containerStyle: {
-        height: "70%",
+        height: "80%",
         width: "90%",
         backgroundColor: 'white',
         borderRadius: 20,

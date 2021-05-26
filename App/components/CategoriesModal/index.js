@@ -25,9 +25,9 @@ export class CategoriesModal extends Component {
         const expense_text_style = (this.state.typeSelection == 1)? {color: '#000000'} : {color: 'white'}
 
         const content_list = (this.state.typeSelection === 1)? 
-        (this.state.expense_cat_list.map((val) => {
+        (this.state.expense_cat_list.map((val, index) => {
             return (
-                <View style={style.category_entry}>
+                <View style={style.category_entry} key={index}>
                     <View style={style.category_entry_content}>
                         <Avatar.Icon size={20} style={{backgroundColor: "red"}}/>
                         <Text style={[style.modal_text, style.content_list_text]}>{val}</Text>
@@ -36,9 +36,9 @@ export class CategoriesModal extends Component {
                 </View>
             )
         }))
-        : (this.state.income_cat_list.map((val) => {
+        : (this.state.income_cat_list.map((val, index) => {
             return (
-                <View style={style.category_entry}>
+                <View style={style.category_entry} key={index}>
                     <View style={style.category_entry_content}>
                         <Avatar.Icon size={20} style={{backgroundColor: "green"}}/>
                         <Text style={[style.modal_text, style.content_list_text]}>{val}</Text>

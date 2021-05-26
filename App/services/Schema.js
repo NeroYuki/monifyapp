@@ -95,15 +95,16 @@ export const GiaoDichSchema = {
   embeded: true,
   properties: {
     idgiaodich: 'objectId',
+    idnguoidung: 'objectId',
     thoigian: 'date',
-    idtaikhoanchuyen: 'TaiKhoan',
-    idtaikhoannhan: 'TaiKhoan?',
-    sotientieudung: 'double',
-    sotienthunhap: 'double',
-    loaihangmucgd: 'HangMucGiaoDich',
-    ghichu: 'string?', // add cause UI demand
+    idtaikhoanchuyen: 'objectId',
+    idtaikhoannhan: 'objectId?',
+    sotientieudung: 'double?',
+    sotienthunhap: 'double?',
+    loaihangmucgd: 'objectId',
+    ghichu:'string',
   },
-  //primaryKey: 'idgiaodich',
+  primaryKey: 'idgiaodich',
 };
 
 export const GiaoDichTheoCKSchema={
@@ -111,15 +112,15 @@ export const GiaoDichTheoCKSchema={
   embeded: true,
   properties:{
     idgiaodichtheochuky:'objectId',
-    idnguoidung: 'NguoiDung',
+    idnguoidung: 'objectId',
     thoigian: 'date',
-    idtaikhoanchuyen: 'TaiKhoan?',
-    idtaikhoannhan: 'TaiKhoan?',
+    idtaikhoanchuyen: 'objectId?',
+    idtaikhoannhan: 'objectId?',
     sotientieudung: 'double?',
     sotienthunhap: 'double?',
-    loaihangmucgd: 'HangMucGiaoDich',
-    chukygiaodichtheongay: 'int',
-    chukygiaodichtheothang: 'int',
+    loaihangmucgd: 'objectId',
+    chukygiaodichtheongay: 'int?',
+    chukygiaodichtheothang: 'int?',
     //add because UI demand
     thoigianbatdau: 'date?',
     ghichu: 'string?',
@@ -133,7 +134,7 @@ export const MucTieuCaNhanSchema = {
   embeded: true,
   properties: {
     idmuctieu: 'objectId',
-    idnguoidung: 'NguoiDung',
+    idnguoidung: 'objectId',
     thoigiantao: 'date',
     loaimuctieu:  'LoaiMucTieuConfig',
     sotienmuctieu: 'double',
@@ -156,7 +157,7 @@ export const HangMucGiaoDichSchema = {
   embeded: true,
   properties: {
     idhangmucgiaodich: 'objectId',
-    idnguoidung: 'NguoiDung',
+    idnguoidung: 'objectId',
     thoigiantao: 'date',
     tenhangmuc: 'string',
     loaihangmuc: 'LoaiHangMucConfig',
@@ -177,8 +178,8 @@ export const CaiDatSchema = {
   embeded: true,
   properties: {
     idcaidat: 'objectId',
-    idnguoidung: 'string',
-    thoigiantao: 'string',
+    idnguoidung: 'objectId',
+    thoigiantao: 'date',
     loaitien: 'string',
     chedo: 'string',
     ngonngu: 'string',
@@ -204,5 +205,5 @@ export const monifydata = {
     //LoaiTietKiemConfigSchema,
     LoaiMucTieuConfigSchema,
     LoaiHangMucConfigSchema],
-  schemaVersion:0,
+    schemaVersion:0,
 }

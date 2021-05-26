@@ -67,14 +67,47 @@ export const insertMucTieuCaNhan = (newMucTieuCaNhan,LoaiMucTieu) =>
 export const updateMucTieuCaNhan=MucTieuCaNhan=> new Promise((resolve,reject)=>{
     Realm.open(data).then(realm=>{
         realm.write(()=>{
-            let updateMucTieuCaNhan=realm.objectForPrimaryKey(MucTieuCaNhanSchema.name,MucTieuCaNhan.idmuctieu)
-            updateMucTieuCaNhan.loaimuctieu.tietkiemdenmuc=MucTieuCaNhan.loaimuctieu.tietkiemdenmuc
-            updateMucTieuCaNhan.loaimuctieu.tieudungquamuc=MucTieuCaNhan.loaimuctieu.tieudungquamuc
-            updateMucTieuCaNhan.loaimuctieu.sodutoithieu=MucTieuCaNhan.loaimuctieu.sodutoithieu
-            updateMucTieuCaNhan.sotienmuctieu=MucTieuCaNhan.sotienmuctieu
-            updateMucTieuCaNhan.ngaybatdau=MucTieuCaNhan.ngaybatdau
-            updateMucTieuCaNhan.ngayketthuc=MucTieuCaNhan.ngayketthuc
-            resolve(updateMucTieuCaNhan)
+            if(MucTieuCaNhan.loaimuctieu&&(((MucTieuCaNhan.loaimuctieu.tietkiemdenmuc==true)&&(MucTieuCaNhan.loaimuctieu.tieudungquamuc==false)&&(MucTieuCaNhan.loaimuctieu.sodutoithieu==false))||((MucTieuCaNhan.loaimuctieu.tietkiemdenmuc==false)&&(MucTieuCaNhan.loaimuctieu.tieudungquamuc==true)&&(MucTieuCaNhan.loaimuctieu.sodutoithieu==false))||((MucTieuCaNhan.loaimuctieu.tietkiemdenmuc==false)&&(MucTieuCaNhan.loaimuctieu.tieudungquamuc==false)&&(MucTieuCaNhan.loaimuctieu.sodutoithieu==true))))
+            {
+              let updateMucTieuCaNhan=realm.objectForPrimaryKey(MucTieuCaNhanSchema.name,MucTieuCaNhan.idmuctieu)
+              updateMucTieuCaNhan.loaimuctieu.tietkiemdenmuc=MucTieuCaNhan.loaimuctieu.tietkiemdenmuc
+              updateMucTieuCaNhan.loaimuctieu.tieudungquamuc=MucTieuCaNhan.loaimuctieu.tieudungquamuc
+              updateMucTieuCaNhan.loaimuctieu.sodutoithieu=MucTieuCaNhan.loaimuctieu.sodutoithieu
+              if(MucTieuCaNhan.sotienmuctieu)
+              {
+                updateMucTieuCaNhan.sotienmuctieu=MucTieuCaNhan.sotienmuctieu
+              }
+              if(MucTieuCaNhan.ngaybatdau)
+              {
+                updateMucTieuCaNhan.ngaybatdau=MucTieuCaNhan.ngaybatdau
+              }
+              if(MucTieuCaNhan.ngayketthuc)
+              {
+                updateMucTieuCaNhan.ngayketthuc=MucTieuCaNhan.ngayketthuc
+              }
+              resolve(updateMucTieuCaNhan)
+            }
+            else if(!MucTieuCaNhan.loaimuctieu)
+            {
+              let updateMucTieuCaNhan=realm.objectForPrimaryKey(MucTieuCaNhanSchema.name,MucTieuCaNhan.idmuctieu)
+              if(MucTieuCaNhan.sotienmuctieu)
+              {
+                updateMucTieuCaNhan.sotienmuctieu=MucTieuCaNhan.sotienmuctieu
+              }
+              if(MucTieuCaNhan.ngaybatdau)
+              {
+                updateMucTieuCaNhan.ngaybatdau=MucTieuCaNhan.ngaybatdau
+              }
+              if(MucTieuCaNhan.ngayketthuc)
+              {
+                updateMucTieuCaNhan.ngayketthuc=MucTieuCaNhan.ngayketthuc
+              }
+              resolve(updateMucTieuCaNhan)
+            }
+            else
+            {
+              reject('Loại mục tiêu có nhiều hơn 1 loại')
+            }
             // console.log(JSON.parse(JSON.stringify(updateMucTieuCaNhan)))
         })
     }).catch((error)=>reject(error))
@@ -102,7 +135,11 @@ export const queryMucTieuCaNhan=(option)=> new Promise((resolve,reject)=>{
     let Taget = realm.objects(MucTieuCaNhanSchema.name)
     if(option.id)
     {
-      Taget=Taget.filtered('idnguoidung.idnguoidung==$0',option.id)
+      Taget=Taget.filtered('idnguoidung==$0',option.id)
+    }
+    if(option.idmuctieu)
+    {
+      Taget=Taget.filtered('idmuctieu==$0',option.idmuctieu)
     }
     if(option.thoigiantao)
     {

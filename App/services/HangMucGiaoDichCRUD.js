@@ -52,11 +52,36 @@ export const insertHangMucGiaoDich = (newHangMucGiaoDich,LoaiHangMuc) =>
 export const updateHangMucGiaoDich=HangMucGiaoDich=> new Promise((resolve,reject)=>{
     Realm.open(data).then(realm=>{
         realm.write(()=>{
-            let updateHangMucGiaoDich=realm.objectForPrimaryKey(HangMucGiaoDichSchema.name,HangMucGiaoDich.idhangmucgiaodich)
-            updateHangMucGiaoDich.tenhangmuc=HangMucGiaoDich.tenhangmuc
-            updateHangMucGiaoDich.loaihangmuc=JSON.parse(JSON.stringify(HangMucGiaoDich.loaihangmuc))
-            updateHangMucGiaoDich.iconhangmuc=HangMucGiaoDich.iconhangmuc
-            resolve(updateHangMucGiaoDich)
+            if(HangMucGiaoDich.loaihangmuc&&!(HangMucGiaoDich.loaihangmuc.chitieu&&HangMucGiaoDich.loaihangmuc.thunhap))
+            {
+              let updateHangMucGiaoDich=realm.objectForPrimaryKey(HangMucGiaoDichSchema.name,HangMucGiaoDich.idhangmucgiaodich)
+              if(HangMucGiaoDich.tenhangmuc)
+              {
+                updateHangMucGiaoDich.tenhangmuc=HangMucGiaoDich.tenhangmuc
+              }
+              updateHangMucGiaoDich.loaihangmuc=JSON.parse(JSON.stringify(HangMucGiaoDich.loaihangmuc))
+              if(HangMucGiaoDich.iconhangmuc)
+              {
+                updateHangMucGiaoDich.iconhangmuc=HangMucGiaoDich.iconhangmuc
+              }
+              resolve(updateHangMucGiaoDich)
+            }
+            else if(!HangMucGiaoDich.loaihangmuc)
+            {
+              let updateHangMucGiaoDich=realm.objectForPrimaryKey(HangMucGiaoDichSchema.name,HangMucGiaoDich.idhangmucgiaodich)
+              if(HangMucGiaoDich.tenhangmuc)
+              {
+                updateHangMucGiaoDich.tenhangmuc=HangMucGiaoDich.tenhangmuc
+              }
+              if(HangMucGiaoDich.iconhangmuc)
+              {
+                updateHangMucGiaoDich.iconhangmuc=HangMucGiaoDich.iconhangmuc
+              }
+              resolve(updateHangMucGiaoDich)
+            }
+            else
+              reject('Hai loại hạng mục cùng giá trị')
+            // console.log(JSON.parse(JSON.stringify(realm.objects(HangMucGiaoDichSchema.name))))
         })
     }).catch((error)=>reject(error))
 })
@@ -84,6 +109,14 @@ export const queryHangMucGiaoDich=(option)=> new Promise((resolve,reject)=>{
     {
       Taget=Taget.filtered('thoigiantao==$0',option.thoigiantao)
     }
+    if(option.iconhangmuc)
+    {
+      Taget=Taget.filtered('iconhangmuc==$0',option.iconhangmuc)
+    }
+    if(option.idhangmucgiaodich)
+    {
+      Taget=Taget.filtered('idhangmucgiaodich==$0',option.idhangmucgiaodich)
+    }
     if(option.tenhangmuc)
     {
       Taget=Taget.filtered('tenhangmuc==$0',option.tenhangmuc)
@@ -98,7 +131,7 @@ export const queryHangMucGiaoDich=(option)=> new Promise((resolve,reject)=>{
     }
     if(option.id)
     {
-      Taget=Taget.filtered('idnguoidung.idnguoidung==$0',option.id)
+      Taget=Taget.filtered('idnguoidung==$0',option.id)
     }
     resolve(Taget)
   }).catch((error)=>reject(error))

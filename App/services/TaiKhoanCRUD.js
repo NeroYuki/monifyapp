@@ -4,30 +4,84 @@ import {BSON} from 'realm'
 
 const data = monifydata;
 
-export const insertTaiKhoan = newTaiKhoan => 
+export const insertTaiKhoan = (newTaiKhoan,loaitaikhoan) => 
   new Promise((resolve,reject)=> {
     Realm.open(data).then(realm=>{
-      if(newTaiKhoan.tieudung != null) {
-        let tieudungoption = realm.objectForPrimaryKey(TKTieuDungSchema.name, newTaiKhoan.tieudung.idtktieudung)
-        newTaiKhoan.tieudung = tieudungoption
+      if(loaitaikhoan == null){
+        if(newTaiKhoan.tieudung != null) {
+          let tieudungoption = realm.objects(TKTieuDungSchema.name).filtered("idtktieudung==$0",newTaiKhoan.tieudung.idtktieudung)
+          newTaiKhoan.tieudung = tieudungoption
+        }
+        else if(newTaiKhoan.tietkiem != null){
+          let tietkiemoption = realm.objects(TKTietKiemSchema.name).filtered("idtktietkiem==$0", newTaiKhoan.tietkiem.idtktietkiem)
+          if(tietkiemoption= null)newTaiKhoan.tietkiem = tietkiemoption
+        }
+        else if(newTaiKhoan.no != null){
+          let nooption = realm.objects(TKNoSchema.name).filtered("idtkno==$0", newTaiKhoan.no.idtkno)
+          if(nooption = null)newTaiKhoan.no = nooption
+        }
+        realm.write(()=>{
+          let tk = realm.create(TaiKhoanSchema.name,newTaiKhoan);
+          //console.log(tk)
+          resolve(tk);
+        })
       }
-      else if(newTaiKhoan.tietkiem != null){
-        let tietkiemoption = realm.objectForPrimaryKey(TKTietKiemSchema.name, newTaiKhoan.tietkiem.idtktietkiem)
-        newTaiKhoan.tietkiem = tietkiemoption
+      else if (loaitaikhoan != null) {
+        if (newTaiKhoan.tieudung == null && loaitaikhoan=='tieudung' ) {
+          realm.write(()=>{
+            let tk = realm.create(TaiKhoanSchema.name,newTaiKhoan);
+            tk.tieudung = realm.create(TKTieuDungSchema.name,
+              {
+                idtktieudung: new BSON.ObjectID(),
+                sotien: 0,
+              }
+            )
+            //console.log(tk)
+            resolve(tk);
+          })      
+        }
+        else if (newTaiKhoan.tietkiem == null && loaitaikhoan=='tietkiem' ) {
+          realm.write(()=>{
+            let tk = realm.create(TKTietKiemSchema.name,newTaiKhoan);
+            tk.tietkiem = realm.create(TKTieuDungSchema.name,
+              {
+                idtktietkiem: new BSON.ObjectID(),
+                sotien: 0,
+                laisuattietkiem: 0,
+                laisuattruochan: '0',
+                kyhantietkiem: 1, // đơn vị tháng
+                ngaybatdau: new Date(),
+                ruttatca: false, //Rút tất cả gốc lẫn lãi
+                tieptuc: false , //Tiếp tục tiết kiệm cả gốc lẫn lãi
+                rutlai: false , //Tiếp tục nhưng rút lãi
+              }
+            )
+            //console.log(tk)
+            resolve(tk);
+          })      
+        }
+        else if (newTaiKhoan.no == null && loaitaikhoan=='no' ) {
+          realm.write(()=>{
+            let tk = realm.create(TaiKhoanSchema.name,newTaiKhoan);
+            tk.no = realm.create(TKNoSchema.name,
+              {
+                idtkno: new BSON.ObjectID(),
+                sotien: 0,
+                laisuatno: 0,
+                //loaitietkiem: 'LoaiTietKiemConfig',
+                ngaybatdauno: new Date(),
+                sotientradukien: 0,
+              }
+            )
+            //console.log(tk)
+            resolve(tk);
+          })      
+        }
       }
-      else if(newTaiKhoan.no != null){
-        let nooption = realm.objectForPrimaryKey(TKNoSchema.name, newTaiKhoan.no.idtkno)
-        newTaiKhoan.no = nooption
-      }
-      realm.write(()=>{
-        let tk = realm.create(TaiKhoanSchema.name,newTaiKhoan);
-        console.log(tk)
-        resolve(tk);
-      })
     }).catch((error)=> reject(error));
   });
 
-export const updateTaiKhoan =  updateTaiKhoan => 
+export const updateTaiKhoan =  updateTaiKhoan =>  
   new Promise((resolve,reject)=>{
     Realm.open(data).then(realm => {
       realm.write(()=> {
@@ -46,8 +100,8 @@ export const queryTaiKhoan = (option) =>
     Realm.open(data).then(realm => {
       realm.write(()=> {
         let Target = realm.objects(TaiKhoanSchema.name)
-        if(option.id){
-          Target = Target.filtered('idtaikhoan==$0',option.id)
+        if(option.idtaikhoan){
+          Target = Target.filtered('idtaikhoan==$0',option.idtaikhoan)
         }
         if(option.nguoidungid){
           Target= Target.filtered('idnguoidung==$0',option.nguoidungid)
@@ -62,7 +116,7 @@ export const queryTaiKhoan = (option) =>
           filterUnwantedtietkiem(Target)
         }
         if(option.taikhoantieudun){
-            filterUnwantedtieudung(Target)
+          filterUnwantedtieudung(Target)
         }
         resolve(Target)
       })

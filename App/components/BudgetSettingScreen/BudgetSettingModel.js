@@ -10,6 +10,7 @@ import { ItemsBudget } from '../../components/BudgetSettingScreen/ItemsBudget';
 import { BudgetSettingPeriodModal } from "./BudgetSettingPeriodModal";
 
 import { AddNewBudgetExpenseModal } from "./AddNewBudgetExpenseModal";
+import { TransactionModal } from "../TransactionEditor/TransactionModal";
 export class BudgetSettingModal extends Component {
 
     constructor(props) {
@@ -19,9 +20,15 @@ export class BudgetSettingModal extends Component {
 
             periodVisible: false,
             addBudgetExpenseVisible: false,
+            transactionVisible: false,
 
             periodOptions: ["Weekly, Monthly, Yearly"],
             periodCurrent: "Weekly",
+
+            // Tap on item report then set data on this
+            currentData: {
+
+            }
         }
 
         this.changePeriod = this.changePeriod.bind(this)

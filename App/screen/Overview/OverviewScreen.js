@@ -4,6 +4,7 @@ import { Button, Modal } from "react-native-paper";
 import { COLORS } from "../../assets/constants";
 import { CategoriesModal, TabSwitcher, TimespanPicker, TransactionEditor, WalletHeader } from "../../components";
 import { ChartOverview } from "../../components/OverviewScreen/ChartOverview";
+import { ExpenseOrIncomeModal } from "../../components/OverviewScreen/ExpenseOrIncomeModal";
 import { ItemsOverView } from "../../components/OverviewScreen/ItemsOverview";
 import { RecurringModal } from "../../components/TransactionEditor/RecurringModal";
 import { TransactionModal } from "../../components/TransactionEditor/TransactionModal";
@@ -17,9 +18,14 @@ export class OverviewScreen extends Component {
             recurringVisible: false,
             chartView: false,
             periodVisible: false,
+            expenseOrIncomeVisible: false,
 
             // Tap on item report then set data on this
             currentData: {
+
+            },
+
+            currentDate: {
 
             }
         }
@@ -31,8 +37,18 @@ export class OverviewScreen extends Component {
         this.onHideRecurring = this.onHideRecurring.bind(this)
         this.onPressTransactionEditor = this.onPressTransactionEditor.bind(this)
         this.onTimeTextPress = this.onTimeTextPress.bind(this)
+        this.onPressShowing = this.onPressShowing.bind(this)
+
+
     }
 
+    componentDidMount() {
+        console.log("COMPONENT DID MOUNT")
+
+        console.log(this.state.currentDate)
+    }
+
+    // MARK: - CALL MODAL
     onCategoriesPress() {
         this.setState({ categoriesVisible: true })
     }
@@ -65,13 +81,27 @@ export class OverviewScreen extends Component {
         this.setState({ periodVisible: !this.state.periodVisible })
     }
 
+    onPressShowing() {
+        this.setState({ expenseOrIncomeVisible: !this.state.expenseOrIncomeVisible })
+    }
+
+    // MARK: - ACTION
     reportView = () => {
         return (
             (!this.state.chartView) ?
                 <ItemsOverView onPressTransactionEditor={this.onPressTransactionEditor} />
                 :
-                <ChartOverview />
+                <ChartOverview onPressShowing={this.onPressShowing} />
         )
+    }
+
+    decreasePeriod() {
+        console.log("Decrease Period")
+
+    }
+
+    increasePeriod() {
+        console.log("Increase Period")
     }
 
     render() {
@@ -87,7 +117,12 @@ export class OverviewScreen extends Component {
                         />
 
                         <SafeAreaView style={{ flex: 1 }}>
-                            <TabSwitcher text="May 2021" onTimeTextPress={this.onTimeTextPress}></TabSwitcher>
+                            <TabSwitcher
+                                text="May 2021"
+                                onTimeTextPress={this.onTimeTextPress}
+                                decreasePeriod={this.decreasePeriod}
+                                increasePeriod={this.increasePeriod}
+                            />
 
                             <this.reportView />
 
@@ -140,6 +175,13 @@ export class OverviewScreen extends Component {
                     isVisible={this.state.recurringVisible}
                     closePeriod={() => {
                         this.setState({ recurringVisible: false })
+                    }}
+                />
+
+                <ExpenseOrIncomeModal
+                    isVisible={this.state.expenseOrIncomeVisible}
+                    closePeriod={() => {
+                        this.setState({ expenseOrIncomeVisible: false })
                     }}
                 />
 

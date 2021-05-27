@@ -27,7 +27,7 @@ export class ItemsBudget extends Component {
     }
 
     Item = ({ items }) => (
-        <View style={styles.item}>
+        <TouchableOpacity style={styles.item}>
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                 <Image
                     style={{
@@ -44,7 +44,7 @@ export class ItemsBudget extends Component {
 
             </View>
             <View style={{ height: 1, backgroundColor: COLORS.separateLine }}></View>
-        </View>
+        </TouchableOpacity>
     );
 
     Header = ({ section }) => (

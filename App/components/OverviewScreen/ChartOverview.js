@@ -13,7 +13,7 @@ export class ChartOverview extends Component {
             <View style={styles.container}>
                 <ChartView />
 
-                <ItemsCategoriesTab />
+                <ItemsCategoriesTab onPressShowing={this.props.onPressShowing} />
             </View>
         )
 

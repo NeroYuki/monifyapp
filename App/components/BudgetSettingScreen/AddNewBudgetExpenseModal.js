@@ -41,7 +41,7 @@ export class AddNewBudgetExpenseModal extends Component {
                                 <Icon name='close' size={24} />
                             </TouchableOpacity>
 
-                            <Text style={styles.textHeader}>EDIT TRANSACTION</Text>
+                            <Text style={styles.textHeader}>BUDGET EXPENSE</Text>
                         </View>
 
                         <View style={styles.moneyTitle}>

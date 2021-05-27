@@ -62,7 +62,10 @@ export class ItemsCategoriesTab extends Component {
     );
 
     Header = ({ section }) => (
-        <TouchableOpacity style={styles.header}>
+        <TouchableOpacity
+            style={styles.header}
+            onPress={this.props.onPressShowing}
+        >
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ flex: 1, flexDirection: 'row' }}>
                     <Text style={styles.titleHeader}>Showing: </Text>

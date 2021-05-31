@@ -1,27 +1,78 @@
 import React, { Component } from 'react';
+import { Dimensions, Text, View } from 'react-native';
+import { PieChart } from 'react-native-svg-charts'
 
-import { PieChart } from 'react-native-svg-charts';
-import { COLORS } from '../../assets/constants';
+export class ChartView extends Component {
 
-const data = [50, 10, 40, 95, -4, -24, 85, 91, 35, 53, -53, 24, 50, -20, -80]
+    constructor(props) {
+        super(props);
+        this.state = {
+            selectedIndex: 0
+        }
+    }
 
-const randomColor = () => ('#' + ((Math.random() * 0xffffff) << 0).toString(16) + '000000').slice(0, 7)
+    render() {
 
-const pieData = data
-    .filter((value) => value > 0)
-    .map((value, index) => ({
-        value,
-        svg: {
-            fill: randomColor(),
-            onPress: () => console.log('press', index),
-        },
-        key: `pie-${index}`,
-    }))
+        const data = [
+            {
+                key: 1,
+                amount: 50,
+                svg: { fill: '#600080' },
+            },
+            {
+                key: 2,
+                amount: 50,
+                svg: { fill: '#9900cc' },
+                // arc: { outerRadius: '130%' }
+            },
+            {
+                key: 3,
+                amount: 40,
+                svg: { fill: '#c61aff' }
+            },
+            {
+                key: 4,
+                amount: 95,
+                svg: { fill: '#d966ff' }
+            },
+            {
+                key: 5,
+                amount: 35,
+                svg: { fill: '#ecb3ff' }
+            }
+        ]
 
-const ChartView = () => {
-    return (
-        <PieChart style={{ height: 200 }} data={pieData} />
-    )
+
+        const pieData = data.map((value) => {
+            return {
+                key: value.key,
+                amount: value.amount,
+                svg: {
+                    fill: value.svg.fill,
+                    onPress: () => {
+                        this.setState({ selectedIndex: value.key })
+                    },
+                },
+                arc: {
+                    outerRadius: (value.key === this.state.selectedIndex) ? '130%' : '100%'
+                }
+            }
+        })
+
+        return (
+            <View style={{ height: 300 }}>
+                <PieChart
+                    style={{ height: 250, paddingTop: 50 }}
+                    valueAccessor={({ item }) => item.amount}
+                    data={pieData}
+                    spacing={0}
+                    outerRadius={'95%'}
+                >
+
+                </PieChart>
+            </View>
+
+        )
+    }
+
 }
-
-export default ChartView;

@@ -110,6 +110,7 @@ export class TransactionModal extends Component {
                                 <View style={styles.info_field_item}>
                                     <Icon name="calendar" size={24} />
                                     <Text style={styles.info_field_item_text}>Tuesday, 5 Mar</Text>
+
                                 </View>
                             </TouchableOpacity>
 
@@ -160,19 +161,23 @@ export class TransactionModal extends Component {
                         onRequestClose={() => { this.setState({ categoriesVisible: false }) }}
                     />
 
-                    <SafeAreaView>
-                        {this.state.showPickerDialog && (
-                            <DateTimePicker
-                                testID="dateTimePicker"
+                    {this.state.showPickerDialog && (
+                        <DateTimePicker
+                            testID="dateTimePicker"
+                            value={this.state.customDate}
+                            mode={'date'}
+                            is24Hour={true}
+                            display='default'
+                            onChange={this.onChangeDateTime}
+                            style={{
+                                height: 40,
+                                width: 400,
+                                backgroundColor: COLORS.white,
+                                color: COLORS.black
 
-                                value={this.state.customDate}
-                                mode={'date'}
-                                is24Hour={true}
-                                display="default"
-                                onChange={this.onChangeDateTime}
-                            />
-                        )}
-                    </SafeAreaView>
+                            }}
+                        />
+                    )}
 
                 </View>
 

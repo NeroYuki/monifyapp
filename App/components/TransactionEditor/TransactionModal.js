@@ -7,6 +7,7 @@ import { COLORS, icons } from "../../assets/constants";
 import { CategoriesModal } from "../CategoriesModal";
 
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { RecurringModal } from "./RecurringModal";
 
 
 export class TransactionModal extends Component {
@@ -16,6 +17,7 @@ export class TransactionModal extends Component {
 
         this.state = {
             categoriesVisible: false,
+            recurringVisible: false,
 
             customDate: new Date(),
             showPickerDialog: false,
@@ -32,7 +34,6 @@ export class TransactionModal extends Component {
     }
 
     onChangeDateTime(event, selectedDate) {
-        console.log("CHANGE DATE")
 
         const currentDate = selectedDate || this.state.customDate;
         this.setState({
@@ -42,7 +43,6 @@ export class TransactionModal extends Component {
     }
 
     render() {
-        console.log("DATETIME", this.state.showPickerDialog)
 
         return (
             <Modal
@@ -77,7 +77,9 @@ export class TransactionModal extends Component {
 
                         <View style={styles.info_field}>
                             <TouchableOpacity
-                                onPress={this.props.onCategoriesPress}
+                                onPress={() => {
+                                    this.setState({ categoriesVisible: !this.state.categoriesVisible })
+                                }}
                             >
                                 <View style={styles.info_field_item}>
                                     <Icon name="sack" size={24} />
@@ -114,7 +116,9 @@ export class TransactionModal extends Component {
                             <Divider style={{ height: 1 }} />
 
                             <TouchableOpacity
-                                onPress={this.props.onRecurringPress}
+                                onPress={() => {
+                                    this.setState({ recurringVisible: !this.state.recurringVisible })
+                                }}
                             >
                                 <View style={styles.info_field_item}>
                                     <Icon name="repeat" size={24} />
@@ -144,15 +148,19 @@ export class TransactionModal extends Component {
                         </View>
                     </View>
 
-                    <SafeAreaView>
-                        <CategoriesModal
-                            isVisible={this.state.categoriesVisible}
-                            onRequestClose={() => {
-                                console.log("EXITT")
-                                this.setState({ categoriesVisible: false })
-                            }}
-                        />
+                    <RecurringModal
+                        isVisible={this.state.recurringVisible}
+                        closePeriod={() => {
+                            this.setState({ recurringVisible: false })
+                        }}
+                    />
 
+                    <CategoriesModal
+                        isVisible={this.state.categoriesVisible}
+                        onRequestClose={() => { this.setState({ categoriesVisible: false }) }}
+                    />
+
+                    <SafeAreaView>
                         {this.state.showPickerDialog && (
                             <DateTimePicker
                                 testID="dateTimePicker"

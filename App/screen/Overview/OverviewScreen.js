@@ -207,7 +207,7 @@ export class OverviewScreen extends Component {
                     onRecurringPress={this.onRecurringPress}
                 />
 
-                <CategoriesModal
+                {/* <CategoriesModal
                     isVisible={this.state.categoriesVisible}
                     onRequestClose={() => { this.setState({ categoriesVisible: false }) }}
                 />
@@ -217,7 +217,7 @@ export class OverviewScreen extends Component {
                     closePeriod={() => {
                         this.setState({ recurringVisible: false })
                     }}
-                />
+                />*/}
 
                 <ExpenseOrIncomeModal
                     isVisible={this.state.expenseOrIncomeVisible}

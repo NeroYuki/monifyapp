@@ -9,6 +9,9 @@ import { ItemsOverView } from "../../components/OverviewScreen/ItemsOverview";
 import { RecurringModal } from "../../components/TransactionEditor/RecurringModal";
 import { TransactionModal } from "../../components/TransactionEditor/TransactionModal";
 
+import Moment from 'moment'
+import { format, addDays, addMonths, addYears } from 'date-fns'
+
 export class OverviewScreen extends Component {
     constructor(props) {
         super(props)
@@ -25,9 +28,7 @@ export class OverviewScreen extends Component {
 
             },
 
-            currentDate: {
-
-            }
+            dateTime: "",
         }
 
         this.onCategoriesPress = this.onCategoriesPress.bind(this)
@@ -39,13 +40,62 @@ export class OverviewScreen extends Component {
         this.onTimeTextPress = this.onTimeTextPress.bind(this)
         this.onPressShowing = this.onPressShowing.bind(this)
 
-
+        this.getDate = this.getDate.bind(this)
+        this.decreasePeriod = this.decreasePeriod.bind(this)
+        this.increasePeriod = this.increasePeriod.bind(this)
     }
+
+    getDate() {
+
+        // Becuz getMonth() start from 0. You need to date.getMonth() - 1 to achieve what u want
+        var basicFormat = new Date()
+
+        var date = {
+            currentTime: format(new Date(), 'MMM yyyy'),
+            otherFormat: new Date(basicFormat.setMonth(basicFormat.getMonth() - 1))
+        };
+
+        this.setState({
+            dateTime: date
+        });
+    }
+
+    decreasePeriod() {
+        console.log("Decrease Period")
+
+        var currentDate = this.state.dateTime.otherFormat
+        var newDate = new Date(currentDate.setMonth(currentDate.getMonth() - 1));
+
+        var date = {
+            currentTime: format(newDate, 'MMM yyyy'),
+            otherFormat: newDate
+        }
+
+        this.setState({
+            dateTime: date
+        });
+    }
+
+    increasePeriod() {
+        console.log("Increase Period")
+
+        var currentDate = this.state.dateTime.otherFormat
+        var newDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
+
+        var date = {
+            currentTime: format(newDate, 'MMM yyyy'),
+            otherFormat: newDate
+        }
+
+        this.setState({
+            dateTime: date
+        });
+    }
+
 
     componentDidMount() {
         console.log("COMPONENT DID MOUNT")
-
-        console.log(this.state.currentDate)
+        this.getDate()
     }
 
     // MARK: - CALL MODAL
@@ -95,15 +145,6 @@ export class OverviewScreen extends Component {
         )
     }
 
-    decreasePeriod() {
-        console.log("Decrease Period")
-
-    }
-
-    increasePeriod() {
-        console.log("Increase Period")
-    }
-
     render() {
         return (
             <SafeAreaView style={{ flex: 1 }}>
@@ -118,7 +159,7 @@ export class OverviewScreen extends Component {
 
                         <SafeAreaView style={{ flex: 1 }}>
                             <TabSwitcher
-                                text="May 2021"
+                                text={this.state.dateTime.currentTime}
                                 onTimeTextPress={this.onTimeTextPress}
                                 decreasePeriod={this.decreasePeriod}
                                 increasePeriod={this.increasePeriod}

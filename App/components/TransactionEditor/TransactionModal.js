@@ -17,12 +17,12 @@ export class TransactionModal extends Component {
         this.state = {
             categoriesVisible: false,
 
-            customFromDate: new Date(),
+            customDate: new Date(),
             showPickerDialog: false,
-            currentSelection: 'from',
         }
 
         this.openCategoriesModal = this.openCategoriesModal.bind(this)
+        this.onChangeDateTime = this.onChangeDateTime.bind(this)
     }
 
     openCategoriesModal() {
@@ -34,14 +34,16 @@ export class TransactionModal extends Component {
     onChangeDateTime(event, selectedDate) {
         console.log("CHANGE DATE")
 
-        const currentDate = selectedDate || this.state.customFromDate;
+        const currentDate = selectedDate || this.state.customDate;
         this.setState({
-            customFromDate: currentDate,
+            customDate: currentDate,
             showPickerDialog: false
         })
     }
 
     render() {
+        console.log("DATETIME", this.state.showPickerDialog)
+
         return (
             <Modal
                 animationType='fade'
@@ -155,7 +157,7 @@ export class TransactionModal extends Component {
                             <DateTimePicker
                                 testID="dateTimePicker"
 
-                                value={this.state.customFromDate}
+                                value={this.state.customDate}
                                 mode={'date'}
                                 is24Hour={true}
                                 display="default"

@@ -1,20 +1,25 @@
 import Realm, { schemaVersion } from 'realm';
-import {NguoiDungSchema,monifydata} from './Schema'
+import {TaiKhoanSchema,monifydata,LoaiTaiKhoanConfigSchema} from './Schema'
 
-export const insertNewNguoiDung = newNguoiDung => new Promise((resolve,reject)=> {
-    //console.log(JSON.stringify(monifydata))
+
+
+export const insertNewTaiKhoan = newTaiKhoan => new Promise((resolve,reject)=> {
+    // console.log(JSON.stringify(monifydata))
     Realm.open(monifydata).then(realm => {
         realm.write(()=> {
-            realm.create(NguoiDungSchema.name,newNguoiDung);
-            resolve(newNguoiDung);
+            realm.create(TaiKhoanSchema.name,newTaiKhoan);
+            resolve(newTaiKhoan);
         });
     }).catch((error)=> reject(error));
 });
-export const updateNguoiDung = nguoiDung => new Promise((resolve,reject)=> {
+export const updateTaiKhoan = taiKhoan => new Promise((resolve,reject)=> {
     Realm.open(monifydata).then(realm => {
         realm.write(()=> {
-            let updatingNguoiDung =realm.objectForPrimaryKey(NguoiDungSchema.name,nguoiDung.idnguoidung);
-            updatingNguoiDung.pass=nguoiDung.pass;
+            let updatingTaiKhoan =realm.objectForPrimaryKey(TaiKhoanSchema.name,taiKhoan.idtaikhoan);
+            updatingTaiKhoan.tentaikhoan=taiKhoan.tentaikhoan;
+            updatingTaiKhoan.bieutuong = taiKhoan.bieutuong;
+            updatingTaiKhoan.idnguoidung = taiKhoan.idnguoidung;
+            updatingTaiKhoan.loaitaikhoan = taiKhoan.loaitaikhoan;
             resolve();
         });
     }).catch((error)=> reject(error));

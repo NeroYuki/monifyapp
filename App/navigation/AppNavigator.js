@@ -18,8 +18,23 @@ const tabOptions = {
 
 const CreateInput = (props) => {
   return (
-    <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', width: 38, height: 38, borderRadius: 19, backgroundColor: COLORS.yellow }} onPress={props.onPress}>
-      <Image source={icons.plus} resizeMode='contain' style={{ height: 19, width: 19 }} />
+    <TouchableOpacity
+      style={{
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 38, height: 38,
+        borderRadius: 19,
+        backgroundColor: COLORS.yellow
+      }}
+      onPress={props.onPress}>
+      <Image
+        source={icons.plus}
+        resizeMode='contain'
+        style={{
+          height: 19,
+          width: 19
+        }}
+      />
     </TouchableOpacity>
   )
 }
@@ -31,9 +46,16 @@ const AppNavigator = () => {
   const CreateModalWrapper = ({ navigation }) => {
 
     return (
-      <View style={{flex: 1}}>
-        <OverviewScreen />
-        <CreateModal isVisible={showCreateModal} onRequestClose={() => { console.log('close'); setShowCreateModal(false) }}></CreateModal>
+      <View style={{ flex: 1 }}>
+        {/* <OverviewScreen /> */}
+        <CreateModal
+          isVisible={showCreateModal}
+          onRequestClose={() => {
+            console.log('close');
+            setShowCreateModal(false)
+          }}>
+
+        </CreateModal>
       </View>
     )
   }
@@ -110,13 +132,15 @@ const AppNavigator = () => {
     >
       <Tab.Screen name='Overview' component={OverviewScreen} />
       <Tab.Screen name='Budget' component={BudgetScreen} />
-      <Tab.Screen name='CreateInput' component={CreateModalWrapper} listeners={{
-        tabPress: e => {
-          // Prevent default action
-
-          e.preventDefault();
-        },
-      }} />
+      <Tab.Screen
+        name='CreateInput'
+        component={CreateModalWrapper}
+        listeners={{
+          tabPress: e => {
+            // Prevent default action
+            e.preventDefault();
+          },
+        }} />
       <Tab.Screen name='Profile' component={ProfileContainer} />
       <Tab.Screen name='Tools' component={ToolsContainer} />
     </Tab.Navigator >

@@ -44,7 +44,6 @@ export const stylesheet = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'white',
-
     },
     custom_selection_row_text: {
         marginBottom: 20,

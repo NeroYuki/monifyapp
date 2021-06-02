@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { FAB, Searchbar } from "react-native-paper";
+import { FAB, Searchbar, Dialog, Paragraph, Button } from "react-native-paper";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { WalletEntry, WalletSearchModal } from "../../components";
+import { WalletEntry, WalletSearchModal, WalletTransferModal } from "../../components";
 import { stylesheet } from './style'
 
 export class WalletManager extends Component {
@@ -34,6 +34,8 @@ export class WalletManager extends Component {
                 }
             ],
             advanceSearchVisible: false,
+            transferModalVisible: false,
+            deletePromptVisible: false,
         }
     }
     
@@ -42,8 +44,9 @@ export class WalletManager extends Component {
         const walletDisplay = this.state.walletList.map((val) => {
             return <WalletEntry 
                 key={val.id} style={[style.wallet_entry, {backgroundColor: val.color}]} name={val.name} last_tran={val.last_tran} amount={val.amount}
+                onTransferPress={() => {this.setState({transferModalVisible: true})}}
                 onViewPress={() => {this.props.navigation.navigate("WalletEditor")}}
-                onDeletePress={() => {}}
+                onDeletePress={() => {this.setState({deletePromptVisible: true})}}
                 onEditPress={() => {this.props.navigation.navigate("WalletEditor")}}
             ></WalletEntry>
         })
@@ -69,6 +72,21 @@ export class WalletManager extends Component {
                     onRequestClose={() => {this.setState({advanceSearchVisible: false})}} 
                     onFilterRequest={(data) => {console.log(data); }}>
                 </WalletSearchModal>
+
+                <WalletTransferModal isVisible={this.state.transferModalVisible} 
+                    onRequestClose={() => {this.setState({transferModalVisible: false})}} >
+                </WalletTransferModal>
+
+                <Dialog visible={this.state.deletePromptVisible} onDismiss={() => {this.setState({deletePromptVisible: false})}}>
+                    <Dialog.Title>Confirm</Dialog.Title>
+                    <Dialog.Content>
+                        <Paragraph>Are you sure you want to delete this wallet? The wallet will no longer be visible </Paragraph>
+                    </Dialog.Content>
+                    <Dialog.Actions>
+                    <Button onPress={() => {this.setState({deletePromptVisible: false})}}>Cancel</Button>
+                        <Button mode='contained' onPress={() => {this.setState({deletePromptVisible: false})}}>Confirm</Button>
+                    </Dialog.Actions>
+                </Dialog>
             </View>
         )
     }

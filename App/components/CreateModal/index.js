@@ -4,6 +4,7 @@ import { Modal as PModal, Portal } from 'react-native-paper';
 import { TransactionEditor } from '../TransactionEditor'
 import { DescriptiveButton } from "..";
 import { stylesheet } from './style';
+import { TransactionModal } from "../TransactionEditor/TransactionModal";
 
 export class CreateModal extends Component {
     constructor(props) {
@@ -16,6 +17,11 @@ export class CreateModal extends Component {
 
     render() {
         const style = stylesheet
+        const defaultData = {
+            money: 0,
+            describe: "",
+            key: "",
+        }
         //console.log('createModal: re-render')
         return (
             <Modal
@@ -27,10 +33,13 @@ export class CreateModal extends Component {
                 <Portal.Host>
                     <View style={style.overlay}>
                         <Portal>
-                            <PModal visible={this.state.transactionEditorVisible} onDismiss={() => { this.setState({ transactionEditorVisible: false }) }} onRequestClose={() => { this.setState({ transactionEditorVisible: false }) }}
-                                contentContainerStyle={style.transaction_container} style={style.transaction}>
-                                <TransactionEditor></TransactionEditor>
-                            </PModal>
+                            <TransactionModal
+                                isVisible={this.state.transactionEditorVisible}
+                                onRequestClose={() => this.setState({ transactionEditorVisible: false })}
+                                currentData={defaultData}
+                                // onCategoriesPress={this.onCategoriesPress}
+                                // onRecurringPress={this.onRecurringPress}
+                            />
                         </Portal>
                         <View style={{ backgroundColor: "#00000070", height: "70%" }}></View>
                         <Modal

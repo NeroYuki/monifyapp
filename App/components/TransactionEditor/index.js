@@ -28,7 +28,7 @@ export class TransactionEditor extends Component {
                             fontSize: 40,
                             fontWeight: '300'
                         }}
-                        defaultValue={this.props.currentData.money}
+                        defaultValue={(this.props.currentData)? this.props.currentData.money : 0}
                         placeholder='0'
                         onChangeText={text => console.log(text)}
                     />
@@ -40,7 +40,7 @@ export class TransactionEditor extends Component {
                     >
                         <View style={style.info_field_item}>
                             <Icon name="sack" size={24} />
-                            <Text style={style.info_field_item_text}>{this.props.currentData.key}</Text>
+                            <Text style={style.info_field_item_text}>{(this.props.currentData)? this.props.currentData.key : ""}</Text>
                         </View>
                     </TouchableOpacity>
                     <Divider style={{ height: 1 }} />
@@ -54,7 +54,7 @@ export class TransactionEditor extends Component {
                                 fontSize: 17,
                                 marginLeft: 16,
                             }}
-                            defaultValue={this.props.currentData.describe}
+                            defaultValue={(this.props.currentData)? this.props.currentData.describe : ""}
                             placeholder="Note"
                             onChangeText={text => console.log(text)}
                         />

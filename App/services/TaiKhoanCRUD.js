@@ -10,19 +10,19 @@ export const insertTaiKhoan = (newTaiKhoan,loaitaikhoan) =>
       if(loaitaikhoan == null){
         if(newTaiKhoan.tieudung != null) {
           let tieudungoption = realm.objects(TKTieuDungSchema.name).filtered("idtktieudung==$0",newTaiKhoan.tieudung.idtktieudung)
-          newTaiKhoan.tieudung = tieudungoption
+          if(tieudungoption== null) newTaiKhoan.tieudung = tieudungoption
         }
         else if(newTaiKhoan.tietkiem != null){
           let tietkiemoption = realm.objects(TKTietKiemSchema.name).filtered("idtktietkiem==$0", newTaiKhoan.tietkiem.idtktietkiem)
-          if(tietkiemoption= null)newTaiKhoan.tietkiem = tietkiemoption
+          if(tietkiemoption==null)newTaiKhoan.tietkiem = tietkiemoption
         }
         else if(newTaiKhoan.no != null){
           let nooption = realm.objects(TKNoSchema.name).filtered("idtkno==$0", newTaiKhoan.no.idtkno)
-          if(nooption = null)newTaiKhoan.no = nooption
+          if(nooption == null)newTaiKhoan.no = nooption
         }
         realm.write(()=>{
+          console.log(tk)
           let tk = realm.create(TaiKhoanSchema.name,newTaiKhoan);
-          //console.log(tk)
           resolve(tk);
         })
       }
@@ -42,8 +42,8 @@ export const insertTaiKhoan = (newTaiKhoan,loaitaikhoan) =>
         }
         else if (newTaiKhoan.tietkiem == null && loaitaikhoan=='tietkiem' ) {
           realm.write(()=>{
-            let tk = realm.create(TKTietKiemSchema.name,newTaiKhoan);
-            tk.tietkiem = realm.create(TKTieuDungSchema.name,
+            let tk = realm.create(TaiKhoanSchema.name,newTaiKhoan);
+            tk.tietkiem = realm.create(TKTietKiemSchema.name,
               {
                 idtktietkiem: new BSON.ObjectID(),
                 sotien: 0,
@@ -106,6 +106,15 @@ export const queryTaiKhoan = (option) =>
         if(option.nguoidungid){
           Target= Target.filtered('idnguoidung==$0',option.nguoidungid)
         }
+        if(option.idtktieudung){
+          Target= Target.filtered('tieudung.idtktieudung==$0',option.idtktieudung)
+        }
+        if(option.idtktietkiem){
+          Target= Target.filtered('tietkiem.idtktietkiem==$0',option.idtktietkiem)
+        }
+        if(option.idtkno){
+          Target= Target.filtered('no.idtkno==$0',option.idtkno)
+        }
         if(option.thoigiantao){
         Taget=Taget.filtered('thoigiantao==$0',option.thoigiantao)
         }
@@ -122,6 +131,9 @@ export const queryTaiKhoan = (option) =>
       })
     }).catch((error)=> reject(error));
   })
+
+
+
 export const deleteTaiKhoan = taiKhoanID => new Promise((resolve,reject)=>{
   Realm.open(monifydata).then(realm => {
       realm.write(()=> {

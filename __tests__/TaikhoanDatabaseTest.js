@@ -14,11 +14,35 @@ taikhoanTest1={
     thoigiantao: new Date(),
     idnguoidung: nguoiDung.idnguoidung,
 }
+taikhoanTest02={
+    idtaikhoan: new BSON.ObjectID(),
+    tentaikhoan: 'testing',
+    bieutuong:'none',
+    thoigiantao: new Date(),
+    idnguoidung: nguoiDung.idnguoidung,
+}
+taikhoanTest03={
+    idtaikhoan: new BSON.ObjectID(),
+    tentaikhoan: 'testing2',
+    bieutuong:'none',
+    thoigiantao: new Date(),
+    idnguoidung: nguoiDung.idnguoidung,
+}
+taikhoanTest04={
+    idtaikhoan: new BSON.ObjectID(),
+    tentaikhoan: 'testing2',
+    bieutuong:'none',
+    thoigiantao: new Date(),
+    idnguoidung: nguoiDung.idnguoidung,
+    tieudung:{
+        idtktieudung:new BSON.ObjectID(),
+        sotien: 500000,
+    }
+}
+
 test('insert taikhoan test', async () => {
     await insertTaiKhoan(taikhoanTest1,'no').then((tk) => {
-       // console.log(JSON.parse(JSON.stringify(tk)))
         queryTaiKhoan({idtaikhoan:taikhoanTest1.idtaikhoan}).then((taikhoanTest2)=> {
-            //console.log(taikhoanTest2[0])
             taikhoantest3 = {
                 idtaikhoan: taikhoanTest2[0].idtaikhoan,
                 tentaikhoan: taikhoanTest2[0].tentaikhoan,  
@@ -37,6 +61,40 @@ test('insert taikhoan test', async () => {
             expect(tk.idtaikhoan).toEqual(taikhoanTest1.idtaikhoan)
     })
 });
+});
+
+test('insert taikhoan test', async ()=> {
+    await insertTaiKhoan(taikhoanTest02,'tietkiem').then((tk) => {
+        expect(tk.no).toBeNull()
+        expect(tk.tieudung).toBeNull()
+        expect(tk.tietkiem.sotien).toEqual(0)
+    })
+})
+test('insert taikhoan test', async ()=> {
+    await insertTaiKhoan(taikhoanTest03,'tieudung').then((tk) => {
+        expect(tk.no).toBeNull()
+        expect(tk.tietkiem).toBeNull()
+        expect(tk.tieudung.sotien).toEqual(0)
+    })
+})
+test('insert taikhoan test', async ()=> {
+    await insertTaiKhoan(taikhoanTest04).then((tk) => {
+        expect(tk.tieudung.sotien).toBe(500000)
+    })
+})
+test('query taikhoan tietkiem', async()=> {
+    await queryTaiKhoan({taikhoanno: true,idnguoidung: nguoiDung.idnguoidung}).then((tk) => {
+        expect(tk).not.toBeNull()
+    })
+})
+test('querytaikhoantieudung = id',async()=> {
+    await queryTaiKhoan({idtktieudung: taikhoanTest04.tieudung.idtktieudung}).then((tk) => {
+        console.log(JSON.parse(JSON.stringify(tk)))
+       // console.log(tk.tieudung)
+        expect(tk[0].tieudung.sotien).toEqual(500000)
+    })
+})
+
 // test('query test', async () => {
 //     await queryTaiKhoan({idtaikhoan:taikhoanTest1.idtaikhoan}).then((taikhoanTest2)=> {
 //         console.log(taikhoanTest2)
@@ -55,7 +113,7 @@ test('insert taikhoan test', async () => {
 //         console.log(JSON.parse(JSON.stringify(updateTaiKhoan(taikhoantest3))))
 //     })
 
-});// console.log(JSON.parse(JSON.stringify(taikhoanTest2)))
+// console.log(JSON.parse(JSON.stringify(taikhoanTest2)))
 // taikhoanTest2.idtaikhoan= new BSON.ObjectID()
 // taikhoanTest2.no.idtkno = new BSON.ObjectID()
 // test('insert 2 test', async () => {

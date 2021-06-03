@@ -15,7 +15,7 @@ export const updateNguoiDung = nguoiDung => new Promise((resolve,reject)=> {
         realm.write(()=> {
             let updatingNguoiDung =realm.objectForPrimaryKey(NguoiDungSchema.name,nguoiDung.idnguoidung);
             updatingNguoiDung.pass=nguoiDung.pass;
-            resolve();
+            resolve('thanhcong');
         });
     }).catch((error)=> reject(error));
 });
@@ -25,6 +25,15 @@ export const deleteNguoiDung = nguoiDungId => new Promise((resolve,reject)=>{
             let deleteintNguoiDung =realm.objectForPrimaryKey(NguoiDungSchema.name,nguoiDungId);
             realm.delete(deleteintNguoiDung);
             resolve();
+        });
+    }).catch((error)=> reject(error));
+}); 
+export const softDeleteNguoiDung = nguoiDungId => new Promise((resolve,reject)=>{
+    Realm.open(monifydata).then(realm => {
+        realm.write(()=> {
+            let deleteintNguoiDung =realm.objectForPrimaryKey(NguoiDungSchema.name,nguoiDungId);
+            deleteintNguoiDung.deleted=true
+            resolve('thanhcong');
         });
     }).catch((error)=> reject(error));
 }); 
@@ -38,9 +47,12 @@ export const deleteAllNguoiDung = () => new Promise((resolve,reject)=>{
     }).catch((error)=> reject(error));
 }); 
 
-export const queryAllNguoiDung = () =>new Promise((resolve,reject)=>{
+export const queryAllNguoiDung = (option) =>new Promise((resolve,reject)=>{
     Realm.open(monifydata).then(realm => {
         let allNguoiDungs = realm.objects(NguoiDungSchema.name);
+        if(option == 1){
+            allNguoiDungs=allNguoiDungs.filtered('deleted==true')
+        }
         resolve(allNguoiDungs);
     }).catch((error)=> reject(error));
 });

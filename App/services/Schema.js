@@ -6,6 +6,7 @@ export const NguoiDungSchema = {
   properties: {
     idnguoidung: 'objectId',
     pass: 'string',
+    deleted: { type: 'bool', default: false },
   },
   primaryKey: 'idnguoidung',
 };
@@ -67,13 +68,6 @@ export const TKTietKiemSchema = {
   //primaryKey: 'idtktietkiem',
 }
 
-// export const LoaiTietKiemConfigSchema = {
-//   name: "LoaiTietKiemConfig",
-//   embeded: true,
-//   properties: {
-    
-//   }
-// }
 
 export const TKNoSchema = {
   name: 'TKNo',
@@ -106,7 +100,20 @@ export const GiaoDichSchema = {
   },
   primaryKey: 'idgiaodich',
 };
-
+export const GiaoDichNoiBoSchema = {
+  name: 'GiaoDichNoiBo',
+  embeded: true,
+  properties: {
+    idgiaodich: 'objectId',
+    idnguoidung: 'objectId',
+    thoigian: 'date',
+    idtaikhoanchuyen: 'objectId',
+    idtaikhoannhan: 'objectId?',
+    sotienchuyen: 'double?',
+    ghichu:'string',
+  },
+  primaryKey: 'idgiaodich',
+};
 export const GiaoDichTheoCKSchema={
   name:'GiaoDichTheoCK',
   embeded: true,
@@ -201,6 +208,7 @@ export const monifydata = {
     TKTieuDungSchema,
     TaiKhoanSchema,
     NguoiDungSchema,
+    GiaoDichNoiBoSchema,
     //LoaiTaiKhoanConfigSchema,
     //LoaiTietKiemConfigSchema,
     LoaiMucTieuConfigSchema,

@@ -9,11 +9,31 @@ export class TabSwitcher extends Component {
         const style = stylesheet
         return (
             <View style={style.button}>
-                <TouchableOpacity><Icon name="chevron-left" size={25}></Icon></TouchableOpacity>
-                <TouchableOpacity style={style.button_content} onPress={(this.props.onTimeTextPress)? this.props.onTimeTextPress : () => {console.log('default handler')}}>
+                <TouchableOpacity
+                    style={{ marginLeft: 8 }}
+                    onPress={this.props.decreasePeriod}
+                >
+                    <Icon
+                        name="chevron-left"
+                        size={25}>
+                    </Icon>
+                </TouchableOpacity>
+
+                <TouchableOpacity
+                    style={style.button_content}
+                    onPress={(this.props.onTimeTextPress) ? this.props.onTimeTextPress : () => { console.log('default handler') }}>
                     <Text style={style.button_label}>{this.props.text}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity><Icon name="chevron-right" size={25}></Icon></TouchableOpacity>
+
+                <TouchableOpacity
+                    style={{ marginRight: 8 }}
+                    onPress={this.props.increasePeriod}
+                >
+                    <Icon
+                        name="chevron-right"
+                        size={25}>
+                    </Icon>
+                </TouchableOpacity>
             </View>
         )
     }

@@ -2,8 +2,7 @@ import { StyleSheet } from 'react-native'
 
 export const stylesheet = StyleSheet.create({
     container: {
-        flex: 1,
-        flexDirection: "column",
+        flex: 1
     },
     header: {
         flex: 1,
@@ -24,13 +23,11 @@ export const stylesheet = StyleSheet.create({
         fontSize: 50,
     },
     info_field: {
-        flex: 5,
-        flexDirection: "column",
-        justifyContent: "flex-start",
+        flex: 1,
     },
     info_field_item: {
-        //flex: 1,
-        margin: 15,
+        height: 30,
+        margin: 16,
         flexDirection: "row",
         alignItems: "center",
     },

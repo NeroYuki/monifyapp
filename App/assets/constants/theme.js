@@ -3,28 +3,14 @@ const { width, height } = Dimensions.get('window');
 
 export const COLORS = {
     pink: '#FF83A0',
-    lightPink: 'rgba(255, 131, 160, 0.7)',
-
     blue: '#00A9EA',
-    blueText: '#007AFF',
 
     black: '#000000',
-    blackBlur: 'rgba(0, 0, 0, 0.2)',
-
     white: '#FFFFFF',
-    lightWhite: 'rgba(255, 255, 255, 0.5)',
-
     yellow: '#FFBE61',
 
     gray: '#A9A9A9',
     lightGray: '#F8F8F8',
-    grayBackground: '#F0F0F0',
-
-    blueProgress: '#00B9FF',
-    ligtBlueProgress: 'rgba(0, 185, 255, 0.2)',
-
-    lightText: 'rgba(255, 255, 255, 0.7)',
-    separateLine: '#E7E7E7',
 };
 export const SIZES = {
     // global sizes

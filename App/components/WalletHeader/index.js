@@ -1,73 +1,18 @@
 import React, { Component } from "react";
 import { Text, TouchableOpacity, View } from "react-native";
-import { Button, Divider, Surface } from "react-native-paper";
+import { Button, Divider, Surface} from "react-native-paper";
 import { stylesheet } from './style'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { COLORS } from "../../assets/constants";
 
 export class WalletHeader extends Component {
-
-    // Change Color in Button when choose "List" or "Categories"
-    TabSelectedButton = () => {
-        return (
-            (!this.props.currentTab) ?
-                <View style={stylesheet.button_group}>
-                    <Button
-                        icon="format-list-bulleted"
-                        mode="contained"
-
-                        contentStyle={stylesheet.button_content}
-                        style={[stylesheet.button, { backgroundColor: COLORS.white }]}
-                        labelStyle={{ color: COLORS.pink }}
-                        onPress={this.props.onListPress}
-                    >List</Button>
-                    <Button
-                        icon="chart-donut"
-                        mode="contained"
-                        contentStyle={stylesheet.button_content}
-                        style={[stylesheet.button, { backgroundColor: COLORS.lightWhite }]}
-                        labelStyle={{ color: COLORS.white }}
-                        onPress={this.props.onCategoriesPress}
-                    >Categories</Button>
-                </View>
-                :
-                <View style={stylesheet.button_group}>
-                    <Button
-                        icon="format-list-bulleted"
-                        mode="contained"
-
-                        contentStyle={stylesheet.button_content}
-                        style={[stylesheet.button, { backgroundColor: COLORS.lightWhite }]}
-                        labelStyle={{ color: COLORS.white }}
-                        onPress={this.props.onListPress}
-
-                    >List</Button>
-                    <Button
-                        icon="chart-donut"
-                        mode="contained"
-                        contentStyle={stylesheet.button_content}
-                        style={[stylesheet.button, { backgroundColor: COLORS.white }]}
-                        labelStyle={{ color: COLORS.pink }}
-                        onPress={this.props.onCategoriesPress}
-                    >Categories</Button>
-                </View>
-        )
-    }
-
     render() {
         const style = stylesheet
-
-        console.log("HELLO", this.props.currentTab)
 
         return (
             <Surface style={style.surface}>
                 <View style={style.selector}>
                     <Text style={style.selector_text}>Overview: </Text>
-                    <TouchableOpacity>
-                        <Text style={style.info_field_text_highlight}>My Wallet
-                        <Icon name="chevron-down" size={20} />
-                        </Text>
-                    </TouchableOpacity>
+                    <TouchableOpacity><Text style={style.info_field_text_highlight}>My Wallet <Icon name="chevron-down" size={20}/></Text></TouchableOpacity>
                 </View>
                 <View style={style.info_field}>
                     <View>
@@ -85,8 +30,11 @@ export class WalletHeader extends Component {
                         <Text style={style.info_field_text}>BALANCE</Text>
                     </View>
                 </View>
-
-                <this.TabSelectedButton />
+                <View style={style.button_group}>
+                    <Button icon="format-list-bulleted" mode="contained" contentStyle={style.button_content} style={style.button} labelStyle={style.button_label}>List</Button>
+                    <Button icon="chart-donut" mode="contained" contentStyle={style.button_content} style={style.button} labelStyle={style.button_label} 
+                        onPress={(this.props.onCategoriesPress)? this.props.onCategoriesPress : () => {console.log('default handler')}}>Categories</Button>
+                </View>
             </Surface>
         )
     }

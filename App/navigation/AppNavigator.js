@@ -1,11 +1,9 @@
 import * as React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import { Login, TestScreen, BudgetScreen, ToolsContainer, OverviewScreen, ProfileContainer } from '../screen';
+import { Login, TestScreen, BudgetScreen } from '../screen';
 import { COLORS, icons, SIZES } from '../assets/constants/';
-import { Image, Text, TouchableOpacity, View } from 'react-native';
-import { CreateModal, TransactionEditor } from '../components';
-import { Component } from 'react';
+import { Image, Text, View } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
@@ -16,31 +14,17 @@ const tabOptions = {
   },
 }
 
-const CreateInput = (props) => {
+const CreateInput = () => {
   return (
-    <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', width: 38, height: 38, borderRadius: 19, backgroundColor: COLORS.yellow }} onPress={props.onPress}>
+    <View style={{ alignItems: 'center', justifyContent: 'center', width: 38, height: 38, borderRadius: 19, backgroundColor: COLORS.yellow }}>
       <Image source={icons.plus} resizeMode='contain' style={{ height: 19, width: 19 }} />
-    </TouchableOpacity>
+    </View>
   )
 }
 
 const AppNavigator = () => {
-  const [showCreateModal, setShowCreateModal] = React.useState(false)
-  const [procOnce, setProcOnce] = React.useState(true)
-
-  const CreateModalWrapper = ({ navigation }) => {
-
-    return (
-      <View style={{flex: 1}}>
-        <OverviewScreen />
-        <CreateModal isVisible={showCreateModal} onRequestClose={() => { console.log('close'); setShowCreateModal(false) }}></CreateModal>
-      </View>
-    )
-  }
-
   return (
     <Tab.Navigator
-      initialRouteName="CreateInput"
       tabBarOptions={tabOptions}
       screenOptions={({ route }) => ({
         tabBarIcon: ({ focused }) => {
@@ -76,7 +60,7 @@ const AppNavigator = () => {
               );
             case 'CreateInput':
               return (
-                <CreateInput onPress={() => setShowCreateModal(true)} />
+                <CreateInput />
               );
             case 'Profile':
               return (
@@ -108,18 +92,12 @@ const AppNavigator = () => {
         }
       })}
     >
-      <Tab.Screen name='Overview' component={OverviewScreen} />
+      <Tab.Screen name='Overview' component={TestScreen} />
       <Tab.Screen name='Budget' component={BudgetScreen} />
-      <Tab.Screen name='CreateInput' component={CreateModalWrapper} listeners={{
-        tabPress: e => {
-          // Prevent default action
-
-          e.preventDefault();
-        },
-      }} />
-      <Tab.Screen name='Profile' component={ProfileContainer} />
-      <Tab.Screen name='Tools' component={ToolsContainer} />
-    </Tab.Navigator >
+      <Tab.Screen name='CreateInput' component={TestScreen} />
+      <Tab.Screen name='Profile' component={TestScreen} />
+      <Tab.Screen name='Tools' component={TestScreen} />
+    </Tab.Navigator>
   );
 }
 

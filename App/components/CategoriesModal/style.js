@@ -1,9 +1,8 @@
 import { StyleSheet } from 'react-native'
-import { COLORS } from '../../assets/constants'
 
 export const stylesheet = StyleSheet.create({
     modal_view: {
-        backgroundColor: "#000000e0",
+        backgroundColor: "#000000e0", 
         flex: 1,
         flexDirection: 'column',
         justifyContent: 'center',
@@ -62,11 +61,9 @@ export const stylesheet = StyleSheet.create({
         alignItems: 'center',
     },
     category_entry: {
-        height: 48,
         marginLeft: 10,
         marginRight: 10,
-        justifyContent: 'center',
-
+        justifyContent: 'space-evenly',
     },
     category_entry_content: {
         flexDirection: 'row',
@@ -74,20 +71,6 @@ export const stylesheet = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     content_list_text: {
-        marginLeft: 20,
-        fontSize: 17
-    },
-    transaction_container: {
-        padding: 10,
-        height: "50%",
-        width: "90%",
-        backgroundColor: COLORS.white,
-        elevation: 20,
-    },
-    transaction: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        elevation: 20,
-    },
+        marginLeft: 20
+    }
 })

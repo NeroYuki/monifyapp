@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Text, TouchableOpacity, View, Modal } from "react-native";
 import { stylesheet } from './style';
 import TimespanPickerNavigation from "../../navigation/TimespanPickerNavigator";
-import { COLORS } from "../../assets/constants";
 
 export class TimespanPicker extends Component {
     constructor(props) {
@@ -19,20 +18,21 @@ export class TimespanPicker extends Component {
                 animationType="fade"
                 transparent={true}
                 visible={this.props.isVisible}
+                onRequestClose={this.props.onRequestClose}
             >
                 <View style={style.overlay}>
-                    <View style={{ backgroundColor: COLORS.blackBlur, height: "60%" }}>
-                        <TouchableOpacity
-                            style={{ flex: 1 }}
-                            onPress={this.props.onRequestClose}
-                        >
-                            <View style={{ flex: 1 }}></View>
-                        </TouchableOpacity>
-                    </View>
-                    <View style={style.main_view}>
-                        <Text style={style.main_view_header}>BUDGET PERIOD</Text>
-                        <TimespanPickerNavigation />
-                    </View>
+                    <View style={{backgroundColor: "#000000e0", height: "60%"}}></View>
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={this.props.isVisible}
+                        onRequestClose={this.props.onRequestClose}
+                    >
+                        <View style={style.main_view}>
+                            <Text style={style.main_view_header}>Budget Period</Text>
+                            <TimespanPickerNavigation />
+                        </View>
+                    </Modal>
                 </View>
 
             </Modal>

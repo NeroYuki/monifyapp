@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, SectionList, Text, Image } from 'react-native';
+import { View, StyleSheet, SectionList, Text, Image, TouchableOpacity } from 'react-native';
 import { COLORS, icons } from '../../assets/constants';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -62,7 +62,10 @@ export class ItemsCategoriesTab extends Component {
     );
 
     Header = ({ section }) => (
-        <View style={styles.header}>
+        <TouchableOpacity
+            style={styles.header}
+            onPress={this.props.onPressShowing}
+        >
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ flex: 1, flexDirection: 'row' }}>
                     <Text style={styles.titleHeader}>Showing: </Text>
@@ -75,11 +78,10 @@ export class ItemsCategoriesTab extends Component {
                         size={25}>
                     </Icon>
                 </View>
-
             </View>
 
             <View style={{ height: 1, backgroundColor: COLORS.separateLine }}></View>
-        </View>
+        </TouchableOpacity>
     );
 
     Footer = () => (
@@ -118,6 +120,12 @@ const styles = StyleSheet.create({
     header: {
         height: 48,
         justifyContent: 'space-between'
+    },
+
+    footer: {
+        height: 48,
+        backgroundColor: COLORS.grayBackground,
+        marginTop: -1
     },
     item: {
         flex: 1,

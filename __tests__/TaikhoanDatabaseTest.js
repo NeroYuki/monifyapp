@@ -95,6 +95,8 @@ test('querytaikhoantieudung = id',async()=> {
     })
 })
 
+
+
 // test('query test', async () => {
 //     await queryTaiKhoan({idtaikhoan:taikhoanTest1.idtaikhoan}).then((taikhoanTest2)=> {
 //         console.log(taikhoanTest2)

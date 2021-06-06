@@ -18,6 +18,7 @@ export const COLORS = {
 
     gray: '#A9A9A9',
     lightGray: '#F8F8F8',
+    grayBackground: '#F0F0F0',
 
     blueProgress: '#00B9FF',
     ligtBlueProgress: 'rgba(0, 185, 255, 0.2)',

@@ -32,8 +32,8 @@ export class RecurringBillEntry extends Component {
                         visible={this.state.visible}
                         onDismiss={() => {this.setState({visible: false})}}
                         anchor={<TouchableOpacity onPress={() => {this.setState({visible: true})}}><Icon name='dots-vertical' size={24}></Icon></TouchableOpacity>}>
-                            <Menu.Item onPress={() => {}} icon="pause" title="Pause" />
-                            <Menu.Item onPress={() => {}} icon="play" title="Resume" />
+                            <Menu.Item onPress={() => {this.setState({visible: false}); (this.props.onPausePress)? this.props.onPausePress() : () => {}}} icon="pause" title="Pause" />
+                            <Menu.Item onPress={() => {this.setState({visible: false}); (this.props.onResumePress)? this.props.onResumePress() : () => {}}} icon="play" title="Resume" />
                             <Divider></Divider>
                             <Menu.Item onPress={() => {this.setState({visible: false}); (this.props.onViewPress)? this.props.onViewPress() : () => {}}} icon="eye" title="View" />
                             <Menu.Item onPress={() => {this.setState({visible: false}); (this.props.onEditPress)? this.props.onEditPress() : () => {}}} icon="file-edit" title="Edit" />

@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Text, View, StyleSheet, SectionList, Image } from 'react-native';
+import { Text, View, StyleSheet, SectionList, Image, TouchableOpacity } from 'react-native';
 import { COLORS, icons } from '../../assets/constants';
 
 export class ItemsBudget extends Component {
@@ -10,23 +10,15 @@ export class ItemsBudget extends Component {
         this.state = {
             data: [
                 {
-                    title: "INCOME",
+                    title: this.props.title,
                     data: [
                         {
-                            key: 'Food',
+                            key: 'Salary',
                             money: '200.000'
                         },
                         {
-                            key: 'Entertainment',
+                            key: 'Investment',
                             money: '300.000'
-                        },
-                        {
-                            key: 'Internet',
-                            money: '400.000'
-                        },
-                        {
-                            key: 'Coffee',
-                            money: '600.000'
                         },
                     ]
                 },
@@ -35,7 +27,7 @@ export class ItemsBudget extends Component {
     }
 
     Item = ({ items }) => (
-        <View style={styles.item}>
+        <TouchableOpacity style={styles.item}>
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                 <Image
                     style={{
@@ -52,7 +44,7 @@ export class ItemsBudget extends Component {
 
             </View>
             <View style={{ height: 1, backgroundColor: COLORS.separateLine }}></View>
-        </View>
+        </TouchableOpacity>
     );
 
     Header = ({ section }) => (
@@ -64,7 +56,10 @@ export class ItemsBudget extends Component {
     );
 
     Footer = () => (
-        <View style={styles.item}>
+        <TouchableOpacity
+            style={styles.item}
+            onPress={this.props.addNewCatgory}
+        >
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                 <Image
                     style={{
@@ -76,8 +71,7 @@ export class ItemsBudget extends Component {
                 />
                 <Text style={[styles.title, { marginLeft: 16 }]}>Add new category</Text>
             </View>
-            <View style={{ height: 1, backgroundColor: COLORS.separateLine }}></View>
-        </View>
+        </TouchableOpacity>
 
     );
 

@@ -1,9 +1,10 @@
 import React, { Component } from "react";
-import { View, Modal, Text, TouchableHighlight, TouchableOpacity, SafeAreaView } from "react-native";
+import { View, Modal, Text, TouchableHighlight, TouchableOpacity, SafeAreaView, Image } from "react-native";
 import { Divider, Avatar, Modal as PModal } from "react-native-paper"
 import { stylesheet } from './style'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { CategoryEditor } from "../CategoryEditor";
+import { COLORS, icons } from "../../assets/constants";
 
 export class CategoriesModal extends Component {
     constructor(props) {
@@ -13,8 +14,43 @@ export class CategoriesModal extends Component {
             isAddCategoryPromptVisible: false,
             typeSelection: 1,
             //placeholder, replace with props
-            income_cat_list: ["Salary", "Bonus", "Interest", "Gift", "Others"],
-            expense_cat_list: ["Food", "Clothes", "Utility", "Travel", "Entertainment", "Others"],
+            // income_cat_list: ["Salary", "Bonus", "Interest", "Gift", "Others"],
+
+            // expense_cat_list: ["Food", "Clothes", "Utility", "Travel", "Entertainment", "Others"],
+
+            income_cat_list: [
+                {
+                    type: 'Salary',
+                    icon: icons.salaryIcon,
+                },
+                {
+                    type: 'Bonus',
+                    icon: icons.bonusIcon,
+                },
+                {
+                    type: 'Investment',
+                    icon: icons.investmentIcon,
+                },
+            ],
+
+            expense_cat_list: [
+                {
+                    type: 'Food',
+                    icon: icons.foodIcon,
+                },
+                {
+                    type: 'Clothes',
+                    icon: icons.clothesIcon,
+                },
+                {
+                    type: 'Electric Bill',
+                    icon: icons.electricBillIcon,
+                },
+                {
+                    type: 'Houseware',
+                    icon: icons.housewareIcon,
+                },
+            ]
         }
 
         this.onAddCategoryPress = this.onAddCategoryPress.bind(this)
@@ -40,10 +76,17 @@ export class CategoriesModal extends Component {
                 return (
                     <View style={style.category_entry} key={index}>
                         <View style={style.category_entry_content}>
-                            <Avatar.Icon size={20} style={{ backgroundColor: "red" }} />
-                            <Text style={[style.modal_text, style.content_list_text]}>{val}</Text>
+                            <Image
+                                source={val.icon}
+                                resizeMode='contain'
+                                style={{
+                                    height: 24,
+                                    width: 24,
+                                }}
+                            />
+                            <Text style={[style.modal_text, style.content_list_text]}>{val.type}</Text>
                         </View>
-                        <Divider style={{ backgroundColor: 'white' }}></Divider>
+                        <Divider style={{ height: 1, backgroundColor: 'white' }}></Divider>
                     </View>
                 )
             }))
@@ -51,20 +94,27 @@ export class CategoriesModal extends Component {
                 return (
                     <View style={style.category_entry} key={index}>
                         <View style={style.category_entry_content}>
-                            <Avatar.Icon size={20} style={{ backgroundColor: "green" }} />
-                            <Text style={[style.modal_text, style.content_list_text]}>{val}</Text>
+                            <Image
+                                source={val.icon}
+                                resizeMode='contain'
+                                style={{
+                                    height: 24,
+                                    width: 24,
+                                }}
+                            />
+                            <Text style={[style.modal_text, style.content_list_text]}>{val.type}</Text>
                         </View>
+                        <Divider style={{ height: 1, backgroundColor: 'white' }}></Divider>
                     </View>
                 )
             }))
 
         return (
             <Modal
-                animationType="slide"
+                animationType='slide'
                 transparent={true}
                 visible={this.props.isVisible}
                 onRequestClose={this.props.onRequestClose}
-
             >
                 <SafeAreaView style={{ flex: 1 }}>
                     <View style={style.modal_view}>

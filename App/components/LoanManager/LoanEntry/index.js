@@ -32,8 +32,8 @@ export class LoanEntry extends Component {
                         visible={this.state.visible}
                         onDismiss={() => {this.setState({visible: false})}}
                         anchor={<TouchableOpacity onPress={() => {this.setState({visible: true})}}><Icon name='dots-vertical' size={24}></Icon></TouchableOpacity>}>
-                            <Menu.Item onPress={(this.props.onPaymentPress)? this.props.onPaymentPress : () => {}} icon="cash-register" title="Payment" />
-                            <Menu.Item onPress={() => {}} icon="block-helper" title="Deactivate" />
+                            <Menu.Item onPress={() => {this.setState({visible: false}); (this.props.onPaymentPress)? this.props.onPaymentPress() : () => {}}} icon="cash-register" title="Payment" />
+                            <Menu.Item onPress={() => {this.setState({visible: false}); (this.props.onDeactivatePress)? this.props.onDeactivatePress() : () => {}}} icon="block-helper" title="Deactivate" />
                             <Divider />
                             <Menu.Item onPress={() => {this.setState({visible: false}); (this.props.onViewPress)? this.props.onViewPress() : () => {}}} icon="eye" title="View" />
                             <Menu.Item onPress={() => {this.setState({visible: false}); (this.props.onEditPress)? this.props.onEditPress() : () => {}}} icon="file-edit" title="Edit" />

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View } from 'react-native'
 import { PieChart } from 'react-native-svg-charts';
 import { COLORS } from '../../assets/constants';
-import ChartView from './ChartView';
+import { ChartView } from './ChartView';
 import { ItemsCategoriesTab } from './ItemsCategoriesTab';
 
 export class ChartOverview extends Component {
@@ -12,8 +12,7 @@ export class ChartOverview extends Component {
         return (
             <View style={styles.container}>
                 <ChartView />
-
-                <ItemsCategoriesTab />
+                <ItemsCategoriesTab onPressShowing={this.props.onPressShowing} />
             </View>
         )
 

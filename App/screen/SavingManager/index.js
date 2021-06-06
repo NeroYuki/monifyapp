@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { ScrollView, Text, View, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { FAB, Searchbar } from "react-native-paper";
-import { SavingEntry, SavingSearchModal } from "../../components";
+import { FAB, Searchbar, Dialog, Paragraph, Button } from "react-native-paper";
+import { SavingDepositModal, SavingEntry, SavingSearchModal, SavingWithdrawModal } from "../../components";
 import { stylesheet } from './style'
 
 export class SavingManager extends Component {
@@ -29,6 +29,10 @@ export class SavingManager extends Component {
                 },
             ],
             advanceSearchVisible: false,
+            deactivatePromptVisible: false,
+            deletePromptVisible: false,
+            depositModalVisible: false,
+            withdrawModalVisible: false,
         }
     }
 
@@ -37,8 +41,11 @@ export class SavingManager extends Component {
         const savingDisplay = this.state.savingList.map((val) => {
             return <SavingEntry
                 key={val.id} style={[style.saving_entry, {backgroundColor: val.color}]} name={val.name} due_duration={val.due_duratuion} amount={val.amount} interest_string={val.interest_string}
+                onDepositPress={() => {this.setState({depositModalVisible: true})}}
+                onWithdrawPress={() => {this.setState({withdrawModalVisible: true})}}
+                onDeactivatePress={() => {this.setState({deactivatePromptVisible: true})}}
                 onViewPress={() => {this.props.navigation.navigate("SavingEditor")}}
-                onDeletePress={() => {}}
+                onDeletePress={() => {this.setState({deletePromptVisible: true})}}
                 onEditPress={() => {this.props.navigation.navigate("SavingEditor")}}
             ></SavingEntry>
         })
@@ -57,13 +64,44 @@ export class SavingManager extends Component {
                 </ScrollView>
                 <FAB style={style.fab}
                     big
-                    icon="plus"
+                    icon='plus'
                     onPress={() => {this.props.navigation.navigate("SavingEditor")}}
                 />
+
                 <SavingSearchModal isVisible={this.state.advanceSearchVisible} 
                     onRequestClose={() => {this.setState({advanceSearchVisible: false})}} 
                     onFilterRequest={(data) => {console.log(data); }}>
                 </SavingSearchModal>
+
+                <SavingDepositModal isVisible={this.state.depositModalVisible} 
+                    onRequestClose={() => {this.setState({depositModalVisible: false})}}>
+                </SavingDepositModal>
+                
+                <SavingWithdrawModal isVisible={this.state.withdrawModalVisible} 
+                    onRequestClose={() => {this.setState({withdrawModalVisible: false})}}>
+                </SavingWithdrawModal>
+
+                <Dialog visible={this.state.deletePromptVisible} onDismiss={() => {this.setState({deletePromptVisible: false})}}>
+                    <Dialog.Title>Confirm</Dialog.Title>
+                    <Dialog.Content>
+                        <Paragraph>Are you sure you want to delete this saving account? The account will no longer be visible </Paragraph>
+                    </Dialog.Content>
+                    <Dialog.Actions>
+                    <Button onPress={() => {this.setState({deletePromptVisible: false})}}>Cancel</Button>
+                        <Button mode='contained' onPress={() => {this.setState({deletePromptVisible: false})}}>Confirm</Button>
+                    </Dialog.Actions>
+                </Dialog>
+
+                <Dialog visible={this.state.deactivatePromptVisible} onDismiss={() => {this.setState({deactivatePromptVisible: false})}}>
+                    <Dialog.Title>Confirm</Dialog.Title>
+                    <Dialog.Content>
+                        <Paragraph>Are you sure you want to deactivate this saving account? All remaining saving value will be lost</Paragraph>
+                    </Dialog.Content>
+                    <Dialog.Actions>
+                    <Button onPress={() => {this.setState({deactivatePromptVisible: false})}}>Cancel</Button>
+                        <Button mode='contained' onPress={() => {this.setState({deactivatePromptVisible: false})}}>Confirm</Button>
+                    </Dialog.Actions>
+                </Dialog>
             </View>
         )
     }

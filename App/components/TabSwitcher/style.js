@@ -25,6 +25,7 @@ export const stylesheet = StyleSheet.create({
         elevation: 5,
     },
     button_content: {
+        flex: 1,
         width: 150,
         height: 40,
         justifyContent: 'center'

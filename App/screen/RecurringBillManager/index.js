@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { ScrollView, Text, View, TouchableOpacity } from "react-native";
-import { FAB, Searchbar } from "react-native-paper";
+import { FAB, Searchbar, Dialog, Paragraph, Button } from "react-native-paper";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RecurringBillEntry, RecurringBillSearchModal } from "../../components";
 import { stylesheet } from './style'
@@ -29,6 +29,7 @@ export class RecurringBillManager extends Component {
                 },
             ],
             advanceSearchVisible: false,
+            deletePromptVisible: false,
         }
     }
 
@@ -38,7 +39,7 @@ export class RecurringBillManager extends Component {
             return <RecurringBillEntry
                 key={val.id} style={[style.bill_entry, {backgroundColor: val.color}]} name={val.name} next_tran={val.next_tran} amount={val.amount} desc={val.desc}
                 onViewPress={() => {this.props.navigation.navigate("RecurringBillEditor")}}
-                onDeletePress={() => {}}
+                onDeletePress={() => {this.setState({deletePromptVisible: true})}}
                 onEditPress={() => {this.props.navigation.navigate("RecurringBillEditor")}}
             ></RecurringBillEntry>
         })
@@ -64,6 +65,17 @@ export class RecurringBillManager extends Component {
                     onRequestClose={() => {this.setState({advanceSearchVisible: false})}} 
                     onFilterRequest={(data) => {console.log(data); }}>
                 </RecurringBillSearchModal>
+
+                <Dialog visible={this.state.deletePromptVisible} onDismiss={() => {this.setState({deletePromptVisible: false})}}>
+                    <Dialog.Title>Confirm</Dialog.Title>
+                    <Dialog.Content>
+                        <Paragraph>Are you sure you want to delete this recurring bill? This action is irreversible</Paragraph>
+                    </Dialog.Content>
+                    <Dialog.Actions>
+                    <Button onPress={() => {this.setState({deletePromptVisible: false})}}>Cancel</Button>
+                        <Button mode='contained' onPress={() => {this.setState({deletePromptVisible: false})}}>Confirm</Button>
+                    </Dialog.Actions>
+                </Dialog>
             </View>
         )
     }

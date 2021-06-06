@@ -5,6 +5,9 @@ import * as Progress from 'react-native-progress';
 
 
 export class IncomeReportView extends Component {
+
+    windowWidth = Dimensions.get('window').width - 40;
+
     render() {
 
         console.log(this.props)
@@ -20,6 +23,7 @@ export class IncomeReportView extends Component {
                     <View style={{ flex: 1 }}>
                         <Progress.Bar
                             style={styles.progressBar}
+                            width={this.windowWidth}
                             progress={this.props.current / this.props.total}
                             color={COLORS.blueProgress}
                             unfilledColor={COLORS.ligtBlueProgress}
@@ -57,7 +61,6 @@ const styles = StyleSheet.create({
         fontWeight: 'normal'
     },
     progressBar: {
-        width: '100%',
         marginTop: 16,
         justifyContent: 'center',
     }

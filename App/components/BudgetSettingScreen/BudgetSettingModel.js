@@ -9,6 +9,8 @@ import { COLORS } from '../../assets/constants';
 import { ItemsBudget } from '../../components/BudgetSettingScreen/ItemsBudget';
 import { BudgetSettingPeriodModal } from "./BudgetSettingPeriodModal";
 
+import { AddNewBudgetExpenseModal } from "./AddNewBudgetExpenseModal";
+import { TransactionModal } from "../TransactionEditor/TransactionModal";
 export class BudgetSettingModal extends Component {
 
     constructor(props) {
@@ -17,18 +19,32 @@ export class BudgetSettingModal extends Component {
         this.state = {
 
             periodVisible: false,
+            addBudgetExpenseVisible: false,
+            transactionVisible: false,
 
             periodOptions: ["Weekly, Monthly, Yearly"],
             periodCurrent: "Weekly",
+
+            // Tap on item report then set data on this
+            currentData: {
+
+            }
         }
 
         this.changePeriod = this.changePeriod.bind(this)
+        this.addNewCatgory = this.addNewCatgory.bind(this)
     }
 
     changePeriod(val) {
         this.setState({
             periodCurrent: val,
             periodVisible: false
+        })
+    }
+
+    addNewCatgory() {
+        this.setState({
+            addBudgetExpenseVisible: !this.state.addBudgetExpenseVisible
         })
     }
 
@@ -89,7 +105,9 @@ export class BudgetSettingModal extends Component {
                         </View>
 
                         {/* INCOME/EXPENSE Item List */}
-                        <ItemsBudget />
+                        <ItemsBudget title="INCOME" addNewCatgory={this.addNewCatgory} />
+
+                        <ItemsBudget title="EXPENSE" addNewCatgory={this.addNewCatgory} />
 
                         <BudgetSettingPeriodModal
                             isVisible={this.state.periodVisible}
@@ -104,6 +122,11 @@ export class BudgetSettingModal extends Component {
                             changePeriod={this.changePeriod}
                         />
                     </ScrollView>
+
+                    <AddNewBudgetExpenseModal
+                        isVisible={this.state.addBudgetExpenseVisible}
+                        onRequestClose={() => this.setState({ addBudgetExpenseVisible: false })}
+                    />
 
                 </SafeAreaView>
 

@@ -25,6 +25,7 @@ import { RecurringBillSearchModal } from './RecurringBillManager/RecurringBillSe
 import { GenericInputModal } from './GenericInputModal'
 import { ColorPickerModal } from './ColorPickerModal'
  
+
 export {
     TabSwitcher,
     WalletHeader,

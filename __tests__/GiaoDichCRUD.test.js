@@ -3,8 +3,7 @@ import {BSON} from 'realm'
 
 let idgiaodich=new BSON.ObjectID()
 let idnguoidung=new BSON.ObjectID()
-let idtaikhoanchuyen=new BSON.ObjectID()
-let idtaikhoannhan=new BSON.ObjectID()
+let idtaikhoan=new BSON.ObjectID()
 let loaihangmuc=new BSON.ObjectID()
 let thoigian= new Date('2011-04-11T10:20:30.000Z')
 
@@ -12,8 +11,7 @@ let GiaoDich={
     idgiaodich:idgiaodich,
     idnguoidung:idnguoidung,
     thoigian:thoigian,
-    idtaikhoanchuyen:idtaikhoanchuyen,
-    idtaikhoannhan:idtaikhoannhan,
+    idtaikhoan:idtaikhoan,
     sotientieudung:2000,
     sotienthunhap:null,
     loaihangmucgd:loaihangmuc,
@@ -29,8 +27,7 @@ let GiaoDichtestupdate={
     idgiaodich:idgiaodich,
     idnguoidung:idnguoidung,
     thoigian:new Date('2011-06-11T10:20:30.000Z'),
-    idtaikhoanchuyen:idtaikhoanchuyen,
-    idtaikhoannhan:idtaikhoannhan,
+    idtaikhoan:idtaikhoan,
     sotientieudung:6000,
     sotienthunhap:null,
     loaihangmucgd:loaihangmuc,
@@ -40,8 +37,7 @@ let GiaoDichtestquery=[{
     idgiaodich:idgiaodich,
     idnguoidung:idnguoidung,
     thoigian:new Date('2011-06-11T10:20:30.000Z'),
-    idtaikhoanchuyen:idtaikhoanchuyen,
-    idtaikhoannhan:idtaikhoannhan,
+    idtaikhoan:idtaikhoan,
     sotientieudung:6000,
     sotienthunhap:null,
     loaihangmucgd:loaihangmuc,
@@ -58,8 +54,7 @@ test('testing querry GiaoDich', async () => {
         idgiaodich:idgiaodich,
         idnguoidung:idnguoidung,
         thoigian:new Date('2011-06-11T10:20:30.000Z'),
-        idtaikhoanchuyen:idtaikhoanchuyen,
-        idtaikhoannhan:idtaikhoannhan,
+        idtaikhoan:idtaikhoan,
         sotientieudung:6000,
         sotienthunhap:null,
         loaihangmucgd:loaihangmuc,
@@ -74,8 +69,7 @@ test('testing delete GiaoDich', async () => {
 ////////////////////////////////////////////////test2///////////////////////////////////////////////////
 let idgiaodich2=new BSON.ObjectID()
 let idnguoidung2=new BSON.ObjectID()
-let idtaikhoanchuyen2=new BSON.ObjectID()
-let idtaikhoannhan2=new BSON.ObjectID()
+let idtaikhoan2=new BSON.ObjectID()
 let loaihangmuc2=new BSON.ObjectID()
 let thoigian2= new Date('2011-04-11T10:20:30.000Z')
 
@@ -83,8 +77,7 @@ let GiaoDich2={
     idgiaodich:idgiaodich2,
     idnguoidung:idnguoidung2,
     thoigian:thoigian2,
-    idtaikhoanchuyen:idtaikhoanchuyen2,
-    idtaikhoannhan:idtaikhoannhan2,
+    idtaikhoan:idtaikhoan2,
     sotientieudung:2000,
     loaihangmucgd:loaihangmuc2,
     ghichu:'Tiền chơi coin',
@@ -93,8 +86,7 @@ let GiaoDich2KT={
     idgiaodich:idgiaodich2,
     idnguoidung:idnguoidung2,
     thoigian:thoigian2,
-    idtaikhoanchuyen:idtaikhoanchuyen2,
-    idtaikhoannhan:idtaikhoannhan2,
+    idtaikhoan:idtaikhoan2,
     sotientieudung:2000,
     sotienthunhap:null,
     loaihangmucgd:loaihangmuc2,
@@ -110,8 +102,7 @@ let GiaoDichtestupdate2={
     idgiaodich:idgiaodich2,
     idnguoidung:idnguoidung2,
     thoigian:new Date('2011-06-11T10:20:30.000Z'),
-    idtaikhoanchuyen:idtaikhoanchuyen2,
-    idtaikhoannhan:idtaikhoannhan2,
+    idtaikhoan:idtaikhoan2,
     sotientieudung:6000,
     loaihangmucgd:loaihangmuc2,
     ghichu:'Tiền chơi đá',
@@ -120,8 +111,7 @@ let GiaoDichtestupdate2KT={
     idgiaodich:idgiaodich2,
     idnguoidung:idnguoidung2,
     thoigian:new Date('2011-06-11T10:20:30.000Z'),
-    idtaikhoanchuyen:idtaikhoanchuyen2,
-    idtaikhoannhan:idtaikhoannhan2,
+    idtaikhoan:idtaikhoan2,
     sotientieudung:6000,
     sotienthunhap:null,
     loaihangmucgd:loaihangmuc2,
@@ -131,8 +121,7 @@ let GiaoDichtestquery2=[{
     idgiaodich:idgiaodich2,
     idnguoidung:idnguoidung2,
     thoigian:new Date('2011-06-11T10:20:30.000Z'),
-    idtaikhoanchuyen:idtaikhoanchuyen2,
-    idtaikhoannhan:idtaikhoannhan2,
+    idtaikhoan:idtaikhoan2,
     sotientieudung:6000,
     sotienthunhap:null,
     loaihangmucgd:loaihangmuc2,
@@ -161,7 +150,7 @@ test('testing delete GiaoDich', async () => {
 ////////////////////////////////////////////////////test3////////////////////////////////////////////////////////////////
 let idgiaodich3=new BSON.ObjectID()
 let idnguoidung3=new BSON.ObjectID()
-let idtaikhoanchuyen3=new BSON.ObjectID()
+let idtaikhoan3=new BSON.ObjectID()
 let loaihangmuc3=new BSON.ObjectID()
 let thoigian3= new Date('2011-04-11T10:20:30.000Z')
 
@@ -169,7 +158,7 @@ let GiaoDich3={
     idgiaodich:idgiaodich3,
     idnguoidung:idnguoidung3,
     thoigian:thoigian3,
-    idtaikhoanchuyen:idtaikhoanchuyen3,
+    idtaikhoan:idtaikhoan3,
     sotientieudung:2000,
     loaihangmucgd:loaihangmuc3,
     ghichu:'Tiền chơi coin',
@@ -178,8 +167,7 @@ let GiaoDich3KT={
     idgiaodich:idgiaodich3,
     idnguoidung:idnguoidung3,
     thoigian:thoigian3,
-    idtaikhoanchuyen:idtaikhoanchuyen3,
-    idtaikhoannhan:null,
+    idtaikhoan:idtaikhoan3,
     sotientieudung:2000,
     sotienthunhap:null,
     loaihangmucgd:loaihangmuc3,
@@ -195,7 +183,7 @@ let GiaoDichtestupdate3={
     idgiaodich:idgiaodich3,
     idnguoidung:idnguoidung3,
     thoigian:new Date('2011-06-11T10:20:30.000Z'),
-    idtaikhoanchuyen:idtaikhoanchuyen3,
+    idtaikhoan:idtaikhoan3,
     sotientieudung:6000,
     loaihangmucgd:loaihangmuc3,
     ghichu:'Tiền chơi đá',
@@ -204,8 +192,7 @@ let GiaoDichtestupdate3KT={
     idgiaodich:idgiaodich3,
     idnguoidung:idnguoidung3,
     thoigian:new Date('2011-06-11T10:20:30.000Z'),
-    idtaikhoanchuyen:idtaikhoanchuyen3,
-    idtaikhoannhan:null,
+    idtaikhoan:idtaikhoan3,
     sotientieudung:6000,
     sotienthunhap:null,
     loaihangmucgd:loaihangmuc3,
@@ -215,8 +202,7 @@ let GiaoDichtestquery3=[{
     idgiaodich:idgiaodich3,
     idnguoidung:idnguoidung3,
     thoigian:new Date('2011-06-11T10:20:30.000Z'),
-    idtaikhoanchuyen:idtaikhoanchuyen3,
-    idtaikhoannhan:null,
+    idtaikhoan:idtaikhoan3,
     sotientieudung:6000,
     sotienthunhap:null,
     loaihangmucgd:loaihangmuc3,

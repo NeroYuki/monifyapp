@@ -38,13 +38,9 @@ export const updateGiaoDichChuKy=GiaoDichChuKy=> new Promise((resolve,reject)=>{
               {
                 updateGiaoDichChuKy.thoigian=GiaoDichChuKy.thoigian
               }
-              if(GiaoDichChuKy.idtaikhoanchuyen)
+              if(GiaoDichChuKy.idtaikhoan)
               {
-                updateGiaoDichChuKy.idtaikhoanchuyen=GiaoDichChuKy.idtaikhoanchuyen
-              }
-              if(GiaoDichChuKy.idtaikhoannhan)
-              {
-                updateGiaoDichChuKy.idtaikhoannhan=GiaoDichChuKy.idtaikhoannhan
+                updateGiaoDichChuKy.idtaikhoan=GiaoDichChuKy.idtaikhoan
               }
 
               updateGiaoDichChuKy.sotientieudung=GiaoDichChuKy.sotientieudung
@@ -57,6 +53,10 @@ export const updateGiaoDichChuKy=GiaoDichChuKy=> new Promise((resolve,reject)=>{
               if(GiaoDichChuKy.ghichu)
               {
                 updateGiaoDichChuKy.ghichu=GiaoDichChuKy.ghichu
+              }
+              if(GiaoDichChuKy.thoigiancuoicungcheck)
+              {
+                updateGiaoDichChuKy.thoigiancuoicungcheck=GiaoDichChuKy.thoigiancuoicungcheck
               }
               updateGiaoDichChuKy.chukygiaodichtheongay=GiaoDichChuKy.chukygiaodichtheongay
               updateGiaoDichChuKy.chukygiaodichtheothang=GiaoDichChuKy.chukygiaodichtheothang
@@ -69,15 +69,10 @@ export const updateGiaoDichChuKy=GiaoDichChuKy=> new Promise((resolve,reject)=>{
               {
                 updateGiaoDichChuKy.thoigian=GiaoDichChuKy.thoigian
               }
-              if(GiaoDichChuKy.idtaikhoanchuyen)
+              if(GiaoDichChuKy.idtaikhoan)
               {
-                updateGiaoDichChuKy.idtaikhoanchuyen=GiaoDichChuKy.idtaikhoanchuyen
+                updateGiaoDichChuKy.idtaikhoan=GiaoDichChuKy.idtaikhoan
               }
-              if(GiaoDichChuKy.idtaikhoannhan)
-              {
-                updateGiaoDichChuKy.idtaikhoannhan=GiaoDichChuKy.idtaikhoannhan
-              }
-
               updateGiaoDichChuKy.sotientieudung=GiaoDichChuKy.sotientieudung
               updateGiaoDichChuKy.sotienthunhap=GiaoDichChuKy.sotienthunhap
 
@@ -88,6 +83,10 @@ export const updateGiaoDichChuKy=GiaoDichChuKy=> new Promise((resolve,reject)=>{
               if(GiaoDichChuKy.ghichu)
               {
                 updateGiaoDichChuKy.ghichu=GiaoDichChuKy.ghichu
+              }
+              if(GiaoDichChuKy.thoigiancuoicungcheck)
+              {
+                updateGiaoDichChuKy.thoigiancuoicungcheck=GiaoDichChuKy.thoigiancuoicungcheck
               }
               resolve(updateGiaoDichChuKy)
             }
@@ -134,13 +133,9 @@ export const queryGiaoDichChuKy=(option)=> new Promise((resolve,reject)=>{
     {
       Taget=Taget.filtered('thoigian==$0',option.thoigian)
     }
-    if(option.idtaikhoanchuyen)
+    if(option.idtaikhoan)
     {
-      Taget=Taget.filtered('idtaikhoanchuyen==$0',option.idtaikhoanchuyen)
-    }
-    if(option.idtaikhoannhan)
-    {
-      Taget=Taget.filtered('idtaikhoannhan==$0',option.idtaikhoannhan)
+      Taget=Taget.filtered('idtaikhoan==$0',option.idtaikhoan)
     }
     if(option.sotientieudung)
     {
@@ -165,6 +160,10 @@ export const queryGiaoDichChuKy=(option)=> new Promise((resolve,reject)=>{
     if(option.ghichu)
     {
       Taget=Taget.filtered('ghichu==$0',option.ghichu)
+    }
+    if(option.thoigiancuoicungcheck)
+    {
+      Taget=Taget.filtered('thoigiancuoicungcheck==$0',option.thoigiancuoicungcheck)
     }
     resolve(Taget)
   }).catch((error)=>reject(error))

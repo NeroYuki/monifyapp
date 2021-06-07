@@ -17,6 +17,8 @@ export class RecurringBillEditor extends Component {
             cycle_start: new Date(),
             cycle_duration_value: "1",
             cycle_duration_type_values: ['Day', 'Week', 'Month', 'Year'],
+            //TODO: if day/week => cycle_duration_day = week*7/day
+            //else => cycle_duration_month = month/year*12
             cycle_duration_type: 'Month',
             creation_date: new Date(),
 

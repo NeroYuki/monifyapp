@@ -38,11 +38,22 @@ export const updateGiaoDichChuKy=GiaoDichChuKy=> new Promise((resolve,reject)=>{
               {
                 updateGiaoDichChuKy.thoigian=GiaoDichChuKy.thoigian
               }
+              if(GiaoDichChuKy.name)
+              {
+                updateGiaoDichChuKy.name=GiaoDichChuKy.name
+              }
               if(GiaoDichChuKy.idtaikhoan)
               {
                 updateGiaoDichChuKy.idtaikhoan=GiaoDichChuKy.idtaikhoan
               }
-
+              if(GiaoDichChuKy.color)
+              {
+                updateGiaoDichChuKy.color=GiaoDichChuKy.color
+              }
+              if(GiaoDichChuKy.pause)
+              {
+                updateGiaoDichChuKy.pause=GiaoDichChuKy.pause
+              }
               updateGiaoDichChuKy.sotientieudung=GiaoDichChuKy.sotientieudung
               updateGiaoDichChuKy.sotienthunhap=GiaoDichChuKy.sotienthunhap
 
@@ -69,13 +80,24 @@ export const updateGiaoDichChuKy=GiaoDichChuKy=> new Promise((resolve,reject)=>{
               {
                 updateGiaoDichChuKy.thoigian=GiaoDichChuKy.thoigian
               }
+              if(GiaoDichChuKy.name)
+              {
+                updateGiaoDichChuKy.name=GiaoDichChuKy.name
+              }
               if(GiaoDichChuKy.idtaikhoan)
               {
                 updateGiaoDichChuKy.idtaikhoan=GiaoDichChuKy.idtaikhoan
               }
               updateGiaoDichChuKy.sotientieudung=GiaoDichChuKy.sotientieudung
               updateGiaoDichChuKy.sotienthunhap=GiaoDichChuKy.sotienthunhap
-
+              if(GiaoDichChuKy.color)
+              {
+                updateGiaoDichChuKy.color=GiaoDichChuKy.color
+              }
+              if(GiaoDichChuKy.pause)
+              {
+                updateGiaoDichChuKy.pause=GiaoDichChuKy.pause
+              }
               if(GiaoDichChuKy.loaihangmucgd)
               {
                 updateGiaoDichChuKy.loaihangmucgd=GiaoDichChuKy.loaihangmucgd
@@ -128,6 +150,14 @@ export const queryGiaoDichChuKy=(option)=> new Promise((resolve,reject)=>{
     if(option.idnguoidung)
     {
       Taget=Taget.filtered('idnguoidung==$0',option.idnguoidung)
+    }
+    if(option.color)
+    {
+      Taget=Taget.filtered('color==$0',option.color)
+    }
+    if(option.pause)
+    {
+      Taget=Taget.filtered('pause==$0',option.pause)
     }
     if(option.thoigian)
     {

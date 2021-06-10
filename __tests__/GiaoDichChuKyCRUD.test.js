@@ -21,6 +21,8 @@ let GiaoDichTheoChuKy={
     chukygiaodichtheothang:null,
     ghichu:'Tiền chơi coin',
     thoigianbatdau: thoigiancuoicungcheck,
+    color:null,
+    pause:false,
     thoigiancuoicungcheck:thoigiancuoicungcheck
 }
 
@@ -42,6 +44,8 @@ let GiaoDichTheoChuKytestupdate={
     chukygiaodichtheothang:null,
     ghichu:'Tiền chơi đá',
     thoigianbatdau: thoigiancuoicungcheck,
+    color:null,
+    pause:false,
     thoigiancuoicungcheck:thoigiancuoicungcheck
 }
 let GiaoDichTheoChuKytestquery=[{
@@ -57,6 +61,8 @@ let GiaoDichTheoChuKytestquery=[{
     chukygiaodichtheothang:null,
     ghichu:'Tiền chơi đá',
     thoigianbatdau: thoigiancuoicungcheck,
+    color:null,
+    pause:false,
     thoigiancuoicungcheck:thoigiancuoicungcheck
 }]
 test('testing update GiaoDichTheoChuKy', async () => {
@@ -105,6 +111,8 @@ let GiaoDichTheoChuKy2={
     chukygiaodichtheongay:60,
     ghichu:'Tiền chơi coin',
     thoigiancuoicungcheck:thoigiancuoicungcheck2,
+    color:null,
+    pause:false,
     thoigianbatdau:thoigiancuoicungcheck2
 }
 let GiaoDichTheoChuKy2KT={
@@ -120,6 +128,8 @@ let GiaoDichTheoChuKy2KT={
     ghichu:'Tiền chơi coin',
     name:null,
     thoigianbatdau:thoigiancuoicungcheck2,
+    color:null,
+    pause:false,
     thoigiancuoicungcheck:thoigiancuoicungcheck2
 }
 
@@ -138,6 +148,8 @@ let GiaoDichTheoChuKytestupdate2={
     chukygiaodichtheongay:120,
     ghichu:'Tiền chơi đá',
     thoigiancuoicungcheck:thoigiancuoicungcheck2,
+    color:null,
+    pause:false,
     thoigianbatdau:thoigiancuoicungcheck2,
 }
 let GiaoDichTheoChuKytestupdate2KT={
@@ -153,6 +165,8 @@ let GiaoDichTheoChuKytestupdate2KT={
     ghichu:'Tiền chơi đá',
     name:null,
     thoigianbatdau:thoigiancuoicungcheck2,
+    color:null,
+    pause:false,
     thoigiancuoicungcheck:thoigiancuoicungcheck2
 }
 let GiaoDichTheoChuKytestquery2=[{
@@ -168,6 +182,8 @@ let GiaoDichTheoChuKytestquery2=[{
     ghichu:'Tiền chơi đá',
     name:null,
     thoigianbatdau:thoigiancuoicungcheck2,
+    color:null,
+    pause:false,
     thoigiancuoicungcheck:thoigiancuoicungcheck2
 }]
 test('testing update GiaoDichTheoChuKy', async () => {
@@ -204,6 +220,8 @@ let GiaoDichTheoChuKy3={
     chukygiaodichtheongay:60,
     ghichu:'Tiền chơi coin',
     thoigiancuoicungcheck:thoigiancuoicungcheck3,
+    color:null,
+    pause:false,
     thoigianbatdau:thoigiancuoicungcheck3,
 }
 let GiaoDichTheoChuKy3KT={
@@ -219,6 +237,8 @@ let GiaoDichTheoChuKy3KT={
     ghichu:'Tiền chơi coin',
     thoigiancuoicungcheck:thoigiancuoicungcheck3,
     name:null,
+    color:null,
+    pause:false,
     thoigianbatdau:thoigiancuoicungcheck3,
 }
 
@@ -235,6 +255,8 @@ let GiaoDichTheoChuKytestupdate3={
     chukygiaodichtheongay:120,
     ghichu:'Tiền chơi đá',
     thoigiancuoicungcheck:thoigiancuoicungcheck3,
+    color:null,
+    pause:false,
     thoigianbatdau:thoigiancuoicungcheck3,
 }
 let GiaoDichTheoChuKytestupdate3KT={
@@ -250,6 +272,8 @@ let GiaoDichTheoChuKytestupdate3KT={
     ghichu:'Tiền chơi đá',
     name:null,
     thoigianbatdau:thoigiancuoicungcheck3,
+    color:null,
+    pause:false,
     thoigiancuoicungcheck:thoigiancuoicungcheck3
 }
 let GiaoDichTheoChuKytestquery3=[{
@@ -265,6 +289,8 @@ let GiaoDichTheoChuKytestquery3=[{
     ghichu:'Tiền chơi đá',
     name:null,
     thoigianbatdau:thoigiancuoicungcheck3,
+    color:null,
+    pause:false,
     thoigiancuoicungcheck:thoigiancuoicungcheck3
 }]
 test('testing update GiaoDichTheoChuKy', async () => {

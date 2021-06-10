@@ -29,7 +29,7 @@ export const updateCaiDat=CaiDat=> new Promise((resolve,reject)=>{
             {
               updateCaiDat.ngonngu=CaiDat.ngonngu
             }
-            if(CaiDat.chedonghiemngat)
+            if(typeof(CaiDat.chedonghiemngat)=='boolean')
             {
               updateCaiDat.chedonghiemngat=CaiDat.chedonghiemngat
             }
@@ -77,7 +77,7 @@ export const queryCaiDat=(option)=> new Promise((resolve,reject)=>{
     {
         Taget=Taget.filtered('ngonngu==$0',option.ngonngu)
     }
-    if(option.chedonghiemngat)
+    if(typeof(option.chedonghiemngat)=='boolean')
     {
         Taget=Taget.filtered('chedonghiemngat==$0',option.chedonghiemngat)
     }

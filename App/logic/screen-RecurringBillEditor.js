@@ -1,7 +1,8 @@
 import {queryGiaoDichChuKy,updateGiaoDichChuKy,insertGiaoDichChuKy} from '../services/GiaoDichChuKyCRUD';
+import{queryHangMucGiaoDich} from '../services/HangMucGiaoDichCRUD'
 import {BSON} from 'realm';
 
-export const fetchBill = billId =>
+export const fetchBill = ({billId}) =>
   new Promise((resolve, reject) => {
     let ID=billId
     if(billId)
@@ -11,17 +12,18 @@ export const fetchBill = billId =>
         resolve(giaodich)
     }).catch(er => reject(er))
 })
-
-export const saveBill=({billId,userId,name,color,note,amount,cycle_start,cycle_duration_day,cycle_duration_month,creation_date})=>
-    new Promise((resolve,reject)=>{
+// số tiền khi cập nhật phải đưa tham số vào lại, nếu không giá trị sẻ lưu null vì amount được phép null, sau này khi người dùng muốn nhập thì nhập
+export const saveBill=({billId,userId,loaihangmucId,name,color,note,amount,cycle_start,cycle_duration_day,cycle_duration_month,creation_date})=>
+    new Promise(async(resolve,reject)=>{
         if(!billId)
         {
             let Bill={
                 idgiaodichtheochuky:new BSON.ObjectID(),
-                idnguoidung:(userId)?new BSON.ObjectID(userId):null,
+                idnguoidung:new BSON.ObjectID(userId),
+                loaihangmucgd:new BSON.ObjectID(loaihangmucId),
                 thoigian:new Date(creation_date),
-                sotientieudung:(amount>0)?amount:null,
-                sotienthunhap:(amount<=0)?amount:null,
+                sotientieudung:(amount)?Math.abs(amount):null,
+                sotienthunhap:(amount)?Math.abs(amount):null,
                 chukygiaodichtheongay:cycle_duration_day,
                 chukygiaodichtheothang:cycle_duration_month,
                 thoigiancuoicungcheck:null,
@@ -30,6 +32,24 @@ export const saveBill=({billId,userId,name,color,note,amount,cycle_start,cycle_d
                 name:name,
                 color:color,
             }
+            if(loaihangmucId)
+            {
+                await queryHangMucGiaoDich({idhangmucgiaodich:Bill.loaihangmucgd}).then(hangmuc=>{
+                    if(!hangmuc)
+                        reject({result:false,message:'Hạng mục không có trong dữ liệu'})
+                    else
+                    {
+                        if(hangmuc[0].loaihangmuc.chitieu==true)
+                        {
+                            Bill.sotienthunhap=null
+                        }
+                        else
+                            Bill.sotientieudung=null
+                    }
+                }).catch((er)=>reject({result:false,message:er}))
+            }
+            else
+                reject({result:false,message:'Không nhập loại hạng mục'})
             if(Bill.chukygiaodichtheongay)
             {
                 let date=new Date(cycle_start)
@@ -55,19 +75,78 @@ export const saveBill=({billId,userId,name,color,note,amount,cycle_start,cycle_d
         }
         else
         {
+            let BillUpdate
+            await queryGiaoDichChuKy({idgiaodichtheochuky: new BSON.ObjectID(billId)})
+                .then(giaodich => {
+                    if(giaodich)
+                    {
+                        BillUpdate=giaodich[0]
+                    }
+                    else    
+                        resolve({result:false,message:'Không tìm thấy giao dịch cần thay đổi'})
+                }).catch(er => reject({result:false,message:er}))
             let Bill={
                 idgiaodichtheochuky:new BSON.ObjectID(billId),
                 idnguoidung:(userId)?new BSON.ObjectID(userId):null,
-                thoigian:new Date(creation_date),
-                sotientieudung:(amount>0)?amount:null,
-                sotienthunhap:(amount<=0)?amount:null,
+                loaihangmucgd:(loaihangmucId)?new BSON.ObjectID(loaihangmucId):null,
+                thoigian:(creation_date)?new Date(creation_date):null,
+                sotientieudung:(amount)?Math.abs(amount):null,
+                sotienthunhap:(amount)?Math.abs(amount):null,
                 chukygiaodichtheongay:cycle_duration_day,
                 chukygiaodichtheothang:cycle_duration_month,
                 thoigiancuoicungcheck:null,
-                thoigianbatdau:new Date(cycle_start),
+                thoigianbatdau:(cycle_start)?new Date(cycle_start):null,
                 ghichu:note,
                 name:name,
                 color:color,
+            }
+            if(loaihangmucId)
+            {
+                await queryHangMucGiaoDich({idhangmucgiaodich:Bill.loaihangmucgd}).then(hangmuc=>{
+                    if(!hangmuc||hangmuc==[])
+                        reject({result:false,message:'Hạng mục không có trong dữ liệu'})
+                    else
+                    {
+                        if(Bill.sotienthunhap||Bill.sotientieudung)
+                        {
+                            if(hangmuc[0].loaihangmuc.chitieu==true)
+                            {
+                                Bill.sotienthunhap=null
+                            }
+                            else
+                                Bill.sotientieudung=null
+                        }
+                        else
+                        {
+                            if(hangmuc[0].loaihangmuc.chitieu==true)
+                            {
+                                if(BillUpdate.sotientieudung)
+                                {
+                                    Bill.sotientieudung=BillUpdate.sotientieudung
+                                }
+                                else
+                                    Bill.sotientieudung=BillUpdate.sotienthunhap
+                                Bill.sotienthunhap=null
+                            }
+                            else
+                            {
+                                if(BillUpdate.sotientieudung)
+                                {
+                                    Bill.sotienthunhap=BillUpdate.sotientieudung
+                                }
+                                else
+                                {
+                                    Bill.sotienthunhap=BillUpdate.sotienthunhap
+                                }   
+                                Bill.sotientieudung=null
+                            }
+                        }
+                    }
+                }).catch((er)=>reject({result:false,message:er}))
+            }
+            if(!Bill.thoigianbatdau)
+            {
+                Bill.thoigianbatdau=BillUpdate.thoigianbatdau
             }
             if(Bill.chukygiaodichtheongay)
             {

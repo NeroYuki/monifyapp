@@ -125,7 +125,7 @@ export const GiaoDichTheoCKSchema={
     // idtaikhoannhan: 'objectId?',
     sotientieudung: 'double?',
     sotienthunhap: 'double?',
-    loaihangmucgd: 'objectId?',
+    loaihangmucgd: 'objectId',
     chukygiaodichtheongay: 'int?',
     chukygiaodichtheothang: 'int?',
     thoigiancuoicungcheck: 'date',
@@ -216,5 +216,5 @@ export const monifydata = {
     //LoaiTietKiemConfigSchema,
     LoaiMucTieuConfigSchema,
     LoaiHangMucConfigSchema],
-    schemaVersion:4,
+    schemaVersion:5,
 }

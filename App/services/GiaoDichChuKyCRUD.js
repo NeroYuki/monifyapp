@@ -50,7 +50,7 @@ export const updateGiaoDichChuKy=GiaoDichChuKy=> new Promise((resolve,reject)=>{
               {
                 updateGiaoDichChuKy.color=GiaoDichChuKy.color
               }
-              if(GiaoDichChuKy.pause)
+              if(typeof(GiaoDichChuKy.pause)=='boolean')
               {
                 updateGiaoDichChuKy.pause=GiaoDichChuKy.pause
               }
@@ -88,13 +88,16 @@ export const updateGiaoDichChuKy=GiaoDichChuKy=> new Promise((resolve,reject)=>{
               {
                 updateGiaoDichChuKy.idtaikhoan=GiaoDichChuKy.idtaikhoan
               }
-              updateGiaoDichChuKy.sotientieudung=GiaoDichChuKy.sotientieudung
-              updateGiaoDichChuKy.sotienthunhap=GiaoDichChuKy.sotienthunhap
+              if(GiaoDichChuKy.pause==null||GiaoDichChuKy.pause==undefined)
+              {
+                updateGiaoDichChuKy.sotientieudung=GiaoDichChuKy.sotientieudung
+                updateGiaoDichChuKy.sotienthunhap=GiaoDichChuKy.sotienthunhap
+              }
               if(GiaoDichChuKy.color)
               {
                 updateGiaoDichChuKy.color=GiaoDichChuKy.color
               }
-              if(GiaoDichChuKy.pause)
+              if(typeof(GiaoDichChuKy.pause)=='boolean')
               {
                 updateGiaoDichChuKy.pause=GiaoDichChuKy.pause
               }
@@ -155,7 +158,7 @@ export const queryGiaoDichChuKy=(option)=> new Promise((resolve,reject)=>{
     {
       Taget=Taget.filtered('color==$0',option.color)
     }
-    if(option.pause)
+    if(typeof(option.pause)=='boolean')
     {
       Taget=Taget.filtered('pause==$0',option.pause)
     }
@@ -194,6 +197,10 @@ export const queryGiaoDichChuKy=(option)=> new Promise((resolve,reject)=>{
     if(option.thoigiancuoicungcheck)
     {
       Taget=Taget.filtered('thoigiancuoicungcheck==$0',option.thoigiancuoicungcheck)
+    }
+    if(option.name)
+    {
+      Taget=Taget.filtered('name==$0',option.name)
     }
     resolve(Taget)
   }).catch((error)=>reject(error))

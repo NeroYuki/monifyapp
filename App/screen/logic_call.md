@@ -38,7 +38,7 @@ return Object({username: string, email: string, birthday: Date})
 8. screen/RecurringBillEditor
 #### fetchBill({billId: string})
 return Object({billId: string, name: string, color: string, note: string, amount: number, cycle_start: Date, cycle_duration_day: number, cycle_duration_month: number, creation_date: Date})
-#### saveBill({billId: string?,userid:string, name: string, color: string, note: string, cycle_start: Date, cycle_duration_day: number, cycle_duration_month: number})
+#### saveBill({billId: string?,loaihangmucid:string,userid:string, name: string, color: string, note: string, cycle_start: Date, cycle_duration_day: number, cycle_duration_month: number})
 return Object({result: boolean, message: ?string})
 
 9. screen/RecurringBillManager

@@ -15,12 +15,14 @@ export const TaiKhoanSchema = {
   name: 'TaiKhoan',
   //embeded: true,
   properties: {
-    idtaikhoan: 'objectId',
+    idtaikhoan: 'objectId?',
     tentaikhoan: 'string',
 
+    deactivate: { type: 'bool', default: false },
     bieutuong: 'string',
-    thoigiantao: 'date',
-    idnguoidung: 'objectId',
+    color: 'string',
+    thoigiantao: 'date?',
+    idnguoidung: 'objectId?',
     tieudung:'TKTieuDung?',
     tietkiem:'TKTietKiem?',
     no:'TKNo?',
@@ -41,7 +43,7 @@ export const TKTieuDungSchema = {
   name: 'TKTieuDung',
   embeded: true,
   properties: {
-    idtktieudung: 'objectId',
+    idtktieudung: 'objectId?',
     sotien: 'double?',
   },
  //primaryKey: 'idtktieudung',
@@ -51,7 +53,7 @@ export const TKTietKiemSchema = {
   name: 'TKTietKiem',
   embeded: true,
   properties: {
-    idtktietkiem: 'objectId',
+    idtktietkiem: 'objectId?',
     sotien: 'double?',
     laisuattietkiem: 'double?',
     laisuattruochan: 'string?',
@@ -73,7 +75,7 @@ export const TKNoSchema = {
   name: 'TKNo',
   embeded: true,
   properties: {
-    idtkno: 'objectId',
+    idtkno: 'objectId?',
     sotien: 'double?',
     laisuatno: 'double?',
     kyhanno: 'int?',

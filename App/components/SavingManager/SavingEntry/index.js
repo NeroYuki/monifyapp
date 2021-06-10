@@ -32,9 +32,9 @@ export class SavingEntry extends Component {
                         visible={this.state.visible}
                         onDismiss={() => {this.setState({visible: false})}}
                         anchor={<TouchableOpacity onPress={() => {this.setState({visible: true})}}><Icon name='dots-vertical' size={24}></Icon></TouchableOpacity>}>
-                            <Menu.Item onPress={() => {}} icon="cash-plus" title="Deposit" />
-                            <Menu.Item onPress={() => {}} icon="cash-minus" title="Withdraw" />
-                            <Menu.Item onPress={() => {}} icon="block-helper" title="Deactivate" />
+                            <Menu.Item onPress={() => {this.setState({visible: false}); (this.props.onDepositPress)? this.props.onDepositPress() : () => {}}} icon="cash-plus" title="Deposit" />
+                            <Menu.Item onPress={() => {this.setState({visible: false}); (this.props.onWithdrawPress)? this.props.onWithdrawPress() : () => {}}} icon="cash-minus" title="Withdraw" />
+                            <Menu.Item onPress={() => {this.setState({visible: false}); (this.props.onDeactivatePress)? this.props.onDeactivatePress() : () => {}}} icon="block-helper" title="Deactivate" />
                             <Divider />
                             <Menu.Item onPress={() => {this.setState({visible: false}); (this.props.onViewPress)? this.props.onViewPress() : () => {}}} icon="eye" title="View" />
                             <Menu.Item onPress={() => {this.setState({visible: false}); (this.props.onEditPress)? this.props.onEditPress() : () => {}}} icon="file-edit" title="Edit" />

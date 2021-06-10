@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { FAB, Searchbar } from "react-native-paper";
+import { FAB, Searchbar, Dialog, Paragraph, Button } from "react-native-paper";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { LoanEntry, LoanSearchModal } from "../../components";
+import { LoanEntry, LoanPaymentModal, LoanSearchModal } from "../../components";
 import { stylesheet } from './style'
 
 export class LoanManager extends Component {
@@ -29,6 +29,9 @@ export class LoanManager extends Component {
                 },
             ],
             advanceSearchVisible: false,
+            deactivatePromptVisible: false,
+            deletePromptVisible: false,
+            paymentModalVisible: false,
         }
     }
 
@@ -37,8 +40,10 @@ export class LoanManager extends Component {
         const loanDisplay = this.state.loanList.map((val) => {
             return <LoanEntry
                 key={val.id} style={[style.loan_entry, {backgroundColor: val.color}]} name={val.name} due_duration={val.due_duratuion} amount={val.amount} interest_string={val.interest_string}
+                onPaymentPress={() => {this.setState({paymentModalVisible: true})}}
+                onDeactivatePress={() => {this.setState({deactivatePromptVisible: true})}}
                 onViewPress={() => {this.props.navigation.navigate("LoanEditor")}}
-                onDeletePress={() => {}}
+                onDeletePress={() => {this.setState({deletePromptVisible: true})}}
                 onEditPress={() => {this.props.navigation.navigate("LoanEditor")}}
             ></LoanEntry>
         })
@@ -64,6 +69,32 @@ export class LoanManager extends Component {
                     onRequestClose={() => {this.setState({advanceSearchVisible: false})}} 
                     onFilterRequest={(data) => {console.log(data); }}>
                 </LoanSearchModal>
+
+                <LoanPaymentModal isVisible={this.state.paymentModalVisible} 
+                    onRequestClose={() => {this.setState({paymentModalVisible: false})}} >
+                </LoanPaymentModal>
+
+                <Dialog visible={this.state.deletePromptVisible} onDismiss={() => {this.setState({deletePromptVisible: false})}}>
+                    <Dialog.Title>Confirm</Dialog.Title>
+                    <Dialog.Content>
+                        <Paragraph>Are you sure you want to delete this loan account? The account will no longer be visible </Paragraph>
+                    </Dialog.Content>
+                    <Dialog.Actions>
+                    <Button onPress={() => {this.setState({deletePromptVisible: false})}}>Cancel</Button>
+                        <Button mode='contained' onPress={() => {this.setState({deletePromptVisible: false})}}>Confirm</Button>
+                    </Dialog.Actions>
+                </Dialog>
+
+                <Dialog visible={this.state.deactivatePromptVisible} onDismiss={() => {this.setState({deactivatePromptVisible: false})}}>
+                    <Dialog.Title>Confirm</Dialog.Title>
+                    <Dialog.Content>
+                        <Paragraph>Are you sure you want to deactivate this loan account? All remaining loan value will be neglected</Paragraph>
+                    </Dialog.Content>
+                    <Dialog.Actions>
+                    <Button onPress={() => {this.setState({deactivatePromptVisible: false})}}>Cancel</Button>
+                        <Button mode='contained' onPress={() => {this.setState({deactivatePromptVisible: false})}}>Confirm</Button>
+                    </Dialog.Actions>
+                </Dialog>
             </View>
         )
     }

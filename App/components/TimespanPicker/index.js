@@ -33,7 +33,6 @@ export class TimespanPicker extends Component {
                         <Text style={style.main_view_header}>BUDGET PERIOD</Text>
                         <TimespanPickerNavigation />
                     </View>
-
                 </View>
 
             </Modal>

@@ -85,6 +85,10 @@ export const updateMucTieuCaNhan=MucTieuCaNhan=> new Promise((resolve,reject)=>{
               {
                 updateMucTieuCaNhan.ngayketthuc=MucTieuCaNhan.ngayketthuc
               }
+              if(MucTieuCaNhan.tenmuctieu)
+              {
+                updateMucTieuCaNhan.tenmuctieu=MucTieuCaNhan.tenmuctieu
+              }
               resolve(updateMucTieuCaNhan)
             }
             else if(!MucTieuCaNhan.loaimuctieu)
@@ -101,6 +105,10 @@ export const updateMucTieuCaNhan=MucTieuCaNhan=> new Promise((resolve,reject)=>{
               if(MucTieuCaNhan.ngayketthuc)
               {
                 updateMucTieuCaNhan.ngayketthuc=MucTieuCaNhan.ngayketthuc
+              }
+              if(MucTieuCaNhan.tenmuctieu)
+              {
+                updateMucTieuCaNhan.tenmuctieu=MucTieuCaNhan.tenmuctieu
               }
               resolve(updateMucTieuCaNhan)
             }
@@ -168,6 +176,10 @@ export const queryMucTieuCaNhan=(option)=> new Promise((resolve,reject)=>{
     if(option.loaimuctieu&&option.loaimuctieu=='SoDuToiThieu')
     {
       Taget=Taget.filtered('loaimuctieu.sodutoithieu==$0',true)
+    }
+    if(option.tenmuctieu)
+    {
+      Taget=Taget.filtered('tenmuctieu==$0',option.tenmuctieu)
     }
     resolve(Taget)
   }).catch((error)=>reject(error))

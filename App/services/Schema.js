@@ -146,6 +146,7 @@ export const MucTieuCaNhanSchema = {
     idmuctieu: 'objectId',
     idnguoidung: 'objectId',
     thoigiantao: 'date',
+    tenmuctieu:'string',
     loaimuctieu:  'LoaiMucTieuConfig',
     sotienmuctieu: 'double',
     ngaybatdau: 'date',
@@ -217,5 +218,5 @@ export const monifydata = {
     //LoaiTietKiemConfigSchema,
     LoaiMucTieuConfigSchema,
     LoaiHangMucConfigSchema],
-    schemaVersion:6,
+    schemaVersion:7,
 }

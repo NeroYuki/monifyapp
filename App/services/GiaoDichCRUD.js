@@ -29,13 +29,9 @@ export const updateGiaoDich=GiaoDich=> new Promise((resolve,reject)=>{
               {
                 updateGiaoDich.thoigian=GiaoDich.thoigian
               }
-              if(GiaoDich.idtaikhoanchuyen)
+              if(GiaoDich.idtaikhoan)
               {
-                updateGiaoDich.idtaikhoanchuyen=GiaoDich.idtaikhoanchuyen
-              }
-              if(GiaoDich.idtaikhoannhan)
-              {
-                updateGiaoDich.idtaikhoannhan=GiaoDich.idtaikhoannhan
+                updateGiaoDich.idtaikhoan=GiaoDich.idtaikhoan
               }
               updateGiaoDich.sotientieudung=GiaoDich.sotientieudung
               updateGiaoDich.sotienthunhap=GiaoDich.sotienthunhap
@@ -46,6 +42,10 @@ export const updateGiaoDich=GiaoDich=> new Promise((resolve,reject)=>{
               if(GiaoDich.ghichu)
               {
                 updateGiaoDich.ghichu=GiaoDich.ghichu
+              }
+              if(GiaoDich.name)
+              {
+                updateGiaoDich.name=GiaoDich.name
               }
               resolve(updateGiaoDich)
               // console.log(JSON.parse(JSON.stringify(updateGiaoDichChuKy)))
@@ -88,13 +88,9 @@ export const queryGiaoDich=(option)=> new Promise((resolve,reject)=>{
     {
       Taget=Taget.filtered('thoigian==$0',option.thoigian)
     }
-    if(option.idtaikhoanchuyen)
+    if(option.idtaikhoan)
     {
-      Taget=Taget.filtered('idtaikhoanchuyen==$0',option.idtaikhoanchuyen)
-    }
-    if(option.idtaikhoannhan)
-    {
-      Taget=Taget.filtered('idtaikhoannhan==$0',option.idtaikhoannhan)
+      Taget=Taget.filtered('idtaikhoan==$0',option.idtaikhoan)
     }
     if(option.sotientieudung)
     {

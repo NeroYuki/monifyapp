@@ -65,6 +65,7 @@ export class BudgetSettingModal extends Component {
                                 <Icon size={32} name='close' onPress={this.props.onRequestClose} />
                             </TouchableOpacity>
                             <Text style={{ flex: 1, textAlign: 'center', marginRight: 16 }}> EDIT BUDGET </Text>
+                            <View style={{ height: 32, width: 32, marginRight: 16 }}></View>
                         </View>
 
                         {/* Name  */}

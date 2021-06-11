@@ -12,6 +12,7 @@ export const stylesheet = StyleSheet.create({
         alignItems: "center",
     },
     header_text: {
+        fontSize: 17,
         flex: 1,
         textAlign: "center",
         color: 'black',

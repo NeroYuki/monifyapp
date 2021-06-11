@@ -38,15 +38,22 @@ export const updateGiaoDichChuKy=GiaoDichChuKy=> new Promise((resolve,reject)=>{
               {
                 updateGiaoDichChuKy.thoigian=GiaoDichChuKy.thoigian
               }
-              if(GiaoDichChuKy.idtaikhoanchuyen)
+              if(GiaoDichChuKy.name)
               {
-                updateGiaoDichChuKy.idtaikhoanchuyen=GiaoDichChuKy.idtaikhoanchuyen
+                updateGiaoDichChuKy.name=GiaoDichChuKy.name
               }
-              if(GiaoDichChuKy.idtaikhoannhan)
+              if(GiaoDichChuKy.idtaikhoan)
               {
-                updateGiaoDichChuKy.idtaikhoannhan=GiaoDichChuKy.idtaikhoannhan
+                updateGiaoDichChuKy.idtaikhoan=GiaoDichChuKy.idtaikhoan
               }
-
+              if(GiaoDichChuKy.color)
+              {
+                updateGiaoDichChuKy.color=GiaoDichChuKy.color
+              }
+              if(typeof(GiaoDichChuKy.pause)=='boolean')
+              {
+                updateGiaoDichChuKy.pause=GiaoDichChuKy.pause
+              }
               updateGiaoDichChuKy.sotientieudung=GiaoDichChuKy.sotientieudung
               updateGiaoDichChuKy.sotienthunhap=GiaoDichChuKy.sotienthunhap
 
@@ -57,6 +64,10 @@ export const updateGiaoDichChuKy=GiaoDichChuKy=> new Promise((resolve,reject)=>{
               if(GiaoDichChuKy.ghichu)
               {
                 updateGiaoDichChuKy.ghichu=GiaoDichChuKy.ghichu
+              }
+              if(GiaoDichChuKy.thoigiancuoicungcheck)
+              {
+                updateGiaoDichChuKy.thoigiancuoicungcheck=GiaoDichChuKy.thoigiancuoicungcheck
               }
               updateGiaoDichChuKy.chukygiaodichtheongay=GiaoDichChuKy.chukygiaodichtheongay
               updateGiaoDichChuKy.chukygiaodichtheothang=GiaoDichChuKy.chukygiaodichtheothang
@@ -69,18 +80,27 @@ export const updateGiaoDichChuKy=GiaoDichChuKy=> new Promise((resolve,reject)=>{
               {
                 updateGiaoDichChuKy.thoigian=GiaoDichChuKy.thoigian
               }
-              if(GiaoDichChuKy.idtaikhoanchuyen)
+              if(GiaoDichChuKy.name)
               {
-                updateGiaoDichChuKy.idtaikhoanchuyen=GiaoDichChuKy.idtaikhoanchuyen
+                updateGiaoDichChuKy.name=GiaoDichChuKy.name
               }
-              if(GiaoDichChuKy.idtaikhoannhan)
+              if(GiaoDichChuKy.idtaikhoan)
               {
-                updateGiaoDichChuKy.idtaikhoannhan=GiaoDichChuKy.idtaikhoannhan
+                updateGiaoDichChuKy.idtaikhoan=GiaoDichChuKy.idtaikhoan
               }
-
-              updateGiaoDichChuKy.sotientieudung=GiaoDichChuKy.sotientieudung
-              updateGiaoDichChuKy.sotienthunhap=GiaoDichChuKy.sotienthunhap
-
+              if(GiaoDichChuKy.pause==null||GiaoDichChuKy.pause==undefined)
+              {
+                updateGiaoDichChuKy.sotientieudung=GiaoDichChuKy.sotientieudung
+                updateGiaoDichChuKy.sotienthunhap=GiaoDichChuKy.sotienthunhap
+              }
+              if(GiaoDichChuKy.color)
+              {
+                updateGiaoDichChuKy.color=GiaoDichChuKy.color
+              }
+              if(typeof(GiaoDichChuKy.pause)=='boolean')
+              {
+                updateGiaoDichChuKy.pause=GiaoDichChuKy.pause
+              }
               if(GiaoDichChuKy.loaihangmucgd)
               {
                 updateGiaoDichChuKy.loaihangmucgd=GiaoDichChuKy.loaihangmucgd
@@ -88,6 +108,10 @@ export const updateGiaoDichChuKy=GiaoDichChuKy=> new Promise((resolve,reject)=>{
               if(GiaoDichChuKy.ghichu)
               {
                 updateGiaoDichChuKy.ghichu=GiaoDichChuKy.ghichu
+              }
+              if(GiaoDichChuKy.thoigiancuoicungcheck)
+              {
+                updateGiaoDichChuKy.thoigiancuoicungcheck=GiaoDichChuKy.thoigiancuoicungcheck
               }
               resolve(updateGiaoDichChuKy)
             }
@@ -130,17 +154,21 @@ export const queryGiaoDichChuKy=(option)=> new Promise((resolve,reject)=>{
     {
       Taget=Taget.filtered('idnguoidung==$0',option.idnguoidung)
     }
+    if(option.color)
+    {
+      Taget=Taget.filtered('color==$0',option.color)
+    }
+    if(typeof(option.pause)=='boolean')
+    {
+      Taget=Taget.filtered('pause==$0',option.pause)
+    }
     if(option.thoigian)
     {
       Taget=Taget.filtered('thoigian==$0',option.thoigian)
     }
-    if(option.idtaikhoanchuyen)
+    if(option.idtaikhoan)
     {
-      Taget=Taget.filtered('idtaikhoanchuyen==$0',option.idtaikhoanchuyen)
-    }
-    if(option.idtaikhoannhan)
-    {
-      Taget=Taget.filtered('idtaikhoannhan==$0',option.idtaikhoannhan)
+      Taget=Taget.filtered('idtaikhoan==$0',option.idtaikhoan)
     }
     if(option.sotientieudung)
     {
@@ -165,6 +193,14 @@ export const queryGiaoDichChuKy=(option)=> new Promise((resolve,reject)=>{
     if(option.ghichu)
     {
       Taget=Taget.filtered('ghichu==$0',option.ghichu)
+    }
+    if(option.thoigiancuoicungcheck)
+    {
+      Taget=Taget.filtered('thoigiancuoicungcheck==$0',option.thoigiancuoicungcheck)
+    }
+    if(option.name)
+    {
+      Taget=Taget.filtered('name==$0',option.name)
     }
     resolve(Taget)
   }).catch((error)=>reject(error))

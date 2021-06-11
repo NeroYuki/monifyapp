@@ -24,6 +24,10 @@ export class LoanEditor extends Component {
         }
     }
 
+    componentDidMount() {
+        
+    }
+
     render() {
         const style = stylesheet
         return (

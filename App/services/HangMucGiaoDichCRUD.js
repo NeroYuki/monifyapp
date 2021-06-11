@@ -52,7 +52,7 @@ export const insertHangMucGiaoDich = (newHangMucGiaoDich,LoaiHangMuc) =>
 export const updateHangMucGiaoDich=HangMucGiaoDich=> new Promise((resolve,reject)=>{
     Realm.open(data).then(realm=>{
         realm.write(()=>{
-            if(HangMucGiaoDich.loaihangmuc&&!(HangMucGiaoDich.loaihangmuc.chitieu&&HangMucGiaoDich.loaihangmuc.thunhap))
+            if(HangMucGiaoDich.loaihangmuc&&!(HangMucGiaoDich.loaihangmuc.chitieu&&HangMucGiaoDich.loaihangmuc.thunhap)&&(HangMucGiaoDich.loaihangmuc.chitieu||HangMucGiaoDich.loaihangmuc.thunhap))
             {
               let updateHangMucGiaoDich=realm.objectForPrimaryKey(HangMucGiaoDichSchema.name,HangMucGiaoDich.idhangmucgiaodich)
               if(HangMucGiaoDich.tenhangmuc)

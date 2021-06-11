@@ -2,17 +2,18 @@ import Realm, { schemaVersion } from 'realm';
 
 export const NguoiDungSchema = {
   name: 'NguoiDung',
-  embeded: true,
+  //embeded: true,
   properties: {
     idnguoidung: 'objectId',
     pass: 'string',
+    deleted: { type: 'bool', default: false },
   },
   primaryKey: 'idnguoidung',
 };
 
 export const TaiKhoanSchema = {
   name: 'TaiKhoan',
-  embeded: true,
+  //embeded: true,
   properties: {
     idtaikhoan: 'objectId',
     tentaikhoan: 'string',
@@ -20,19 +21,21 @@ export const TaiKhoanSchema = {
     bieutuong: 'string',
     thoigiantao: 'date',
     idnguoidung: 'objectId',
-    loaitaikhoan: 'LoaiTaiKhoanConfig',
+    tieudung:'TKTieuDung?',
+    tietkiem:'TKTietKiem?',
+    no:'TKNo?',
   },
   primaryKey: 'idtaikhoan',
 };
-export const LoaiTaiKhoanConfigSchema = {
-  name: 'LoaiTaiKhoanConfig',
-  embeded: true,
-  properties:{
-    tieudung:'TKTieuDung',
-    tietkiem:'TKTietKiem',
-    no:'TKNo',
-  }
-}
+// export const LoaiTaiKhoanConfigSchema = {
+//   name: 'LoaiTaiKhoanConfig',
+//   embeded: true,
+//   properties:{
+//     tieudung:'TKTieuDung',
+//     tietkiem:'TKTietKiem',
+//     no:'TKNo',
+//   }
+// }
 
 export const TKTieuDungSchema = {
   name: 'TKTieuDung',
@@ -41,7 +44,7 @@ export const TKTieuDungSchema = {
     idtktieudung: 'objectId',
     sotien: 'double?',
   },
-  primaryKey: 'idtktieudung',
+ //primaryKey: 'idtktieudung',
 }
 
 export const TKTietKiemSchema = {
@@ -51,26 +54,20 @@ export const TKTietKiemSchema = {
     idtktietkiem: 'objectId',
     sotien: 'double?',
     laisuattietkiem: 'double?',
-    laisuattruochan: 'double?',
-    idtkduocthuhuong: 'string?',
+    laisuattruochan: 'string?',
+    idtkduocthuhuong: 'objectId?',
     kyhantietkiem: 'int?', // đơn vị tháng
-    loaitietkiem: 'LoaiTietKiemConfig',
+    //loaitietkiem: 'LoaiTietKiemConfig',
     ngaybatdau: 'date?',
     ngayrutdukien: 'date?',
     sotiencodukien: 'double?',
-  },
-  primaryKey: 'idtktietkiem',
-}
-
-export const LoaiTietKiemConfigSchema = {
-  name: "LoaiTietKiemConfig",
-  embeded: true,
-  properties: {
     ruttatca: { type: 'bool', default: false }, //Rút tất cả gốc lẫn lãi
     tieptuc: { type: 'bool', default: false }, //Tiếp tục tiết kiệm cả gốc lẫn lãi
     rutlai: { type: 'bool', default: false }, //Tiếp tục nhưng rút lãi
-  }
+  },
+  //primaryKey: 'idtktietkiem',
 }
+
 
 export const TKNoSchema = {
   name: 'TKNo',
@@ -82,9 +79,9 @@ export const TKNoSchema = {
     kyhanno: 'int?',
     ngaybatdauno: 'date?',
     ngaytradukien: 'date?',
-    sotientradukien: 'double?',
+    sotientradukien: 'double?',    
   },
-  primaryKey: 'idtkno',
+  //primaryKey: 'idtkno',
 }
 
 export const GiaoDichSchema = {
@@ -94,8 +91,8 @@ export const GiaoDichSchema = {
     idgiaodich: 'objectId',
     idnguoidung: 'objectId',
     thoigian: 'date',
-    idtaikhoanchuyen: 'objectId',
-    idtaikhoannhan: 'objectId?',
+    idtaikhoan: 'objectId',
+    // idtaikhoannhan: 'objectId?',
     sotientieudung: 'double?',
     sotienthunhap: 'double?',
     loaihangmucgd: 'objectId',
@@ -103,7 +100,20 @@ export const GiaoDichSchema = {
   },
   primaryKey: 'idgiaodich',
 };
-
+export const GiaoDichNoiBoSchema = {
+  name: 'GiaoDichNoiBo',
+  embeded: true,
+  properties: {
+    idgiaodich: 'objectId',
+    idnguoidung: 'objectId',
+    thoigian: 'date',
+    idtaikhoanchuyen: 'objectId',
+    idtaikhoannhan: 'objectId?',
+    sotienchuyen: 'double?',
+    ghichu:'string',
+  },
+  primaryKey: 'idgiaodich',
+};
 export const GiaoDichTheoCKSchema={
   name:'GiaoDichTheoCK',
   embeded: true,
@@ -111,14 +121,20 @@ export const GiaoDichTheoCKSchema={
     idgiaodichtheochuky:'objectId',
     idnguoidung: 'objectId',
     thoigian: 'date',
-    idtaikhoanchuyen: 'objectId?',
-    idtaikhoannhan: 'objectId?',
+    idtaikhoan: 'objectId?',
+    // idtaikhoannhan: 'objectId?',
     sotientieudung: 'double?',
     sotienthunhap: 'double?',
     loaihangmucgd: 'objectId',
     chukygiaodichtheongay: 'int?',
     chukygiaodichtheothang: 'int?',
-    ghichu:'string',
+    thoigiancuoicungcheck: 'date',
+    //add because UI demand
+    thoigianbatdau: 'date',
+    ghichu: 'string?',
+    name: 'string?',
+    color:'string?',
+    pause : { type: 'bool', default: false }, 
   },
   primaryKey:'idgiaodichtheochuky',
 }
@@ -195,9 +211,10 @@ export const monifydata = {
     TKTieuDungSchema,
     TaiKhoanSchema,
     NguoiDungSchema,
-    LoaiTaiKhoanConfigSchema,
-    LoaiTietKiemConfigSchema,
+    GiaoDichNoiBoSchema,
+    //LoaiTaiKhoanConfigSchema,
+    //LoaiTietKiemConfigSchema,
     LoaiMucTieuConfigSchema,
     LoaiHangMucConfigSchema],
-  schemaVersion:5,
+    schemaVersion:5,
 }

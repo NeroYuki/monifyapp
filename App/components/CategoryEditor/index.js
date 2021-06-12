@@ -32,6 +32,12 @@ export class CategoryEditor extends Component {
         },
     ];
 
+    renderItemComponent = (item, index) => {
+        <View style={{ height: 20, width: '100%', backgroundColor: 'pink' }}>
+            <Text> {item.id} </Text>
+        </View>
+    }
+
 
     render() {
         return (
@@ -91,8 +97,12 @@ export class CategoryEditor extends Component {
                         <Text style={{ marginTop: 16, color: COLORS.blueText }}> ICON </Text>
                     </View>
 
-                    <View style={{ flex: 1, marginLeft: 16, backgroundColor: '' }}>
-
+                    <View style={{ flex: 1, marginLeft: 16 }}>
+                        <FlatList
+                            data={this.DATA}
+                            keyExtractor={item => item.id}
+                            renderItem={({ item, index }) => this.renderItemComponent(item, index)}
+                        />
                     </View>
                 </View>
 

@@ -13,6 +13,7 @@ let muctieucanhantest={
     sotienmuctieu: 200000,
     ngaybatdau: datestart,
     ngayketthuc: dateend,
+    tenmuctieu:'nameXXX',
 }
 let muctieucanhan={
     idmuctieu: idmuctieu,
@@ -26,6 +27,7 @@ let muctieucanhan={
     sotienmuctieu: 200000,
     ngaybatdau: datestart,
     ngayketthuc: dateend,
+    tenmuctieu:'nameXXX',
 }
 test('testing insert MucTieuCaNhan', async () => {
     // console.log(JSON.parse(JSON.stringify(await insertMucTieuCaNhan(muctieucanhantest,'TietKiemDenMuc'))))
@@ -44,6 +46,7 @@ let muctieucanhantestupdate={
     sotienmuctieu: 500000,
     ngaybatdau: datestart,
     ngayketthuc: datestart,
+    tenmuctieu:'nameXXX',
 }
 let muctieucanhantestquery=[{
     idmuctieu: idmuctieu,
@@ -57,6 +60,7 @@ let muctieucanhantestquery=[{
     sotienmuctieu: 500000,
     ngaybatdau: datestart,
     ngayketthuc: datestart,
+    tenmuctieu:'nameXXX',
 }]
 test('testing update MucTieuCaNhan', async () => {
     // console.log(JSON.parse(JSON.stringify(await insertMucTieuCaNhan(muctieucanhantest,'TietKiemDenMuc'))))
@@ -86,6 +90,7 @@ let muctieucanhantest2={
     sotienmuctieu: 200000,
     ngaybatdau: datestart2,
     ngayketthuc: dateend2,
+    tenmuctieu:'nameXXX',
 }
 let muctieucanhan2={
     idmuctieu: idmuctieu2,
@@ -99,6 +104,7 @@ let muctieucanhan2={
     sotienmuctieu: 200000,
     ngaybatdau: datestart2,
     ngayketthuc: dateend2,
+    tenmuctieu:'nameXXX',
 }
 test('testing insert MucTieuCaNhan', async () => {
     // console.log(JSON.parse(JSON.stringify(await insertMucTieuCaNhan(muctieucanhantest,'TietKiemDenMuc'))))
@@ -115,6 +121,7 @@ let muctieucanhantestupdate2={
     sotienmuctieu: 600000,
     ngaybatdau: datestart2,
     ngayketthuc: datestart2,
+    tenmuctieu:'nameXXX',
 }
 let muctieucanhantestupdate2KT={
     idmuctieu: idmuctieu2,
@@ -128,6 +135,7 @@ let muctieucanhantestupdate2KT={
     sotienmuctieu: 600000,
     ngaybatdau: datestart2,
     ngayketthuc: datestart2,
+    tenmuctieu:'nameXXX',
 }
 let muctieucanhantestquery2=[{
     idmuctieu: idmuctieu2,
@@ -141,6 +149,7 @@ let muctieucanhantestquery2=[{
     sotienmuctieu: 600000,
     ngaybatdau: datestart2,
     ngayketthuc: datestart2,
+    tenmuctieu:'nameXXX',
 }]
 test('testing update MucTieuCaNhan', async () => {
     // console.log(JSON.parse(JSON.stringify(await insertMucTieuCaNhan(muctieucanhantest,'TietKiemDenMuc'))))
@@ -170,6 +179,7 @@ let muctieucanhantest3={
     sotienmuctieu: 200000,
     ngaybatdau: datestart3,
     ngayketthuc: dateend3,
+    tenmuctieu:'nameXXX',
 }
 let muctieucanhan3={
     idmuctieu: idmuctieu3,
@@ -183,6 +193,7 @@ let muctieucanhan3={
     sotienmuctieu: 200000,
     ngaybatdau: datestart3,
     ngayketthuc: dateend3,
+    tenmuctieu:'nameXXX',
 }
 test('testing insert MucTieuCaNhan', async () => {
     // console.log(JSON.parse(JSON.stringify(await insertMucTieuCaNhan(muctieucanhantest,'TietKiemDenMuc'))))
@@ -192,6 +203,7 @@ test('testing insert MucTieuCaNhan', async () => {
 let muctieucanhantestupdate3={
     idmuctieu: idmuctieu3,
     sotienmuctieu: 1000000,
+    tenmuctieu:'nameXXX',
 }
 let muctieucanhantestupdate3KT={
     idmuctieu: idmuctieu3,
@@ -205,6 +217,7 @@ let muctieucanhantestupdate3KT={
     sotienmuctieu: 1000000,
     ngaybatdau: datestart3,
     ngayketthuc: dateend3,
+    tenmuctieu:'nameXXX',
 }
 let muctieucanhantestquery3=[{
     idmuctieu: idmuctieu3,
@@ -218,6 +231,7 @@ let muctieucanhantestquery3=[{
     sotienmuctieu: 1000000,
     ngaybatdau: datestart3,
     ngayketthuc: dateend3,
+    tenmuctieu:'nameXXX',
 }]
 test('testing update MucTieuCaNhan', async () => {
     // console.log(JSON.parse(JSON.stringify(await insertMucTieuCaNhan(muctieucanhantest,'TietKiemDenMuc'))))

@@ -15,6 +15,8 @@ export const fetchBill = ({ billId }) =>
 // số tiền khi cập nhật phải đưa tham số vào lại, nếu không giá trị sẻ lưu null vì amount được phép null, sau này khi người dùng muốn nhập thì nhập
 export const saveBill = ({ billId, userId, loaihangmucId, name, color, note, amount, cycle_start, cycle_duration_day, cycle_duration_month, creation_date }) =>
     new Promise(async (resolve, reject) => {
+
+        console.log(billId, userId, loaihangmucId, name, color, note, amount, cycle_start, cycle_duration_day, cycle_duration_month, creation_date)
         if (!billId) {
             let Bill = {
                 idgiaodichtheochuky: new BSON.ObjectID(),
@@ -31,11 +33,14 @@ export const saveBill = ({ billId, userId, loaihangmucId, name, color, note, amo
                 name: name,
                 color: color,
             }
+
+            console.log("SAVE BILLL ID::::")
             if (loaihangmucId) {
                 await queryHangMucGiaoDich({ idhangmucgiaodich: Bill.loaihangmucgd }).then(hangmuc => {
                     if (!hangmuc)
                         reject({ result: false, message: 'Hạng mục không có trong dữ liệu' })
                     else {
+                        console.log("HANG MUC", hangmuc)
                         if (hangmuc[0].loaihangmuc.chitieu == true) {
                             Bill.sotienthunhap = null
                         }
@@ -65,6 +70,8 @@ export const saveBill = ({ billId, userId, loaihangmucId, name, color, note, amo
                     reject({ result: false, message: 'Nhập thất bại' })
             }).catch((er) => reject({ result: false, message: er }))
         }
+
+        // có ID
         else {
             let BillUpdate
             await queryGiaoDichChuKy({ idgiaodichtheochuky: new BSON.ObjectID(billId) })
@@ -74,7 +81,7 @@ export const saveBill = ({ billId, userId, loaihangmucId, name, color, note, amo
                     }
                     else
                         resolve({ result: false, message: 'Không tìm thấy giao dịch cần thay đổi' })
-                }).catch(er => reject({ result: false, message: er }))
+                }).catch(error => reject({ result: false, message: error, example: 'Lỗi bạn ơiiii' }))
             let Bill = {
                 idgiaodichtheochuky: new BSON.ObjectID(billId),
                 idnguoidung: (userId) ? new BSON.ObjectID(userId) : null,
@@ -90,11 +97,17 @@ export const saveBill = ({ billId, userId, loaihangmucId, name, color, note, amo
                 name: name,
                 color: color,
             }
+
             if (loaihangmucId) {
                 await queryHangMucGiaoDich({ idhangmucgiaodich: Bill.loaihangmucgd }).then(hangmuc => {
                     if (!hangmuc || hangmuc == [])
                         reject({ result: false, message: 'Hạng mục không có trong dữ liệu' })
                     else {
+
+                        let hangmucNew = JSON.parse(JSON.stringify(hangmuc))
+
+                        console.log(hangmucNew)
+
                         if (Bill.sotienthunhap || Bill.sotientieudung) {
                             if (hangmuc[0].loaihangmuc.chitieu == true) {
                                 Bill.sotienthunhap = null
@@ -122,7 +135,7 @@ export const saveBill = ({ billId, userId, loaihangmucId, name, color, note, amo
                             }
                         }
                     }
-                }).catch((er) => reject({ result: false, message: er }))
+                }).catch((er) => reject({ result: false, message: er, example: 'LỖI HANG MỤC BẠN ƠIII' }))
             }
             if (!Bill.thoigianbatdau) {
                 Bill.thoigianbatdau = BillUpdate.thoigianbatdau

@@ -146,6 +146,7 @@ export const MucTieuCaNhanSchema = {
     idmuctieu: 'objectId',
     idnguoidung: 'objectId',
     thoigiantao: 'date',
+    tenmuctieu:'string',
     loaimuctieu:  'LoaiMucTieuConfig',
     sotienmuctieu: 'double',
     ngaybatdau: 'date',
@@ -172,6 +173,7 @@ export const HangMucGiaoDichSchema = {
     tenhangmuc: 'string',
     loaihangmuc: 'LoaiHangMucConfig',
     iconhangmuc: 'string',
+    color:'string'
   },
   primaryKey: 'idhangmucgiaodich',
 };
@@ -216,5 +218,5 @@ export const monifydata = {
     //LoaiTietKiemConfigSchema,
     LoaiMucTieuConfigSchema,
     LoaiHangMucConfigSchema],
-    schemaVersion:5,
+    schemaVersion:7,
 }

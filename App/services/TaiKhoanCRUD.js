@@ -86,8 +86,9 @@ export const updateTaiKhoan =  updateTaiKhoan =>
     Realm.open(data).then(realm => {
       realm.write(()=> {
         let taiKhoanUpdated = realm.objectForPrimaryKey(TaiKhoanSchema.name,updateTaiKhoan.idtaikhoan)
-        taiKhoanUpdated.tentaikhoan=updateTaiKhoan.tentaikhoan;
-        taiKhoanUpdated.bieutuong = updateTaiKhoan.bieutuong;
+        if(updateTaiKhoan.tentaikhoan!=null)  taiKhoanUpdated.tentaikhoan=updateTaiKhoan.tentaikhoan;
+        if(updateTaiKhoan.bieutuong!=null)  taiKhoanUpdated.bieutuong = updateTaiKhoan.bieutuong;
+        if(updateTaiKhoan.color!=null) taiKhoanUpdated.color=updateTaiKhoan.color
         taiKhoanUpdated.tieudung=updateTaiKhoan.tieudung;
         taiKhoanUpdated.tietkiem=updateTaiKhoan.tietkiem;
         taiKhoanUpdated.no=updateTaiKhoan.no;
@@ -141,7 +142,18 @@ export const queryTaiKhoan = (option) =>
         if(option.nomaxAmount){
           Target= Target.filtered('no.sotien<=$0',option.idtkno)
         }
-
+        if(option.savingminAmount){
+          Target= Target.filtered('tietkiem.sotien>=$0',option.idtkno)
+        }
+        if(option.savingmaxAmount){
+          Target= Target.filtered('tietkiem.sotien<=$0',option.idtkno)
+        }        
+        if(option.walletminAmount){
+          Target= Target.filtered('tieudung.sotien>=$0',option.idtkno)
+        }
+        if(option.walletmaxAmount){
+          Target= Target.filtered('tieudung.sotien<=$0',option.idtkno)
+        }
         //  console.log(JSON.stringify(Target))
         resolve(Target)
       })

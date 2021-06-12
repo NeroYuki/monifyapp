@@ -20,12 +20,14 @@ let GiaoDichTheoChuKy={
     chukygiaodichtheongay:60,
     chukygiaodichtheothang:null,
     ghichu:'Tiền chơi coin',
-    thoigianbatdau: null,
+    thoigianbatdau: thoigiancuoicungcheck,
+    color:null,
+    pause:false,
     thoigiancuoicungcheck:thoigiancuoicungcheck
 }
 
 test('testing insert GiaoDichTheoChuKy', async () => {
-    // console.log(await insertGiaoDichChuKy(GiaoDichTheoChuKy))
+    // console.log(JSON.parse(JSON.stringify(await insertGiaoDichChuKy(GiaoDichTheoChuKy))))
     // console.log(hangmucgiaodichtest)
    expect(JSON.parse(JSON.stringify(await insertGiaoDichChuKy(GiaoDichTheoChuKy)))).toStrictEqual(JSON.parse(JSON.stringify(GiaoDichTheoChuKy)))
 })
@@ -41,7 +43,9 @@ let GiaoDichTheoChuKytestupdate={
     chukygiaodichtheongay:120,
     chukygiaodichtheothang:null,
     ghichu:'Tiền chơi đá',
-    thoigianbatdau: null,
+    thoigianbatdau: thoigiancuoicungcheck,
+    color:null,
+    pause:false,
     thoigiancuoicungcheck:thoigiancuoicungcheck
 }
 let GiaoDichTheoChuKytestquery=[{
@@ -56,7 +60,9 @@ let GiaoDichTheoChuKytestquery=[{
     chukygiaodichtheongay:120,
     chukygiaodichtheothang:null,
     ghichu:'Tiền chơi đá',
-    thoigianbatdau: null,
+    thoigianbatdau: thoigiancuoicungcheck,
+    color:null,
+    pause:false,
     thoigiancuoicungcheck:thoigiancuoicungcheck
 }]
 test('testing update GiaoDichTheoChuKy', async () => {
@@ -78,7 +84,7 @@ test('testing querry GiaoDichTheoChuKy', async () => {
         chukygiaodichtheongay:120,
         chukygiaodichtheothang:null,
         ghichu:'Tiền chơi đá',
-        thoigianbatdau: null,
+        thoigianbatdau: thoigiancuoicungcheck,
         thoigiancuoicungcheck:thoigiancuoicungcheck
     })))).toStrictEqual(JSON.parse(JSON.stringify(GiaoDichTheoChuKytestquery)))
 })
@@ -104,7 +110,10 @@ let GiaoDichTheoChuKy2={
     loaihangmucgd:loaihangmuc2,
     chukygiaodichtheongay:60,
     ghichu:'Tiền chơi coin',
-    thoigiancuoicungcheck:thoigiancuoicungcheck2
+    thoigiancuoicungcheck:thoigiancuoicungcheck2,
+    color:null,
+    pause:false,
+    thoigianbatdau:thoigiancuoicungcheck2
 }
 let GiaoDichTheoChuKy2KT={
     idgiaodichtheochuky:idgiaodichtheochuky2,
@@ -118,7 +127,9 @@ let GiaoDichTheoChuKy2KT={
     chukygiaodichtheothang:null,
     ghichu:'Tiền chơi coin',
     name:null,
-    thoigianbatdau:null,
+    thoigianbatdau:thoigiancuoicungcheck2,
+    color:null,
+    pause:false,
     thoigiancuoicungcheck:thoigiancuoicungcheck2
 }
 
@@ -136,7 +147,10 @@ let GiaoDichTheoChuKytestupdate2={
     loaihangmucgd:loaihangmuc2,
     chukygiaodichtheongay:120,
     ghichu:'Tiền chơi đá',
-    thoigiancuoicungcheck:thoigiancuoicungcheck2
+    thoigiancuoicungcheck:thoigiancuoicungcheck2,
+    color:null,
+    pause:false,
+    thoigianbatdau:thoigiancuoicungcheck2,
 }
 let GiaoDichTheoChuKytestupdate2KT={
     idgiaodichtheochuky:idgiaodichtheochuky2,
@@ -150,7 +164,9 @@ let GiaoDichTheoChuKytestupdate2KT={
     chukygiaodichtheothang:null,
     ghichu:'Tiền chơi đá',
     name:null,
-    thoigianbatdau:null,
+    thoigianbatdau:thoigiancuoicungcheck2,
+    color:null,
+    pause:false,
     thoigiancuoicungcheck:thoigiancuoicungcheck2
 }
 let GiaoDichTheoChuKytestquery2=[{
@@ -165,7 +181,9 @@ let GiaoDichTheoChuKytestquery2=[{
     chukygiaodichtheothang:null,
     ghichu:'Tiền chơi đá',
     name:null,
-    thoigianbatdau:null,
+    thoigianbatdau:thoigiancuoicungcheck2,
+    color:null,
+    pause:false,
     thoigiancuoicungcheck:thoigiancuoicungcheck2
 }]
 test('testing update GiaoDichTheoChuKy', async () => {
@@ -201,7 +219,10 @@ let GiaoDichTheoChuKy3={
     loaihangmucgd:loaihangmuc3,
     chukygiaodichtheongay:60,
     ghichu:'Tiền chơi coin',
-    thoigiancuoicungcheck:thoigiancuoicungcheck3
+    thoigiancuoicungcheck:thoigiancuoicungcheck3,
+    color:null,
+    pause:false,
+    thoigianbatdau:thoigiancuoicungcheck3,
 }
 let GiaoDichTheoChuKy3KT={
     idgiaodichtheochuky:idgiaodichtheochuky3,
@@ -216,7 +237,9 @@ let GiaoDichTheoChuKy3KT={
     ghichu:'Tiền chơi coin',
     thoigiancuoicungcheck:thoigiancuoicungcheck3,
     name:null,
-    thoigianbatdau:null,
+    color:null,
+    pause:false,
+    thoigianbatdau:thoigiancuoicungcheck3,
 }
 
 test('testing insert GiaoDichTheoChuKy', async () => {
@@ -231,7 +254,10 @@ let GiaoDichTheoChuKytestupdate3={
     loaihangmucgd:loaihangmuc3,
     chukygiaodichtheongay:120,
     ghichu:'Tiền chơi đá',
-    thoigiancuoicungcheck:thoigiancuoicungcheck3
+    thoigiancuoicungcheck:thoigiancuoicungcheck3,
+    color:null,
+    pause:false,
+    thoigianbatdau:thoigiancuoicungcheck3,
 }
 let GiaoDichTheoChuKytestupdate3KT={
     idgiaodichtheochuky:idgiaodichtheochuky3,
@@ -245,7 +271,9 @@ let GiaoDichTheoChuKytestupdate3KT={
     chukygiaodichtheothang:null,
     ghichu:'Tiền chơi đá',
     name:null,
-    thoigianbatdau:null,
+    thoigianbatdau:thoigiancuoicungcheck3,
+    color:null,
+    pause:false,
     thoigiancuoicungcheck:thoigiancuoicungcheck3
 }
 let GiaoDichTheoChuKytestquery3=[{
@@ -260,7 +288,9 @@ let GiaoDichTheoChuKytestquery3=[{
     chukygiaodichtheothang:null,
     ghichu:'Tiền chơi đá',
     name:null,
-    thoigianbatdau:null,
+    thoigianbatdau:thoigiancuoicungcheck3,
+    color:null,
+    pause:false,
     thoigiancuoicungcheck:thoigiancuoicungcheck3
 }]
 test('testing update GiaoDichTheoChuKy', async () => {

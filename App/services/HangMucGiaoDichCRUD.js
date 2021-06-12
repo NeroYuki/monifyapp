@@ -64,6 +64,10 @@ export const updateHangMucGiaoDich=HangMucGiaoDich=> new Promise((resolve,reject
               {
                 updateHangMucGiaoDich.iconhangmuc=HangMucGiaoDich.iconhangmuc
               }
+              if(HangMucGiaoDich.color)
+              {
+                updateHangMucGiaoDich.color=HangMucGiaoDich.color
+              }
               resolve(updateHangMucGiaoDich)
             }
             else if(!HangMucGiaoDich.loaihangmuc)
@@ -76,6 +80,10 @@ export const updateHangMucGiaoDich=HangMucGiaoDich=> new Promise((resolve,reject
               if(HangMucGiaoDich.iconhangmuc)
               {
                 updateHangMucGiaoDich.iconhangmuc=HangMucGiaoDich.iconhangmuc
+              }
+              if(HangMucGiaoDich.color)
+              {
+                updateHangMucGiaoDich.color=HangMucGiaoDich.color
               }
               resolve(updateHangMucGiaoDich)
             }
@@ -132,6 +140,10 @@ export const queryHangMucGiaoDich=(option)=> new Promise((resolve,reject)=>{
     if(option.id)
     {
       Taget=Taget.filtered('idnguoidung==$0',option.id)
+    }
+    if(option.color)
+    {
+      Taget=Taget.filtered('color==$0',option.color)
     }
     resolve(Taget)
   }).catch((error)=>reject(error))

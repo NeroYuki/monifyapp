@@ -132,9 +132,11 @@ export const GiaoDichTheoCKSchema={
     chukygiaodichtheothang: 'int?',
     thoigiancuoicungcheck: 'date',
     //add because UI demand
-    thoigianbatdau: 'date?',
+    thoigianbatdau: 'date',
     ghichu: 'string?',
     name: 'string?',
+    color:'string?',
+    pause : { type: 'bool', default: false }, 
   },
   primaryKey:'idgiaodichtheochuky',
 }
@@ -146,6 +148,7 @@ export const MucTieuCaNhanSchema = {
     idmuctieu: 'objectId',
     idnguoidung: 'objectId',
     thoigiantao: 'date',
+    tenmuctieu:'string',
     loaimuctieu:  'LoaiMucTieuConfig',
     sotienmuctieu: 'double',
     ngaybatdau: 'date',
@@ -172,6 +175,7 @@ export const HangMucGiaoDichSchema = {
     tenhangmuc: 'string',
     loaihangmuc: 'LoaiHangMucConfig',
     iconhangmuc: 'string',
+    color:'string'
   },
   primaryKey: 'idhangmucgiaodich',
 };
@@ -216,5 +220,5 @@ export const monifydata = {
     //LoaiTietKiemConfigSchema,
     LoaiMucTieuConfigSchema,
     LoaiHangMucConfigSchema],
-    schemaVersion:2,
+    schemaVersion:7,
 }

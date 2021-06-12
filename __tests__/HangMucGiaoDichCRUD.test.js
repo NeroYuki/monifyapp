@@ -14,6 +14,7 @@ hangmucgiaodichtest= {
         chitieu:true,
         thunhap:false,  
     },
+    color:'#123456'
 }
 hangmucgiaodich= {
     idhangmucgiaodich: idhangmuc,
@@ -21,6 +22,7 @@ hangmucgiaodich= {
     thoigiantao: date,
     tenhangmuc: 'Sắm tết',
     iconhangmuc: '123456###',
+    color:'#123456'
 }
 test('testing insert HangMucGiaoDich', async () => {
     // console.log(await insertHangMucGiaoDich(hangmucgiaodich,'chitieu'))
@@ -37,6 +39,7 @@ hangmucgiaodichtestupdate= {
         chitieu:true,
         thunhap:false,  
     },
+    color:'#123456'
 }
 hangmuctestquery=[{
     idhangmucgiaodich: idhangmuc,
@@ -44,7 +47,8 @@ hangmuctestquery=[{
     thoigiantao: '2011-04-11T10:20:30.000Z',
     tenhangmuc: 'Sắm tết 3',
     loaihangmuc: { chitieu: true, thunhap: false },
-    iconhangmuc: '123456###'
+    iconhangmuc: '123456###',
+    color:'#123456'
   }]
 test('testing update HangMucGiaoDich', async () => {
     // console.log(BSON.deserialize(BSON.serialize(updateHangMucGiaoDich(hangmucgiaodichtestupdate))))
@@ -74,6 +78,7 @@ hangmucgiaodichtest2= {
         chitieu:false,
         thunhap:true,  
     },
+    color:'#123456'
 }
 hangmucgiaodich2= {
     idhangmucgiaodich: idhangmuc2,
@@ -81,6 +86,7 @@ hangmucgiaodich2= {
     thoigiantao: date2,
     tenhangmuc: 'Bán xe',
     iconhangmuc: '123456###',
+    color:'#123456'
 }
 test('testing insert HangMucGiaoDich', async () => {
     // console.log(await insertHangMucGiaoDich(hangmucgiaodich,'chitieu'))
@@ -96,6 +102,7 @@ hangmucgiaodichtestupdate2= {
         chitieu:true,
         thunhap:false,  
     },
+    color:'#123456'
 }
 hangmucgiaodichtestupdate2KT= {
     idhangmucgiaodich: idhangmuc2,
@@ -107,6 +114,7 @@ hangmucgiaodichtestupdate2KT= {
         chitieu:true,
         thunhap:false,  
     },
+    color:'#123456'
 }
 hangmuctestquery2=[{
     idhangmucgiaodich: idhangmuc2,
@@ -114,7 +122,8 @@ hangmuctestquery2=[{
     thoigiantao: '2011-04-11T10:20:30.000Z',
     tenhangmuc: 'Bán oto',
     loaihangmuc: { chitieu: true, thunhap: false },
-    iconhangmuc: '123456###'
+    iconhangmuc: '123456###',
+    color:'#123456'
   }]
 test('testing update HangMucGiaoDich', async () => {
     // console.log(BSON.deserialize(BSON.serialize(updateHangMucGiaoDich(hangmucgiaodichtestupdate))))
@@ -143,6 +152,7 @@ hangmucgiaodichtest3= {
         chitieu:false,
         thunhap:true,  
     },
+    color:'#123456'
 }
 hangmucgiaodich3= {
     idhangmucgiaodich: idhangmuc3,
@@ -150,6 +160,7 @@ hangmucgiaodich3= {
     thoigiantao: date3,
     tenhangmuc: 'Crypto',
     iconhangmuc: '*****',
+    color:'#123456'
 }
 test('testing insert HangMucGiaoDich', async () => {
     // console.log(await insertHangMucGiaoDich(hangmucgiaodich,'chitieu'))
@@ -162,6 +173,7 @@ hangmucgiaodichtestupdate3= {
         chitieu:true,
         thunhap:false,  
     },
+    color:'#123456'
 }
 hangmucgiaodichtestupdate3KT= {
     idhangmucgiaodich: idhangmuc3,
@@ -173,6 +185,7 @@ hangmucgiaodichtestupdate3KT= {
         chitieu:true,
         thunhap:false,  
     },
+    color:'#123456'
 }
 hangmuctestquery3=[{
     idhangmucgiaodich: idhangmuc3,
@@ -181,6 +194,7 @@ hangmuctestquery3=[{
     tenhangmuc: 'Crypto',
     loaihangmuc: { chitieu: true, thunhap: false },
     iconhangmuc: '*****',
+    color:'#123456'
   }]
 test('testing update HangMucGiaoDich', async () => {
     // console.log(BSON.deserialize(BSON.serialize(updateHangMucGiaoDich(hangmucgiaodichtestupdate))))

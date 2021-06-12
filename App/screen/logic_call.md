@@ -8,6 +8,10 @@ return Object({appTheme: string, Language: string, Currency: string, StrictMode:
 #### fetchBugetList()
 return Array(Object({budgetId: string, name: string}))
 #### fetchBudget({budgetId: string})
+#### saveBudget({idbudget:string?,userId:string,name:string,loaimuctieu:'string',Amount:number,period:string,startday:string,enday:string})
+return obj
+#### deleteBudget({idbudget:string})
+return Object({result: boolean, message: ?string})
 
 3. screen/LoanEditor
 #### fetchLoan({loanId: string})
@@ -37,8 +41,8 @@ return Object({username: string, email: string, birthday: Date})
 
 8. screen/RecurringBillEditor
 #### fetchBill({billId: string})
-return Object({billId: string, name: string, color: string, note: string, amount, number, cycle_start: Date, cycle_duration_day: number, cycle_duration_month: number, creation_date: Date})
-#### saveBill({billId: string, name: string, color: string, note: string, cycle_start: Date, cycle_duration_day: number, cycle_duration_month: number})
+return Object({billId: string, name: string, color: string, note: string, amount: number, cycle_start: Date, cycle_duration_day: number, cycle_duration_month: number, creation_date: Date})
+#### saveBill({billId: string?,loaihangmucid:string,userid:string, name: string, color: string, note: string, cycle_start: Date, cycle_duration_day: number, cycle_duration_month: number})
 return Object({result: boolean, message: ?string})
 
 9. screen/RecurringBillManager

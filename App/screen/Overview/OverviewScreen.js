@@ -166,38 +166,11 @@ export class OverviewScreen extends Component {
                             />
 
                             <this.reportView />
-
-
-                            {/* <Button onPress={() => { this.setState({ visible: true }) }}>Click me</Button>
-                    <Button onPress={() => { this.setState({ categoriesVisible: !this.state.categoriesModal }) }}>Click me 2</Button>
-
-                    <Modal visible={this.state.visible} onDismiss={() => { this.setState({ visible: false }) }} contentContainerStyle={containerStyle} style={style}>
-                        <TransactionEditor></TransactionEditor>
-                    </Modal>
-
-                    <TimespanPicker isVisible={this.state.periodVisible} onRequestClose={() => { this.setState({ periodVisible: false }) }}></TimespanPicker>
-
-                    <CategoriesModal isVisible={this.state.categoriesVisible} onRequestClose={() => { this.setState({ categoriesVisible: false }) }}></CategoriesModal> */}
                         </SafeAreaView>
                     </View>
 
 
                 </ScrollView>
-                {/* <Modal
-                    visible={this.state.visible}
-                    onDismiss={() => { this.setState({ visible: false }) }}
-                    contentContainerStyle={styles.containerStyle}
-                    style={styles.modalStyle}
-                >
-
-                    <TransactionEditor
-                        currentData={this.state.currentData}
-                        onCategoriesPress={this.onCategoriesPress}
-                        onRecurringPress={this.onRecurringPress}
-                        onRequestClose={this.onPressTransactionEditor}
-                    />
-
-                </Modal> */}
 
                 <TransactionModal
                     isVisible={this.state.visible}
@@ -206,18 +179,6 @@ export class OverviewScreen extends Component {
                     onCategoriesPress={this.onCategoriesPress}
                     onRecurringPress={this.onRecurringPress}
                 />
-
-                {/* <CategoriesModal
-                    isVisible={this.state.categoriesVisible}
-                    onRequestClose={() => { this.setState({ categoriesVisible: false }) }}
-                />
-
-                <RecurringModal
-                    isVisible={this.state.recurringVisible}
-                    closePeriod={() => {
-                        this.setState({ recurringVisible: false })
-                    }}
-                />*/}
 
                 <ExpenseOrIncomeModal
                     isVisible={this.state.expenseOrIncomeVisible}

@@ -37,25 +37,15 @@ export class RecurringBillEditor extends Component {
     handleSaveButton = async () => {
         console.log("SAVE BILL")
 
-        // var caidattest = {
-        //     idnguoidung: '60c0cb55a09b8f641df3ca14',
-        //     loaitien: 'VND',
-        //     chedo: 'Light',
-        //     ngonngu: 'EN',
-        //     chedonghiemngat: true,
-        // }
-
-        // console.log(await saveSetting(caidattest))
-
         let thoigiancuoicungcheck = new Date('2011-04-11T10:20:30.000Z')
         let Bill = {
-            billId: '60c0d8c26638c98738494f2e',
-            userId: '60bf81c035582676b155066e',
+            // billId: '60c0d8c26638c98738494f2e',
+            userId: '60c0cb55a09b8f641df3ca14',
             loaihangmucId: '60c0cb2a62cd926b5f692f72',//60c2124cff795ef6c9ba7d59,60c1e454c706ae2f3930f623
             name: 'SSCI',
             color: '#00000',
             note: 'bán hàng tự vận',
-            amount: 7777,
+            amount: 696969,
             cycle_start: thoigiancuoicungcheck,
             cycle_duration_day: 5,
             cycle_duration_month: null,

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 // import { stylesheet } from './style'
-import { Text, View, StyleSheet, TextInput, FlatList, Image } from "react-native";
+import { Text, View, StyleSheet, TextInput, SectionList, FlatList, Image } from "react-native";
 import { Button, Divider } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { COLORS, icons } from "../../assets/constants";
@@ -13,30 +13,38 @@ export class CategoryEditor extends Component {
         super(props)
         this.state = {
             selectedType: 'Income',
-
+            DATA: [
+                {
+                    id: '1',
+                    text: 'Long',
+                    source: icons.foodIcon,
+                },
+                {
+                    id: '2',
+                    text: 'Yeu',
+                    source: icons.bonusIcon,
+                },
+                {
+                    id: '3',
+                    text: 'Yen',
+                    source: icons.clothesIcon,
+                },
+            ],
         }
     }
 
-    DATA = [
-        {
-            id: '1',
-            source: icons.foodIcon,
-        },
-        {
-            id: '2',
-            source: icons.bonusIcon,
-        },
-        {
-            id: '3',
-            source: icons.clothesIcon,
-        },
-    ];
-
-    renderItemComponent = (item, index) => {
-        <View style={{ height: 20, width: '100%', backgroundColor: 'pink' }}>
-            <Text> {item.id} </Text>
+    RenderItem = ({ items }) => (
+        <View style={{ justifyContent: 'center', alignItems: 'center', height: 48, width: 48, marginVertical: 8, marginHorizontal: 8, }}>
+            <Image
+                source={items.item.source}
+                style={{
+                    height: 48,
+                    width: 48,
+                }}
+                resizeMode='contain'
+            />
         </View>
-    }
+    );
 
 
     render() {
@@ -99,9 +107,17 @@ export class CategoryEditor extends Component {
 
                     <View style={{ flex: 1, marginLeft: 16 }}>
                         <FlatList
-                            data={this.DATA}
-                            keyExtractor={item => item.id}
-                            renderItem={({ item, index }) => this.renderItemComponent(item, index)}
+                            style={{ flex: 1, padding: 8 }}
+                            // numColumns={2}
+                            horizontal
+                            data={this.state.DATA}
+                            keyExtractor={items => items.id}
+                            renderItem={(items) => {
+                                // console.log(items)
+                                return (
+                                    <this.RenderItem items={items} />
+                                )
+                            }}
                         />
                     </View>
                 </View>

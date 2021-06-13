@@ -5,7 +5,7 @@ export const saveSetting=(setting)=>
     new Promise((resolve,reject)=>{
         let sSet={
             idcaidat: new BSON.ObjectID(),
-            idnguoidung: new BSON.ObjectID(setting.idnguoidung),
+            idnguoidung: (setting.idnguoidung)?new BSON.ObjectID(setting.idnguoidung):null,
             thoigiantao: new Date(Date.now()),
             loaitien: setting.loaitien,
             chedo: setting.chedo,

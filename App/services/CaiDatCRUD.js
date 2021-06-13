@@ -40,7 +40,12 @@ export const updateCaiDat=CaiDat=> new Promise((resolve,reject)=>{
 
 export const deleteCaiDat=CaiDat=> new Promise((resolve,reject)=>{
     Realm.open(data).then(realm=>{
-        let IDCaiDat = new BSON.ObjectID(JSON.parse(JSON.stringify(CaiDat.idcaidat)))
+        let IDCaiDat = (CaiDat.idcaidat)?new BSON.ObjectID(JSON.parse(JSON.stringify(CaiDat.idcaidat))):null
+        if(!IDCaiDat)
+        {
+          reject('ThatBai')
+          return
+        }  
         realm.write(()=>{
             let deleteCaiDat=realm.objectForPrimaryKey(CaiDatSchema.name,CaiDat.idcaidat)
             realm.delete(deleteCaiDat)

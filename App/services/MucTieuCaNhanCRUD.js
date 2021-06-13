@@ -123,7 +123,12 @@ export const updateMucTieuCaNhan=MucTieuCaNhan=> new Promise((resolve,reject)=>{
 
 export const deleteMucTieuCaNhan=MucTieuCaNhan=> new Promise((resolve,reject)=>{
     Realm.open(data).then(realm=>{
-        let IDMucTieuCaNhanCop = new BSON.ObjectID(JSON.parse(JSON.stringify(MucTieuCaNhan.idmuctieu)))
+        let IDMucTieuCaNhanCop = (MucTieuCaNhan.idmuctieu)?new BSON.ObjectID(JSON.parse(JSON.stringify(MucTieuCaNhan.idmuctieu))):null
+        if(!IDMucTieuCaNhanCop)
+        {
+          reject('ThatBai')
+          return
+        }
         realm.write(()=>{
             let deleteMucTieuCaNhan=realm.objectForPrimaryKey(MucTieuCaNhanSchema.name,MucTieuCaNhan.idmuctieu)
             realm.delete(deleteMucTieuCaNhan)

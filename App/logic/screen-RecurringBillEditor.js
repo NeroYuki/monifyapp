@@ -19,15 +19,15 @@ export const saveBill=({billId,userId,loaihangmucId,name,color,note,amount,cycle
         {
             let Bill={
                 idgiaodichtheochuky:new BSON.ObjectID(),
-                idnguoidung:new BSON.ObjectID(userId),
-                loaihangmucgd:new BSON.ObjectID(loaihangmucId),
-                thoigian:new Date(creation_date),
+                idnguoidung:(userId)?new BSON.ObjectID(userId):null,
+                loaihangmucgd:(loaihangmucId)?new BSON.ObjectID(loaihangmucId):null,
+                thoigian:(creation_date)?new Date(creation_date):null,
                 sotientieudung:(amount)?Math.abs(amount):null,
                 sotienthunhap:(amount)?Math.abs(amount):null,
                 chukygiaodichtheongay:cycle_duration_day,
                 chukygiaodichtheothang:cycle_duration_month,
                 thoigiancuoicungcheck:null,
-                thoigianbatdau:new Date(cycle_start),
+                thoigianbatdau:(cycle_start)?new Date(cycle_start):null,
                 ghichu:note,
                 name:name,
                 color:color,
@@ -35,8 +35,11 @@ export const saveBill=({billId,userId,loaihangmucId,name,color,note,amount,cycle
             if(loaihangmucId)
             {
                 await queryHangMucGiaoDich({idhangmucgiaodich:Bill.loaihangmucgd}).then(hangmuc=>{
-                    if(!hangmuc)
+                    if(hangmuc.length==0)
+                    {    
                         reject({result:false,message:'Hạng mục không có trong dữ liệu'})
+                        return
+                    }
                     else
                     {
                         if(hangmuc[0].loaihangmuc.chitieu==true)
@@ -49,7 +52,10 @@ export const saveBill=({billId,userId,loaihangmucId,name,color,note,amount,cycle
                 }).catch((er)=>reject({result:false,message:er}))
             }
             else
+            {    
                 reject({result:false,message:'Không nhập loại hạng mục'})
+                return
+            }
             if(Bill.chukygiaodichtheongay)
             {
                 let date=new Date(cycle_start)
@@ -78,15 +84,18 @@ export const saveBill=({billId,userId,loaihangmucId,name,color,note,amount,cycle
             let BillUpdate
             await queryGiaoDichChuKy({idgiaodichtheochuky: new BSON.ObjectID(billId)})
                 .then(giaodich => {
-                    if(giaodich)
+                    if(giaodich.length!=0)
                     {
                         BillUpdate=giaodich[0]
                     }
                     else    
+                    {    
                         resolve({result:false,message:'Không tìm thấy giao dịch cần thay đổi'})
+                        return
+                    }
                 }).catch(er => reject({result:false,message:er}))
             let Bill={
-                idgiaodichtheochuky:new BSON.ObjectID(billId),
+                idgiaodichtheochuky:(billId)?new BSON.ObjectID(billId):null,
                 idnguoidung:(userId)?new BSON.ObjectID(userId):null,
                 loaihangmucgd:(loaihangmucId)?new BSON.ObjectID(loaihangmucId):null,
                 thoigian:(creation_date)?new Date(creation_date):null,
@@ -103,8 +112,11 @@ export const saveBill=({billId,userId,loaihangmucId,name,color,note,amount,cycle
             if(loaihangmucId)
             {
                 await queryHangMucGiaoDich({idhangmucgiaodich:Bill.loaihangmucgd}).then(hangmuc=>{
-                    if(!hangmuc||hangmuc==[])
+                    if(!hangmuc||hangmuc.length==0)
+                    {
                         reject({result:false,message:'Hạng mục không có trong dữ liệu'})
+                        return
+                    }
                     else
                     {
                         if(Bill.sotienthunhap||Bill.sotientieudung)

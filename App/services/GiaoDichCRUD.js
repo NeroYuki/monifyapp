@@ -59,7 +59,12 @@ export const updateGiaoDich=GiaoDich=> new Promise((resolve,reject)=>{
 
 export const deleteGiaoDich=GiaoDich=> new Promise((resolve,reject)=>{
     Realm.open(data).then(realm=>{
-        let IDGiaoDichCop = new BSON.ObjectID(JSON.parse(JSON.stringify(GiaoDich.idgiaodich)))
+        let IDGiaoDichCop = (GiaoDich.idgiaodich)?new BSON.ObjectID(JSON.parse(JSON.stringify(GiaoDich.idgiaodich))):null
+        if(!IDGiaoDichCop)
+        {  
+          reject('ThatBai')
+          return
+        }
         realm.write(()=>{
             let deleteGiaoDich=realm.objectForPrimaryKey(GiaoDichSchema.name,GiaoDich.idgiaodich)
             realm.delete(deleteGiaoDich)

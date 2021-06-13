@@ -40,16 +40,18 @@ export const queryTransactions = ({period,start_day,end_day,walletId}) =>
         else
         {
             reject('không tồn tại loại period tương xứng')
+            return
         }
     }
     else if(!period&&start_day&&end_day)
     {
-        start=start_day
-        end=end_day
+        start=new Date(start_day)
+        end=new Date(end_day)
     }
     else if(period||start_day||end_day)
     {
         reject('Không xử lý được ngày bắt đầu và ngày kết thúc của mục tiêu ')
+        return
     }
     if(end&&start)
         InTrans=InTrans.filter((tran)=>{
@@ -144,16 +146,18 @@ export const queryTranCategories = ({period,start_day,end_day,walletId}) =>
         else
         {
             reject('không tồn tại loại period tương xứng')
+            return
         }
     }
     else if(!period&&start_day&&end_day)
     {
-        start=start_day
-        end=end_day
+        start=new Date(start_day)
+        end=new Date(end_day)
     }
     else if(period||start_day||end_day)
     {
         reject('Không xử lý được ngày bắt đầu và ngày kết thúc của mục tiêu ')
+        return
     }
     if(end&&start)
         InTrans=InTrans.filter((tran)=>{

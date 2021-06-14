@@ -1,13 +1,13 @@
-import {queryTaiKhoan,insertTaiKhoan, deleteTaiKhoan}from '../services/TaiKhoanCRUD';
+import {queryTaiKhoan,insertTaiKhoan, deleteTaiKhoan, deactiavteTaiKhoan}from '../services/TaiKhoanCRUD';
 import {BSON} from 'realm'
 import { updateTaiKhoan } from '../services/TaiKhoanCRUD';
 
 
-export const fetchSaving= ({savingId}) => new Promise((resolve, reject) => {
+export const fetchSaving= (savingId) => new Promise((resolve, reject) => {
     queryTaiKhoan({idtaikhoan:savingId}).then((tk)=> {
         let rs =
         {
-            savingId: tk[0].idtaikhoan,
+            savingId: JSON.parse(JSON.stringify(tk[0].idtaikhoan)),
             name: tk[0].tentaikhoan,
             color: tk[0].color,
             amount: tk[0].tietkiem.sotien,
@@ -44,7 +44,8 @@ export const saveSaving= ({savingId,savingName, color, amount, expire_on,interes
         insertTaiKhoan(newtaikhoansaving).then((tk)=>{resolve(true)}, (reason) => {reject(reason)})
     }
     else{
-        queryTaiKhoan({taikhoantietkiem: true,idtaikhoan:savingId}).then((tk)=>{
+        let tempid = new BSON.ObjectID(savingId)
+        queryTaiKhoan({taikhoantietkiem: true,idtaikhoan:tempid}).then((tk)=>{
             let rs =
             {
                 idtaikhoan:tk[0].idtaikhoan,
@@ -86,13 +87,12 @@ export const querySaving=({savingName, minAmount, maxAmount, expire_in_days}) =>
     let today = new Date()
     let endday = today.addDays(expire_in_days)
     queryTaiKhoan({deactivate:false,taikhoantietkiem: true,tentaikhoan:savingName, tietkiemminAmount:minAmount ,tietkiemmaxAmount:maxAmount}).then((rs)=> {
-        //console.log(JSON.stringify(rs))
         let rsarr=[]
         rs.forEach(element => {
-            if(element.tietkiem.ngaytradukien<=expire_in_days)
+            //if(element.tietkiem.ngaytradukien<=endday)
             rsarr.push(
                 {
-                    savingId: element.idtaikhoan,
+                    savingId: JSON.parse(JSON.stringify(element.idtaikhoan)),
                     name: element.tentaikhoan,
                     color: element.color,
                     amount: element.tietkiem.sotien,
@@ -105,26 +105,30 @@ export const querySaving=({savingName, minAmount, maxAmount, expire_in_days}) =>
             )
         });
         //console.log(rsarr)
-        resolve(rsarr)
-    }),reason => reject(reason)
+        return resolve(rsarr)
+    }),reason => {console.error(reason); return reject(reason)}
 })
-export const deleteSaving= ({savingId}) => new Promise((resolve, reject) => {
+export const deleteSaving= (savingId) => new Promise((resolve, reject) => {
     try {
-        let id =new MongoId(savingId)
+        let id =new BSON.ObjectId(savingId)
         let rs=deleteTaiKhoan(id)
-        resolve(resolve)
-    } catch (error) {
+        resolve(rs)
+        return true
+    } catch (rs) {
         reject(console.error())
+        return false
     }
 })
 
-export const deactivateSaving= ({savingId}) => new Promise((resolve, reject) => {
+export const deactivateSaving= (savingId) => new Promise((resolve, reject) => {
     try {
-        let id =new MongoId(savingId)
+        let id =new BSON.ObjectId(savingId)
         let rs=deactiavteTaiKhoan(id)
-        resolve(resolve)
-    } catch (error) {
+        resolve(rs)
+        return true
+    } catch (rs) {
         reject(console.error())
+        return false
     }
 })
 

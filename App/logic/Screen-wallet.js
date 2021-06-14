@@ -1,13 +1,13 @@
-import {queryTaiKhoan,insertTaiKhoan, deleteTaiKhoan}from '../services/TaiKhoanCRUD';
+import {queryTaiKhoan,insertTaiKhoan, deleteTaiKhoan, deactiavteTaiKhoan}from '../services/TaiKhoanCRUD';
 import {BSON} from 'realm'
 import { updateTaiKhoan } from '../services/TaiKhoanCRUD';
 
 
-export const fetchWallet= ({walletId}) => new Promise((resolve, reject) => {
+export const fetchWallet= (walletId) => new Promise((resolve, reject) => {
     queryTaiKhoan({idtaikhoan:walletId}).then((tk)=> {
         let rs =
         {
-            walletId: tk[0].idtaikhoan,
+            walletId: JSON.parse(JSON.stringify(tk[0].idtaikhoan)),
             name: tk[0].tentaikhoan,
             color: tk[0].color,
             amount: tk[0].tieudung.sotien,
@@ -17,13 +17,13 @@ export const fetchWallet= ({walletId}) => new Promise((resolve, reject) => {
     }), reason=> {reject(reason)}
 })
 export const saveWallet= ({walletId,walletName, color, amount}) => new Promise((resolve, reject) => {
-    if(loanId ===undefined){
+    if(walletId ===undefined){
         newtaikhoantietkiem={
             idtaikhoan: new BSON.ObjectID(),
             tentaikhoan: walletName,        
             bieutuong: '',
             color: color,
-            thoigiantao: creationDate,
+            thoigiantao: new Date(),
             //idnguoidung: 'objectId',
             tieudung:{
                 idtktieudung: new BSON.ObjectID(),
@@ -35,7 +35,8 @@ export const saveWallet= ({walletId,walletName, color, amount}) => new Promise((
         insertTaiKhoan(newtaikhoantietkiem).then((tk)=>{resolve(true)}, (reason) => {reject(reason)})
     }
     else{
-        queryTaiKhoan({taikhoanieudung: true,idtaikhoan:walletId}).then((tk)=>{
+        let tempid = new BSON.ObjectId(walletId)
+        queryTaiKhoan({taikhoanieudung: true,idtaikhoan:tempid}).then((tk)=>{
             let rs =
             {
                 idtaikhoan:tk[0].idtaikhoan,
@@ -66,14 +67,14 @@ export const saveWallet= ({walletId,walletName, color, amount}) => new Promise((
     }
 })
 
-export const queryLoan=({walletName, minAmount, maxAmount}) => new Promise((resolve, reject) => {
+export const querywallet=({walletName, minAmount, maxAmount}) => new Promise((resolve, reject) => {
     queryTaiKhoan({deactivate:false,taikhoanieudung: true,tentaikhoan:walletName, walletminAmount:minAmount ,walletmaxAmount:maxAmount}).then((rs)=> {
         //console.log(JSON.stringify(rs))
         let rsarr=[]
         rs.forEach(element => {
             rsarr.push(
                 {
-                    walletId: element.idtaikhoan,
+                    walletId: JSON.parse(JSON.stringify(element.idtaikhoan)),
                     name: element.tentaikhoan,
                     color: element.color,
                     amount: element.tieudung.sotien,
@@ -85,23 +86,27 @@ export const queryLoan=({walletName, minAmount, maxAmount}) => new Promise((reso
         resolve(rsarr)
     }),reason => reject(reason)
 })
-export const deleteLoan= ({walletId}) => new Promise((resolve, reject) => {
+export const deleteWallet= (walletId) => new Promise((resolve, reject) => {
     try {
-        let id =new MongoId(walletId)
+        let id =new BSON.ObjectId(walletId)
         let rs=deleteTaiKhoan(id)
-        resolve(resolve)
+        resolve(rs)
+        return true
     } catch (error) {
         reject(console.error())
+        return false
     }
 })
 
-export const deactivateLoan= ({walletId}) => new Promise((resolve, reject) => {
+export const deactivateWallet= (walletId) => new Promise((resolve, reject) => {
     try {
-        let id =new MongoId(walletId)
+        let id =new BSON.ObjectId(walletId)
         let rs=deactiavteTaiKhoan(id)
-        resolve(resolve)
+        resolve(rs)
+        return true
     } catch (error) {
         reject(console.error())
+        return false
     }
 })
 

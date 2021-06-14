@@ -1,13 +1,13 @@
-import {queryTaiKhoan,insertTaiKhoan, deleteTaiKhoan}from '../services/TaiKhoanCRUD';
+import {queryTaiKhoan,insertTaiKhoan, deleteTaiKhoan, deactiavteTaiKhoan}from '../services/TaiKhoanCRUD';
 import {BSON} from 'realm'
 import { updateTaiKhoan } from '../services/TaiKhoanCRUD';
 
 
-export const fetchLoan= ({loanId}) => new Promise((resolve, reject) => {
+export const fetchLoan= (loanId) => new Promise((resolve, reject) => {
     queryTaiKhoan({idtaikhoan:loanId}).then((tk)=> {
         let rs =
         {
-            loanId: tk[0].idtaikhoan,
+            loanId: JSON.parse(JSON.stringify(tk[0].idtaikhoan)),
             name: tk[0].tentaikhoan,
             color: tk[0].color,
             amount: tk[0].no.sotien,
@@ -15,8 +15,8 @@ export const fetchLoan= ({loanId}) => new Promise((resolve, reject) => {
             interest: tk[0].no.laisuatno,
             creationDate: tk[0].no.ngaybatdauno
         }       
-        resolve(rs)
-    }), reason=> {reject(reason)}
+        return resolve(rs)
+    }), reason=> {return reject(reason)}
 })
 export const saveLoan= ({loanId,loanName, color, amount, expire_on, interest, creationDate, cycle}) => new Promise((resolve, reject) => {
     if(loanId ===undefined){
@@ -40,11 +40,12 @@ export const saveLoan= ({loanId,loanName, color, amount, expire_on, interest, cr
                 sotientradukien: amount,  
             },
         }
-        insertTaiKhoan(newtaikhoanno).then((tk)=>{resolve(true)}, (reason) => {reject(reason)})
+        insertTaiKhoan(newtaikhoanno).then((tk)=>{return resolve(true)}, (reason) => {return reject(reason)})
     }
     else{
-        queryTaiKhoan({taikhoanno: true,idtaikhoan:loanId}).then((tk)=>{
-            let rs =
+        id= new BSON.ObjectId(loanId)
+        queryTaiKhoan({idtaikhoan: id}).then((tk)=> {
+                let rs =
             {
                 idtaikhoan:tk[0].idtaikhoan,
                 tentaikhoan: tk[0].tentaikhoan,  
@@ -65,36 +66,30 @@ export const saveLoan= ({loanId,loanName, color, amount, expire_on, interest, cr
                     sotientradukien: tk[0].no.sotientradukien,  
                 },
             }
-            if(typeof loanName!==  'undefined') rs.tentaikhoan =loanName
-            console.log(typeof(amount))
-            console.log(typeof(rs.no.sotien))
-            if(typeof amount!==  'undefined') {
-                rs.no.sotien=amount;
-              }
-            if(typeof color!==  'undefined')  rs.color= color
-            if(typeof interest!==  'undefined') rs.no.laisuatno =interest
-            if(typeof cycle!==  'undefined') rs.no.kyhanno =cycle
-            if(typeof expire_on!==  'undefined') rs.no.ngaytradukien =expire_on
-            console.log(JSON.stringify(rs))
-            updateTaiKhoan(rs).then(tk=> resolve(true)), (reason)=> reject(reason)
-        }, (reason) => {
-            reject(reason)
+            if(typeof loanName!=  'undefined') rs.tentaikhoan =loanName
+            if(typeof amount!=  'undefined') rs.no.sotien=amount        
+            if(typeof color!=  'undefined')  rs.color= color
+            if(typeof interest!=  'undefined') rs.no.laisuatno =interest
+            if(typeof cycle!=  'undefined') rs.no.kyhanno =cycle
+            if(typeof expire_on!=  'undefined') rs.no.ngaytradukien =expire_on
+            //console.log(JSON.parse(JSON.stringify(rs)))
+            resolve(updateTaiKhoan(rs))
+            return 
+        })
         }
-        )
     }
-})
+)
 
 export const queryLoan=({loanName, minAmount, maxAmount, expire_in_days}) => new Promise((resolve, reject) => {
     let today = new Date()
     let endday = today.addDays(expire_in_days)
     queryTaiKhoan({deactivate:false,taikhoanno: true,tentaikhoan:loanName, nominAmount:minAmount ,nomaxAmount:maxAmount}).then((rs)=> {
-        //console.log(JSON.stringify(rs))
         let rsarr=[]
         rs.forEach(element => {
-            if(element.no.expire_on<=expire_in_days)
+            //if(element.no.expire_on<=expire_in_days)
             rsarr.push(
                 {
-                    loanId: element.idtaikhoan,
+                    loanId: JSON.parse(JSON.stringify(element.idtaikhoan)),
                     name: element.tentaikhoan,
                     color: element.color,
                     amount: element.no.sotien,
@@ -104,27 +99,35 @@ export const queryLoan=({loanName, minAmount, maxAmount, expire_in_days}) => new
                 }
             )
         });
-        //console.log(rsarr)
+         //console.log(JSON.stringify(rs))
+        // console.log(JSON.stringify(rsarr))
+
         resolve(rsarr)
     }),reason => reject(reason)
 })
-export const deleteLoan= ({loanId}) => new Promise((resolve, reject) => {
+export const deleteLoan= (loanId) => new Promise((resolve, reject) => {
     try {
-        let id =new MongoId(loanId)
-        let rs=deleteTaiKhoan(id)
-        resolve(resolve)
+        let id =new BSON.ObjectId(loanId)
+        // console.log(loanId)
+        deleteTaiKhoan(loanId).then((id)=>{       
+        resolve(tk)
+        return true
+    })
+
     } catch (error) {
-        reject(console.error())
+        reject(console.error(error))
+        return false 
     }
 })
 
-export const deactivateLoan= ({loanId}) => new Promise((resolve, reject) => {
+export const deactivateLoan= (loanId) => new Promise((resolve, reject) => {
     try {
-        let id =new MongoId(loanId)
-        let rs=deactiavteTaiKhoan(id)
-        resolve(resolve)
+        let rs=deactiavteTaiKhoan(loanId)
+        resolve(rs)
+        return true
     } catch (error) {
         reject(console.error())
+        return false
     }
 })
 

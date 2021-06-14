@@ -5,6 +5,8 @@ export const NguoiDungSchema = {
   //embeded: true,
   properties: {
     idnguoidung: 'objectId',
+    username:'string',
+    email:'string?',
     pass: 'string',
     deleted: { type: 'bool', default: false },
   },
@@ -20,7 +22,7 @@ export const TaiKhoanSchema = {
 
     deactivate: { type: 'bool', default: false },
     bieutuong: 'string',
-    color: 'string',
+    color: 'string?',
     thoigiantao: 'date?',
     idnguoidung: 'objectId?',
     tieudung:'TKTieuDung?',
@@ -132,7 +134,7 @@ export const GiaoDichTheoCKSchema={
     chukygiaodichtheothang: 'int?',
     thoigiancuoicungcheck: 'date',
     //add because UI demand
-    thoigianbatdau: 'date',
+    thoigianbatdau: 'date?',
     ghichu: 'string?',
     name: 'string?',
     color:'string?',

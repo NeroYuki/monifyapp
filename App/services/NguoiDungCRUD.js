@@ -1,4 +1,4 @@
-import Realm, { schemaVersion } from 'realm';
+\import Realm, { schemaVersion } from 'realm';
 import {NguoiDungSchema,monifydata} from './Schema'
 
 export const insertNewNguoiDung = newNguoiDung => new Promise((resolve,reject)=> {
@@ -15,6 +15,7 @@ export const updateNguoiDung = nguoiDung => new Promise((resolve,reject)=> {
     Realm.open(monifydata).then(realm => {
         realm.write(()=> {
             let updatingNguoiDung =realm.objectForPrimaryKey(NguoiDungSchema.name,nguoiDung.idnguoidung);
+            updateNguoiDung.username=nguoiDung.username;
             updatingNguoiDung.pass=nguoiDung.pass;
             resolve('thanhcong');
         });

@@ -19,11 +19,11 @@ test('testing logic saveTransaction', async () => {
     // expect(JSON.parse(JSON.stringify(await insertCaiDat(caidattest)))).toStrictEqual(JSON.parse(JSON.stringify(caidattest)))
 })
 
-test('testing logic deleteTransaction', async () => {
-    console.log(JSON.parse(JSON.stringify(await deleteTransaction({transactionId:'60c36e1cc1d2c0bb15fd9a3d'}))))
-    // console.log(caidattest)
-    // expect(JSON.parse(JSON.stringify(await insertCaiDat(caidattest)))).toStrictEqual(JSON.parse(JSON.stringify(caidattest)))
-})
+// test('testing logic deleteTransaction', async () => {
+//     console.log(JSON.parse(JSON.stringify(await deleteTransaction({transactionId:'60c36e1cc1d2c0bb15fd9a3d'}))))
+//     // console.log(caidattest)
+//     // expect(JSON.parse(JSON.stringify(await insertCaiDat(caidattest)))).toStrictEqual(JSON.parse(JSON.stringify(caidattest)))
+// })
 
 test('testing logic fetchTransaction', async () => {
     console.log(JSON.parse(JSON.stringify(await fetchTransaction({}))))

@@ -49,11 +49,11 @@ test('testing logic saveBudget', async () => {
     // expect(JSON.parse(JSON.stringify(await insertCaiDat(caidattest)))).toStrictEqual(JSON.parse(JSON.stringify(caidattest)))
 })
 
-test('testing logic deleteBudget', async () => {
-    console.log(JSON.parse(JSON.stringify(await deleteBudget({budgetId:'60c229bed53a5da856e26889'}))))
-    // console.log(caidattest)
-    // expect(JSON.parse(JSON.stringify(await insertCaiDat(caidattest)))).toStrictEqual(JSON.parse(JSON.stringify(caidattest)))
-})
+// test('testing logic deleteBudget', async () => {
+//     console.log(JSON.parse(JSON.stringify(await deleteBudget({budgetId:'60c229bed53a5da856e26889'}))))
+//     // console.log(caidattest)
+//     // expect(JSON.parse(JSON.stringify(await insertCaiDat(caidattest)))).toStrictEqual(JSON.parse(JSON.stringify(caidattest)))
+// })
 
 test('testing logic fetchBudget', async () => {
     console.log(JSON.parse(JSON.stringify(await fetchBudget({budgetId:'60c2e2de9ef12535790d2d1b'}))))

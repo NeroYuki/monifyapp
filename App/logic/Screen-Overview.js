@@ -90,7 +90,7 @@ export const queryTransactions = ({period,start_day,end_day,walletId}) =>
     console.log('date::',JSON.parse(JSON.stringify(date)))
     if(date.length==0)
     {
-        reject([])
+        resolve([])
         return
     }  
     for (let i of date)

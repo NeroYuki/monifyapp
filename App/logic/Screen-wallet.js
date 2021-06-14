@@ -58,7 +58,7 @@ export const saveWallet= ({walletId,walletName, color, amount}) => new Promise((
                 rs.tieudung.sotien=amount;
               }
             if(typeof color!==  'undefined')  rs.color= color
-            console.log(JSON.stringify(rs))
+           // console.log(JSON.stringify(rs))
             updateTaiKhoan(rs).then(tk=> resolve(true)), (reason)=> reject(reason)
         }, (reason) => {
             reject(reason)

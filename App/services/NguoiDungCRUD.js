@@ -1,4 +1,5 @@
-\import Realm, { schemaVersion } from 'realm';
+import { id } from 'date-fns/locale';
+import Realm, { BSON, schemaVersion } from 'realm';
 import {NguoiDungSchema,monifydata} from './Schema'
 
 export const insertNewNguoiDung = newNguoiDung => new Promise((resolve,reject)=> {
@@ -8,6 +9,7 @@ export const insertNewNguoiDung = newNguoiDung => new Promise((resolve,reject)=>
         realm.write(()=> {
             realm.create(NguoiDungSchema.name,newNguoiDung);
             resolve(newNguoiDung);
+            return
         });
     }).catch((error)=> reject(error));
 });
@@ -18,33 +20,29 @@ export const updateNguoiDung = nguoiDung => new Promise((resolve,reject)=> {
             updateNguoiDung.username=nguoiDung.username;
             updatingNguoiDung.pass=nguoiDung.pass;
             resolve('thanhcong');
+            return
         });
     }).catch((error)=> reject(error));
 });
 export const deleteNguoiDung = nguoiDungId => new Promise((resolve,reject)=>{
     Realm.open(monifydata).then(realm => {
         realm.write(()=> {
-            let deleteintNguoiDung =realm.objectForPrimaryKey(NguoiDungSchema.name,nguoiDungId);
+            let idnguoidung = new BSON.ObjectId(JSON.parse(JSON.stringify(nguoiDungId)))
+            let deleteintNguoiDung =realm.objectForPrimaryKey(NguoiDungSchema.name,idnguoidung);
             realm.delete(deleteintNguoiDung);
-            resolve();
+            resolve('thanh cong');
+            return
         });
     }).catch((error)=> reject(error));
 }); 
 export const softDeleteNguoiDung = nguoiDungId => new Promise((resolve,reject)=>{
     Realm.open(monifydata).then(realm => {
         realm.write(()=> {
-            let deleteintNguoiDung =realm.objectForPrimaryKey(NguoiDungSchema.name,nguoiDungId);
+            let idnguoidung = new BSON.ObjectId(JSON.parse(JSON.stringify(nguoiDungId)))
+            let deleteintNguoiDung =realm.objectForPrimaryKey(NguoiDungSchema.name,idnguoidung);
             deleteintNguoiDung.deleted=true
-            resolve('thanhcong');
-        });
-    }).catch((error)=> reject(error));
-}); 
-export const deleteAllNguoiDung = () => new Promise((resolve,reject)=>{
-    Realm.open(monifydata).then(realm => {
-        realm.write(()=> {
-            let delAllNguoiDungs =realm.objects(NguoiDungSchema.name);
-            realm.delete(delAllNguoiDungs);
-            resolve(delAllNguoiDungs);
+            resolve(1);
+            return
         });
     }).catch((error)=> reject(error));
 }); 
@@ -52,10 +50,22 @@ export const deleteAllNguoiDung = () => new Promise((resolve,reject)=>{
 export const queryAllNguoiDung = (option) =>new Promise((resolve,reject)=>{
     Realm.open(monifydata).then(realm => {
         let allNguoiDungs = realm.objects(NguoiDungSchema.name);
-        if(option == 1){
+        if(option.deleted == 1){
             allNguoiDungs=allNguoiDungs.filtered('deleted==true')
         }
+        if(option.deleted == 0){
+            allNguoiDungs=allNguoiDungs.filtered('deleted==false')
+        }
         resolve(allNguoiDungs);
+        return
     }).catch((error)=> reject(error));
 });
 
+export const queryNguoiDung = (id) =>new Promise((resolve,reject)=>{
+    Realm.open(monifydata).then(realm => {
+        //console.log(JSON.parse(JSON.stringify(id)))
+        let idnguoidung = new BSON.ObjectId(JSON.parse(JSON.stringify(id)))
+        let nguoidung =realm.objectForPrimaryKey(NguoiDungSchema.name,idnguoidung);
+        resolve(nguoidung);
+    }).catch((error)=> reject(error));
+});

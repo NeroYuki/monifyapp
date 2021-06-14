@@ -78,7 +78,7 @@ export const insertTaiKhoan = (newTaiKhoan,loaitaikhoan) =>
           })      
         }
       }
-    }).catch((error)=> console.error(error))
+    }).catch((error)=> reject(console.error(error)))
   });
 
 export const updateTaiKhoan =  updateTaiKhoan =>  
@@ -157,7 +157,7 @@ export const queryTaiKhoan = (option) =>
         }
         resolve(Target)
       })
-    }).catch((error)=> console.error(error));
+    }).catch((error)=>{ console.error(error); reject (error)});
   })
 
 

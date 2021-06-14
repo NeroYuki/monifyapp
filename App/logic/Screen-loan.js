@@ -109,7 +109,7 @@ export const deleteLoan= (loanId) => new Promise((resolve, reject) => {
     try {
         let id =new BSON.ObjectId(loanId)
         // console.log(loanId)
-        deleteTaiKhoan(loanId).then((id)=>{       
+        deleteTaiKhoan(id).then((tk)=>{       
         resolve(tk)
         return true
     })

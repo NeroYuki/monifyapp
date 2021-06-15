@@ -1,50 +1,73 @@
 import React, { Component } from "react";
 // import { stylesheet } from './style'
-import { Text, View, StyleSheet, TextInput, SectionList, FlatList, Image } from "react-native";
-import { Button, Divider } from 'react-native-paper';
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { COLORS, icons } from "../../assets/constants";
+import { Text, View, StyleSheet, TextInput, TouchableOpacity, FlatList, Image, Alert } from "react-native";
+import { COLORS } from "../../assets/constants";
 
 import { RadioButton } from "react-native-paper"
-
+import { iconData } from "../../appdata/iconData";
+import { saveCategory } from "../../logic/Component-CategoryEditor";
 
 export class CategoryEditor extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            name: '',
             selectedType: 'Income',
-            DATA: [
-                {
-                    id: '1',
-                    text: 'Long',
-                    source: icons.foodIcon,
-                },
-                {
-                    id: '2',
-                    text: 'Yeu',
-                    source: icons.bonusIcon,
-                },
-                {
-                    id: '3',
-                    text: 'Yen',
-                    source: icons.clothesIcon,
-                },
-            ],
+            selectedIcon: '',
+            DATA: iconData
         }
     }
 
     RenderItem = ({ items }) => (
-        <View style={{ justifyContent: 'center', alignItems: 'center', height: 48, width: 48, marginVertical: 8, marginHorizontal: 8, }}>
+        <TouchableOpacity
+            style={{ justifyContent: 'center', alignItems: 'center', height: 48, width: 48, marginVertical: 8, marginHorizontal: 8, }}
+            onPress={() => {
+                this.setState({ selectedIcon: items.item.source })
+            }}
+        >
             <Image
                 source={items.item.source}
                 style={{
-                    height: 48,
-                    width: 48,
+                    height: (this.state.selectedIcon == items.item.source) ? 64 : 48,
+                    width: (this.state.selectedIcon == items.item.source) ? 64 : 48,
                 }}
                 resizeMode='contain'
             />
-        </View>
+        </TouchableOpacity>
     );
+
+    handleSaveCategory = async () => {
+        console.log("Handle Save Category")
+
+        if (this.state.name == '' || this.state.selectedIcon == '') {
+            Alert.alert(
+                "Something wrong!",
+                "Please fill in all the field",
+                [
+                    {
+                        text: "Cancel",
+                        onPress: () => console.log("Cancel Pressed"),
+                        style: "cancel"
+                    },
+                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                ]
+            )
+        }
+        else {
+            hangmucgiaodich = {
+                userid: '60c0cb55a09b8f641df3ca14',
+                name: this.state.name,
+                icon: String(this.state.selectedIcon),
+                loaihangmuc: (this.state.selectedType == 'Income') ? 'thunhap' : 'chitieu',
+                color: '#fdfd96'
+            }
+
+            console.log(JSON.parse(JSON.stringify(await saveCategory(hangmucgiaodich))))
+
+            this.props.onDismiss()
+        }
+
+    }
 
 
     render() {
@@ -68,7 +91,12 @@ export class CategoryEditor extends Component {
                                 fontSize: 17
                             }}
                             placeholder="Required"
-                            onChangeText={text => console.log(text)}
+                            onChangeText={text => {
+                                // console.log(text)
+                                this.setState({
+                                    name: text,
+                                })
+                            }}
                         />
                     </View>
                 </View>
@@ -108,12 +136,10 @@ export class CategoryEditor extends Component {
                     <View style={{ flex: 1, marginLeft: 16 }}>
                         <FlatList
                             style={{ flex: 1, padding: 8 }}
-                            // numColumns={2}
                             horizontal
                             data={this.state.DATA}
                             keyExtractor={items => items.id}
                             renderItem={(items) => {
-                                // console.log(items)
                                 return (
                                     <this.RenderItem items={items} />
                                 )
@@ -123,9 +149,12 @@ export class CategoryEditor extends Component {
                 </View>
 
                 <View style={{ height: 100, justifyContent: 'center', alignItems: 'center' }}>
-                    <View style={styles.button}>
+                    <TouchableOpacity
+                        style={styles.button}
+                        onPress={this.handleSaveCategory}
+                    >
                         <Text style={{ color: COLORS.white, fontSize: 17 }}>SAVE</Text>
-                    </View>
+                    </TouchableOpacity>
                 </View>
 
             </View>

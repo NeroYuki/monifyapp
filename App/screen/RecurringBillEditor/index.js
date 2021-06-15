@@ -1,12 +1,10 @@
 import React, { Component } from "react";
-import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { ScrollView, TouchableOpacity, View } from "react-native";
 import { stylesheet } from './style'
 import { ColorPickerModal, GenericInputModal, GenericSelectionModal, GenericSettingField } from '../../components'
 import { FAB } from "react-native-paper";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { saveBill } from "../../logic/screen-RecurringBillEditor";
-import { saveSetting } from "../../logic/Screen-AppearanceSetting";
 
 export class RecurringBillEditor extends Component {
     constructor(props) {
@@ -38,13 +36,13 @@ export class RecurringBillEditor extends Component {
         console.log("SAVE BILL")
 
         let thoigiancuoicungcheck = new Date('2011-04-11T10:20:30.000Z')
-        let Bill = {
-            // billId: '60c0d8c26638c98738494f2e',
-            userId: '60c0cb55a09b8f641df3ca14',
-            loaihangmucId: '60c0cb2a62cd926b5f692f72',//60c2124cff795ef6c9ba7d59,60c1e454c706ae2f3930f623
-            name: 'SSCI',
+        Bill = {
+            billId: '60c0d8c26638c98738494f2e',
+            userId: '60bf81c035582676b155066e',
+            loaihangmucId: '60c1e454c706ae2f3930f623',//60c2124cff795ef6c9ba7d59,60c1e454c706ae2f3930f623
+            name: 'FOOD',
             color: '#00000',
-            note: 'bán hàng tự vận',
+            note: 'Sextoyys',
             amount: 696969,
             cycle_start: thoigiancuoicungcheck,
             cycle_duration_day: 5,

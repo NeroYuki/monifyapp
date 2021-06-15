@@ -5,6 +5,9 @@ import { stylesheet } from './style'
 import { FAB } from 'react-native-paper'
 import { fetchSetting, saveSetting } from "../../logic/Screen-AppearanceSetting";
 
+const Realm = require('realm');
+
+
 export class AppearanceSetting extends Component {
     constructor(props) {
         super(props)
@@ -35,10 +38,12 @@ export class AppearanceSetting extends Component {
         var data = await fetchSetting({})
         console.log(data)
 
+
         this.setState({
             appThemeCurrent: data.chedo,
             languageCurrent: (data.ngonngu == 'EN') ? 'English' : 'Vietnam',
-            currencyCurrent: (data.loaitien)
+            currencyCurrent: (data.loaitien),
+            strictModeCurrent: (data.chedo == true) ? 'Enable' : 'Disable',
         })
     }
 
@@ -46,11 +51,11 @@ export class AppearanceSetting extends Component {
         console.log("Save Setting")
 
         var caidattest = {
-            // idnguoidung: '60c5c67c3576c0078f3bc622',
-            loaitien: 'USD',
-            chedo: 'Light',
-            ngonngu: 'EN',
-            chedonghiemngat: true,
+            idnguoidung: '60c5c67c3576c0078f3bc622',
+            loaitien: this.state.currencyCurrent,
+            chedo: this.state.appThemeCurrent,
+            ngonngu: this.state.languageCurrent,
+            chedonghiemngat: (this.state.strictModeCurrent == 'Enable') ? true : false,
         }
 
         console.log(await saveSetting(caidattest))

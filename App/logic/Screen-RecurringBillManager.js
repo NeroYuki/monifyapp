@@ -6,8 +6,11 @@ export const queryBill = ({billName,minAmount,maxAmount}) =>
     queryGiaoDichChuKy({name: billName})
       .then(giaodich => {
         // console.log(JSON.parse(JSON.stringify(giaodich)))
-        if(!giaodich||giaodich==[])
+        if(!giaodich||giaodich.length==0)
+        {    
             resolve(giaodich)
+            return
+        }
         else
         {
             let kq=giaodich.filter(gd=>{
@@ -39,7 +42,7 @@ export const queryBill = ({billName,minAmount,maxAmount}) =>
 
 export const pauseBill=({billId})=>
 new Promise((resolve, reject) => {
-    updateGiaoDichChuKy({idgiaodichtheochuky:new BSON.ObjectID(billId),pause:true}).then(giaodich=>{
+    updateGiaoDichChuKy({idgiaodichtheochuky:(billId)?new BSON.ObjectID(billId):null,pause:true}).then(giaodich=>{
         // console.log(JSON.parse(JSON.stringify(giaodich)))
         if(giaodich.pause==true)
             resolve({result:true,message:'Pause thành công'})
@@ -50,7 +53,7 @@ new Promise((resolve, reject) => {
 
 export const resumeBill=({billId})=>
 new Promise((resolve, reject) => {
-    updateGiaoDichChuKy({idgiaodichtheochuky:new BSON.ObjectID(billId),pause:false}).then(giaodich=>{
+    updateGiaoDichChuKy({idgiaodichtheochuky:(billId)?new BSON.ObjectID(billId):null,pause:false}).then(giaodich=>{
         if(giaodich.pause==false)
             resolve({result:true,message:'Resume thành công'})
         else
@@ -60,7 +63,7 @@ new Promise((resolve, reject) => {
 
 export const deleteBill=({billId})=>
 new Promise((resolve, reject) => {
-    deleteGiaoDichChuKy({idgiaodichtheochuky:new BSON.ObjectID(billId)}).then(giaodich=>{
+    deleteGiaoDichChuKy({idgiaodichtheochuky:(billId)?new BSON.ObjectID(billId):null}).then(giaodich=>{
         if(giaodich=='ThanhCong')
             resolve({result:true,message:'Delete thành công'})
         else

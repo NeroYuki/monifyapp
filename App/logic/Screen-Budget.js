@@ -11,7 +11,7 @@ export const fetchBugetList = () =>
 
 export const fetchBudget = ({budgetId}) =>
   new Promise((resolve, reject) => {
-    let budid=new BSON.ObjectID(budgetId)
+    let budid=(budgetId)?new BSON.ObjectID(budgetId):null
     queryMucTieuCaNhan({idmuctieu:budid}).then(muctieu=>{
         resolve(muctieu)
     }).catch(err=>reject(err))
@@ -23,7 +23,7 @@ export const saveBudget = ({budgetId,userId,name,loaimuctieu,amount,period,start
     {
         let budget={
             idmuctieu:new BSON.ObjectID(),
-            idnguoidung:new BSON.ObjectID(userId),
+            idnguoidung:(userId)?new BSON.ObjectID(userId):null,
             thoigiantao: new Date(Date.now()),
             loaimuctieu:loaimuctieu,
             sotienmuctieu:amount,
@@ -51,6 +51,7 @@ export const saveBudget = ({budgetId,userId,name,loaimuctieu,amount,period,start
             else
             {
                 reject('không tồn tại loại period tương xứng')
+                return
             }
         }
         else if(!period&&start_day&&end_day)
@@ -61,6 +62,7 @@ export const saveBudget = ({budgetId,userId,name,loaimuctieu,amount,period,start
         else
         {
             reject('Không xử lý được ngày bắt đầu và ngày kết thúc của mục tiêu ')
+            return
         }
         insertMucTieuCaNhan(budget,loaimuctieu).then(muctieu=>{
             if(muctieu)
@@ -71,7 +73,7 @@ export const saveBudget = ({budgetId,userId,name,loaimuctieu,amount,period,start
     }
     else{
         let budget={
-            idmuctieu:new BSON.ObjectID(budgetId),
+            idmuctieu:(budgetId)?new BSON.ObjectID(budgetId):null,
             idnguoidung:(userId)?new BSON.ObjectID(userId):null,
             loaimuctieu:loaimuctieu,
             sotienmuctieu:amount,
@@ -99,6 +101,7 @@ export const saveBudget = ({budgetId,userId,name,loaimuctieu,amount,period,start
             else
             {
                 reject('không tồn tại loại period tương xứng')
+                return
             }
         }
         else if(!period&&start_day&&end_day)
@@ -109,6 +112,7 @@ export const saveBudget = ({budgetId,userId,name,loaimuctieu,amount,period,start
         else if(period||start_day||end_day)
         {
             reject('Không xử lý được ngày bắt đầu và ngày kết thúc của mục tiêu ')
+            return
         }
 
         if(loaimuctieu=='TietKiemDenMuc')
@@ -141,6 +145,7 @@ export const saveBudget = ({budgetId,userId,name,loaimuctieu,amount,period,start
         else if(loaimuctieu!=null)
         {
             reject('Không xử lý được loại mục tiêu')
+            return
         }
         // console.log('budget đây',JSON.parse(JSON.stringify(budget)))
         updateMucTieuCaNhan(budget).then(muctieu=>{
@@ -154,7 +159,7 @@ export const saveBudget = ({budgetId,userId,name,loaimuctieu,amount,period,start
 
 export const deleteBudget = ({budgetId}) =>
   new Promise((resolve, reject) => {
-    let budid=new BSON.ObjectID(budgetId)
+    let budid=(budgetId)?new BSON.ObjectID(budgetId):null
     deleteMucTieuCaNhan({idmuctieu:budid}).then(muctieu=>{
         if(muctieu=='ThanhCong')
             resolve({result:true,message:'Xóa mục tiêu thành công'})

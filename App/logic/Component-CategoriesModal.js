@@ -10,7 +10,12 @@ export const fetchCategories = () =>
 
 export const deleteCategory = ({categoryId})=>
     new Promise((resolve, reject )=>{
-        let catId=new BSON.ObjectID(categoryId)
+        let catId=(categoryId)?new BSON.ObjectID(categoryId):null
+        if(!catId)
+        {
+            resolve({result:false,message:'Xóa hạng mục thất bại'})
+            return
+        }
         deleteHangMucGiaoDich({idhangmucgiaodich:catId}).then(hangmuc=>{
             if(hangmuc=='ThanhCong')
                 resolve({result:true,message:'Xóa hạng mục thành công'})

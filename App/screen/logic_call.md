@@ -33,7 +33,10 @@ return Object({userId: string})
 
 6. screen/Overview
 [TODO] add Overview task
-#### queryTransactions(<?>)
+#### queryTransactions(period:string,start_day:day,end_day:day,walletId:string)
+retun {income,expense,tras:[[tran of day],[tran of day],[tran of day]....]} 
+### queryTranCategories(period:string,start_day:day,end_day:day,walletId:string)
+return {income:[{categoryId:string,amount:number}]],expense:[{categoryId:string,amount:number}]]}
 
 
 
@@ -136,4 +139,4 @@ return Array(Object({loanId: string, name: string, eventName: number(VALUE_UPDAT
 #### checkSavingForCycle()
 return Array(Object({savingId: string, name: string, eventName: number(VALUE_UPDATE = 1, EXPIRE = 2), current_amount: number}))
 #### checkBillForCycle()
-return Array(Object({billId: string, name: string, eventName: number(NEW_TRANSACION = 1, ERROR = 2), amount: number}))
+return Array(Object({billId: string, name: string, eventName: number(NEW_TRANSACION = 1, ERROR = 2,NOWALLET=3), amount: number,loaitien:string}))

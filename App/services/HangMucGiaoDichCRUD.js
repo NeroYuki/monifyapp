@@ -96,7 +96,12 @@ export const updateHangMucGiaoDich=HangMucGiaoDich=> new Promise((resolve,reject
 
 export const deleteHangMucGiaoDich=HangMucGiaoDich=> new Promise((resolve,reject)=>{
     Realm.open(data).then(realm=>{
-        let IDHangMucGiaoDichCop = new BSON.ObjectID(JSON.parse(JSON.stringify(HangMucGiaoDich.idhangmucgiaodich)))
+        let IDHangMucGiaoDichCop = (HangMucGiaoDich.idhangmucgiaodich)?new BSON.ObjectID(JSON.parse(JSON.stringify(HangMucGiaoDich.idhangmucgiaodich))):null
+        if(!IDHangMucGiaoDichCop)
+        {
+          reject('ThatBai')
+          return
+        }
         realm.write(()=>{
             let deleteHangMucGiaoDich=realm.objectForPrimaryKey(HangMucGiaoDichSchema.name,HangMucGiaoDich.idhangmucgiaodich)
             realm.delete(deleteHangMucGiaoDich)

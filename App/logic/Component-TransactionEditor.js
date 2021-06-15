@@ -13,7 +13,7 @@ export const fetchTransaction = ({ transactionId }) =>
 
 export const deleteTransaction = ({ transactionId }) =>
     new Promise((resolve, reject) => {
-        let tranid = new BSON.ObjectID(transactionId)
+        let tranid = (transactionId) ? new BSON.ObjectID(transactionId) : null
         deleteGiaoDich({ idgiaodich: tranid }).then(giaodich => {
             if (giaodich == 'ThanhCong')
                 resolve({ result: true, message: 'Xóa giao dịch thành công' })
@@ -27,18 +27,20 @@ export const saveTransaction = ({ transactionId, userId, note, amount, walletId,
         if (!transactionId) {
             let giaodich = {
                 idgiaodich: new BSON.ObjectID(),
-                idnguoidung: new BSON.ObjectID(userId),
-                thoigian: new Date(occur_date),
-                idtaikhoan: new BSON.ObjectID(walletId),
+                idnguoidung: (userId) ? new BSON.ObjectID(userId) : null,
+                thoigian: (occur_date) ? new Date(occur_date) : null,
+                idtaikhoan: (walletId) ? new BSON.ObjectID(walletId) : null,
                 sotientieudung: null,
                 sotienthunhap: null,
-                loaihangmucgd: new BSON.ObjectID(categoryId),
+                loaihangmucgd: (categoryId) ? new BSON.ObjectID(categoryId) : null,
                 ghichu: note,
             }
             if (categoryId) {
                 await queryHangMucGiaoDich({ idhangmucgiaodich: giaodich.loaihangmucgd }).then(hangmuc => {
-                    if (!hangmuc)
+                    if (hangmuc.length == 0) {
                         reject({ result: false, message: 'Hạng mục không có trong dữ liệu' })
+                        return
+                    }
                     else {
                         if (hangmuc[0].loaihangmuc.chitieu == true) {
                             giaodich.sotientieudung = amount
@@ -48,8 +50,10 @@ export const saveTransaction = ({ transactionId, userId, note, amount, walletId,
                     }
                 }).catch((er) => reject({ result: false, message: er }))
             }
-            else
+            else {
                 reject({ result: false, message: 'Không nhập loại hạng mục' })
+                return
+            }
             insertGiaoDich(giaodich).then(giaodich => {
                 if (giaodich)
                     resolve({ result: true, message: 'Tạo giao dịch thành công' })
@@ -59,7 +63,7 @@ export const saveTransaction = ({ transactionId, userId, note, amount, walletId,
         }
         else {
             let giaodich = {
-                idgiaodich: new BSON.ObjectID(transactionId),
+                idgiaodich: (transactionId) ? new BSON.ObjectID(transactionId) : null,
                 idnguoidung: (userId) ? new BSON.ObjectID(userId) : null,
                 thoigian: (occur_date) ? new Date(occur_date) : null,
                 idtaikhoan: (walletId) ? new BSON.ObjectID(walletId) : null,
@@ -69,21 +73,24 @@ export const saveTransaction = ({ transactionId, userId, note, amount, walletId,
                 ghichu: note,
             }
             await queryGiaoDich({ idgiaodich: giaodich.idgiaodich }).then(gd => {
-                if (gd) {
+                if (gd.length != 0) {
                     if (!categoryId) {
-                        giaodich.loaihangmucgd = new BSON.ObjectID(gd.loaihangmucgd)
+                        giaodich.loaihangmucgd = new BSON.ObjectID(gd[0].loaihangmucgd)
                     }
-                    giaodich.sotientieudung = gd.sotientieudung
-                    giaodich.sotienthunhap = gd.sotienthunhap
+                    giaodich.sotientieudung = gd[0].sotientieudung
+                    giaodich.sotienthunhap = gd[0].sotienthunhap
                 }
                 else {
                     reject({ result: false, message: 'Không tìm thấy dử liệu cần cập nhật' })
+                    return
                 }
             })
             if (amount) {
                 await queryHangMucGiaoDich({ idhangmucgiaodich: giaodich.loaihangmucgd }).then(hangmuc => {
-                    if (!hangmuc)
+                    if (hangmuc.length == 0) {
                         reject({ result: false, message: 'Hạng mục không có trong dữ liệu' })
+                        return
+                    }
                     else {
                         if (hangmuc[0].loaihangmuc.chitieu == true) {
                             giaodich.sotientieudung = amount
@@ -98,8 +105,10 @@ export const saveTransaction = ({ transactionId, userId, note, amount, walletId,
             }
             else {
                 await queryHangMucGiaoDich({ idhangmucgiaodich: giaodich.loaihangmucgd }).then(hangmuc => {
-                    if (!hangmuc)
+                    if (hangmuc.length == 0) {
                         reject({ result: false, message: 'Hạng mục không có trong dữ liệu' })
+                        return
+                    }
                     else {
                         if (hangmuc[0].loaihangmuc.chitieu == true) {
                             if (giaodich.sotienthunhap) {

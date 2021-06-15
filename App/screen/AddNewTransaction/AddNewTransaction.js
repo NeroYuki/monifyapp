@@ -41,6 +41,24 @@ export class AddNewTransaction extends Component {
         })
     }
 
+    handleSaveTransaction = async () => {
+        console.log("SAVE TRANSACTION");
+
+        let idtaikhoan = new BSON.ObjectID()
+
+        let GiaoDich = {
+            transactionId: '60c36b9f7ab578ff8656f01b',
+            userId: '60c22a3e29fc94b5464910a8',
+            occur_date: new Date('2011-11-11T10:20:30.000Z'),
+            walletId: idtaikhoan,
+            amount: 6969696,
+            categoryId: '60c1e454c706ae2f3930f623',//60c20d3075a2f3751ad6e731,60c1e454c706ae2f3930f623
+            note: 'Tiền chơi gáiii',
+        }
+
+        console.log(JSON.parse(JSON.stringify(await saveTransaction(GiaoDich))))
+    }
+
     render() {
         return (
             <SafeAreaView style={{ backgroundColor: 'white' }}>
@@ -123,7 +141,10 @@ export class AddNewTransaction extends Component {
 
                     {/* Button  */}
                     <View style={{ height: 64, top: 50, flexDirection: 'row' }}>
-                        <TouchableOpacity style={{ flex: 1, justifyContent: 'center', marginRight: 16, marginLeft: 16 }}>
+                        <TouchableOpacity
+                            style={{ flex: 1, justifyContent: 'center', marginRight: 16, marginLeft: 16 }}
+                            onPress={this.handleSaveTransaction}
+                        >
                             <View style={styles.button}>
                                 <Text style={{ fontSize: 17, color: COLORS.white }}> SAVE </Text>
                             </View>

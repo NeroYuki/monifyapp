@@ -23,7 +23,6 @@ export const login = ({username, password})=> new Promise((resovle, reject) => {
 })
 export const fetchuser = (userId)=> new Promise((resovle, reject) => {
     queryNguoiDung(userId).then((nguoidung)=>{
-        console.log(JSON.parse(JSON.stringify(nguoidung)))
         if(nguoidung != null){
         let rs = {
             idnguoidung: JSON.parse(JSON.stringify(nguoidung.idnguoidung)),
@@ -32,7 +31,6 @@ export const fetchuser = (userId)=> new Promise((resovle, reject) => {
             pass: nguoidung.pass,
             deleted: nguoidung.deleted
         }  
-        console.log(JSON.parse(JSON.stringify(rs)))      
         resovle(rs)
         }
         else

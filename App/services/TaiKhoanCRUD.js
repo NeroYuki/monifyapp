@@ -97,6 +97,55 @@ export const updateTaiKhoan =  updateTaiKhoan =>
       })
     }).catch((error)=> reject(error));
   });
+
+export const updateTaikhoanNo = ({taikhoannoid, sotienthem}) => {
+  new Promise((resolve,reject)=> {
+    Realm.open(data).then(realm=> {
+      realm.write(()=>{
+        let tempid = new BSON.ObjectID(JSON.parse(JSON.stringify(taikhoannoid)))
+        let taiKhoanUpdated = realm.objectForPrimaryKey(TaiKhoanSchema.name,sotienthem)
+        if(taiKhoanUpdated.no!=null) {
+        taiKhoanUpdated.no.sotien += sotienthem;
+        resolve(true)
+        }
+        else resolve(false)
+        return
+      })
+    }).catch((error)=> reject(error));
+  })
+}
+export const updateTaikhoanTieudung = ({taikhoantieudungid, sotienthem}) => {
+  new Promise((resolve,reject)=> {
+    Realm.open(data).then(realm=> {
+      realm.write(()=>{
+        let tempid = new BSON.ObjectID(JSON.parse(JSON.stringify(taikhoantieudungid)))
+        let taiKhoanUpdated = realm.objectForPrimaryKey(TaiKhoanSchema.name,tempid)
+        if(taiKhoanUpdated.tieudung!=null) {
+        taiKhoanUpdated.tieudung.sotien += sotienthem;
+        resolve(true)
+        }
+        else resolve(false)
+        return
+      })
+    }).catch((error)=> reject(error));
+  })
+}
+export const updateTaikhoanTietKiem = ({taikhoantietkiemid, sotienthem}) => {
+  new Promise((resolve,reject)=> {
+    Realm.open(data).then(realm=> {
+      realm.write(()=>{
+        let tempid = new BSON.ObjectID(JSON.parse(JSON.stringify(taikhoantietkiemid)))
+        let taiKhoanUpdated = realm.objectForPrimaryKey(TaiKhoanSchema.name,tempid)
+        if(taiKhoanUpdated.tietkiem!=null) {
+        taiKhoanUpdated.tietkiem.sotien += sotienthem;
+        resolve(true)
+        }
+        else resolve(false)
+        return
+      })
+    }).catch((error)=> reject(error));
+  })
+}
 export const queryTaiKhoan = (option) =>
   new Promise((resolve,reject)=> {
     Realm.open(data).then(realm => {

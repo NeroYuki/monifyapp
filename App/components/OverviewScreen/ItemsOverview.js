@@ -9,45 +9,89 @@ export class ItemsOverView extends Component {
         super(props)
 
         this.state = {
-            data: [
-                {
-                    title: "TUESDAY, 5 MAR",
-                    total: '+350.000',
-                    data: [
-                        {
-                            key: 'Salary',
-                            money: '450.000',
-                            describe: '',
-                        },
-                        {
-                            key: 'Food',
-                            money: '300.000',
-                            describe: 'Chocolate + Milk'
-                        },
-                    ]
-                },
-                {
-                    title: "TUESDAY, 3 MAR",
-                    total: '-250.000',
-                    data: [
-                        {
-                            key: 'Internet',
-                            money: '200.000',
-                            describe: '',
-                        },
-                        {
-                            key: 'Food',
-                            money: '50.000',
-                            describe: ''
-                        },
-                    ]
-                },
-            ]
+            // data: [
+            //     {
+            //         title: "TUESDAY, 5 MAR",
+            //         total: '+350.000',
+            //         data: [
+            //             {
+            //                 key: 'Salary',
+            //                 money: '450.000',
+            //                 describe: '',
+            //             },
+            //             {
+            //                 key: 'Food',
+            //                 money: '300.000',
+            //                 describe: 'Chocolate + Milk'
+            //             },
+            //         ]
+            //     },
+            //     {
+            //         title: "TUESDAY, 3 MAR",
+            //         total: '-250.000',
+            //         data: [
+            //             {
+            //                 key: 'Internet',
+            //                 money: '200.000',
+            //                 describe: '',
+            //             },
+            //             {
+            //                 key: 'Food',
+            //                 money: '50.000',
+            //                 describe: ''
+            //             },
+            //         ]
+            //     },
+            // ]
+            data: ''
         };
+    }
+
+    componentDidMount() {
+
+        console.log("COMPONENT DIT MOUNT")
+        var dataFetched = this.props.data
+
+        console.log("DATA TRANS: ", dataFetched)
+
+        var trans = []
+
+        for (var i in dataFetched) {
+            var value = {
+                title: dataFetched[i].time,
+                total: '',
+                data: dataFetched[i].data
+            }
+
+            trans.push(value)
+        }
+
+        this.setState({ data: trans })
+    }
+
+    filterDataToState = () => {
+        var dataFetched = this.props.data
+
+        console.log("DATA TRANS: ", dataFetched)
+
+        var trans = []
+
+        for (var i in dataFetched) {
+            var value = {
+                title: dataFetched[i].time,
+                total: '',
+                data: dataFetched[i].data
+            }
+
+            trans.push(value)
+        }
+
+        this.setState({ data: trans })
     }
 
 
     Item = ({ items }) => (
+
         <TouchableOpacity
             style={styles.item}
             // onPress={this.props.onPressTransactionEditor}
@@ -67,10 +111,10 @@ export class ItemsOverView extends Component {
                 />
                 <View style={{ flex: 1, marginLeft: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={styles.title}>{items.key}</Text>
-                        <Text style={styles.describe}>   {items.describe}  </Text>
+                        <Text style={styles.title}>Food</Text>
+                        <Text style={styles.describe}>   Hamburger  </Text>
                     </View>
-                    <Text style={styles.title}>{items.money}</Text>
+                    <Text style={styles.title}>10000</Text>
                 </View>
 
             </View>
@@ -96,6 +140,7 @@ export class ItemsOverView extends Component {
     );
 
     render() {
+        console.log("STATE DATA: ", this.state)
         return (
             <View style={styles.container}>
                 <SectionList

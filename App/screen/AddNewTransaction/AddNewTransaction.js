@@ -24,7 +24,6 @@ export class AddNewTransaction extends Component {
             icon: '',
             note: '',
             currentDate: new Date(),
-            currentDateString: new Date().toString(),
             recurring: 'Never repeat',
         }
 
@@ -39,14 +38,15 @@ export class AddNewTransaction extends Component {
         })
     }
 
-    onChangeDateTime(selectedDate) {
-        const currentDate = selectedDate || this.state.customDate;
+    onChangeDateTime = (event, selectedDate) => {
+        console.log(selectedDate)
 
-        console.log(currentDate)
+        const date = selectedDate || this.state.currentDate;
+
+        console.log("CHOOSDE DATE: ", date)
         this.setState({
-            currentDate: currentDate,
-            currentDateString: currentDate.toString(),
-            showPickerDialog: false
+            currentDate: date,
+            showPickerDialog: (Platform.OS === 'ios')
         })
     }
 
@@ -146,8 +146,7 @@ export class AddNewTransaction extends Component {
                         >
                             <View style={styles.info_field_item}>
                                 <Icon name="calendar" size={24} />
-                                <Text style={styles.info_field_item_text}>{this.state.currentDateString}</Text>
-
+                                <Text style={styles.info_field_item_text}>{this.state.currentDate.toDateString()}</Text>
                             </View>
                         </TouchableOpacity>
 
@@ -166,6 +165,24 @@ export class AddNewTransaction extends Component {
 
                         <Divider style={{ height: 1 }} />
                     </View>
+
+                    {this.state.showPickerDialog && (
+                        <DateTimePicker
+                            testID="dateTimePicker"
+                            value={this.state.currentDate}
+                            mode={'date'}
+                            is24Hour={true}
+                            display="default"
+                            onChange={this.onChangeDateTime}
+                            style={{
+                                height: 40,
+                                width: 400,
+                                backgroundColor: COLORS.white,
+                                color: COLORS.white
+
+                            }}
+                        />
+                    )}
 
                     {/* Button  */}
                     <View style={{ height: 64, top: 50, flexDirection: 'row' }}>
@@ -194,23 +211,7 @@ export class AddNewTransaction extends Component {
                     onRequestClose={() => { this.setState({ categoriesVisible: false }) }}
                 />
 
-                {this.state.showPickerDialog && (
-                    <DateTimePicker
-                        testID="dateTimePicker"
-                        value={this.state.currentDate}
-                        mode={'date'}
-                        is24Hour={true}
-                        display='default'
-                        onChange={this.onChangeDateTime}
-                        style={{
-                            height: 40,
-                            width: 400,
-                            backgroundColor: COLORS.pink,
-                            color: COLORS.black
 
-                        }}
-                    />
-                )}
             </SafeAreaView>
 
         )

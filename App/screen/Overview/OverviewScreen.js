@@ -11,6 +11,7 @@ import { TransactionModal } from "../../components/TransactionEditor/Transaction
 
 import Moment from 'moment'
 import { format, addDays, addMonths, addYears } from 'date-fns'
+import { queryTransactions } from "../../logic/Screen-Overview";
 
 export class OverviewScreen extends Component {
     constructor(props) {
@@ -23,10 +24,11 @@ export class OverviewScreen extends Component {
             periodVisible: false,
             expenseOrIncomeVisible: false,
 
-            // Tap on item report then set data on this
-            currentData: {
+            // All trans data 
+            overviewData: {},
 
-            },
+            // Tap on item report then set data on this
+            currentData: {},
 
             dateTime: "",
         }
@@ -45,6 +47,23 @@ export class OverviewScreen extends Component {
         this.increasePeriod = this.increasePeriod.bind(this)
     }
 
+    componentDidMount() {
+        console.log("COMPONENT DID MOUNT")
+        this.getDate()
+
+        this.getDataOverview()
+    }
+
+    getDataOverview = async () => {
+
+        var data = JSON.parse(JSON.stringify(await queryTransactions({ walletId: '60c96efa9bd6d1e6e1aed7a6' })))
+
+        this.setState({
+            overviewData: data,
+        })
+
+    }
+
     getDate() {
 
         // Becuz getMonth() start from 0. You need to date.getMonth() - 1 to achieve what u want
@@ -52,7 +71,7 @@ export class OverviewScreen extends Component {
 
         var date = {
             currentTime: format(new Date(), 'MMM yyyy'),
-            otherFormat: new Date(basicFormat.setMonth(basicFormat.getMonth() - 1))
+            otherFormat: new Date(basicFormat.setMonth(basicFormat.getMonth()))
         };
 
         this.setState({
@@ -92,11 +111,6 @@ export class OverviewScreen extends Component {
         });
     }
 
-
-    componentDidMount() {
-        console.log("COMPONENT DID MOUNT")
-        this.getDate()
-    }
 
     // MARK: - CALL MODAL
     onCategoriesPress() {
@@ -139,19 +153,29 @@ export class OverviewScreen extends Component {
     reportView = () => {
         return (
             (!this.state.chartView) ?
-                <ItemsOverView onPressTransactionEditor={this.onPressTransactionEditor} />
+                <ItemsOverView
+                    onPressTransactionEditor={this.onPressTransactionEditor}
+                    data={this.state.overviewData.trans}
+                />
                 :
-                <ChartOverview onPressShowing={this.onPressShowing} />
+                <ChartOverview
+                    onPressShowing={this.onPressShowing}
+
+                />
         )
     }
 
     render() {
+
+        console.log("OVerview Datas: ", this.state.overviewData)
+
         return (
             <SafeAreaView style={{ flex: 1 }}>
                 <ScrollView style={{ flex: 1 }}>
                     <View style={{ flex: 1 }}>
 
                         <WalletHeader
+                            data={this.state.overviewData}
                             currentTab={this.state.chartView}
                             onCategoriesPress={this.onChartCategoriesPress}
                             onListPress={this.onListPress}

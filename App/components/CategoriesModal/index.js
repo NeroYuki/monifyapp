@@ -41,11 +41,13 @@ export class CategoriesModal extends Component {
                 expenses.push({
                     type: value[index].tenhangmuc,
                     icon: value[index].iconhangmuc,
+                    id: value[index].idhangmucgiaodich
                 })
             } else {
                 incomes.push({
                     type: value[index].tenhangmuc,
                     icon: value[index].iconhangmuc,
+                    id: value[index].idhangmucgiaodich
                 })
             }
         }
@@ -55,8 +57,8 @@ export class CategoriesModal extends Component {
             expense_cat_list: expenses,
             income_cat_list: incomes
         })
-        console.log("Expense", expenses)
-        console.log("Income", incomes)
+        // console.log("Expense", expenses)
+        // console.log("Income", incomes)
 
     }
 
@@ -80,7 +82,15 @@ export class CategoriesModal extends Component {
 
                 return (
                     <View style={style.category_entry} key={index}>
-                        <View style={style.category_entry_content}>
+                        <TouchableOpacity style={style.category_entry_content}
+                            onPress={(this.props.chooseIcon) ?
+                                () => {
+                                    this.props.onRequestClose()
+                                    this.props.chooseIcon(val)
+                                }
+                                :
+                                () => { console.log(val) }}
+                        >
                             <Image
                                 source={val.icon}
                                 resizeMode='contain'
@@ -90,7 +100,7 @@ export class CategoriesModal extends Component {
                                 }}
                             />
                             <Text style={[style.modal_text, style.content_list_text]}>{val.type}</Text>
-                        </View>
+                        </TouchableOpacity>
                         <Divider style={{ height: 1, backgroundColor: 'white' }}></Divider>
                     </View>
                 )
@@ -98,7 +108,15 @@ export class CategoriesModal extends Component {
             : (this.state.income_cat_list.map((val, index) => {
                 return (
                     <View style={style.category_entry} key={index}>
-                        <View style={style.category_entry_content}>
+                        <TouchableOpacity style={style.category_entry_content}
+                            onPress={(this.props.chooseIcon) ?
+                                () => {
+                                    this.props.onRequestClose()
+                                    this.props.chooseIcon(val)
+                                }
+                                :
+                                () => { console.log(val) }}
+                        >
                             <Image
                                 source={val.icon}
                                 resizeMode='contain'
@@ -108,7 +126,7 @@ export class CategoriesModal extends Component {
                                 }}
                             />
                             <Text style={[style.modal_text, style.content_list_text]}>{val.type}</Text>
-                        </View>
+                        </TouchableOpacity>
                         <Divider style={{ height: 1, backgroundColor: 'white' }}></Divider>
                     </View>
                 )

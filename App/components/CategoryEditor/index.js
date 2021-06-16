@@ -62,6 +62,8 @@ export class CategoryEditor extends Component {
                 color: '#fdfd96'
             }
 
+            console.log("Hang Muc Giao dich", hangmucgiaodich)
+
             console.log(JSON.parse(JSON.stringify(await saveCategory(hangmucgiaodich))))
 
             this.props.onDismiss()

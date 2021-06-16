@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, SafeAreaView, TextInput, TouchableOpacity } from 'react-native';
+import { View, StyleSheet, Text, SafeAreaView, TextInput, TouchableOpacity, Image } from 'react-native';
 import { Divider } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { COLORS } from '../../assets/constants';
@@ -7,7 +7,7 @@ import { CategoriesModal } from '../../components';
 import { RecurringModal } from '../../components/TransactionEditor/RecurringModal';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
-
+import { saveTransaction } from '../../logic/Component-TransactionEditor';
 
 export class AddNewTransaction extends Component {
 
@@ -17,13 +17,20 @@ export class AddNewTransaction extends Component {
         this.state = {
             categoriesVisible: false,
             recurringVisible: false,
-
-            customDate: new Date(),
             showPickerDialog: false,
+
+            // Data 
+            money: '',
+            icon: '',
+            note: '',
+            currentDate: new Date(),
+            currentDateString: new Date().toString(),
+            recurring: 'Never repeat',
         }
 
         this.openCategoriesModal = this.openCategoriesModal.bind(this)
         this.onChangeDateTime = this.onChangeDateTime.bind(this)
+        this.handleChooseIcon = this.handleChooseIcon.bind(this)
     }
 
     openCategoriesModal() {
@@ -32,28 +39,35 @@ export class AddNewTransaction extends Component {
         })
     }
 
-    onChangeDateTime(event, selectedDate) {
-
+    onChangeDateTime(selectedDate) {
         const currentDate = selectedDate || this.state.customDate;
+
+        console.log(currentDate)
         this.setState({
-            customDate: currentDate,
+            currentDate: currentDate,
+            currentDateString: currentDate.toString(),
             showPickerDialog: false
+        })
+    }
+
+    handleChooseIcon(val) {
+        console.log("ADD NEW TRANS - ICON: ", val)
+        this.setState({
+            icon: val
         })
     }
 
     handleSaveTransaction = async () => {
         console.log("SAVE TRANSACTION");
 
-        let idtaikhoan = new BSON.ObjectID()
-
         let GiaoDich = {
-            transactionId: '60c36b9f7ab578ff8656f01b',
-            userId: '60c22a3e29fc94b5464910a8',
-            occur_date: new Date('2011-11-11T10:20:30.000Z'),
-            walletId: idtaikhoan,
-            amount: 6969696,
-            categoryId: '60c1e454c706ae2f3930f623',//60c20d3075a2f3751ad6e731,60c1e454c706ae2f3930f623
-            note: 'Tiền chơi gáiii',
+            // transactionId: '60c36b9f7ab578ff8656f01b',
+            userId: '60c0cb55a09b8f641df3ca14',
+            occur_date: this.state.currentDate,
+            walletId: '60c96efa9bd6d1e6e1aed7a6',
+            amount: parseInt(this.state.money),
+            categoryId: this.state.icon.id,
+            note: this.state.note,
         }
 
         console.log(JSON.parse(JSON.stringify(await saveTransaction(GiaoDich))))
@@ -79,7 +93,7 @@ export class AddNewTransaction extends Component {
                                 fontWeight: '300'
                             }}
                             placeholder='0'
-                            onChangeText={text => console.log(text)}
+                            onChangeText={text => this.setState({ money: text })}
                         />
                     </View>
 
@@ -88,12 +102,26 @@ export class AddNewTransaction extends Component {
                         <TouchableOpacity
                             onPress={() => {
                                 this.setState({ categoriesVisible: !this.state.categoriesVisible })
-                            }}
-                        >
-                            <View style={styles.info_field_item}>
-                                <Icon name="sack" size={24} />
-                                <Text style={styles.info_field_item_text}>Category</Text>
-                            </View>
+                            }}>
+                            {
+                                (this.state.icon == '') ?
+                                    <View style={styles.info_field_item}>
+                                        <Icon name="sack" size={24} />
+                                        <Text style={styles.info_field_item_text}>Category</Text>
+                                    </View>
+                                    :
+                                    <View style={styles.info_field_item}>
+                                        <Image
+                                            source={this.state.icon.icon}
+                                            resizeMode='contain'
+                                            style={{
+                                                height: 24,
+                                                width: 24,
+                                            }}
+                                        />
+                                        <Text style={styles.info_field_item_text}>{this.state.icon.type}</Text>
+                                    </View>
+                            }
                         </TouchableOpacity>
                         <Divider style={{ height: 1 }} />
 
@@ -108,7 +136,7 @@ export class AddNewTransaction extends Component {
                                 }}
                                 //defaultValue={this.props.currentData.describe}
                                 placeholder="Note"
-                                onChangeText={text => console.log(text)}
+                                onChangeText={text => this.setState({ note: text })}
                             />
                         </View>
                         <Divider style={{ height: 1 }} />
@@ -118,7 +146,7 @@ export class AddNewTransaction extends Component {
                         >
                             <View style={styles.info_field_item}>
                                 <Icon name="calendar" size={24} />
-                                <Text style={styles.info_field_item_text}>Today</Text>
+                                <Text style={styles.info_field_item_text}>{this.state.currentDateString}</Text>
 
                             </View>
                         </TouchableOpacity>
@@ -154,6 +182,7 @@ export class AddNewTransaction extends Component {
 
                 <RecurringModal
                     isVisible={this.state.recurringVisible}
+
                     closePeriod={() => {
                         this.setState({ recurringVisible: false })
                     }}
@@ -161,13 +190,14 @@ export class AddNewTransaction extends Component {
 
                 <CategoriesModal
                     isVisible={this.state.categoriesVisible}
+                    chooseIcon={this.handleChooseIcon}
                     onRequestClose={() => { this.setState({ categoriesVisible: false }) }}
                 />
 
                 {this.state.showPickerDialog && (
                     <DateTimePicker
                         testID="dateTimePicker"
-                        value={this.state.customDate}
+                        value={this.state.currentDate}
                         mode={'date'}
                         is24Hour={true}
                         display='default'

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, SectionList, Text, Image, TouchableOpacity } from 'react-native';
 import { COLORS, icons } from '../../assets/constants';
+import { fetchCategory } from '../../logic/Component-CategoryEditor';
 
 
 export class ItemsOverView extends Component {
@@ -47,9 +48,8 @@ export class ItemsOverView extends Component {
         };
     }
 
-    componentDidMount() {
+    componentDidMount = async () => {
 
-        console.log("COMPONENT DIT MOUNT")
         var dataFetched = this.props.data
 
         console.log("DATA TRANS: ", dataFetched)
@@ -57,10 +57,21 @@ export class ItemsOverView extends Component {
         var trans = []
 
         for (var i in dataFetched) {
+
+            var datas = []
+
+            for (var j in dataFetched[i].data) {
+                var icon = JSON.parse(JSON.stringify(await fetchCategory({ categoryId: dataFetched[i].data[j].loaihangmucgd })))
+                datas.push({
+                    icon: icon,
+                    datas: dataFetched[i].data[j],
+                })
+            }
+
             var value = {
                 title: dataFetched[i].time,
                 total: '',
-                data: dataFetched[i].data
+                data: datas,
             }
 
             trans.push(value)
@@ -68,37 +79,21 @@ export class ItemsOverView extends Component {
 
         this.setState({ data: trans })
     }
-
-    filterDataToState = () => {
-        var dataFetched = this.props.data
-
-        console.log("DATA TRANS: ", dataFetched)
-
-        var trans = []
-
-        for (var i in dataFetched) {
-            var value = {
-                title: dataFetched[i].time,
-                total: '',
-                data: dataFetched[i].data
-            }
-
-            trans.push(value)
-        }
-
-        this.setState({ data: trans })
-    }
-
 
     Item = ({ items }) => (
 
         <TouchableOpacity
             style={styles.item}
             // onPress={this.props.onPressTransactionEditor}
-            onPress={(this.props.onPressTransactionEditor) ?
-                () => this.props.onPressTransactionEditor(items)
-                :
-                () => { console.log(items) }}
+            onPress={
+                (this.props.onPressTransactionEditor) ?
+                    () => {
+                        // console.log("111", items.icon[0].color)
+                        this.props.onPressTransactionEditor(items)
+                    }
+                    :
+                    () => { console.log(items) }
+            }
         >
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                 <Image
@@ -106,15 +101,21 @@ export class ItemsOverView extends Component {
                         height: 32,
                         width: 32
                     }}
-                    source={icons.foodIcon}
+                    source={items.icon[0].iconhangmuc}
                     resizeMode='contain'
                 />
                 <View style={{ flex: 1, marginLeft: 16, flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                        <Text style={styles.title}>Food</Text>
-                        <Text style={styles.describe}>   Hamburger  </Text>
+                        <Text style={styles.title}>{items.icon[0].tenhangmuc}</Text>
+                        <Text style={styles.describe}>   {items.datas.ghichu}  </Text>
                     </View>
-                    <Text style={styles.title}>10000</Text>
+                    {
+                        (items.datas.sotientieudung != null) ?
+                            <Text style={styles.title}> -{items.datas.sotientieudung}</Text>
+                            :
+                            <Text style={styles.title}> +{items.datas.sotienthunhap}</Text>
+                    }
+
                 </View>
 
             </View>

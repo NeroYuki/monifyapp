@@ -9,14 +9,14 @@ hangmucgiaodich = {
   loaihangmuc: 'thunhap',//'chitieu'
   color: '#123456'
 }
-test('testing logic saveCategory', async () => {
-  console.log(JSON.parse(JSON.stringify(await saveCategory(hangmucgiaodich))))
-  // console.log(caidattest)
-  // expect(JSON.parse(JSON.stringify(await insertCaiDat(caidattest)))).toStrictEqual(JSON.parse(JSON.stringify(caidattest)))
-})
+// test('testing logic saveCategory', async () => {
+//   console.log(JSON.parse(JSON.stringify(await saveCategory(hangmucgiaodich))))
+//   // console.log(caidattest)
+//   // expect(JSON.parse(JSON.stringify(await insertCaiDat(caidattest)))).toStrictEqual(JSON.parse(JSON.stringify(caidattest)))
+// })
 
 test('testing logic fetchCategory', async () => {
-  console.log(JSON.parse(JSON.stringify(await fetchCategory({ categoryId: '60c1e454c706ae2f3930f623' }))))
+  console.log(JSON.parse(JSON.stringify(await fetchCategory({ categoryId: '60c96dd414660d8e1852cc47' }))))
   // console.log(caidattest)
   // expect(JSON.parse(JSON.stringify(await insertCaiDat(caidattest)))).toStrictEqual(JSON.parse(JSON.stringify(caidattest)))
 })

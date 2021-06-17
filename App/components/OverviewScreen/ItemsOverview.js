@@ -52,7 +52,7 @@ export class ItemsOverView extends Component {
     getData = async () => {
         var dataFetched = this.props.data
 
-        console.log("DATA TRANS: ", dataFetched)
+        console.log("DATA TRANS: ", this.props.currentOption)
 
         var trans = []
 

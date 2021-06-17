@@ -39,6 +39,31 @@ export class ItemsCategoriesTab extends Component {
         this.getData()
     }
 
+    fetchDataList = async (array, datas, total, title) => {
+        for (var i in array) {
+            total += array[i].amount
+
+            var icon = JSON.parse(JSON.stringify(await fetchCategory({ categoryId: array[i].categoryId })))
+            var value = {
+                amount: array[i].amount,
+                icon: icon,
+            }
+
+            datas.push(value)
+        }
+
+        this.setState({
+            expense: [
+                {
+                    title: title,
+                    // title: this.props.currentOption,
+                    total: total,
+                    data: datas,
+                }
+            ]
+        })
+    }
+
     getData = async () => {
         console.log("CATEGORIES DATA: ", this.props.data)
 
@@ -46,29 +71,37 @@ export class ItemsCategoriesTab extends Component {
         var expenses = []
         var total = 0
 
-        for (var i in trans.expense) {
-            total += trans.expense[i].amount
+        if (this.props.currentOption == 'Expense')
+            this.fetchDataList(trans.expense, expenses, total, 'Expense')
+        else
+            if (this.props.currentOption == 'Income')
+                this.fetchDataList(trans.income, expenses, total, 'Income')
 
-            var icon = JSON.parse(JSON.stringify(await fetchCategory({ categoryId: trans.expense[i].categoryId })))
-            var value = {
-                amount: trans.expense[i].amount,
-                icon: icon,
-            }
+        // for (var i in trans.expense) {
+        //     total += trans.expense[i].amount
 
-            expenses.push(value)
-        }
+        //     var icon = JSON.parse(JSON.stringify(await fetchCategory({ categoryId: trans.expense[i].categoryId })))
+        //     var value = {
+        //         amount: trans.expense[i].amount,
+        //         icon: icon,
+        //     }
 
-        this.setState({
-            expense: [
-                {
-                    title: 'Expenses',
-                    total: total,
-                    data: expenses,
-                }
-            ]
-        })
+        //     expenses.push(value)
+        // }
 
-        console.log("ITEM ALL CATE: ", this.state.expense)
+        // this.setState({
+        //     expense: [
+        //         {
+        //             title: 'Expenses',
+        //             // title: this.props.currentOption,
+        //             total: total,
+        //             data: expenses,
+        //         }
+        //     ]
+        // })
+
+        // console.log("ITEM ALL CATE: ", this.state.expense)
+
     }
 
     Item = ({ items }) => (
@@ -106,7 +139,7 @@ export class ItemsCategoriesTab extends Component {
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ flex: 1, flexDirection: 'row' }}>
                     <Text style={styles.titleHeader}>Showing: </Text>
-                    <Text style={styles.totalHeader}>{section.title}</Text>
+                    <Text style={styles.totalHeader}>{this.props.currentOption}</Text>
                 </View>
 
                 <View style={{ marginRight: 20, height: 25, width: 25 }}>

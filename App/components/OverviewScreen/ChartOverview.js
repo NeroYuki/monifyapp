@@ -11,16 +11,18 @@ export class ChartOverview extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            data: this.props.data
+            data: this.props.data,
         }
     }
 
     render() {
+        console.log("CHART OVERVIEW CURRENT OPTION: ", this.props.currentOption)
 
         return (
             <View style={styles.container}>
                 <ChartView />
                 <ItemsCategoriesTab
+                    currentOption={this.props.currentOption}
                     data={this.state.data}
                     onPressShowing={this.props.onPressShowing}
                 />

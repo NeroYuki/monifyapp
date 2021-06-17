@@ -29,7 +29,11 @@ export class OverviewScreen extends Component {
             categoriesData: {},
 
             // Tap on item report then set data on this
+            // List - Tab 
             currentData: {},
+
+            // Categories - Tab
+            currentOption: 'Income',
 
             dateTime: "",
         }
@@ -46,6 +50,7 @@ export class OverviewScreen extends Component {
         this.getDate = this.getDate.bind(this)
         this.decreasePeriod = this.decreasePeriod.bind(this)
         this.increasePeriod = this.increasePeriod.bind(this)
+        this.changeShowingOption = this.changeShowingOption.bind(this)
     }
 
     componentDidMount() {
@@ -153,18 +158,29 @@ export class OverviewScreen extends Component {
         this.setState({ expenseOrIncomeVisible: !this.state.expenseOrIncomeVisible })
     }
 
+    changeShowingOption(val) {
+        console.log("OPTION IN OVERVIEW", val)
+        this.setState({
+            currentOption: val,
+            expenseOrIncomeVisible: !this.state.expenseOrIncomeVisible
+        })
+    }
+
     // MARK: - ACTION
     reportView = () => {
+        console.log("OVER VIEW REPORT VIEW", this.state.currentOption)
         return (
             (this.state.chartView) ?
                 <ItemsOverView
                     onPressTransactionEditor={this.onPressTransactionEditor}
                     data={this.state.overviewData.trans}
+                    currentOption={this.state.currentOption}
                 />
                 :
                 <ChartOverview
                     onPressShowing={this.onPressShowing}
                     data={this.state.categoriesData}
+                    currentOption={this.state.currentOption}
                 />
         )
     }
@@ -210,6 +226,8 @@ export class OverviewScreen extends Component {
 
                 <ExpenseOrIncomeModal
                     isVisible={this.state.expenseOrIncomeVisible}
+                    currentOption='Expense'
+                    changeShowingOption={this.changeShowingOption}
                     closePeriod={() => {
                         this.setState({ expenseOrIncomeVisible: false })
                     }}

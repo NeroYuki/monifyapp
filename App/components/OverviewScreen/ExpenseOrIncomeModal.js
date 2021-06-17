@@ -11,13 +11,13 @@ export class ExpenseOrIncomeModal extends Component {
         super(props)
 
         this.state = {
-            selectedType: this.props.periodCurrent
+            selectedType: this.props.currentOption
         }
     }
 
     render() {
 
-        console.log("PERIOD", this.state.selectedType)
+        console.log("OPTION SHOWING ", this.state.selectedType)
         return (
             <Modal
                 animationType="fade"
@@ -38,10 +38,12 @@ export class ExpenseOrIncomeModal extends Component {
                         <Text style={styles.title}> CATEGORY TYPE </Text>
 
                         <TouchableWithoutFeedback
-                            onPress={(this.props.changePeriod) ?
-                                () => this.props.changePeriod(this.state.selectedType)
-                                :
-                                () => { console.log(this.state.selectedType) }}
+                            onPress={
+                                (this.props.changeShowingOption) ?
+                                    () => this.props.changeShowingOption(this.state.selectedType)
+                                    :
+                                    () => console.log(this.state.selectedType)
+                            }
 
                         >
                             <Icon name='check' size={25} />
@@ -54,8 +56,8 @@ export class ExpenseOrIncomeModal extends Component {
                                 this.setState({ selectedType: value })
                             }}
                         >
-                            <RadioButton.Item label="EXPENSE" value="expense" />
-                            <RadioButton.Item label="INCOME" value="income" />
+                            <RadioButton.Item label="EXPENSE" value="Expense" />
+                            <RadioButton.Item label="INCOME" value="Income" />
                         </RadioButton.Group>
                     </View>
                 </View>

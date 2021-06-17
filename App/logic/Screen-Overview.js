@@ -74,7 +74,7 @@ export const queryTransactions = ({ period, start_day, end_day, walletId }) =>
                     date.push(i.thoigian)
             }
         }
-        console.log('date::', JSON.parse(JSON.stringify(date)))
+        // console.log('date::', JSON.parse(JSON.stringify(date)))
         if (date.length == 0) {
             resolve([])
             return

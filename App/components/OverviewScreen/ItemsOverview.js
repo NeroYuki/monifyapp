@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { View, StyleSheet, SectionList, Text, Image, TouchableOpacity } from 'react-native';
 import { COLORS, icons } from '../../assets/constants';
 import { fetchCategory } from '../../logic/Component-CategoryEditor';
+import { currencyFormat } from '../../utils/formatNumber';
 
 
 export class ItemsOverView extends Component {
@@ -48,17 +49,17 @@ export class ItemsOverView extends Component {
         };
     }
 
-    componentDidMount = async () => {
-
+    getData = async () => {
         var dataFetched = this.props.data
 
         console.log("DATA TRANS: ", dataFetched)
 
         var trans = []
 
-        for (var i in dataFetched) {
+        for (var i = dataFetched.length - 1; i >= 0; --i) {
 
             var datas = []
+            var total = 0
 
             for (var j in dataFetched[i].data) {
                 var icon = JSON.parse(JSON.stringify(await fetchCategory({ categoryId: dataFetched[i].data[j].loaihangmucgd })))
@@ -66,11 +67,18 @@ export class ItemsOverView extends Component {
                     icon: icon,
                     datas: dataFetched[i].data[j],
                 })
+
+                // total = total + (dataFetched[i].data[j].sotientieudung) ? -dataFetched[i].data[j].sotientieudung : +dataFetched[i].data[j].sotienthunhap
+                if (dataFetched[i].data[j].sotientieudung != null) {
+                    total -= dataFetched[i].data[j].sotientieudung
+                } else {
+                    total += dataFetched[i].data[j].sotienthunhap
+                }
             }
 
             var value = {
                 title: dataFetched[i].time,
-                total: '',
+                total: total,
                 data: datas,
             }
 
@@ -79,6 +87,12 @@ export class ItemsOverView extends Component {
 
         this.setState({ data: trans })
     }
+
+    componentDidMount = async () => {
+        this.getData()
+    }
+
+
 
     Item = ({ items }) => (
 
@@ -111,9 +125,9 @@ export class ItemsOverView extends Component {
                     </View>
                     {
                         (items.datas.sotientieudung != null) ?
-                            <Text style={styles.title}> -{items.datas.sotientieudung}</Text>
+                            <Text style={styles.title}> -{currencyFormat(items.datas.sotientieudung)}</Text>
                             :
-                            <Text style={styles.title}> +{items.datas.sotienthunhap}</Text>
+                            <Text style={styles.title}> +{currencyFormat(items.datas.sotienthunhap)}</Text>
                     }
 
                 </View>
@@ -127,7 +141,7 @@ export class ItemsOverView extends Component {
         <View style={styles.header}>
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
                 <Text style={styles.titleHeader}>{section.title}</Text>
-                <Text style={styles.totalHeader}>{section.total}</Text>
+                <Text style={styles.totalHeader}>{currencyFormat(section.total)}</Text>
             </View>
 
             <View style={{ height: 1, backgroundColor: COLORS.separateLine }}></View>

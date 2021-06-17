@@ -11,7 +11,7 @@ import { TransactionModal } from "../../components/TransactionEditor/Transaction
 
 import Moment from 'moment'
 import { format, addDays, addMonths, addYears } from 'date-fns'
-import { queryTransactions } from "../../logic/Screen-Overview";
+import { queryTranCategories, queryTransactions } from "../../logic/Screen-Overview";
 
 export class OverviewScreen extends Component {
     constructor(props) {
@@ -26,6 +26,7 @@ export class OverviewScreen extends Component {
 
             // All trans data 
             overviewData: {},
+            categoriesData: {},
 
             // Tap on item report then set data on this
             currentData: {},
@@ -48,7 +49,6 @@ export class OverviewScreen extends Component {
     }
 
     componentDidMount() {
-        console.log("COMPONENT DID MOUNT")
         this.getDate()
 
         this.getDataOverview()
@@ -57,9 +57,13 @@ export class OverviewScreen extends Component {
     getDataOverview = async () => {
 
         var data = JSON.parse(JSON.stringify(await queryTransactions({ walletId: '60c96efa9bd6d1e6e1aed7a6' })))
+        var percentageData = JSON.parse(JSON.stringify(await queryTranCategories({ walletId: '60c96efa9bd6d1e6e1aed7a6' })))
+
+        console.log("PERCENTAGE", percentageData)
 
         this.setState({
             overviewData: data,
+            categoriesData: percentageData,
         })
 
     }
@@ -152,7 +156,7 @@ export class OverviewScreen extends Component {
     // MARK: - ACTION
     reportView = () => {
         return (
-            (!this.state.chartView) ?
+            (this.state.chartView) ?
                 <ItemsOverView
                     onPressTransactionEditor={this.onPressTransactionEditor}
                     data={this.state.overviewData.trans}
@@ -160,14 +164,14 @@ export class OverviewScreen extends Component {
                 :
                 <ChartOverview
                     onPressShowing={this.onPressShowing}
-
+                    data={this.state.categoriesData}
                 />
         )
     }
 
     render() {
 
-        console.log("OVerview Datas: ", this.state.overviewData)
+        // console.log("OVerview Datas: ", this.state.overviewData)
 
         return (
             <SafeAreaView style={{ flex: 1 }}>

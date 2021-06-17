@@ -7,12 +7,23 @@ import { ChartView } from './ChartView';
 import { ItemsCategoriesTab } from './ItemsCategoriesTab';
 
 export class ChartOverview extends Component {
+
+    constructor(props) {
+        super(props)
+        this.state = {
+            data: this.props.data
+        }
+    }
+
     render() {
 
         return (
             <View style={styles.container}>
                 <ChartView />
-                <ItemsCategoriesTab onPressShowing={this.props.onPressShowing} />
+                <ItemsCategoriesTab
+                    data={this.state.data}
+                    onPressShowing={this.props.onPressShowing}
+                />
             </View>
         )
 

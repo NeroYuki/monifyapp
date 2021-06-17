@@ -173,7 +173,8 @@ export const HangMucGiaoDichSchema = {
     tenhangmuc: 'string',
     loaihangmuc: 'LoaiHangMucConfig',
     iconhangmuc: 'string',
-    color:'string'
+    color:'string',
+    invs:{type:'bool',default:true}
   },
   primaryKey: 'idhangmucgiaodich',
 };
@@ -218,5 +219,5 @@ export const monifydata = {
     //LoaiTietKiemConfigSchema,
     LoaiMucTieuConfigSchema,
     LoaiHangMucConfigSchema],
-    schemaVersion:7,
+    schemaVersion:8,
 }

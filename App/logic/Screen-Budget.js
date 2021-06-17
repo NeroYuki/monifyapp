@@ -69,7 +69,10 @@ export const saveBudget = ({budgetId,userId,name,loaimuctieu,amount,period,start
                 resolve(muctieu)
             else
                 reject('Không tạo mục tiêu thành công')
-        }).catch(er=>reject(er))
+        }).catch(er=>{
+            reject(er)
+            return
+        })
     }
     else{
         let budget={

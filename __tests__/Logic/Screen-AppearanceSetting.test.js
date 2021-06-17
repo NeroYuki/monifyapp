@@ -7,7 +7,7 @@ caidattest={
     loaitien: 'VND',
     chedo: 'Light',
     ngonngu: 'EN',
-    chedonghiemngat: true,
+    chedonghiemngat: false,
 }
 test('testing logic saveSetting', async () => {
     console.log(JSON.parse(JSON.stringify(await saveSetting(caidattest))))

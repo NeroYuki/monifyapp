@@ -10,7 +10,10 @@ export const queryTransactions = ({period,start_day,end_day,walletId}) =>
     let InTrans
     await queryGiaoDich({idtaikhoan:taikhoan}).then(giaodich=>{
         InTrans=giaodich
-    }).catch(err=>reject(err))
+    }).catch(err=>{
+        reject(err)
+        return
+    })
     console.log('Intras ở đây',JSON.parse(JSON.stringify(InTrans)))
     let OutTrans={
         income:0,
@@ -118,7 +121,10 @@ export const queryTranCategories = ({period,start_day,end_day,walletId}) =>
     let InTrans
     await queryGiaoDich({idtaikhoan:taikhoan}).then(giaodich=>{
         InTrans=giaodich
-    }).catch(err=>reject(err))
+    }).catch(err=>{
+        reject(err)
+        return
+    })
     let OutTrans={
         income:[],
         expense:[],

@@ -25,10 +25,13 @@ export const fetchSetting = () =>
     let cd
     await queryCaiDat({}).then(caidat=>{
         cd=caidat
-    }).catch(err=>reject(err))
-    console.log(JSON.parse(JSON.stringify(cd)))
+    }).catch(err=>{
+        reject(err)
+        return
+    })
     cd=cd.reduce((s1,s2)=>{
         return s1.thoigiantao>s2.thoigiantao?s1:s2
     })
+    console.log(JSON.parse(JSON.stringify(cd)))
     resolve(cd)
 })

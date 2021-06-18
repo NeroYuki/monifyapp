@@ -9,9 +9,9 @@ export class WalletEditor extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: "Cash Wallet",
-            amount: "200.000",
-            color: '#ffdddd',
+            name: "",
+            amount: "0",
+            color: '#ffffff',
             creation_date: new Date(),
 
             nameInputVisible: false,

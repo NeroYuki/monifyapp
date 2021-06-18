@@ -10,10 +10,10 @@ export class RecurringBillEditor extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: "Netflix Subscription",
-            desc: "Monthly subscription fee for Netflix (Premium Pack)",
-            color: '#ddddff',
-            amount: '220000',
+            name: "",
+            desc: "",
+            color: '#ffffff',
+            amount: '0',
             cycle_start: new Date(),
             cycle_duration_value: "1",
             cycle_duration_type_values: ['Day', 'Week', 'Month', 'Year'],
@@ -30,6 +30,12 @@ export class RecurringBillEditor extends Component {
             cycleTypeSelectionVisible: false,
             colorPickerVisible: false,
         }
+        //route parameters
+        console.log(this.props.route.params)
+    }
+
+    componentDidMount() {
+        
     }
 
     render() {

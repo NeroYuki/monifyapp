@@ -38,9 +38,9 @@ export class RecurringBillManager extends Component {
         const billDisplay = this.state.billList.map((val) => {
             return <RecurringBillEntry
                 key={val.id} style={[style.bill_entry, {backgroundColor: val.color}]} name={val.name} next_tran={val.next_tran} amount={val.amount} desc={val.desc}
-                onViewPress={() => {this.props.navigation.navigate("RecurringBillEditor")}}
+                onViewPress={() => {this.props.navigation.navigate("RecurringBillEditor", {mode: "view", id: val.id})}}
                 onDeletePress={() => {this.setState({deletePromptVisible: true})}}
-                onEditPress={() => {this.props.navigation.navigate("RecurringBillEditor")}}
+                onEditPress={() => {this.props.navigation.navigate("RecurringBillEditor", {mode: "edit", id: val.id})}}
             ></RecurringBillEntry>
         })
 
@@ -59,7 +59,7 @@ export class RecurringBillManager extends Component {
                 <FAB style={style.fab}
                     big
                     icon="plus"
-                    onPress={() => {this.props.navigation.navigate("RecurringBillEditor")}}
+                    onPress={() => {this.props.navigation.navigate("RecurringBillEditor", {mode: "edit", id: ""})}}
                 />
                 <RecurringBillSearchModal isVisible={this.state.advanceSearchVisible} 
                     onRequestClose={() => {this.setState({advanceSearchVisible: false})}} 

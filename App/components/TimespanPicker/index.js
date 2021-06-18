@@ -12,6 +12,13 @@ export class TimespanPicker extends Component {
         }
     }
 
+    handleChangePeriod = (value) => {
+        if (this.props.handleChangePeriod) {
+            this.props.handleChangePeriod(value)
+        } else
+            console.log("Timespan Picker error change period")
+    }
+
     render() {
         const style = stylesheet
         return (
@@ -31,7 +38,10 @@ export class TimespanPicker extends Component {
                     </View>
                     <View style={style.main_view}>
                         <Text style={style.main_view_header}>BUDGET PERIOD</Text>
-                        <TimespanPickerNavigation />
+                        <TimespanPickerNavigation
+                            currentPeriod={this.props.currentPeriod}
+                            handleChangePeriod={this.handleChangePeriod}
+                        />
                     </View>
                 </View>
 

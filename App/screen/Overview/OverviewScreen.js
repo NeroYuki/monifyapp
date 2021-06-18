@@ -38,7 +38,9 @@ export class OverviewScreen extends Component {
             // Categories - Tab
             currentOption: 'Expense',
 
+            // Period
             dateTime: "",
+            currentPeriod: 'month'
         }
 
         this.onCategoriesPress = this.onCategoriesPress.bind(this)
@@ -70,10 +72,20 @@ export class OverviewScreen extends Component {
 
     getDataOverview = async () => {
 
-        var data = JSON.parse(JSON.stringify(await queryTransactions({ walletId: '60c96efa9bd6d1e6e1aed7a6' })))
-        var percentageData = JSON.parse(JSON.stringify(await queryTranCategories({ walletId: '60c96efa9bd6d1e6e1aed7a6' })))
+        var data = JSON.parse(JSON.stringify(
+            await queryTransactions({
+                walletId: '60c96efa9bd6d1e6e1aed7a6',
+                period: this.state.currentPeriod
+            })
+        ))
 
-        // console.log("PERCENTAGE", percentageData)
+        var percentageData = JSON.parse(JSON.stringify(
+            await queryTranCategories({
+                walletId: '60c96efa9bd6d1e6e1aed7a6'
+            })
+        ))
+
+        console.log("Overview Data: ", data)
 
         this.setState({
             overviewData: data,
@@ -82,8 +94,19 @@ export class OverviewScreen extends Component {
 
     }
 
+    handleChangePeriod = (value) => {
+        console.log("Overview: - Change Period", value)
+
+        this.setState({
+            currentPeriod: value
+        })
+
+        this.getDataOverview()
+    }
+
     getDate() {
-        // Becuz getMonth() start from 0. You need to date.getMonth() - 1 to achieve what u want
+
+        console.log("Overview DateTime")
         var basicFormat = new Date()
 
         var date = {
@@ -209,7 +232,7 @@ export class OverviewScreen extends Component {
                             onListPress={this.onListPress}
                         />
 
-                        <SafeAreaView style={{ flex: 1 }}>
+                        <View style={{ flex: 1 }}>
                             <TabSwitcher
                                 text={this.state.dateTime.currentTime}
                                 onTimeTextPress={this.onTimeTextPress}
@@ -218,7 +241,7 @@ export class OverviewScreen extends Component {
                             />
 
                             <this.reportView />
-                        </SafeAreaView>
+                        </View>
                     </View>
 
 
@@ -243,6 +266,8 @@ export class OverviewScreen extends Component {
 
                 <TimespanPicker
                     isVisible={this.state.periodVisible}
+                    currentPeriod={this.state.currentPeriod}
+                    handleChangePeriod={this.handleChangePeriod}
                     onRequestClose={() => {
                         this.setState({ periodVisible: false })
                     }}

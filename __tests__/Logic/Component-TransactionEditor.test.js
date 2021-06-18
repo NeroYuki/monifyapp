@@ -20,7 +20,7 @@ test('testing logic saveTransaction', async () => {
 })
 
 // test('testing logic deleteTransaction', async () => {
-//     console.log(JSON.parse(JSON.stringify(await deleteTransaction({transactionId:'60c36e1cc1d2c0bb15fd9a3d'}))))
+//     console.log(JSON.parse(JSON.stringify(await deleteTransaction({transactionId:'60c36b9f7ab578ff8656f01b'}))))
 //     // console.log(caidattest)
 //     // expect(JSON.parse(JSON.stringify(await insertCaiDat(caidattest)))).toStrictEqual(JSON.parse(JSON.stringify(caidattest)))
 // })

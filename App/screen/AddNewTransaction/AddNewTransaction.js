@@ -8,6 +8,7 @@ import { RecurringModal } from '../../components/TransactionEditor/RecurringModa
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { saveTransaction } from '../../logic/Component-TransactionEditor';
+import { queryTaiKhoan } from '../../services/TaiKhoanCRUD';
 
 export class AddNewTransaction extends Component {
 
@@ -59,6 +60,9 @@ export class AddNewTransaction extends Component {
 
     handleSaveTransaction = async () => {
         console.log("SAVE TRANSACTION");
+
+        // var idTaiKhoan = '60c96efa9bd6d1e6e1aed7a6'
+        //console.log(JSON.parse(JSON.stringify(await queryTaiKhoan({ idTaiKhoan: idTaiKhoan }))))
 
         let GiaoDich = {
             // transactionId: '60c36b9f7ab578ff8656f01b',

@@ -13,52 +13,20 @@ export class ItemsOverView extends Component {
         console.log("Items Overview - Constructor")
 
         this.state = {
-            // data: [
-            //     {
-            //         title: "TUESDAY, 5 MAR",
-            //         total: '+350.000',
-            //         data: [
-            //             {
-            //                 key: 'Salary',
-            //                 money: '450.000',
-            //                 describe: '',
-            //             },
-            //             {
-            //                 key: 'Food',
-            //                 money: '300.000',
-            //                 describe: 'Chocolate + Milk'
-            //             },
-            //         ]
-            //     },
-            //     {
-            //         title: "TUESDAY, 3 MAR",
-            //         total: '-250.000',
-            //         data: [
-            //             {
-            //                 key: 'Internet',
-            //                 money: '200.000',
-            //                 describe: '',
-            //             },
-            //             {
-            //                 key: 'Food',
-            //                 money: '50.000',
-            //                 describe: ''
-            //             },
-            //         ]
-            //     },
-            // ]
             data: ''
         };
+
+
     }
 
     getData = async () => {
         var dataFetched = this.props.data
 
-        console.log('Items Overview: - Get Data')
+        console.log('Items Overview Get Data: ', dataFetched)
 
         var trans = []
 
-        for (var i = dataFetched.length - 1; i >= 0; --i) {
+        for (var i in dataFetched) {
 
             var datas = []
             var total = 0

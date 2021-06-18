@@ -4,7 +4,7 @@ import {BSON} from 'realm';
 export const fetchCategory = ({categoryId}) =>
   new Promise((resolve, reject) => {
     let catId=(categoryId)?new BSON.ObjectID(categoryId):null
-    queryHangMucGiaoDich({idhangmucgiaodich:catId}).then(hangmuc=>{
+    queryHangMucGiaoDich({idhangmucgiaodich:catId,invs:true}).then(hangmuc=>{
         resolve(hangmuc)
     }).catch(err=>reject(err))
 })
@@ -29,7 +29,10 @@ export const saveCategory = ({category_id,userid,name,color,icon,loaihangmuc})=>
                 {
                     reject({result:false,message:'Tạo hạng mục thất bại'})
                 }
-            }).catch(err=>reject({result:false,message:err}))
+            }).catch(err=>{
+                reject({result:false,message:err})
+                return
+            })
         }
         else
         {
@@ -66,6 +69,9 @@ export const saveCategory = ({category_id,userid,name,color,icon,loaihangmuc})=>
                 {
                     reject({result:false,message:'Cập nhật hạng mục thất bại'})
                 }
-            }).catch(err=>reject({result:false,message:err}))
+            }).catch(err=>{
+                reject({result:false,message:err})
+                return
+            })
         }
 })

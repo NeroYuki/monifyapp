@@ -14,6 +14,7 @@ hangmucgiaodichtest= {
         chitieu:true,
         thunhap:false,  
     },
+    invs:true,
     color:'#123456'
 }
 hangmucgiaodich= {
@@ -22,6 +23,7 @@ hangmucgiaodich= {
     thoigiantao: date,
     tenhangmuc: 'Sắm tết',
     iconhangmuc: '123456###',
+    invs:true,
     color:'#123456'
 }
 test('testing insert HangMucGiaoDich', async () => {
@@ -39,6 +41,7 @@ hangmucgiaodichtestupdate= {
         chitieu:true,
         thunhap:false,  
     },
+    invs:true,
     color:'#123456'
 }
 hangmuctestquery=[{
@@ -48,6 +51,7 @@ hangmuctestquery=[{
     tenhangmuc: 'Sắm tết 3',
     loaihangmuc: { chitieu: true, thunhap: false },
     iconhangmuc: '123456###',
+    invs:true,
     color:'#123456'
   }]
 test('testing update HangMucGiaoDich', async () => {
@@ -78,6 +82,7 @@ hangmucgiaodichtest2= {
         chitieu:false,
         thunhap:true,  
     },
+    invs:true,
     color:'#123456'
 }
 hangmucgiaodich2= {
@@ -86,6 +91,7 @@ hangmucgiaodich2= {
     thoigiantao: date2,
     tenhangmuc: 'Bán xe',
     iconhangmuc: '123456###',
+    invs:true,
     color:'#123456'
 }
 test('testing insert HangMucGiaoDich', async () => {
@@ -102,6 +108,7 @@ hangmucgiaodichtestupdate2= {
         chitieu:true,
         thunhap:false,  
     },
+    invs:true,
     color:'#123456'
 }
 hangmucgiaodichtestupdate2KT= {
@@ -114,6 +121,7 @@ hangmucgiaodichtestupdate2KT= {
         chitieu:true,
         thunhap:false,  
     },
+    invs:true,
     color:'#123456'
 }
 hangmuctestquery2=[{
@@ -123,6 +131,7 @@ hangmuctestquery2=[{
     tenhangmuc: 'Bán oto',
     loaihangmuc: { chitieu: true, thunhap: false },
     iconhangmuc: '123456###',
+    invs:true,
     color:'#123456'
   }]
 test('testing update HangMucGiaoDich', async () => {
@@ -152,6 +161,7 @@ hangmucgiaodichtest3= {
         chitieu:false,
         thunhap:true,  
     },
+    invs:true,
     color:'#123456'
 }
 hangmucgiaodich3= {
@@ -160,6 +170,7 @@ hangmucgiaodich3= {
     thoigiantao: date3,
     tenhangmuc: 'Crypto',
     iconhangmuc: '*****',
+    invs:true,
     color:'#123456'
 }
 test('testing insert HangMucGiaoDich', async () => {
@@ -173,6 +184,7 @@ hangmucgiaodichtestupdate3= {
         chitieu:true,
         thunhap:false,  
     },
+    invs:true,
     color:'#123456'
 }
 hangmucgiaodichtestupdate3KT= {
@@ -185,6 +197,7 @@ hangmucgiaodichtestupdate3KT= {
         chitieu:true,
         thunhap:false,  
     },
+    invs:true,
     color:'#123456'
 }
 hangmuctestquery3=[{
@@ -194,6 +207,7 @@ hangmuctestquery3=[{
     tenhangmuc: 'Crypto',
     loaihangmuc: { chitieu: true, thunhap: false },
     iconhangmuc: '*****',
+    invs:true,
     color:'#123456'
   }]
 test('testing update HangMucGiaoDich', async () => {

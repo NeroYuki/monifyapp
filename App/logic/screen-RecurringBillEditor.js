@@ -13,12 +13,13 @@ export const fetchBill = ({ billId }) =>
             }).catch(er => reject(er))
     })
 // số tiền khi cập nhật phải đưa tham số vào lại, nếu không giá trị sẻ lưu null vì amount được phép null, sau này khi người dùng muốn nhập thì nhập
-export const saveBill = ({ billId, userId, loaihangmucId, name, color, note, amount, cycle_start, cycle_duration_day, cycle_duration_month, creation_date }) =>
+export const saveBill = ({ billId, userId, loaihangmucId, name, color, note, amount, cycle_start, cycle_duration_day, cycle_duration_month, creation_date, idtaikhoan }) =>
     new Promise(async (resolve, reject) => {
         if (!billId) {
             let Bill = {
                 idgiaodichtheochuky: new BSON.ObjectID(),
                 idnguoidung: (userId) ? new BSON.ObjectID(userId) : null,
+                idtaikhoan: (idtaikhoan) ? new BSON.ObjectID(idtaikhoan) : null,
                 loaihangmucgd: (loaihangmucId) ? new BSON.ObjectID(loaihangmucId) : null,
                 thoigian: (creation_date) ? new Date(creation_date) : null,
                 sotientieudung: (amount) ? Math.abs(amount) : null,
@@ -44,7 +45,10 @@ export const saveBill = ({ billId, userId, loaihangmucId, name, color, note, amo
                         else
                             Bill.sotientieudung = null
                     }
-                }).catch((er) => reject({ result: false, message: er }))
+                }).catch((er) => {
+                    reject({ result: false, message: er })
+                    return
+                })
             }
             else {
                 reject({ result: false, message: 'Không nhập loại hạng mục' })
@@ -67,7 +71,10 @@ export const saveBill = ({ billId, userId, loaihangmucId, name, color, note, amo
                 }
                 else
                     reject({ result: false, message: 'Nhập thất bại' })
-            }).catch((er) => reject({ result: false, message: er }))
+            }).catch((er) => {
+                reject({ result: false, message: er })
+                return
+            })
         }
         else {
             let BillUpdate
@@ -77,12 +84,16 @@ export const saveBill = ({ billId, userId, loaihangmucId, name, color, note, amo
                         BillUpdate = giaodich[0]
                     }
                     else {
-                        resolve({ result: false, message: 'Không tìm thấy giao dịch cần thay đổi' })
+                        reject({ result: false, message: 'Không tìm thấy giao dịch cần thay đổi' })
                         return
                     }
-                }).catch(er => reject({ result: false, message: er }))
+                }).catch(er => {
+                    reject({ result: false, message: er })
+                    return
+                })
             let Bill = {
                 idgiaodichtheochuky: (billId) ? new BSON.ObjectID(billId) : null,
+                idtaikhoan: (idtaikhoan) ? new BSON.ObjectID(idtaikhoan) : null,
                 idnguoidung: (userId) ? new BSON.ObjectID(userId) : null,
                 loaihangmucgd: (loaihangmucId) ? new BSON.ObjectID(loaihangmucId) : null,
                 thoigian: (creation_date) ? new Date(creation_date) : null,
@@ -130,10 +141,62 @@ export const saveBill = ({ billId, userId, loaihangmucId, name, color, note, amo
                             }
                         }
                     }
-                }).catch((er) => reject({ result: false, message: er }))
+                }).catch((er) => {
+                    reject({ result: false, message: er })
+                    return
+                })
+            }
+            else {
+                Bill.loaihangmucgd = BillUpdate.loaihangmucgd
+                await queryHangMucGiaoDich({ idhangmucgiaodich: Bill.loaihangmucgd }).then(hangmuc => {
+                    if (!hangmuc || hangmuc.length == 0) {
+                        reject({ result: false, message: 'Hạng mục không có trong dữ liệu' })
+                        return
+                    }
+                    else {
+                        if (Bill.sotienthunhap || Bill.sotientieudung) {
+                            if (hangmuc[0].loaihangmuc.chitieu == true) {
+                                Bill.sotienthunhap = null
+                            }
+                            else
+                                Bill.sotientieudung = null
+                        }
+                        else {
+                            if (hangmuc[0].loaihangmuc.chitieu == true) {
+                                if (BillUpdate.sotientieudung) {
+                                    Bill.sotientieudung = BillUpdate.sotientieudung
+                                }
+                                else
+                                    Bill.sotientieudung = BillUpdate.sotienthunhap
+                                Bill.sotienthunhap = null
+                            }
+                            else {
+                                if (BillUpdate.sotientieudung) {
+                                    Bill.sotienthunhap = BillUpdate.sotientieudung
+                                }
+                                else {
+                                    Bill.sotienthunhap = BillUpdate.sotienthunhap
+                                }
+                                Bill.sotientieudung = null
+                            }
+                        }
+                    }
+                }).catch((er) => {
+                    reject({ result: false, message: er })
+                    return
+                })
             }
             if (!Bill.thoigianbatdau) {
                 Bill.thoigianbatdau = BillUpdate.thoigianbatdau
+            }
+            if (!Bill.idtaikhoan && BillUpdate.idtaikhoan) {
+                Bill.idtaikhoan = new BSON.ObjectID(BillUpdate.idtaikhoan)
+            }
+            if (!Bill.chukygiaodichtheongay) {
+                Bill.chukygiaodichtheongay = BillUpdate.chukygiaodichtheongay
+            }
+            if (!Bill.chukygiaodichtheothang) {
+                Bill.chukygiaodichtheothang = BillUpdate.chukygiaodichtheothang
             }
             if (Bill.chukygiaodichtheongay) {
                 let date = new Date(cycle_start)
@@ -152,6 +215,9 @@ export const saveBill = ({ billId, userId, loaihangmucId, name, color, note, amo
                 }
                 else
                     reject({ result: false, message: 'Cập nhật thất bại' })
-            }).catch((er) => reject({ result: false, message: er }))
+            }).catch((er) => {
+                reject({ result: false, message: er })
+                return
+            })
         }
     })

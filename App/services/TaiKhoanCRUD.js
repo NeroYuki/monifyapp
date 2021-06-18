@@ -7,7 +7,7 @@ const data = monifydata;
 export const insertTaiKhoan = (newTaiKhoan,loaitaikhoan) => 
   new Promise((resolve,reject)=> {
     Realm.open(data).then(realm=>{
-      if(loaitaikhoan == null){
+      if(loaitaikhoan === undefined){
         if(newTaiKhoan.tieudung != null) {
           let tieudungoption = realm.objects(TKTieuDungSchema.name).filtered("idtktieudung==$0",newTaiKhoan.tieudung.idtktieudung)
           if(tieudungoption== null) newTaiKhoan.tieudung = tieudungoption
@@ -21,12 +21,12 @@ export const insertTaiKhoan = (newTaiKhoan,loaitaikhoan) =>
           if(nooption == null)newTaiKhoan.no = nooption
         }
         realm.write(()=>{
-          console.log(tk)
+          //console.log(newTaiKhoan)
           let tk = realm.create(TaiKhoanSchema.name,newTaiKhoan);
           resolve(tk);
         })
       }
-      else if (loaitaikhoan != null) {
+      else if (loaitaikhoan !== undefined) {
         if (newTaiKhoan.tieudung == null && loaitaikhoan=='tieudung' ) {
           realm.write(()=>{
             let tk = realm.create(TaiKhoanSchema.name,newTaiKhoan);
@@ -40,7 +40,7 @@ export const insertTaiKhoan = (newTaiKhoan,loaitaikhoan) =>
             resolve(tk);
           })      
         }
-        else if (newTaiKhoan.tietkiem == null && loaitaikhoan=='tietkiem' ) {
+        else if (newTaiKhoan.tietkiem ==null  && loaitaikhoan=='tietkiem' ) {
           realm.write(()=>{
             let tk = realm.create(TaiKhoanSchema.name,newTaiKhoan);
             tk.tietkiem = realm.create(TKTietKiemSchema.name,
@@ -78,7 +78,7 @@ export const insertTaiKhoan = (newTaiKhoan,loaitaikhoan) =>
           })      
         }
       }
-    }).catch((error)=> reject(error));
+    }).catch((error)=> reject(console.error(error)))
   });
 
 export const updateTaiKhoan =  updateTaiKhoan =>  
@@ -86,22 +86,80 @@ export const updateTaiKhoan =  updateTaiKhoan =>
     Realm.open(data).then(realm => {
       realm.write(()=> {
         let taiKhoanUpdated = realm.objectForPrimaryKey(TaiKhoanSchema.name,updateTaiKhoan.idtaikhoan)
-        taiKhoanUpdated.tentaikhoan=updateTaiKhoan.tentaikhoan;
-        taiKhoanUpdated.bieutuong = updateTaiKhoan.bieutuong;
+        if(updateTaiKhoan.tentaikhoan!=null)  taiKhoanUpdated.tentaikhoan=updateTaiKhoan.tentaikhoan;
+        if(updateTaiKhoan.bieutuong!=null)  taiKhoanUpdated.bieutuong = updateTaiKhoan.bieutuong;
+        if(updateTaiKhoan.color!=null) taiKhoanUpdated.color=updateTaiKhoan.color
         taiKhoanUpdated.tieudung=updateTaiKhoan.tieudung;
         taiKhoanUpdated.tietkiem=updateTaiKhoan.tietkiem;
         taiKhoanUpdated.no=updateTaiKhoan.no;
+       // console.log(JSON.parse(JSON.stringify(taiKhoanUpdated)))
         resolve(taiKhoanUpdated) 
       })
     }).catch((error)=> reject(error));
   });
+
+export const updateTaikhoanNo = ({taikhoannoid, sotienthem}) => {
+  new Promise((resolve,reject)=> {
+    Realm.open(data).then(realm=> {
+      realm.write(()=>{
+        let tempid = new BSON.ObjectID(JSON.parse(JSON.stringify(taikhoannoid)))
+        let taiKhoanUpdated = realm.objectForPrimaryKey(TaiKhoanSchema.name,sotienthem)
+        if(taiKhoanUpdated.no!=null) {
+        taiKhoanUpdated.no.sotien += sotienthem;
+        resolve(true)
+        }
+        else resolve(false)
+        return
+      })
+    }).catch((error)=> reject(error));
+  })
+}
+export const updateTaikhoanTieudung = ({taikhoantieudungid, sotienthem}) => 
+  new Promise((resolve,reject)=> {
+    Realm.open(data).then(realm=> {
+      realm.write(()=>{
+        let tempid = new BSON.ObjectID(JSON.parse(JSON.stringify(taikhoantieudungid)))
+        let taiKhoanUpdated = realm.objectForPrimaryKey(TaiKhoanSchema.name,tempid)
+        if(taiKhoanUpdated.tieudung!=null) {
+        taiKhoanUpdated.tieudung.sotien += sotienthem;
+        resolve(true)
+        }
+        else resolve(false)
+        return
+      })
+    }).catch((error)=> reject(error));
+  })
+export const updateTaikhoanTietKiem = ({taikhoantietkiemid, sotienthem}) => {
+  new Promise((resolve,reject)=> {
+    Realm.open(data).then(realm=> {
+      realm.write(()=>{
+        let tempid = new BSON.ObjectID(JSON.parse(JSON.stringify(taikhoantietkiemid)))
+        let taiKhoanUpdated = realm.objectForPrimaryKey(TaiKhoanSchema.name,tempid)
+        if(taiKhoanUpdated.tietkiem!=null) {
+        taiKhoanUpdated.tietkiem.sotien += sotienthem;
+        resolve(true)
+        }
+        else resolve(false)
+        return
+      })
+    }).catch((error)=> reject(error));
+  })
+}
 export const queryTaiKhoan = (option) =>
   new Promise((resolve,reject)=> {
     Realm.open(data).then(realm => {
       realm.write(()=> {
         let Target = realm.objects(TaiKhoanSchema.name)
+        if(option.deactivate){
+          Target = Target.filtered('deactivate==$0',option.deactivate)
+        }
+        if(option.tentaikhoan)
+        {
+          Target = Target.filtered('tentaikhoan==$0',option.tentaikhoan)
+        }
         if(option.idtaikhoan){
           Target = Target.filtered('idtaikhoan==$0',option.idtaikhoan)
+        //  console.log(JSON.stringify(Target))
         }
         if(option.nguoidungid){
           Target= Target.filtered('idnguoidung==$0',option.nguoidungid)
@@ -124,26 +182,55 @@ export const queryTaiKhoan = (option) =>
         if(option.taikhoantietkiem){
           filterUnwantedtietkiem(Target)
         }
-        if(option.taikhoantieudun){
+        if(option.taikhoantieudung){
           filterUnwantedtieudung(Target)
+        }
+        if(option.nominAmount){
+          Target= Target.filtered('no.sotien>=$0',option.idtkno)
+        }
+        if(option.nomaxAmount){
+          Target= Target.filtered('no.sotien<=$0',option.idtkno)
+        }
+        if(option.tietkiemminAmount){
+          Target= Target.filtered('tietkiem.sotien>=$0',option.idtkno)
+        }
+        if(option.tietkiemmaxAmount){
+          Target= Target.filtered('tietkiem.sotien<=$0',option.idtkno)
+        }        
+        if(option.walletminAmount){
+          Target= Target.filtered('tieudung.sotien>=$0',option.idtkno)
+        }
+        if(option.walletmaxAmount){
+          Target= Target.filtered('tieudung.sotien<=$0',option.idtkno)
         }
         resolve(Target)
       })
-    }).catch((error)=> reject(error));
+    }).catch((error)=>{ console.error(error); reject (error)});
   })
 
 
 
-export const deleteTaiKhoan = taiKhoanID => new Promise((resolve,reject)=>{
+export const deleteTaiKhoan = (taiKhoanID) => new Promise((resolve,reject)=>{
   Realm.open(monifydata).then(realm => {
       realm.write(()=> {
-          let deletedTaiKhoan =realm.objectForPrimaryKey(TaiKhoanSchema.name,taiKhoanID);
-          realm.delete(deletedTaiKhoan);
-          resolve(deletedTaiKhoan);
+        let tempid = new BSON.ObjectID(JSON.parse(JSON.stringify(taiKhoanID)))
+        let deletedTaiKhoan =realm.objectForPrimaryKey(TaiKhoanSchema.name,tempid);
+        //console.log(JSON.stringify(deletedTaiKhoan))
+        realm.delete(deletedTaiKhoan);
+        return resolve(true);
+      });
+  }).catch((er)=>{console.error(er);return reject(er)});
+}); 
+export const deactiavteTaiKhoan = (taiKhoanID) => new Promise((resolve,reject)=>{
+  Realm.open(monifydata).then(realm => {
+      realm.write(()=> {
+          let tempid = new BSON.ObjectID(JSON.parse(JSON.stringify(taiKhoanID)))
+          let deletedTaiKhoan =realm.objectForPrimaryKey(TaiKhoanSchema.name,tempid);
+          deletedTaiKhoan.deactivate= true
+          resolve(true);
       });
   }).catch((error)=> reject(error));
 }); 
-
 const filterUnwantedtieudung = (arr) => {
    const required = arr.filter(el => {
       return el.tieudung;

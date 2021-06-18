@@ -69,6 +69,10 @@ export const updateGiaoDichChuKy=GiaoDichChuKy=> new Promise((resolve,reject)=>{
               {
                 updateGiaoDichChuKy.thoigiancuoicungcheck=GiaoDichChuKy.thoigiancuoicungcheck
               }
+              if(GiaoDichChuKy.thoigianbatdau)
+              {
+                updateGiaoDichChuKy.thoigianbatdau=GiaoDichChuKy.thoigianbatdau
+              }
               updateGiaoDichChuKy.chukygiaodichtheongay=GiaoDichChuKy.chukygiaodichtheongay
               updateGiaoDichChuKy.chukygiaodichtheothang=GiaoDichChuKy.chukygiaodichtheothang
               resolve(updateGiaoDichChuKy)
@@ -79,6 +83,10 @@ export const updateGiaoDichChuKy=GiaoDichChuKy=> new Promise((resolve,reject)=>{
               if(GiaoDichChuKy.thoigian)
               {
                 updateGiaoDichChuKy.thoigian=GiaoDichChuKy.thoigian
+              }
+              if(GiaoDichChuKy.thoigianbatdau)
+              {
+                updateGiaoDichChuKy.thoigianbatdau=GiaoDichChuKy.thoigianbatdau
               }
               if(GiaoDichChuKy.name)
               {

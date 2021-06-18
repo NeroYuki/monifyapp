@@ -11,13 +11,13 @@ export class AppearanceSetting extends Component {
         this.state = {
             appThemeModalVisible: false,
             appThemeOption: ['Light', 'Dark'],
-            appThemeCurrent: 'Light',
+            appThemeCurrent: 'Dark',
             languageModalVisible: false,
             languageOption: ['System Deafult', 'English', 'Vietnam'],
             languageCurrent: 'System Default',
             currencyModalVisible: false,
-            currencyOption: ['VND (Vietnamese Dong)', 'USD (US Dollar)'],
-            currencyCurrent: 'VND (Vietnamese Dong)',
+            currencyOption: ['VND', 'USD'],
+            currencyCurrent: 'VND',
             strictModeModalVisible: false,
             strictModeOption: ['Enable', 'Disable'],
             strictModeCurrent: 'Enable',
@@ -30,6 +30,35 @@ export class AppearanceSetting extends Component {
         this.onLanguageChange = this.onLanguageChange.bind(this)
         this.onCurrencyChange = this.onCurrencyChange.bind(this)
         this.onStrictModeChange = this.onStrictModeChange.bind(this)
+
+        this.getData()
+    }
+
+    getData = async () => {
+        var data = await fetchSetting({})
+        console.log(data)
+
+
+        this.setState({
+            appThemeCurrent: data.chedo,
+            languageCurrent: (data.ngonngu == 'EN') ? 'English' : 'Vietnam',
+            currencyCurrent: (data.loaitien),
+            strictModeCurrent: (data.chedo == true) ? 'Enable' : 'Disable',
+        })
+    }
+
+    handleSaveSetting = async () => {
+        console.log("Save Setting")
+
+        var caidattest = {
+            idnguoidung: '60c5c67c3576c0078f3bc622',
+            loaitien: this.state.currencyCurrent,
+            chedo: this.state.appThemeCurrent,
+            ngonngu: this.state.languageCurrent,
+            chedonghiemngat: (this.state.strictModeCurrent == 'Enable') ? true : false,
+        }
+
+        console.log(await saveSetting(caidattest))
     }
 
     async componentDidMount() {

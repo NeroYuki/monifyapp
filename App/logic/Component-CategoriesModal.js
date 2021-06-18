@@ -1,4 +1,4 @@
-import {queryHangMucGiaoDich,deleteHangMucGiaoDich} from '../services/HangMucGiaoDichCRUD';
+import {queryHangMucGiaoDich,deleteHangMucGiaoDich,updateHangMucGiaoDich} from '../services/HangMucGiaoDichCRUD';
 import {BSON} from 'realm';
 
 export const fetchCategories = () =>
@@ -10,11 +10,17 @@ export const fetchCategories = () =>
 
 export const deleteCategory = ({categoryId})=>
     new Promise((resolve, reject )=>{
-        let catId=new BSON.ObjectID(categoryId)
-        deleteHangMucGiaoDich({idhangmucgiaodich:catId}).then(hangmuc=>{
-            if(hangmuc=='ThanhCong')
+        let catId=(categoryId)?new BSON.ObjectID(categoryId):null
+        if(!catId)
+        {
+            reject({result:false,message:'Xóa hạng mục thất bại'})
+            return
+        }
+        updateHangMucGiaoDich({idhangmucgiaodich:catId,invs:false}).then(hangmuc=>{
+            if(hangmuc)
                 resolve({result:true,message:'Xóa hạng mục thành công'})
             else
-                resolve({result:false,message:'Xóa hạng mục thất bại'})
+                reject({result:false,message:'Xóa hạng mục thất bại'})
         }).catch(err=>reject({result:false,message:err}))
 })
+

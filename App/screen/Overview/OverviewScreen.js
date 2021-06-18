@@ -11,10 +11,14 @@ import { TransactionModal } from "../../components/TransactionEditor/Transaction
 
 import Moment from 'moment'
 import { format, addDays, addMonths, addYears } from 'date-fns'
+import { queryTranCategories, queryTransactions } from "../../logic/Screen-Overview";
 
 export class OverviewScreen extends Component {
     constructor(props) {
         super(props)
+
+        console.log("Overview Screen: - Constructor")
+
         this.state = {
             visible: false,
             categoriesVisible: false,
@@ -23,10 +27,16 @@ export class OverviewScreen extends Component {
             periodVisible: false,
             expenseOrIncomeVisible: false,
 
-            // Tap on item report then set data on this
-            currentData: {
+            // All trans data 
+            overviewData: {},
+            categoriesData: {},
 
-            },
+            // Tap on item report then set data on this
+            // List - Tab 
+            currentData: {},
+
+            // Categories - Tab
+            currentOption: 'Expense',
 
             dateTime: "",
         }
@@ -43,16 +53,42 @@ export class OverviewScreen extends Component {
         this.getDate = this.getDate.bind(this)
         this.decreasePeriod = this.decreasePeriod.bind(this)
         this.increasePeriod = this.increasePeriod.bind(this)
+        this.changeShowingOption = this.changeShowingOption.bind(this)
+
+
+    }
+
+    componentDidMount() {
+
+        console.log("Overview Screen: - Component Did Mount")
+
+
+        this.getDate()
+
+        this.getDataOverview()
+    }
+
+    getDataOverview = async () => {
+
+        var data = JSON.parse(JSON.stringify(await queryTransactions({ walletId: '60c96efa9bd6d1e6e1aed7a6' })))
+        var percentageData = JSON.parse(JSON.stringify(await queryTranCategories({ walletId: '60c96efa9bd6d1e6e1aed7a6' })))
+
+        // console.log("PERCENTAGE", percentageData)
+
+        this.setState({
+            overviewData: data,
+            categoriesData: percentageData,
+        })
+
     }
 
     getDate() {
-
         // Becuz getMonth() start from 0. You need to date.getMonth() - 1 to achieve what u want
         var basicFormat = new Date()
 
         var date = {
             currentTime: format(new Date(), 'MMM yyyy'),
-            otherFormat: new Date(basicFormat.setMonth(basicFormat.getMonth() - 1))
+            otherFormat: new Date(basicFormat.setMonth(basicFormat.getMonth()))
         };
 
         this.setState({
@@ -93,11 +129,6 @@ export class OverviewScreen extends Component {
     }
 
 
-    componentDidMount() {
-        console.log("COMPONENT DID MOUNT")
-        this.getDate()
-    }
-
     // MARK: - CALL MODAL
     onCategoriesPress() {
         this.setState({ categoriesVisible: true })
@@ -135,23 +166,44 @@ export class OverviewScreen extends Component {
         this.setState({ expenseOrIncomeVisible: !this.state.expenseOrIncomeVisible })
     }
 
+    changeShowingOption(val) {
+        // console.log("OPTION IN OVERVIEW", val)
+        this.setState({
+            currentOption: val,
+            expenseOrIncomeVisible: !this.state.expenseOrIncomeVisible
+        })
+    }
+
     // MARK: - ACTION
     reportView = () => {
+        console.log("Overview Screen: - Report view")
         return (
             (!this.state.chartView) ?
-                <ItemsOverView onPressTransactionEditor={this.onPressTransactionEditor} />
+                <ItemsOverView
+                    onPressTransactionEditor={this.onPressTransactionEditor}
+                    data={this.state.overviewData.trans}
+                    currentOption={this.state.currentOption}
+                />
                 :
-                <ChartOverview onPressShowing={this.onPressShowing} />
+                <ChartOverview
+                    onPressShowing={this.onPressShowing}
+                    data={this.state.categoriesData}
+                    currentOption={this.state.currentOption}
+                />
         )
     }
 
     render() {
+
+        console.log("Overview Screen: - Render")
+
         return (
             <SafeAreaView style={{ flex: 1 }}>
                 <ScrollView style={{ flex: 1 }}>
                     <View style={{ flex: 1 }}>
 
                         <WalletHeader
+                            data={this.state.overviewData}
                             currentTab={this.state.chartView}
                             onCategoriesPress={this.onChartCategoriesPress}
                             onListPress={this.onListPress}
@@ -166,38 +218,11 @@ export class OverviewScreen extends Component {
                             />
 
                             <this.reportView />
-
-
-                            {/* <Button onPress={() => { this.setState({ visible: true }) }}>Click me</Button>
-                    <Button onPress={() => { this.setState({ categoriesVisible: !this.state.categoriesModal }) }}>Click me 2</Button>
-
-                    <Modal visible={this.state.visible} onDismiss={() => { this.setState({ visible: false }) }} contentContainerStyle={containerStyle} style={style}>
-                        <TransactionEditor></TransactionEditor>
-                    </Modal>
-
-                    <TimespanPicker isVisible={this.state.periodVisible} onRequestClose={() => { this.setState({ periodVisible: false }) }}></TimespanPicker>
-
-                    <CategoriesModal isVisible={this.state.categoriesVisible} onRequestClose={() => { this.setState({ categoriesVisible: false }) }}></CategoriesModal> */}
                         </SafeAreaView>
                     </View>
 
 
                 </ScrollView>
-                {/* <Modal
-                    visible={this.state.visible}
-                    onDismiss={() => { this.setState({ visible: false }) }}
-                    contentContainerStyle={styles.containerStyle}
-                    style={styles.modalStyle}
-                >
-
-                    <TransactionEditor
-                        currentData={this.state.currentData}
-                        onCategoriesPress={this.onCategoriesPress}
-                        onRecurringPress={this.onRecurringPress}
-                        onRequestClose={this.onPressTransactionEditor}
-                    />
-
-                </Modal> */}
 
                 <TransactionModal
                     isVisible={this.state.visible}
@@ -207,20 +232,10 @@ export class OverviewScreen extends Component {
                     onRecurringPress={this.onRecurringPress}
                 />
 
-                {/* <CategoriesModal
-                    isVisible={this.state.categoriesVisible}
-                    onRequestClose={() => { this.setState({ categoriesVisible: false }) }}
-                />
-
-                <RecurringModal
-                    isVisible={this.state.recurringVisible}
-                    closePeriod={() => {
-                        this.setState({ recurringVisible: false })
-                    }}
-                />*/}
-
                 <ExpenseOrIncomeModal
                     isVisible={this.state.expenseOrIncomeVisible}
+                    currentOption='Expense'
+                    changeShowingOption={this.changeShowingOption}
                     closePeriod={() => {
                         this.setState({ expenseOrIncomeVisible: false })
                     }}

@@ -3,12 +3,13 @@ import { ScrollView, Text, View, TouchableOpacity } from "react-native";
 import { FAB, Searchbar, Dialog, Paragraph, Button } from "react-native-paper";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RecurringBillEntry, RecurringBillSearchModal } from "../../components";
+import { queryBill } from "../../logic/Screen-RecurringBillManager";
 import { stylesheet } from './style'
 
 export class RecurringBillManager extends Component {
     constructor(props) {
         super(props)
-        
+
         this.state = {
             billList: [
                 {
@@ -31,6 +32,13 @@ export class RecurringBillManager extends Component {
             advanceSearchVisible: false,
             deletePromptVisible: false,
         }
+
+        this.fetchData()
+    }
+
+    fetchData = async () => {
+        await queryBill({})
+
     }
 
     render() {
@@ -47,9 +55,9 @@ export class RecurringBillManager extends Component {
         return (
             <View style={style.container}>
                 <View style={style.search_bar}>
-                    <Searchbar style={{flex: 1}}></Searchbar>
-                    <TouchableOpacity style={{backgroundColor: 'white', elevation: 5, borderRadius: 5, marginLeft: 2}}
-                        onPress={() => {this.setState({advanceSearchVisible: true})}}>
+                    <Searchbar style={{ flex: 1 }}></Searchbar>
+                    <TouchableOpacity style={{ backgroundColor: 'white', elevation: 5, borderRadius: 5, marginLeft: 2 }}
+                        onPress={() => { this.setState({ advanceSearchVisible: true }) }}>
                         <Icon name="menu-down" size={40}></Icon>
                     </TouchableOpacity>
                 </View>
@@ -61,19 +69,19 @@ export class RecurringBillManager extends Component {
                     icon="plus"
                     onPress={() => {this.props.navigation.navigate("RecurringBillEditor", {mode: "edit", id: ""})}}
                 />
-                <RecurringBillSearchModal isVisible={this.state.advanceSearchVisible} 
-                    onRequestClose={() => {this.setState({advanceSearchVisible: false})}} 
-                    onFilterRequest={(data) => {console.log(data); }}>
+                <RecurringBillSearchModal isVisible={this.state.advanceSearchVisible}
+                    onRequestClose={() => { this.setState({ advanceSearchVisible: false }) }}
+                    onFilterRequest={(data) => { console.log(data); }}>
                 </RecurringBillSearchModal>
 
-                <Dialog visible={this.state.deletePromptVisible} onDismiss={() => {this.setState({deletePromptVisible: false})}}>
+                <Dialog visible={this.state.deletePromptVisible} onDismiss={() => { this.setState({ deletePromptVisible: false }) }}>
                     <Dialog.Title>Confirm</Dialog.Title>
                     <Dialog.Content>
                         <Paragraph>Are you sure you want to delete this recurring bill? This action is irreversible</Paragraph>
                     </Dialog.Content>
                     <Dialog.Actions>
-                    <Button onPress={() => {this.setState({deletePromptVisible: false})}}>Cancel</Button>
-                        <Button mode='contained' onPress={() => {this.setState({deletePromptVisible: false})}}>Confirm</Button>
+                        <Button onPress={() => { this.setState({ deletePromptVisible: false }) }}>Cancel</Button>
+                        <Button mode='contained' onPress={() => { this.setState({ deletePromptVisible: false }) }}>Confirm</Button>
                     </Dialog.Actions>
                 </Dialog>
             </View>

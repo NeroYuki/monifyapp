@@ -69,6 +69,10 @@ export const updateGiaoDichChuKy=GiaoDichChuKy=> new Promise((resolve,reject)=>{
               {
                 updateGiaoDichChuKy.thoigiancuoicungcheck=GiaoDichChuKy.thoigiancuoicungcheck
               }
+              if(GiaoDichChuKy.thoigianbatdau)
+              {
+                updateGiaoDichChuKy.thoigianbatdau=GiaoDichChuKy.thoigianbatdau
+              }
               updateGiaoDichChuKy.chukygiaodichtheongay=GiaoDichChuKy.chukygiaodichtheongay
               updateGiaoDichChuKy.chukygiaodichtheothang=GiaoDichChuKy.chukygiaodichtheothang
               resolve(updateGiaoDichChuKy)
@@ -79,6 +83,10 @@ export const updateGiaoDichChuKy=GiaoDichChuKy=> new Promise((resolve,reject)=>{
               if(GiaoDichChuKy.thoigian)
               {
                 updateGiaoDichChuKy.thoigian=GiaoDichChuKy.thoigian
+              }
+              if(GiaoDichChuKy.thoigianbatdau)
+              {
+                updateGiaoDichChuKy.thoigianbatdau=GiaoDichChuKy.thoigianbatdau
               }
               if(GiaoDichChuKy.name)
               {
@@ -129,7 +137,12 @@ export const updateGiaoDichChuKy=GiaoDichChuKy=> new Promise((resolve,reject)=>{
 
 export const deleteGiaoDichChuKy=GiaoDichChuKy=> new Promise((resolve,reject)=>{
     Realm.open(data).then(realm=>{
-        let IDGiaoDichChuKyCop = new BSON.ObjectID(JSON.parse(JSON.stringify(GiaoDichChuKy.idgiaodichtheochuky)))
+        let IDGiaoDichChuKyCop = (GiaoDichChuKy.idgiaodichtheochuky)?new BSON.ObjectID(JSON.parse(JSON.stringify(GiaoDichChuKy.idgiaodichtheochuky))):null
+        if(!IDGiaoDichChuKyCop)
+        {
+          reject('ThatBai')
+          return
+        }
         realm.write(()=>{
             let deleteGiaoDichChuKy=realm.objectForPrimaryKey(GiaoDichTheoCKSchema.name,GiaoDichChuKy.idgiaodichtheochuky)
             realm.delete(deleteGiaoDichChuKy)

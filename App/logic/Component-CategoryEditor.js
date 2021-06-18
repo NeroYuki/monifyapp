@@ -3,8 +3,8 @@ import {BSON} from 'realm';
 
 export const fetchCategory = ({categoryId}) =>
   new Promise((resolve, reject) => {
-    let catId=new BSON.ObjectID(categoryId)
-    queryHangMucGiaoDich({idhangmucgiaodich:catId}).then(hangmuc=>{
+    let catId=(categoryId)?new BSON.ObjectID(categoryId):null
+    queryHangMucGiaoDich({idhangmucgiaodich:catId,invs:true}).then(hangmuc=>{
         resolve(hangmuc)
     }).catch(err=>reject(err))
 })
@@ -14,7 +14,7 @@ export const saveCategory = ({category_id,userid,name,color,icon,loaihangmuc})=>
         {
             let hangmuc={
                 idhangmucgiaodich:new BSON.ObjectID(),
-                idnguoidung:new BSON.ObjectID(userid),
+                idnguoidung:(userid)?new BSON.ObjectID(userid):null,
                 thoigiantao: new Date(Date.now()),
                 tenhangmuc:name,
                 iconhangmuc:icon,
@@ -29,13 +29,16 @@ export const saveCategory = ({category_id,userid,name,color,icon,loaihangmuc})=>
                 {
                     reject({result:false,message:'Tạo hạng mục thất bại'})
                 }
-            }).catch(err=>reject({result:false,message:err}))
+            }).catch(err=>{
+                reject({result:false,message:err})
+                return
+            })
         }
         else
         {
             let hangmuc={
-                idhangmucgiaodich:new BSON.ObjectID(category_id),
-                idnguoidung:new BSON.ObjectID(userid),
+                idhangmucgiaodich:(category_id)?new BSON.ObjectID(category_id):null,
+                idnguoidung:(userid)?new BSON.ObjectID(userid):null,
                 tenhangmuc:name,
                 iconhangmuc:icon,
                 loaihangmuc:null,
@@ -52,7 +55,10 @@ export const saveCategory = ({category_id,userid,name,color,icon,loaihangmuc})=>
                     hangmuc.loaihangmuc={ chitieu: false, thunhap: true }
                 }
                 else
+                {
                     reject({result:false,mesage:'Không tìm thấy loại hạng mục'})
+                    return
+                }
             }
             updateHangMucGiaoDich(hangmuc).then(hangmuc=>{
                 if(hangmuc!='Hai loại hạng mục cùng giá trị')
@@ -63,6 +69,9 @@ export const saveCategory = ({category_id,userid,name,color,icon,loaihangmuc})=>
                 {
                     reject({result:false,message:'Cập nhật hạng mục thất bại'})
                 }
-            }).catch(err=>reject({result:false,message:err}))
+            }).catch(err=>{
+                reject({result:false,message:err})
+                return
+            })
         }
 })

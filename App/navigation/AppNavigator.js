@@ -6,6 +6,7 @@ import { COLORS, icons, SIZES } from '../assets/constants/';
 import { Image, Text, TouchableOpacity, View } from 'react-native';
 import { CreateModal, TransactionEditor } from '../components';
 import { Component } from 'react';
+import { AddNewTransaction } from '../screen/AddNewTransaction/AddNewTransaction';
 
 const Tab = createBottomTabNavigator();
 
@@ -18,25 +19,28 @@ const tabOptions = {
 
 const CreateInput = (props) => {
   return (
-    <TouchableOpacity style={{ alignItems: 'center', justifyContent: 'center', width: 38, height: 38, borderRadius: 19, backgroundColor: COLORS.yellow }} onPress={props.onPress}>
-      <Image source={icons.plus} resizeMode='contain' style={{ height: 19, width: 19 }} />
+    <TouchableOpacity
+      style={{
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 38, height: 38,
+        borderRadius: 19,
+        backgroundColor: COLORS.yellow
+      }}
+      onPress={() => console.log("Create Input")}>
+      <Image
+        source={icons.plus}
+        resizeMode='contain'
+        style={{
+          height: 19,
+          width: 19
+        }}
+      />
     </TouchableOpacity>
   )
 }
 
 const AppNavigator = () => {
-  const [showCreateModal, setShowCreateModal] = React.useState(false)
-  const [procOnce, setProcOnce] = React.useState(true)
-
-  const CreateModalWrapper = ({ navigation }) => {
-
-    return (
-      <View style={{flex: 1}}>
-        <OverviewScreen />
-        <CreateModal isVisible={showCreateModal} onRequestClose={() => { console.log('close'); setShowCreateModal(false) }}></CreateModal>
-      </View>
-    )
-  }
 
   return (
     <Tab.Navigator
@@ -76,7 +80,7 @@ const AppNavigator = () => {
               );
             case 'CreateInput':
               return (
-                <CreateInput onPress={() => setShowCreateModal(true)} />
+                <CreateInput />
               );
             case 'Profile':
               return (
@@ -110,13 +114,7 @@ const AppNavigator = () => {
     >
       <Tab.Screen name='Overview' component={OverviewScreen} />
       <Tab.Screen name='Budget' component={BudgetScreen} />
-      <Tab.Screen name='CreateInput' component={CreateModalWrapper} listeners={{
-        tabPress: e => {
-          // Prevent default action
-
-          e.preventDefault();
-        },
-      }} />
+      <Tab.Screen name='CreateInput' component={AddNewTransaction} />
       <Tab.Screen name='Profile' component={ProfileContainer} />
       <Tab.Screen name='Tools' component={ToolsContainer} />
     </Tab.Navigator >

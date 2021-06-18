@@ -1,7 +1,6 @@
 import React, { Component } from "react";
-import { View, Modal, Text, TouchableHighlight, TouchableOpacity, SafeAreaView, TextInput, ScrollView } from "react-native";
+import { View, Modal, Text, TouchableHighlight, TouchableOpacity, SafeAreaView, TextInput, ScrollView, StyleSheet } from "react-native";
 import { Divider, Avatar, Modal as PModal } from "react-native-paper"
-import { stylesheet } from './style'
 import { CategoryEditor } from "../CategoryEditor";
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -65,6 +64,7 @@ export class BudgetSettingModal extends Component {
                                 <Icon size={32} name='close' onPress={this.props.onRequestClose} />
                             </TouchableOpacity>
                             <Text style={{ flex: 1, textAlign: 'center', marginRight: 16 }}> EDIT BUDGET </Text>
+                            <View style={{ height: 32, width: 32, marginRight: 16 }}></View>
                         </View>
 
                         {/* Name  */}
@@ -105,9 +105,50 @@ export class BudgetSettingModal extends Component {
                         </View>
 
                         {/* INCOME/EXPENSE Item List */}
-                        <ItemsBudget title="INCOME" addNewCatgory={this.addNewCatgory} />
+                        <View style={{ marginTop: 20, height: 100, backgroundColor: 'white' }}>
+                            <View style={{ flex: 1, marginLeft: 20 }}>
+                                <Text style={{ marginTop: 20, color: COLORS.blueText }}> INCOME </Text>
+                            </View>
+                            <View style={{ justifyContent: 'center', flex: 1, marginLeft: 20 }}>
+                                <TextInput
+                                    style={{
+                                        height: '100%',
+                                        fontSize: 17
+                                    }}
+                                    placeholder="Type your income target"
+                                    onChangeText={text => console.log(text)}
+                                />
+                            </View>
+                        </View>
 
-                        <ItemsBudget title="EXPENSE" addNewCatgory={this.addNewCatgory} />
+                        <View style={{ marginTop: 20, height: 100, backgroundColor: 'white' }}>
+                            <View style={{ flex: 1, marginLeft: 20 }}>
+                                <Text style={{ marginTop: 20, color: COLORS.blueText }}> EXPENSE </Text>
+                            </View>
+                            <View style={{ justifyContent: 'center', flex: 1, marginLeft: 20 }}>
+                                <TextInput
+                                    style={{
+                                        height: '100%',
+                                        fontSize: 17
+                                    }}
+                                    placeholder="Type your expense target"
+                                    onChangeText={text => console.log(text)}
+                                />
+                            </View>
+                        </View>
+
+
+                        <TouchableOpacity style={{ paddingTop: 30, flex: 1, justifyContent: 'center', marginRight: 16, marginLeft: 16 }}>
+                            <View style={[styles.button, { backgroundColor: COLORS.yellow }]}>
+                                <Text style={{ fontSize: 17, color: COLORS.white }}> SAVE </Text>
+                            </View>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={{ paddingTop: 16, flex: 1, justifyContent: 'center', marginRight: 16, marginLeft: 16 }}>
+                            <View style={[styles.button, { backgroundColor: COLORS.red }]}>
+                                <Text style={{ fontSize: 17, color: COLORS.white }}> DELETE </Text>
+                            </View>
+                        </TouchableOpacity>
 
                         <BudgetSettingPeriodModal
                             isVisible={this.state.periodVisible}
@@ -123,14 +164,19 @@ export class BudgetSettingModal extends Component {
                         />
                     </ScrollView>
 
-                    <AddNewBudgetExpenseModal
-                        isVisible={this.state.addBudgetExpenseVisible}
-                        onRequestClose={() => this.setState({ addBudgetExpenseVisible: false })}
-                    />
-
                 </SafeAreaView>
 
             </Modal>
         )
     }
 }
+
+const styles = StyleSheet.create({
+    button: {
+        height: 48,
+        borderRadius: 20,
+        justifyContent: 'center',
+        alignItems: 'center',
+
+    },
+})

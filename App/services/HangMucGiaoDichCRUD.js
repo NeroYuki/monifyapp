@@ -8,7 +8,7 @@ export const insertHangMucGiaoDich = (newHangMucGiaoDich,LoaiHangMuc) =>
   new Promise((resolve, reject) => {
     Realm.open(data).then(realm => {
       let LoaiHangMucObj
-      if(realm.objects(LoaiHangMucConfigSchema.name).filtered("chitieu==true")[0] == undefined&&LoaiHangMuc=='chitieu')
+      if(realm.objects(LoaiHangMucConfigSchema.name).filtered("chitieu==$0",true).length==0&&LoaiHangMuc=='chitieu')
       {
         realm.write(()=>{
           LoaiHangMucObj=realm.create(LoaiHangMucConfigSchema.name,{
@@ -17,11 +17,11 @@ export const insertHangMucGiaoDich = (newHangMucGiaoDich,LoaiHangMuc) =>
           })
         })
       }
-      else if(realm.objects(LoaiHangMucConfigSchema.name).filtered("chitieu==true")[0]!=undefined&&LoaiHangMuc=='chitieu')
+      else if(realm.objects(LoaiHangMucConfigSchema.name).filtered("chitieu==$0",true).length!=0&&LoaiHangMuc=='chitieu')
       {
-        LoaiHangMucObj=realm.objects(LoaiHangMucConfigSchema.name).filtered("chitieu==true")[0]
+        LoaiHangMucObj=realm.objects(LoaiHangMucConfigSchema.name).filtered("chitieu==$0",true)[0]
       }
-      if(realm.objects(LoaiHangMucConfigSchema.name).filtered("thunhap==true")[0]==undefined&&LoaiHangMuc=='thunhap')
+      if(realm.objects(LoaiHangMucConfigSchema.name).filtered("thunhap==$0",true).length==0&&LoaiHangMuc=='thunhap')
       {
         realm.write(()=>{
           LoaiHangMucObj=realm.create(LoaiHangMucConfigSchema.name,{
@@ -30,9 +30,9 @@ export const insertHangMucGiaoDich = (newHangMucGiaoDich,LoaiHangMuc) =>
           })
         })
       }
-      else if(realm.objects(LoaiHangMucConfigSchema.name).filtered("thunhap==true")[0]!=undefined&&LoaiHangMuc=='thunhap')
+      else if(realm.objects(LoaiHangMucConfigSchema.name).filtered("thunhap==$0",true).length!=0&&LoaiHangMuc=='thunhap')
       {
-        LoaiHangMucObj=realm.objects(LoaiHangMucConfigSchema.name).filtered("thunhap==true")[0]
+        LoaiHangMucObj=realm.objects(LoaiHangMucConfigSchema.name).filtered("thunhap==$0",true)[0]
       }
       if(typeof newHangMucGiaoDich.loaihangmuc==undefined){
         newHangMucGiaoDich.__proto__="loaihangmuc"
@@ -68,6 +68,10 @@ export const updateHangMucGiaoDich=HangMucGiaoDich=> new Promise((resolve,reject
               {
                 updateHangMucGiaoDich.color=HangMucGiaoDich.color
               }
+              if(HangMucGiaoDich.invs)
+              {
+                updateHangMucGiaoDich.invs=HangMucGiaoDich.invs
+              }
               resolve(updateHangMucGiaoDich)
             }
             else if(!HangMucGiaoDich.loaihangmuc)
@@ -85,6 +89,10 @@ export const updateHangMucGiaoDich=HangMucGiaoDich=> new Promise((resolve,reject
               {
                 updateHangMucGiaoDich.color=HangMucGiaoDich.color
               }
+              if(HangMucGiaoDich.invs)
+              {
+                updateHangMucGiaoDich.invs=HangMucGiaoDich.invs
+              }
               resolve(updateHangMucGiaoDich)
             }
             else
@@ -96,7 +104,12 @@ export const updateHangMucGiaoDich=HangMucGiaoDich=> new Promise((resolve,reject
 
 export const deleteHangMucGiaoDich=HangMucGiaoDich=> new Promise((resolve,reject)=>{
     Realm.open(data).then(realm=>{
-        let IDHangMucGiaoDichCop = new BSON.ObjectID(JSON.parse(JSON.stringify(HangMucGiaoDich.idhangmucgiaodich)))
+        let IDHangMucGiaoDichCop = (HangMucGiaoDich.idhangmucgiaodich)?new BSON.ObjectID(JSON.parse(JSON.stringify(HangMucGiaoDich.idhangmucgiaodich))):null
+        if(!IDHangMucGiaoDichCop)
+        {
+          reject('ThatBai')
+          return
+        }
         realm.write(()=>{
             let deleteHangMucGiaoDich=realm.objectForPrimaryKey(HangMucGiaoDichSchema.name,HangMucGiaoDich.idhangmucgiaodich)
             realm.delete(deleteHangMucGiaoDich)
@@ -144,6 +157,10 @@ export const queryHangMucGiaoDich=(option)=> new Promise((resolve,reject)=>{
     if(option.color)
     {
       Taget=Taget.filtered('color==$0',option.color)
+    }
+    if(option.invs)
+    {
+      Taget=Taget.filtered('invs==$0',option.invs)
     }
     resolve(Taget)
   }).catch((error)=>reject(error))

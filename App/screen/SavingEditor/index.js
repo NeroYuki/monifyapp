@@ -3,21 +3,24 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { stylesheet } from './style'
 import { ColorPickerModal, GenericInputModal, GenericSelectionModal, GenericSettingField } from '../../components'
-import { FAB } from "react-native-paper";
+import { FAB, Snackbar } from "react-native-paper";
 import DateTimePicker from '@react-native-community/datetimepicker';
+import { fetchSaving, saveSaving } from "../../logic/Screen-saving";
+import { querywallet } from "../../logic/Screen-wallet";
+import moment from "moment";
 
 export class SavingEditor extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: "BIDV Saving",
-            color: '#ddddff',
-            amount: '3.000.000',
+            name: "",
+            color: '#ffffff',
+            amount: '0',
             duration: new Date(),
-            interest: "0.3",
-            applied_wallet_values: ['Credit Card', 'Cash Wallet', 'Secret Fund'],
-            applied_wallet: 'Credit Card',
-            early_interest: "0.1",
+            interest: "0",
+            applied_wallet_values: [], //{key: id, text: name}
+            applied_wallet: '', //id
+            early_interest: "0",
             creation_date: new Date(),
 
             nameInputVisible: false,
@@ -27,10 +30,61 @@ export class SavingEditor extends Component {
             earlyInterestInputVisible: false,
             colorPickerVisible: false,
         }
+
+        this.getWalletText = this.getWalletText.bind(this)
     }
+
+
+    async componentDidMount() {
+        const id = this.props.route.params.id
+        let wallet_selection = []
+        let wallet_query_result = await querywallet({})
+        wallet_query_result.forEach((val) => {
+            wallet_selection.push({
+                key: val.walletId,
+                text: val.name,
+            })
+        })
+
+        
+
+        if (id) {
+            let data = await fetchSaving(id)
+            //console.log('UI', data)
+            if (!data) return
+            this.setState({
+                name: data.name,
+                color: data.color,
+                amount: data.amount,
+                duration: moment(JSON.stringify(data.expire_on), "YYYY-MM-DDTHH:mm:ss.SSSZ").toDate(),
+                interest: data.interest,
+                applied_wallet: data.applied_wallet_id,
+                applied_wallet_values: wallet_selection,
+                early_interest: data.early_interest,
+                creation_date: moment(JSON.stringify(data.creation_date), "YYYY-MM-DDTHH:mm:ss.SSSZ").toDate()
+            })
+            //console.log(this.state)
+        }
+        else {
+            this.setState({
+                applied_wallet_values: wallet_selection
+            })
+        }
+    }
+
+    getWalletText(id) {
+        if (!id) return
+        //Fucking String object, not string primitive was returned. Fuck whoever code the fetching function
+        id = id.toString()
+        let appliedWalletIndex = this.state.applied_wallet_values.findIndex((val) => {return val.key === id})
+        return (appliedWalletIndex !== -1)? this.state.applied_wallet_values[appliedWalletIndex].text : ""
+    }
+
 
     render() {
         const style = stylesheet
+        const mode = this.props.route.params.mode
+
         return (
             <View style={style.container}>
                 <ScrollView>
@@ -51,9 +105,9 @@ export class SavingEditor extends Component {
 
                     <GenericSettingField
                         style={style.setting_entry}
-                        title="Wallet Amount"
+                        title="Saving Amount"
                         value={this.state.amount}
-                        description="The current amount of the wallet, can only be changed by transactions" />
+                        description="The current amount of the saving fund, can only be changed by transactions" />
                     
                     <GenericSettingField
                         style={style.setting_entry}
@@ -74,7 +128,7 @@ export class SavingEditor extends Component {
                     <GenericSettingField
                         style={style.setting_entry}
                         title="Inherited Wallet"
-                        value={this.state.applied_wallet}
+                        value={this.getWalletText(this.state.applied_wallet)}
                         description="The wallet that will get the saving fund withdrawal amount after the fund expire" 
                         onPress={() => {this.setState({walletSelectionVisible: true})}}
                     />
@@ -95,11 +149,37 @@ export class SavingEditor extends Component {
                     />
                 </ScrollView>
 
-                <FAB style={style.fab}
+                {mode === "edit" && <FAB style={style.fab}
                     big
                     icon="content-save"
-                    onPress={() => console.log('Pressed')}
-                />
+                    onPress={ async () => {
+                        const id = this.props.route.params.id
+                        let saved_data = {
+                            savingId: (id)? id : undefined,
+                            savingName: this.state.name,
+                            color: this.state.color,
+                            amount: parseFloat(this.state.amount) || 0,
+                            expire_on: this.state.duration,
+                            interest: parseFloat(this.state.interest) || 0,
+                            applied_wallet_id: this.state.applied_wallet,
+                            early_interest: "0",
+                            creationDate: this.state.creation_date,
+                        }
+                        //console.log(saved_data)
+                        let data_result = await saveSaving(saved_data)
+                        //console.log(data_result)
+                        if (data_result) this.setState({snackbarMessage: "Your saving info have been saved"})
+                        else this.setState({snackbarMessage: "Failed to save your saving info"})
+
+                        this.setState({snackbarMessageVisible: true})
+                    }}
+                />}
+
+                <Snackbar
+                    visible={this.state.snackbarMessageVisible}
+                    onDismiss={() => {this.setState({snackbarMessageVisible: false})}}>
+                    {this.state.snackbarMessage}
+                </Snackbar>
 
                 <GenericInputModal
                     initialValue={this.state.name}
@@ -149,6 +229,7 @@ export class SavingEditor extends Component {
                 )}
 
                 <GenericSelectionModal
+                    keyMode={true}
                     isVisible={this.state.walletSelectionVisible}
                     onRequestClose={() => { this.setState({ walletSelectionVisible: false }) }}
                     selectionEntry={this.state.applied_wallet_values}

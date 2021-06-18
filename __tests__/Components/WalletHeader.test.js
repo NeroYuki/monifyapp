@@ -6,5 +6,8 @@ import { WalletHeader } from '../../App/components';
 import renderer from 'react-test-renderer';
 
 it('renders correctly', async () => {
-  await renderer.create(<WalletHeader />);
+  let overviewData = {}
+  await renderer.create(<WalletHeader 
+      data={overviewData}
+    />);
 });

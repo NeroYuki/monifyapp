@@ -223,5 +223,5 @@ export const monifydata = {
     //LoaiTietKiemConfigSchema,
     LoaiMucTieuConfigSchema,
     LoaiHangMucConfigSchema],
-    schemaVersion:8,
+    schemaVersion: 9,
 }

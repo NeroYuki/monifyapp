@@ -33,12 +33,20 @@ export class RecurringBillManager extends Component {
             deletePromptVisible: false,
         }
 
+        
+    }
+
+    componentDidMount() {
         this.fetchData()
     }
 
     fetchData = async () => {
-        await queryBill({})
-
+        let data = await queryBill({})
+        console.log(data)
+        //if (data.length === 0) console.error("error")
+        this.setState({
+            billList: data
+        })
     }
 
     render() {

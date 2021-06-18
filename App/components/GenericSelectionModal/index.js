@@ -6,18 +6,18 @@ import { stylesheet } from './style';
 export class GenericSelectionModal extends Component {
     render() {
         const style = stylesheet
-
+        const keyMode = this.props.keyMode
         const selectionList = (this.props.selectionEntry) ? (this.props.selectionEntry.map((val, index) => {
             //TODO: overload an onSelection here
             return (
-                <View key={index} style={style.selection_entry}>
+                <View key={(keyMode)? val.key : index} style={style.selection_entry}>
                     <TouchableHighlight
                         onPress={(this.props.onSelection) ?
-                            () => this.props.onSelection(val)
+                            () => this.props.onSelection((keyMode)? val.key : val)
                             :
                             () => { console.log(val) }} underlayColor="#00000030"
                     >
-                        <Text style={style.selection_entry_text}>{val}</Text>
+                        <Text style={style.selection_entry_text}>{(keyMode)? val.text : val}</Text>
                     </TouchableHighlight>
                     <Divider></Divider>
                 </View>

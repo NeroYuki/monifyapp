@@ -6,5 +6,5 @@ import { RecurringBillEditor } from '../App/screen';
 import renderer from 'react-test-renderer';
 
 it('renders correctly', async () => {
-  await renderer.create(<RecurringBillEditor />);
+  await renderer.create(<RecurringBillEditor route={{param: ""}}/>);
 });

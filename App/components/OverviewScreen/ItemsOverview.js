@@ -10,6 +10,8 @@ export class ItemsOverView extends Component {
     constructor(props) {
         super(props)
 
+        console.log("Items Overview - Constructor")
+
         this.state = {
             // data: [
             //     {
@@ -52,7 +54,7 @@ export class ItemsOverView extends Component {
     getData = async () => {
         var dataFetched = this.props.data
 
-        console.log("DATA TRANS: ", this.props.currentOption)
+        console.log('Items Overview: - Get Data')
 
         var trans = []
 
@@ -89,6 +91,8 @@ export class ItemsOverView extends Component {
     }
 
     componentDidMount = async () => {
+
+        console.log("Items Overview - Component Dit Mount")
         this.getData()
     }
 
@@ -155,7 +159,7 @@ export class ItemsOverView extends Component {
     );
 
     render() {
-        console.log("STATE DATA: ", this.state)
+        console.log('Items Overview: - Render')
         return (
             <View style={styles.container}>
                 <SectionList

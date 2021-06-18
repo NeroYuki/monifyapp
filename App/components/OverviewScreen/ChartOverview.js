@@ -10,13 +10,20 @@ export class ChartOverview extends Component {
 
     constructor(props) {
         super(props)
+
+        console.log("Chart OverView: - Constructor")
+
         this.state = {
             data: this.props.data,
         }
     }
 
+    componentDidMount() {
+        console.log("Chart OverView: - Component Did Mount")
+    }
+
     render() {
-        console.log("CHART OVERVIEW CURRENT OPTION: ", this.props.currentOption)
+        console.log("Chart OverView: - Render")
 
         return (
             <View style={styles.container}>

@@ -10,14 +10,20 @@ export class ExpenseOrIncomeModal extends Component {
     constructor(props) {
         super(props)
 
+        console.log("Expense Or Icome: - Constructor")
+
         this.state = {
             selectedType: this.props.currentOption
         }
     }
 
+    componentDidMount() {
+        console.log("Expense Or Icome: - Component Did mount")
+    }
+
     render() {
 
-        console.log("OPTION SHOWING ", this.state.selectedType)
+        console.log("Expense Or Icome: - Render")
         return (
             <Modal
                 animationType="fade"

@@ -16,6 +16,9 @@ import { queryTranCategories, queryTransactions } from "../../logic/Screen-Overv
 export class OverviewScreen extends Component {
     constructor(props) {
         super(props)
+
+        console.log("Overview Screen: - Constructor")
+
         this.state = {
             visible: false,
             categoriesVisible: false,
@@ -33,7 +36,7 @@ export class OverviewScreen extends Component {
             currentData: {},
 
             // Categories - Tab
-            currentOption: 'Income',
+            currentOption: 'Expense',
 
             dateTime: "",
         }
@@ -51,9 +54,15 @@ export class OverviewScreen extends Component {
         this.decreasePeriod = this.decreasePeriod.bind(this)
         this.increasePeriod = this.increasePeriod.bind(this)
         this.changeShowingOption = this.changeShowingOption.bind(this)
+
+
     }
 
     componentDidMount() {
+
+        console.log("Overview Screen: - Component Did Mount")
+
+
         this.getDate()
 
         this.getDataOverview()
@@ -64,7 +73,7 @@ export class OverviewScreen extends Component {
         var data = JSON.parse(JSON.stringify(await queryTransactions({ walletId: '60c96efa9bd6d1e6e1aed7a6' })))
         var percentageData = JSON.parse(JSON.stringify(await queryTranCategories({ walletId: '60c96efa9bd6d1e6e1aed7a6' })))
 
-        console.log("PERCENTAGE", percentageData)
+        // console.log("PERCENTAGE", percentageData)
 
         this.setState({
             overviewData: data,
@@ -74,7 +83,6 @@ export class OverviewScreen extends Component {
     }
 
     getDate() {
-
         // Becuz getMonth() start from 0. You need to date.getMonth() - 1 to achieve what u want
         var basicFormat = new Date()
 
@@ -159,7 +167,7 @@ export class OverviewScreen extends Component {
     }
 
     changeShowingOption(val) {
-        console.log("OPTION IN OVERVIEW", val)
+        // console.log("OPTION IN OVERVIEW", val)
         this.setState({
             currentOption: val,
             expenseOrIncomeVisible: !this.state.expenseOrIncomeVisible
@@ -168,9 +176,9 @@ export class OverviewScreen extends Component {
 
     // MARK: - ACTION
     reportView = () => {
-        console.log("OVER VIEW REPORT VIEW", this.state.currentOption)
+        console.log("Overview Screen: - Report view")
         return (
-            (this.state.chartView) ?
+            (!this.state.chartView) ?
                 <ItemsOverView
                     onPressTransactionEditor={this.onPressTransactionEditor}
                     data={this.state.overviewData.trans}
@@ -187,7 +195,7 @@ export class OverviewScreen extends Component {
 
     render() {
 
-        // console.log("OVerview Datas: ", this.state.overviewData)
+        console.log("Overview Screen: - Render")
 
         return (
             <SafeAreaView style={{ flex: 1 }}>

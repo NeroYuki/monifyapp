@@ -12,6 +12,8 @@ export class ItemsCategoriesTab extends Component {
     constructor(props) {
         super(props)
 
+        console.log("Item Categories Tab: - Constructor")
+
         this.state = {
             data: [
                 {
@@ -37,6 +39,10 @@ export class ItemsCategoriesTab extends Component {
         };
 
         this.getData()
+    }
+
+    componentDidMount() {
+        console.log("Item Categories Tab: - Component Did Mount")
     }
 
     fetchDataList = async (array, datas, total, title) => {
@@ -65,7 +71,7 @@ export class ItemsCategoriesTab extends Component {
     }
 
     getData = async () => {
-        console.log("CATEGORIES DATA: ", this.props.data)
+        console.log("Item Categories Tab: - Get Data")
 
         var trans = this.props.data
         var expenses = []
@@ -161,6 +167,8 @@ export class ItemsCategoriesTab extends Component {
     );
 
     render() {
+
+        console.log("Item Categories Tab: - Render")
         return (
             <View style={styles.container}>
                 <SectionList

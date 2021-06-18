@@ -71,7 +71,6 @@ export class CategoryEditor extends Component {
 
     }
 
-
     render() {
         return (
             <View style={styles.container}>

@@ -29,11 +29,13 @@ export class SavingEditor extends Component {
             interestInputVisible: false,
             earlyInterestInputVisible: false,
             colorPickerVisible: false,
+
+            snackbarMessage: "",
+            snackbarMessageVisible: false,
         }
 
         this.getWalletText = this.getWalletText.bind(this)
     }
-
 
     async componentDidMount() {
         const id = this.props.route.params.id
@@ -45,8 +47,6 @@ export class SavingEditor extends Component {
                 text: val.name,
             })
         })
-
-        
 
         if (id) {
             let data = await fetchSaving(id)

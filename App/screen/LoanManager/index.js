@@ -3,7 +3,9 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { FAB, Searchbar, Dialog, Paragraph, Button } from "react-native-paper";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { LoanEntry, LoanPaymentModal, LoanSearchModal } from "../../components";
+import { deleteLoan, queryLoan } from "../../logic/Screen-loan";
 import { stylesheet } from './style'
+import moment from 'moment'
 
 export class LoanManager extends Component {
     constructor(props) {
@@ -11,47 +13,74 @@ export class LoanManager extends Component {
         
         this.state = {
             loanList: [
-                {
-                    id: '1',
-                    name: 'Friend Borrow',
-                    due_duratuion: '88 days',
-                    amount: '1.200.000 đ',
-                    interest_string: 'None',
-                    color: '#ffdddd'
-                },
-                {
-                    id: '2',
-                    name: 'Credit debt',
-                    due_duratuion: '22 days',
-                    interest_string: '1% / year',
-                    amount: '1.400.000 đ',
-                    color: '#ddffdd',
-                },
+
             ],
             advanceSearchVisible: false,
             deactivatePromptVisible: false,
             deletePromptVisible: false,
             paymentModalVisible: false,
+            selectedId: "",
+            quickQueryString: "",
+            unsubscribe: undefined,
         }
+    }
+
+    componentDidMount() {
+        this.fetchData()
+        const unsubscribe = this.props.navigation.addListener('focus', () => {
+            //console.log('focus')
+            this.fetchData()
+        });
+    
+        // Return the function to unsubscribe from the event so it gets removed on unmount
+        this.setState({unsubscribe: unsubscribe})
+    }
+
+    componentWillUnmount() {
+        if (this.state.unsubscribe) {
+            this.state.unsubscribe()
+        }
+    }
+
+    async fetchData() {
+        let data = await queryLoan({loanName: this.state.quickQueryString})
+        //console.log(data)
+        this.setState({
+            loanList: data
+        })
+    }
+
+    async queryData(input) {
+        let data = await queryLoan({loanName: input.name_input, minAmount: input.min_amount, maxAmount: input.max_amount})
+        this.setState({
+            loanList: data
+        })
     }
 
     render() {
         const style = stylesheet
         const loanDisplay = this.state.loanList.map((val) => {
             return <LoanEntry
-                key={val.id} style={[style.loan_entry, {backgroundColor: val.color}]} name={val.name} due_duration={val.due_duratuion} amount={val.amount} interest_string={val.interest_string}
+                key={val.loanId} style={[style.loan_entry, {backgroundColor: val.color}]} name={val.name} due_duration={moment(JSON.stringify(val.expire_on), "YYYY-MM-DDTHH:mm:ss.SSSZ").format("DD/MM/YYYY")} amount={(val.amount + " đ")} interest_string={(val.interest + "%")}
                 onPaymentPress={() => {this.setState({paymentModalVisible: true})}}
                 onDeactivatePress={() => {this.setState({deactivatePromptVisible: true})}}
-                onViewPress={() => {this.props.navigation.navigate("LoanEditor")}}
-                onDeletePress={() => {this.setState({deletePromptVisible: true})}}
-                onEditPress={() => {this.props.navigation.navigate("LoanEditor")}}
+                onViewPress={() => {this.props.navigation.navigate("LoanEditor", {mode: "view", id: val.loanId})}}
+                onDeletePress={() => {this.setState({deletePromptVisible: true, selectedId: val.loanId})}}
+                onEditPress={() => {this.props.navigation.navigate("LoanEditor", {mode: "edit", id: val.loanId})}}
             ></LoanEntry>
         })
 
         return (
             <View style={style.container}>
                 <View style={style.search_bar}>
-                    <Searchbar style={{flex: 1}}></Searchbar>
+                    <Searchbar style={{flex: 1}}
+                        onChangeText={(e) => {
+                            //console.log(e)
+                                this.setState({
+                                    quickQueryString: e
+                                })
+                            this.fetchData()
+                    }}></Searchbar>
                     <TouchableOpacity style={{backgroundColor: 'white', elevation: 5, borderRadius: 5, marginLeft: 2}}
                         onPress={() => {this.setState({advanceSearchVisible: true})}}>
                         <Icon name="menu-down" size={40}></Icon>
@@ -63,11 +92,14 @@ export class LoanManager extends Component {
                 <FAB style={style.fab}
                     big
                     icon="plus"
-                    onPress={() => {this.props.navigation.navigate("LoanEditor")}}
+                    onPress={() => {this.props.navigation.navigate("LoanEditor", {mode: "edit", id: ""})}}
                 />
                 <LoanSearchModal isVisible={this.state.advanceSearchVisible} 
                     onRequestClose={() => {this.setState({advanceSearchVisible: false})}} 
-                    onFilterRequest={(data) => {console.log(data); }}>
+                    onFilterRequest={(data) => {
+                        console.log(data); 
+                        this.queryData(data)
+                    }}>
                 </LoanSearchModal>
 
                 <LoanPaymentModal isVisible={this.state.paymentModalVisible} 
@@ -81,7 +113,16 @@ export class LoanManager extends Component {
                     </Dialog.Content>
                     <Dialog.Actions>
                     <Button onPress={() => {this.setState({deletePromptVisible: false})}}>Cancel</Button>
-                        <Button mode='contained' onPress={() => {this.setState({deletePromptVisible: false})}}>Confirm</Button>
+                    <Button mode='contained' onPress={async () => {
+                        if (this.state.selectedId) {
+                            let result = await deleteLoan(this.state.selectedId)
+                            if (result) {
+                                this.setState({selectedId: ""})
+                                this.fetchData()
+                            }
+                        }
+                        this.setState({deletePromptVisible: false})}
+                    }>Confirm</Button>
                     </Dialog.Actions>
                 </Dialog>
 

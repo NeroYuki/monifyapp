@@ -1,10 +1,11 @@
 import React, { Component } from "react";
 import { ScrollView, TouchableOpacity, View } from "react-native";
 import { stylesheet } from './style'
-import { ColorPickerModal, GenericInputModal, GenericSelectionModal, GenericSettingField } from '../../components'
-import { FAB } from "react-native-paper";
+import { CategoriesModal, ColorPickerModal, GenericInputModal, GenericSelectionModal, GenericSettingField } from '../../components'
+import { FAB, Snackbar } from "react-native-paper";
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { saveBill } from "../../logic/screen-RecurringBillEditor";
+import { fetchBill, saveBill } from "../../logic/screen-RecurringBillEditor";
+import { querywallet } from "../../logic/Screen-wallet";
 
 export class RecurringBillEditor extends Component {
     constructor(props) {
@@ -14,6 +15,7 @@ export class RecurringBillEditor extends Component {
             desc: "",
             color: '#ffffff',
             amount: '0',
+            icon: '',
             cycle_start: new Date(),
             cycle_duration_value: "1",
             cycle_duration_type_values: ['Day', 'Week', 'Month', 'Year'],
@@ -21,6 +23,8 @@ export class RecurringBillEditor extends Component {
             //else => cycle_duration_month = month/year*12
             cycle_duration_type: 'Month',
             creation_date: new Date(),
+            applied_wallet_values: [], //{key: id, text: name}
+            applied_wallet: '', //id
 
             nameInputVisible: false,
             descInputVisible: false,
@@ -29,39 +33,75 @@ export class RecurringBillEditor extends Component {
             cycleDurationInputVisible: false,
             cycleTypeSelectionVisible: false,
             colorPickerVisible: false,
+            walletSelectionVisible: false,
+            categoriesVisible: false,
+
+            snackbarMessage: "",
+            snackbarMessageVisible: false,
         }
         //route parameters
         console.log(this.props.route.params)
+
+        this.handleChooseIcon = this.handleChooseIcon.bind(this)
     }
 
-    componentDidMount() {
-        
+    async componentDidMount() {
+        const id = this.props.route.params.id
+        let wallet_selection = []
+        let wallet_query_result = await querywallet({})
+        wallet_query_result.forEach((val) => {
+            wallet_selection.push({
+                key: val.walletId,
+                text: val.name,
+            })
+        })
+
+        if (id) {
+            //console.log(this.state)
+            let data = await fetchBill(id)
+            console.log('UI', data)
+            if (!data) return
+            this.setState({
+                // name: data.name,
+                // color: data.color,
+                // amount: data.amount,
+                // duration: moment(JSON.stringify(data.expire_on), "YYYY-MM-DDTHH:mm:ss.SSSZ").toDate(),
+                // interest: data.interest,
+                // applied_wallet_values: wallet_selection,
+                // creation_date: moment(JSON.stringify(data.creationDate), "YYYY-MM-DDTHH:mm:ss.SSSZ").toDate()
+            })
+            //console.log(this.state)
+        }
+        else {
+            this.setState({
+                applied_wallet_values: wallet_selection
+            })
+        }
+    }
+
+    getWalletText(id) {
+        if (!id) return
+        //Fucking String object, not string primitive was returned. Fuck whoever code the fetching function
+        id = id.toString()
+        let appliedWalletIndex = this.state.applied_wallet_values.findIndex((val) => {return val.key === id})
+        return (appliedWalletIndex !== -1)? this.state.applied_wallet_values[appliedWalletIndex].text : ""
+    }
+
+    handleChooseIcon(val) {
+        console.log("ADD NEW TRANS - ICON: ", val)
+        this.setState({
+            icon: val
+        })
     }
 
     handleSaveButton = async () => {
         console.log("SAVE BILL")
-
-        let thoigiancuoicungcheck = new Date('2011-04-11T10:20:30.000Z')
-        Bill = {
-            billId: '60c0d8c26638c98738494f2e',
-            userId: '60bf81c035582676b155066e',
-            loaihangmucId: '60c1e454c706ae2f3930f623',//60c2124cff795ef6c9ba7d59,60c1e454c706ae2f3930f623
-            name: 'FOOD',
-            color: '#00000',
-            note: 'Sextoyys',
-            amount: 696969,
-            cycle_start: thoigiancuoicungcheck,
-            cycle_duration_day: 5,
-            cycle_duration_month: null,
-            creation_date: thoigiancuoicungcheck,
-        }
-
-        await saveBill(Bill)
-        // console.log(JSON.parse(JSON.stringify(await saveBill(Bill))))
     }
 
     render() {
         const style = stylesheet
+        const id = this.props.route.params.id
+        const mode = this.props.route.params.mode
         return (
             <View style={style.container}>
                 <ScrollView>
@@ -96,6 +136,22 @@ export class RecurringBillEditor extends Component {
 
                     <GenericSettingField
                         style={style.setting_entry}
+                        title="Inherited Wallet"
+                        value={this.getWalletText(this.state.applied_wallet)}
+                        description="The wallet that will get the saving fund withdrawal amount after the fund expire" 
+                        onPress={() => {this.setState({walletSelectionVisible: true})}}
+                    />
+
+                    <GenericSettingField
+                        style={style.setting_entry}
+                        title="Category"
+                        value={"Select..."}
+                        description="The category attached to the transaction created by the recurring bills" 
+                        onPress={() => {this.setState({categoriesVisible: true})}}
+                    />
+
+                    <GenericSettingField
+                        style={style.setting_entry}
                         title="Cycle Start Date"
                         value={this.state.cycle_start.toDateString()}
                         description="Indicate time the billing cycle begin"
@@ -126,11 +182,49 @@ export class RecurringBillEditor extends Component {
                     />
                 </ScrollView>
 
-                <FAB style={style.fab}
+                {(mode === "edit") && <FAB style={style.fab}
                     big
                     icon="content-save"
-                    onPress={this.handleSaveButton}
-                />
+                    onPress={async () => {
+                        let cycle_duration_day = null, cycle_duration_month = null
+                        if (this.state.cycle_duration_type === "Day")
+                            cycle_duration_day = this.state.cycle_duration_value
+                        else if (this.state.cycle_duration_type === "Week")
+                            cycle_duration_day = this.state.cycle_duration_value * 7
+                        else if (this.state.cycle_duration_type === "Month")
+                            cycle_duration_month = this.state.cycle_duration_value
+                        else if (this.state.cycle_duration_type === "Year")
+                            cycle_duration_month = this.state.cycle_duration_value * 12
+
+                        let saved_data = {
+                            billId: (id)? id : undefined,
+                            loaihangmucId: (this.state.icon)? this.state.icon.id : "",
+                            userId: '60bf81c035582676b155066e',
+                            name: this.state.name,
+                            note: this.state.desc,
+                            color: this.state.color,
+                            amount: parseFloat(this.state.amount) || 0,
+                            cycle_start: this.state.cycle_start,
+                            cycle_duration_day: parseInt(cycle_duration_day) || null,
+                            cycle_duration_month: parseInt(cycle_duration_month) || null,
+                            creation_date: this.state.creation_date,
+                            idtaikhoan: this.state.applied_wallet,
+                        }
+                        console.log(saved_data)
+                        let data_result = await saveBill(saved_data)
+                        //console.log(data_result)
+                        if (data_result) this.setState({snackbarMessage: "Your billing info have been saved"})
+                        else this.setState({snackbarMessage: "Failed to save your billing info"})
+
+                        this.setState({snackbarMessageVisible: true})
+                    }}
+                />}
+
+                <Snackbar
+                    visible={this.state.snackbarMessageVisible}
+                    onDismiss={() => {this.setState({snackbarMessageVisible: false})}}>
+                    {this.state.snackbarMessage}
+                </Snackbar>
 
                 <GenericInputModal
                     initialValue={this.state.name}
@@ -196,6 +290,24 @@ export class RecurringBillEditor extends Component {
                             cycle_duration_type: val,
                         })
                     }} />
+
+                <GenericSelectionModal
+                    keyMode={true}
+                    isVisible={this.state.walletSelectionVisible}
+                    onRequestClose={() => { this.setState({ walletSelectionVisible: false }) }}
+                    selectionEntry={this.state.applied_wallet_values}
+                    onSelection={(val) => {
+                        this.setState({
+                            walletSelectionVisible: false,
+                            applied_wallet: val,
+                        })
+                    }} />
+
+                <CategoriesModal
+                    isVisible={this.state.categoriesVisible}
+                    chooseIcon={this.handleChooseIcon}
+                    onRequestClose={() => { this.setState({ categoriesVisible: false }) }}
+                />
 
             </View>
         )

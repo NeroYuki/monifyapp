@@ -2,6 +2,7 @@ import {queryTaiKhoan,insertTaiKhoan, deleteTaiKhoan, deactiavteTaiKhoan}from '.
 import {BSON} from 'realm'
 import { updateTaiKhoan } from '../services/TaiKhoanCRUD';
 import { saveTransaction } from './Component-TransactionEditor';
+import { createLoanPayment } from './Screen-payment';
 
 
 export const fetchLoan= (loanId) => new Promise((resolve, reject) => {
@@ -51,6 +52,7 @@ export const saveLoan= ({loanId,loanName, color, amount, expire_on, interest, cr
             //     categoryId:             
             
             // })
+            createLoanPayment({from_wallet_id:applied_wallet_id,for_loan_id:tk.idtaikhoan,amount:amount})
             return resolve(true)
 
         }, (reason) => {return reject(reason)})

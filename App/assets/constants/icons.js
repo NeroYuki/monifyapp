@@ -15,6 +15,7 @@ export const electricBillIcon = require('../images/electric-bill-icon.png')
 export const housewareIcon = require('../images/houseware-icon.png')
 export const investmentIcon = require('../images/investment-icon.png')
 export const salaryIcon = require('../images/salary-icon.png')
+export const petrolIcon = require('../images/petrol-icon.png')
 
 
 export default {
@@ -34,4 +35,5 @@ export default {
     housewareIcon,
     investmentIcon,
     salaryIcon,
+    petrolIcon
 }

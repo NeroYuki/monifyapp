@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { ScrollView, Text, View } from "react-native";
 import { GenericSelectionModal, GenericSettingField } from "../../components";
 import { stylesheet } from './style'
-import { FAB } from 'react-native-paper'
+import { FAB, Snackbar } from 'react-native-paper'
+import { fetchSetting, saveSetting } from "../../logic/Screen-AppearanceSetting";
 
 export class AppearanceSetting extends Component {
     constructor(props) {
@@ -10,22 +11,66 @@ export class AppearanceSetting extends Component {
         this.state = {
             appThemeModalVisible: false,
             appThemeOption: ['Light', 'Dark'],
-            appThemeCurrent: 'Light',
+            appThemeCurrent: 'Dark',
             languageModalVisible: false,
             languageOption: ['System Deafult', 'English', 'Vietnam'],
             languageCurrent: 'System Default',
             currencyModalVisible: false,
-            currencyOption: ['VND (Vietnamese Dong)', 'USD (US Dollar)'],
-            currencyCurrent: 'VND (Vietnamese Dong)',
+            currencyOption: ['VND', 'USD'],
+            currencyCurrent: 'VND',
             strictModeModalVisible: false,
             strictModeOption: ['Enable', 'Disable'],
-            strictModeCurrent: 'Enable'
+            strictModeCurrent: 'Enable',
+
+            snackbarMessage: "",
+            snackbarMessageVisible: false,
         }
 
         this.onAppThemeChange = this.onAppThemeChange.bind(this)
         this.onLanguageChange = this.onLanguageChange.bind(this)
         this.onCurrencyChange = this.onCurrencyChange.bind(this)
         this.onStrictModeChange = this.onStrictModeChange.bind(this)
+
+        this.getData()
+    }
+
+    getData = async () => {
+        var data = await fetchSetting({})
+        console.log(data)
+
+
+        this.setState({
+            appThemeCurrent: data.chedo,
+            languageCurrent: (data.ngonngu == 'EN') ? 'English' : 'Vietnam',
+            currencyCurrent: (data.loaitien),
+            strictModeCurrent: (data.chedo == true) ? 'Enable' : 'Disable',
+        })
+    }
+
+    handleSaveSetting = async () => {
+        console.log("Save Setting")
+
+        var caidattest = {
+            idnguoidung: '60c5c67c3576c0078f3bc622',
+            loaitien: this.state.currencyCurrent,
+            chedo: this.state.appThemeCurrent,
+            ngonngu: this.state.languageCurrent,
+            chedonghiemngat: (this.state.strictModeCurrent == 'Enable') ? true : false,
+        }
+
+        console.log(await saveSetting(caidattest))
+    }
+
+    async componentDidMount() {
+        let obj = await fetchSetting()
+        //let obj = JSON.parse(res)
+        if (!obj) return
+        this.setState({
+            appThemeCurrent: obj.chedo,
+            currencyCurrent: obj.loaitien,
+            languageCurrent: obj.ngonngu,
+            strictModeCurrent: (obj.chedonghiemngat === true)? "Enable" : "Disable"
+        })
     }
 
     onAppThemeChange(val) {
@@ -94,8 +139,26 @@ export class AppearanceSetting extends Component {
                     style={style.fab}
                     big
                     icon="content-save"
-                    onPress={() => console.log('Pressed')}
+                    onPress={async () => {
+                        const data = {
+                            loaitien: this.state.currencyCurrent,
+                            ngonngu: this.state.languageCurrent,
+                            chedonghiemngat: (this.state.strictModeCurrent === "Enable")? true : false,
+                            chedo: this.state.appThemeCurrent,
+                        }
+                        let res = await saveSetting(data)
+                        if (res.result === true) this.setState({snackbarMessage: "Your settings have been saved"})
+                        else this.setState({snackbarMessage: "Failed to save your settings"})
+
+                        this.setState({snackbarMessageVisible: true})
+                    }}
                 />
+
+                <Snackbar
+                    visible={this.state.snackbarMessageVisible}
+                    onDismiss={() => {this.setState({snackbarMessageVisible: false})}}>
+                    {this.state.snackbarMessage}
+                </Snackbar>
 
                 <GenericSelectionModal
                     isVisible={this.state.appThemeModalVisible}

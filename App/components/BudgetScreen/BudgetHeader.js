@@ -19,7 +19,7 @@ export class BudgetHeader extends Component {
 
         return (
             <View style={styles.header}>
-                <View style={{ flexDirection: 'row', flex: 1 }}>
+                <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <TouchableOpacity style={{ width: 25, height: 25, alignItems: 'center', justifyContent: 'center' }}
                         onPress={this.props.onClick}
                     >

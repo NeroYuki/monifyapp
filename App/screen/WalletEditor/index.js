@@ -3,24 +3,44 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { stylesheet } from './style'
 import { ColorPickerModal, GenericInputModal, GenericSettingField } from '../../components'
-import { FAB } from "react-native-paper";
+import { FAB, Snackbar } from "react-native-paper";
+import { fetchWallet, saveWallet } from "../../logic/Screen-wallet";
+import moment from "moment";
 
 export class WalletEditor extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            name: "Cash Wallet",
-            amount: "200.000",
-            color: '#ffdddd',
+            name: "",
+            amount: "0",
+            color: '#ffffff',
             creation_date: new Date(),
 
             nameInputVisible: false,
             colorPickerVisible: false,
+            snackbarMessage: "",
+            snackbarMessageVisible: false
+        }
+    }
+
+    async componentDidMount() {
+        const id = this.props.route.params.id
+        if (id) {
+            let data = await fetchWallet(id)
+            if (!data) return
+            this.setState({
+                name: data.name,
+                amount: data.amount,
+                color: data.color,
+                creation_date: moment(JSON.stringify(data.creationDate), "YYYY-MM-DDTHH:mm:ss.SSSZ").toDate()
+            })
+            console.log(this.state)
         }
     }
 
     render() {
         const style = stylesheet
+        const mode = this.props.route.params.mode
         return (
             <View style={style.container}>
                 <ScrollView>
@@ -29,7 +49,7 @@ export class WalletEditor extends Component {
                         title="Wallet Name"
                         value={this.state.name}
                         description="Change name of the wallet" 
-                        onPress={() => {this.setState({nameInputVisible: true})}}/>
+                        onPress={(mode === "edit") ? () => {this.setState({nameInputVisible: true})} : null}/>
 
                     <GenericSettingField
                         style={style.setting_entry}
@@ -37,7 +57,7 @@ export class WalletEditor extends Component {
                         color={this.state.color}
                         value={this.state.color}
                         description="Pick a color to represent the wallet"
-                        onPress={() => {this.setState({colorPickerVisible: true})}}/>
+                        onPress={(mode === "edit") ? () => {this.setState({colorPickerVisible: true})} : null}/>
 
                     <GenericSettingField
                         style={style.setting_entry}
@@ -53,11 +73,31 @@ export class WalletEditor extends Component {
                     />
                 </ScrollView>
 
-                <FAB style={style.fab}
+                {mode === "edit" && <FAB style={style.fab}
                     big
                     icon="content-save"
-                    onPress={() => console.log('Pressed')}
-                />
+                    onPress={ async () => {
+                        const id = this.props.route.params.id
+                        let saved_data = {
+                            walletId: (id)? id : undefined,
+                            walletName: this.state.name,
+                            color: this.state.color,
+                            amount: parseFloat(this.state.amount)
+                        }
+                        let data_result = await saveWallet(saved_data)
+                        console.log(data_result)
+                        if (data_result) this.setState({snackbarMessage: "Your wallet info have been saved"})
+                        else this.setState({snackbarMessage: "Failed to save your wallet info"})
+
+                        this.setState({snackbarMessageVisible: true})
+                    }}
+                />}
+
+                <Snackbar
+                    visible={this.state.snackbarMessageVisible}
+                    onDismiss={() => {this.setState({snackbarMessageVisible: false})}}>
+                    {this.state.snackbarMessage}
+                </Snackbar>
 
                 <GenericInputModal
                     initialValue={this.state.name}

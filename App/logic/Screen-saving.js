@@ -4,14 +4,14 @@ import { updateTaiKhoan } from '../services/TaiKhoanCRUD';
 
 
 export const fetchSaving= (savingId) => new Promise((resolve, reject) => {
-    queryTaiKhoan({idtaikhoan:savingId}).then((tk)=> {
+    queryTaiKhoan({idtaikhoan: new BSON.ObjectID(savingId)}).then((tk)=> {
         let rs =
         {
             savingId: JSON.parse(JSON.stringify(tk[0].idtaikhoan)),
             name: tk[0].tentaikhoan,
             color: tk[0].color,
             amount: tk[0].tietkiem.sotien,
-            expire_on: tk[0].tietkiem.ngaytradukien, 
+            expire_on: tk[0].tietkiem.ngayrutdukien, 
             interest: tk[0].tietkiem.laisuattietkiem,
             applied_wallet_id:tk[0].tietkiem.idtkduocthuhuong,
             early_interest:tk[0].tietkiem.laisuattruochan,
@@ -22,7 +22,7 @@ export const fetchSaving= (savingId) => new Promise((resolve, reject) => {
 })
 export const saveSaving= ({savingId,savingName, color, amount, expire_on,interest,applied_wallet_id, early_interest, creationDate}) => new Promise((resolve, reject) => {
     if(savingId ===undefined){
-        newtaikhoansaving={
+        let newtaikhoansaving={
             idtaikhoan: new BSON.ObjectID(),
             tentaikhoan: savingName,        
             bieutuong: '',
@@ -35,7 +35,7 @@ export const saveSaving= ({savingId,savingName, color, amount, expire_on,interes
                 sotien: amount,
                 laisuattietkiem: interest,
                 laisuattruochan: early_interest,
-                idtkduocthuhuong:applied_wallet_id,
+                idtkduocthuhuong: new BSON.ObjectID(applied_wallet_id),
                 ngaybatdau:creationDate,
                 ngayrutdukien:expire_on,
             },
@@ -71,9 +71,9 @@ export const saveSaving= ({savingId,savingName, color, amount, expire_on,interes
             if(typeof amount!==  'undefined')  rs.tietkiem.sotien=amount;
             if(typeof color!==  'undefined')  rs.color= color
             if(typeof interest!==  'undefined') rs.tietkiem.laisuattietkiem =interest
-            if(typeof applied_wallet_id!==  'undefined') rs.tietkiem.idtkduocthuhuong = applied_wallet_id
+            if(typeof applied_wallet_id!==  'undefined') rs.tietkiem.idtkduocthuhuong = new BSON.ObjectID(applied_wallet_id)
             if(typeof early_interest!== 'undefined') rs.tietkiem.laisuattruochan = early_interest
-            if(typeof expire_on!==  'undefined') rs.tietkiem.ngaytradukien =expire_on
+            if(typeof expire_on!==  'undefined') rs.tietkiem.ngayrutdukien =expire_on
             //console.log(JSON.stringify(rs))
             updateTaiKhoan(rs).then(tk=> resolve(true)), (reason)=> reject(reason)
         }, (reason) => {
@@ -85,9 +85,11 @@ export const saveSaving= ({savingId,savingName, color, amount, expire_on,interes
 
 export const querySaving=({savingName, minAmount, maxAmount, expire_in_days}) => new Promise((resolve, reject) => {
     let today = new Date()
-    let endday = today.addDays(expire_in_days)
-    queryTaiKhoan({deactivate:false,taikhoantietkiem: true,tentaikhoan:savingName, tietkiemminAmount:minAmount ,tietkiemmaxAmount:maxAmount}).then((rs)=> {
+    let endday = today
+    if (expire_in_days) endday.addDays(expire_in_days)
+    queryTaiKhoan({deactivate:false, taikhoantietkiem: true,tentaikhoan:savingName, tietkiemminAmount:minAmount ,tietkiemmaxAmount:maxAmount}).then((rs)=> {
         let rsarr=[]
+        //console.log(rs)
         rs.forEach(element => {
             //if(element.tietkiem.ngaytradukien<=endday)
             rsarr.push(
@@ -96,7 +98,7 @@ export const querySaving=({savingName, minAmount, maxAmount, expire_in_days}) =>
                     name: element.tentaikhoan,
                     color: element.color,
                     amount: element.tietkiem.sotien,
-                    expire_on: element.tietkiem.ngaytradukien, 
+                    expire_on: element.tietkiem.ngayrutdukien, 
                     interest: element.tietkiem.laisuattietkiem,
                     applied_wallet_id:element.tietkiem.idtkduocthuhuong,
                     early_interest:element.tietkiem.laisuattruochan,
@@ -106,7 +108,7 @@ export const querySaving=({savingName, minAmount, maxAmount, expire_in_days}) =>
         });
         //console.log(rsarr)
         return resolve(rsarr)
-    }),reason => {console.error(reason); return reject(reason)}
+    }), reason => {console.error(reason); return reject(reason)}
 })
 export const deleteSaving= (savingId) => new Promise((resolve, reject) => {
     try {

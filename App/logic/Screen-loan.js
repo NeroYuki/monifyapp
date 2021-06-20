@@ -1,10 +1,11 @@
 import {queryTaiKhoan,insertTaiKhoan, deleteTaiKhoan, deactiavteTaiKhoan}from '../services/TaiKhoanCRUD';
 import {BSON} from 'realm'
 import { updateTaiKhoan } from '../services/TaiKhoanCRUD';
+import { saveTransaction } from './Component-TransactionEditor';
 
 
 export const fetchLoan= (loanId) => new Promise((resolve, reject) => {
-    queryTaiKhoan({idtaikhoan:loanId}).then((tk)=> {
+    queryTaiKhoan({idtaikhoan:new BSON.ObjectID(loanId)}).then((tk)=> {
         let rs =
         {
             loanId: JSON.parse(JSON.stringify(tk[0].idtaikhoan)),
@@ -18,9 +19,9 @@ export const fetchLoan= (loanId) => new Promise((resolve, reject) => {
         return resolve(rs)
     }), reason=> {return reject(reason)}
 })
-export const saveLoan= ({loanId,loanName, color, amount, expire_on, interest, creationDate}) => new Promise((resolve, reject) => {
+export const saveLoan= ({loanId,loanName, color, amount, expire_on, interest, creationDate, cycle, applied_wallet_id = ""}) => new Promise((resolve, reject) => {
     if(loanId ===undefined){
-        newtaikhoanno={
+        let newtaikhoanno={
             idtaikhoan: new BSON.ObjectID(),
             tentaikhoan: loanName,        
             bieutuong: '',
@@ -40,7 +41,19 @@ export const saveLoan= ({loanId,loanName, color, amount, expire_on, interest, cr
                 sotientradukien: amount,  
             },
         }
-        insertTaiKhoan(newtaikhoanno).then((tk)=>{return resolve(true)}, (reason) => {return reject(reason)})
+        insertTaiKhoan(newtaikhoanno).then((tk)=>{
+            //TODO: make insert transaction
+            // saveTransaction({
+            //     note: 'Receiving money from loan',
+            //     amount: amount, 
+            //     walletId: applied_wallet_id, 
+            //     occur_date: new Date(), 
+            //     categoryId:             
+            
+            // })
+            return resolve(true)
+
+        }, (reason) => {return reject(reason)})
     }
     else{
         id= new BSON.ObjectId(loanId)

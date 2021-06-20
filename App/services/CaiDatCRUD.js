@@ -10,7 +10,10 @@ export const insertCaiDat = (newCaiDat) =>
           let CaiDat=realm.create(CaiDatSchema.name,newCaiDat)
           resolve(CaiDat)
       })
-    }).catch((error)=>reject(error))
+    }).catch((error)=>{
+      reject(error)
+      return
+    })
   })
 
 export const updateCaiDat=CaiDat=> new Promise((resolve,reject)=>{
@@ -35,12 +38,20 @@ export const updateCaiDat=CaiDat=> new Promise((resolve,reject)=>{
             }
             resolve(updateCaiDat)
         })
-    }).catch((error)=>reject(error))
+    }).catch((error)=>{
+      reject(error)
+      return
+    })
 })
 
 export const deleteCaiDat=CaiDat=> new Promise((resolve,reject)=>{
     Realm.open(data).then(realm=>{
-        let IDCaiDat = new BSON.ObjectID(JSON.parse(JSON.stringify(CaiDat.idcaidat)))
+        let IDCaiDat = (CaiDat.idcaidat)?new BSON.ObjectID(JSON.parse(JSON.stringify(CaiDat.idcaidat))):null
+        if(!IDCaiDat)
+        {
+          reject('ThatBai')
+          return
+        }  
         realm.write(()=>{
             let deleteCaiDat=realm.objectForPrimaryKey(CaiDatSchema.name,CaiDat.idcaidat)
             realm.delete(deleteCaiDat)
@@ -51,7 +62,10 @@ export const deleteCaiDat=CaiDat=> new Promise((resolve,reject)=>{
             else
               resolve('ThatBai')
         })
-    }).catch((error)=>reject(error))
+    }).catch((error)=>{
+      reject(error)
+      return
+    })
 })
 
 export const queryCaiDat=(option)=> new Promise((resolve,reject)=>{

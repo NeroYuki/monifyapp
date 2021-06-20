@@ -7,7 +7,7 @@ export const insertMucTieuCaNhan = (newMucTieuCaNhan,LoaiMucTieu) =>
   new Promise((resolve, reject) => {
     Realm.open(data).then(realm => {
       let LoaiMucTieuObj
-      if(realm.objects(LoaiMucTieuConfigSchema.name).filtered("tietkiemdenmuc==true")[0] == undefined &&LoaiMucTieu=='TietKiemDenMuc')
+      if(realm.objects(LoaiMucTieuConfigSchema.name).filtered("tietkiemdenmuc==$0",true).length==0 &&LoaiMucTieu=='TietKiemDenMuc')
       {
         realm.write(()=>{
             LoaiMucTieuObj=realm.create(LoaiMucTieuConfigSchema.name,{
@@ -17,11 +17,11 @@ export const insertMucTieuCaNhan = (newMucTieuCaNhan,LoaiMucTieu) =>
           })
         })
       }
-      else if(realm.objects(LoaiMucTieuConfigSchema.name).filtered("tietkiemdenmuc==true")[0]!=undefined&&LoaiMucTieu=='TietKiemDenMuc')
+      else if(realm.objects(LoaiMucTieuConfigSchema.name).filtered("tietkiemdenmuc==$0",true).length!=0&&LoaiMucTieu=='TietKiemDenMuc')
       {
-        LoaiMucTieuObj=realm.objects(LoaiMucTieuConfigSchema.name).filtered("tietkiemdenmuc==true")[0]
+        LoaiMucTieuObj=realm.objects(LoaiMucTieuConfigSchema.name).filtered("tietkiemdenmuc==$0",true)[0]
       }
-      if(realm.objects(LoaiMucTieuConfigSchema.name).filtered("tieudungquamuc==true")[0] == undefined&&LoaiMucTieu=='TieuDungQuaMuc')
+      if(realm.objects(LoaiMucTieuConfigSchema.name).filtered("tieudungquamuc==$0",true).length==0&&LoaiMucTieu=='TieuDungQuaMuc')
       {
         realm.write(()=>{
             LoaiMucTieuObj=realm.create(LoaiMucTieuConfigSchema.name,{
@@ -31,11 +31,11 @@ export const insertMucTieuCaNhan = (newMucTieuCaNhan,LoaiMucTieu) =>
           })
         })
       }
-      else if(realm.objects(LoaiMucTieuConfigSchema.name).filtered("tieudungquamuc==true")[0]!=undefined&&LoaiMucTieu=='TieuDungQuaMuc')
+      else if(realm.objects(LoaiMucTieuConfigSchema.name).filtered("tieudungquamuc==$0",true).length!=0&&LoaiMucTieu=='TieuDungQuaMuc')
       {
-        LoaiMucTieuObj=realm.objects(LoaiMucTieuConfigSchema.name).filtered("tieudungquamuc==true")[0]
+        LoaiMucTieuObj=realm.objects(LoaiMucTieuConfigSchema.name).filtered("tieudungquamuc==$0",true)[0]
       }
-      if(realm.objects(LoaiMucTieuConfigSchema.name).filtered("sodutoithieu==true")[0] == undefined&&LoaiMucTieu=='SoDuToiThieu')
+      if(realm.objects(LoaiMucTieuConfigSchema.name).filtered("sodutoithieu==$0",true).length==0&&LoaiMucTieu=='SoDuToiThieu')
       {
         realm.write(()=>{
             LoaiMucTieuObj=realm.create(LoaiMucTieuConfigSchema.name,{
@@ -45,9 +45,9 @@ export const insertMucTieuCaNhan = (newMucTieuCaNhan,LoaiMucTieu) =>
           })
         })
       }
-      else if(realm.objects(LoaiMucTieuConfigSchema.name).filtered("sodutoithieu==true")[0]!=undefined&&LoaiMucTieu=='SoDuToiThieu')
+      else if(realm.objects(LoaiMucTieuConfigSchema.name).filtered("sodutoithieu==$0",true).length!=0&&LoaiMucTieu=='SoDuToiThieu')
       {
-        LoaiMucTieuObj=realm.objects(LoaiMucTieuConfigSchema.name).filtered("sodutoithieu==true")[0]
+        LoaiMucTieuObj=realm.objects(LoaiMucTieuConfigSchema.name).filtered("sodutoithieu==$0",true)[0]
       }
       if(typeof newMucTieuCaNhan.loaimuctieu==undefined){
         newMucTieuCaNhan.__proto__="loaimuctieu"
@@ -123,7 +123,12 @@ export const updateMucTieuCaNhan=MucTieuCaNhan=> new Promise((resolve,reject)=>{
 
 export const deleteMucTieuCaNhan=MucTieuCaNhan=> new Promise((resolve,reject)=>{
     Realm.open(data).then(realm=>{
-        let IDMucTieuCaNhanCop = new BSON.ObjectID(JSON.parse(JSON.stringify(MucTieuCaNhan.idmuctieu)))
+        let IDMucTieuCaNhanCop = (MucTieuCaNhan.idmuctieu)?new BSON.ObjectID(JSON.parse(JSON.stringify(MucTieuCaNhan.idmuctieu))):null
+        if(!IDMucTieuCaNhanCop)
+        {
+          reject('ThatBai')
+          return
+        }
         realm.write(()=>{
             let deleteMucTieuCaNhan=realm.objectForPrimaryKey(MucTieuCaNhanSchema.name,MucTieuCaNhan.idmuctieu)
             realm.delete(deleteMucTieuCaNhan)

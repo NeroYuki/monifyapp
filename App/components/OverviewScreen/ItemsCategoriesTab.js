@@ -3,12 +3,16 @@ import { View, StyleSheet, SectionList, Text, Image, TouchableOpacity } from 're
 import { COLORS, icons } from '../../assets/constants';
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { fetchCategory } from '../../logic/Component-CategoryEditor';
+import { currencyFormat, percentageFormat } from '../../utils/formatNumber';
 
 
 export class ItemsCategoriesTab extends Component {
 
     constructor(props) {
         super(props)
+
+        console.log("Item Categories Tab: - Constructor")
 
         this.state = {
             data: [
@@ -27,9 +31,83 @@ export class ItemsCategoriesTab extends Component {
                             percentage: '43%',
                         },
                     ]
-                },
-            ]
+                }],
+
+
+            expense: '',
+            income: '',
         };
+
+        this.getData()
+    }
+
+    componentDidMount() {
+        console.log("Item Categories Tab: - Component Did Mount")
+    }
+
+    fetchDataList = async (array, datas, total, title) => {
+        for (var i in array) {
+            total += array[i].amount
+
+            var icon = JSON.parse(JSON.stringify(await fetchCategory({ categoryId: array[i].categoryId })))
+            var value = {
+                amount: array[i].amount,
+                icon: icon,
+            }
+
+            datas.push(value)
+        }
+
+        this.setState({
+            expense: [
+                {
+                    title: title,
+                    // title: this.props.currentOption,
+                    total: total,
+                    data: datas,
+                }
+            ]
+        })
+    }
+
+    getData = async () => {
+        console.log("Item Categories Tab: - Get Data")
+
+        var trans = this.props.data
+        var expenses = []
+        var total = 0
+
+        if (this.props.currentOption == 'Expense')
+            this.fetchDataList(trans.expense, expenses, total, 'Expense')
+        else
+            if (this.props.currentOption == 'Income')
+                this.fetchDataList(trans.income, expenses, total, 'Income')
+
+        // for (var i in trans.expense) {
+        //     total += trans.expense[i].amount
+
+        //     var icon = JSON.parse(JSON.stringify(await fetchCategory({ categoryId: trans.expense[i].categoryId })))
+        //     var value = {
+        //         amount: trans.expense[i].amount,
+        //         icon: icon,
+        //     }
+
+        //     expenses.push(value)
+        // }
+
+        // this.setState({
+        //     expense: [
+        //         {
+        //             title: 'Expenses',
+        //             // title: this.props.currentOption,
+        //             total: total,
+        //             data: expenses,
+        //         }
+        //     ]
+        // })
+
+        // console.log("ITEM ALL CATE: ", this.state.expense)
+
     }
 
     Item = ({ items }) => (
@@ -40,20 +118,18 @@ export class ItemsCategoriesTab extends Component {
                         height: 32,
                         width: 32
                     }}
-                    source={icons.foodIcon}
+                    source={items.icon[0].iconhangmuc}
                     resizeMode='contain'
                 />
                 <View style={{ flex: 1, marginLeft: 16, flexDirection: 'row' }}>
                     <View style={{ flex: 1 }}>
-                        <Text style={styles.title}>{items.money}</Text>
-                        <Text style={styles.describe}>{items.key}  </Text>
+                        <Text style={styles.title}>{currencyFormat(items.amount)}</Text>
+                        <Text style={styles.describe}>{items.icon[0].tenhangmuc}  </Text>
                     </View>
 
-                    <View style={{ height: '100%', alignItems: 'center' }}>
-                        <Text style={styles.percentage}> {items.percentage} </Text>
+                    <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }}>
+                        <Text style={styles.percentage}>{percentageFormat((items.amount / this.state.expense[0].total) * 100)}%</Text>
                     </View>
-
-
                 </View>
 
             </View>
@@ -69,7 +145,7 @@ export class ItemsCategoriesTab extends Component {
             <View style={{ flex: 1, flexDirection: 'row', alignItems: 'center' }}>
                 <View style={{ flex: 1, flexDirection: 'row' }}>
                     <Text style={styles.titleHeader}>Showing: </Text>
-                    <Text style={styles.totalHeader}>{section.title}</Text>
+                    <Text style={styles.totalHeader}>{this.props.currentOption}</Text>
                 </View>
 
                 <View style={{ marginRight: 20, height: 25, width: 25 }}>
@@ -91,12 +167,14 @@ export class ItemsCategoriesTab extends Component {
     );
 
     render() {
+
+        console.log("Item Categories Tab: - Render")
         return (
             <View style={styles.container}>
                 <SectionList
                     style={styles.selectionList}
                     scrollEnabled={false}
-                    sections={this.state.data}
+                    sections={this.state.expense}
                     renderItem={({ item }) => <this.Item items={item} />}
                     renderSectionHeader={({ section }) => <this.Header section={section} />}
                     renderSectionFooter={() => <this.Footer />}
@@ -138,6 +216,7 @@ const styles = StyleSheet.create({
     },
     describe: {
         fontSize: 15,
+        marginTop: 4,
         color: COLORS.gray
     },
     percentage: {

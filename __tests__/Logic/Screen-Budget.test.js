@@ -1,6 +1,6 @@
-import {fetchBudget,fetchBugetList,saveBudget,deleteBudget} from '../../App/logic/Screen-Budget'
-import{insertMucTieuCaNhan} from '../../App/services/MucTieuCaNhanCRUD'
-import {BSON} from 'realm'
+import { fetchBudget, fetchBugetList, saveBudget, deleteBudget } from '../../App/logic/Screen-Budget'
+import { insertMucTieuCaNhan } from '../../App/services/MucTieuCaNhanCRUD'
+import { BSON } from 'realm'
 
 // let idmuctieu=new BSON.ObjectID()
 // let idnguoidung=new BSON.ObjectID()
@@ -36,12 +36,12 @@ import {BSON} from 'realm'
 
 test('testing logic saveBudget', async () => {
     console.log(JSON.parse(JSON.stringify(await saveBudget({
-        budgetId:'60c2d5fe651fc49ab59d4400',
-        userId:'60c22a3e29fc94b5464910a8',
-        name:'Mua may 7',
-        amount:777,
-        loaimuctieu:'SoDuToiThieu',//TieuDungQuaMuc,SoDuToiThieu,TietKiemDenMuc
-        period:'month',//year,month,week
+        budgetId: '60c2d5fe651fc49ab59d4400',
+        userId: '60c22a3e29fc94b5464910a8',
+        name: 'Mua may 7',
+        amount: 777,
+        loaimuctieu: 'SoDuToiThieu',//TieuDungQuaMuc,SoDuToiThieu,TietKiemDenMuc
+        period: 'month',//year,month,week
         // start_day:'2011-05-11T10:20:30.000Z',
         // end_day:'2011-05-11T10:20:30.000Z',
     }))))
@@ -49,14 +49,14 @@ test('testing logic saveBudget', async () => {
     // expect(JSON.parse(JSON.stringify(await insertCaiDat(caidattest)))).toStrictEqual(JSON.parse(JSON.stringify(caidattest)))
 })
 
-test('testing logic deleteBudget', async () => {
-    console.log(JSON.parse(JSON.stringify(await deleteBudget({budgetId:'60c229bed53a5da856e26889'}))))
-    // console.log(caidattest)
-    // expect(JSON.parse(JSON.stringify(await insertCaiDat(caidattest)))).toStrictEqual(JSON.parse(JSON.stringify(caidattest)))
-})
+// test('testing logic deleteBudget', async () => {
+//     console.log(JSON.parse(JSON.stringify(await deleteBudget({budgetId:'60c229bed53a5da856e26889'}))))
+//     // console.log(caidattest)
+//     // expect(JSON.parse(JSON.stringify(await insertCaiDat(caidattest)))).toStrictEqual(JSON.parse(JSON.stringify(caidattest)))
+// })
 
 test('testing logic fetchBudget', async () => {
-    console.log(JSON.parse(JSON.stringify(await fetchBudget({budgetId:'60c2e2de9ef12535790d2d1b'}))))
+    console.log(JSON.parse(JSON.stringify(await fetchBudget({ budgetId: '60c2e2de9ef12535790d2d1b' }))))
     // console.log(caidattest)
     // expect(JSON.parse(JSON.stringify(await insertCaiDat(caidattest)))).toStrictEqual(JSON.parse(JSON.stringify(caidattest)))
 })

@@ -78,10 +78,10 @@ export const stylesheet = StyleSheet.create({
         fontSize: 17
     },
     transaction_container: {
-        padding: 10,
-        height: "50%",
+        height: "90%",
         width: "90%",
-        backgroundColor: COLORS.white,
+        backgroundColor: COLORS.lightGray,
+        borderRadius: 20,
         elevation: 20,
     },
     transaction: {
@@ -89,5 +89,6 @@ export const stylesheet = StyleSheet.create({
         justifyContent: "center",
         alignItems: "center",
         elevation: 20,
+        backgroundColor: COLORS.blackBlur,
     },
 })

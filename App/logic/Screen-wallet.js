@@ -4,7 +4,7 @@ import { updateTaiKhoan } from '../services/TaiKhoanCRUD';
 
 
 export const fetchWallet= (walletId) => new Promise((resolve, reject) => {
-    queryTaiKhoan({idtaikhoan:walletId}).then((tk)=> {
+    queryTaiKhoan({idtaikhoan:new BSON.ObjectID(walletId)}).then((tk)=> {
         let rs =
         {
             walletId: JSON.parse(JSON.stringify(tk[0].idtaikhoan)),
@@ -72,6 +72,7 @@ export const querywallet=({walletName, minAmount, maxAmount}) => new Promise((re
         //console.log(JSON.stringify(rs))
         let rsarr=[]
         rs.forEach(element => {
+            //console.log(element)
             rsarr.push(
                 {
                     walletId: JSON.parse(JSON.stringify(element.idtaikhoan)),

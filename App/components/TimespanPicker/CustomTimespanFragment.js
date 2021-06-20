@@ -17,6 +17,8 @@ export class CustomTimespanFragment extends Component {
         const style = stylesheet
 
         const onChange = (event, selectedDate) => {
+
+            console.log(selectedDate)
             if (this.state.currentSelection === "from") {
                 const currentDate = selectedDate || this.state.customFromDate;
                 this.setState({ customFromDate: currentDate })

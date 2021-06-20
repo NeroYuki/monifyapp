@@ -29,11 +29,11 @@ export class WalletSearchModal extends Component {
             <View style={style.main_view}>
                 <Text style={style.main_view_header}>Advance Filter</Text>
                 <ScrollView contentContainerStyle={style.main_view_tab}>
-                    <TextInput mode="outlined" label="Wallet's name" placeholder="Type something" onChange={(t) => {this.setState({name_input: t})}}></TextInput>
+                    <TextInput mode="outlined" label="Wallet's name" placeholder="Type something" onChangeText={(t) => {this.setState({name_input: t})}}></TextInput>
                     <View style={style.amount_group}>
-                        <TextInput mode="outlined" label="Minimum amount" placeholder="Insert a number" onChange={(t) => {this.setState({min_amount: t})}} style={{flex: 1}}></TextInput>
+                        <TextInput mode="outlined" label="Minimum amount" placeholder="Insert a number" onChangeText={(t) => {this.setState({min_amount: t})}} style={{flex: 1}}></TextInput>
                         <Text style={{marginHorizontal: 10}}> to </Text>
-                        <TextInput mode="outlined" label="Maximum amount" placeholder="Insert a number" onChange={(t) => {this.setState({max_amount: t})}} style={{flex: 1}}></TextInput>
+                        <TextInput mode="outlined" label="Maximum amount" placeholder="Insert a number" onChangeText={(t) => {this.setState({max_amount: t})}} style={{flex: 1}}></TextInput>
                     </View>
                     <View style={style.amount_group}>
                         <Text>Sorting Mode: </Text>
@@ -48,7 +48,12 @@ export class WalletSearchModal extends Component {
                         </Picker>
                     </View>
                     <Button mode='contained' onPress={() => {
-                        (this.props.onFilterRequest) ? this.props.onFilterRequest(this.state) : () => {console.log('default handler')}
+                        (this.props.onFilterRequest) ? this.props.onFilterRequest({
+                            name_input: this.state.name_input,
+                            min_amount: parseFloat(this.state.min_amount) || undefined,
+                            max_amount: parseFloat(this.state.max_amount) || undefined,
+                            sort_mode: this.state.sort_mode,
+                        }) : () => {console.log('default handler')}
                         this.props.onRequestClose()
                     }}
                         labelStyle={style.button_label}>Filter</Button>

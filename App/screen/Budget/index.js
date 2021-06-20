@@ -49,8 +49,8 @@ export class BudgetScreen extends React.Component {
 
                         {/* Detail of Budget */}
                         <View style={styles.detailBudget}>
-                            <TabSwitcher text="March 2021"></TabSwitcher>
-
+                            <TabSwitcher text="March 2021"
+                                onTimeTextPress={this.showSettingScreen} />
                             <IncomeReportView
                                 current={this.state.income.current}
                                 total={this.state.income.total}

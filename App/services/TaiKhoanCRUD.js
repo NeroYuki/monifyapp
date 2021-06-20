@@ -128,7 +128,7 @@ export const updateTaikhoanTieudung = ({taikhoantieudungid, sotienthem}) =>
         else resolve(false)
         return
       })
-    }).catch((error)=> reject(error));
+    }).catch((error)=> {console.error(error);reject(error)});
   })
 
 export const updateTaikhoanTietKiem = ({taikhoantietkiemid, sotienthem,cycle}) => 

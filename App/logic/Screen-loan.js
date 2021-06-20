@@ -52,8 +52,12 @@ export const saveLoan= ({loanId,loanName, color, amount, expire_on, interest, cr
             //     categoryId:             
             
             // })
-            createLoanPayment({from_wallet_id:applied_wallet_id,for_loan_id:tk.idtaikhoan,amount:amount})
-            return resolve(true)
+            // if(applied_wallet_id != "")createLoanPayment({from_wallet_id:applied_wallet_id,for_loan_id:tk.idtaikhoan,amount:amount})
+            return resolve({
+                result: true,
+                loan: tk,
+                message: "tao tai khoan no thanh cong"
+            })
 
         }, (reason) => {return reject(reason)})
     }

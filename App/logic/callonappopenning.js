@@ -75,14 +75,23 @@ export const checkSavingsForCycle = () => new Promise((resolve,reject)=>{
                     let tempamount = amount * Math.pow(laisuattruochan,(different_in_time%1)- cycle) - amount
                     cycle = (different_in_time%1)
                     updateTaikhoanTietKiem({taikhoantietkiemid: id,sotienthem: amount, cycle : cycle})
-                    rs.push({
-                        savingId:id,
-                        name: element.tentaikhoan,
-                        eventName:1 ,
-                        current_amount:amount+tempamount,
-                    })
+       
                     if(idtaikhoanthuhuong){
                         createSavingWithdraw({for_wallet_id:idtaikhoanthuhuong,from_saving_id:id,amount:tempamount})
+                        rs.push({
+                            savingId:id,
+                            name: element.tentaikhoan,
+                            eventName:1 ,
+                            current_amount:amount,
+                        })
+                    }
+                    else{
+                        rs.push({
+                            savingId:id,
+                            name: element.tentaikhoan,
+                            eventName:1 ,
+                            current_amount:amount+tempamount,
+                        })
                     }
                 }
             }
@@ -91,14 +100,23 @@ export const checkSavingsForCycle = () => new Promise((resolve,reject)=>{
                     let tempamount = amount * Math.pow(laisuat,(different_in_time%1)- cycle) - amount
                     cycle = (different_in_time%1)
                     updateTaikhoanTietKiem({taikhoantietkiemid: id,sotienthem: amount, cycle : cycle})
-                    rs.push({
-                        savingId:id,
-                        name: element.tentaikhoan,
-                        eventName:2,
-                        current_amount:amount+tempamount,
-                    })
+
                     if(idtaikhoanthuhuong){
                         createSavingWithdraw({for_wallet_id:idtaikhoanthuhuong,from_saving_id:id,amount:tempamount})
+                        rs.push({
+                            savingId:id,
+                            name: element.tentaikhoan,
+                            eventName:2,
+                            current_amount:amount,
+                        })
+                    }
+                    else {
+                        rs.push({
+                            savingId:id,
+                            name: element.tentaikhoan,
+                            eventName:2,
+                            current_amount:amount+tempamount,
+                        })
                     }
                 }
             }

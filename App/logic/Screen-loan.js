@@ -18,7 +18,7 @@ export const fetchLoan= (loanId) => new Promise((resolve, reject) => {
         return resolve(rs)
     }), reason=> {return reject(reason)}
 })
-export const saveLoan= ({loanId,loanName, color, amount, expire_on, interest, creationDate, cycle}) => new Promise((resolve, reject) => {
+export const saveLoan= ({loanId,loanName, color, amount, expire_on, interest, creationDate}) => new Promise((resolve, reject) => {
     if(loanId ===undefined){
         newtaikhoanno={
             idtaikhoan: new BSON.ObjectID(),
@@ -34,7 +34,7 @@ export const saveLoan= ({loanId,loanName, color, amount, expire_on, interest, cr
                 sotien: amount,
                // color: color,
                 laisuatno: interest,
-                kyhanno: cycle,
+                kyhanno: 0,
                 ngaybatdauno:creationDate ,
                 ngaytradukien: expire_on,
                 sotientradukien: amount,  
@@ -70,7 +70,6 @@ export const saveLoan= ({loanId,loanName, color, amount, expire_on, interest, cr
             if(typeof amount!=  'undefined') rs.no.sotien=amount        
             if(typeof color!=  'undefined')  rs.color= color
             if(typeof interest!=  'undefined') rs.no.laisuatno =interest
-            if(typeof cycle!=  'undefined') rs.no.kyhanno =cycle
             if(typeof expire_on!=  'undefined') rs.no.ngaytradukien =expire_on
             //console.log(JSON.parse(JSON.stringify(rs)))
             resolve(updateTaiKhoan(rs))

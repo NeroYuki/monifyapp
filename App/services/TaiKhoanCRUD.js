@@ -98,14 +98,16 @@ export const updateTaiKhoan =  updateTaiKhoan =>
     }).catch((error)=> reject(error));
   });
 
-export const updateTaikhoanNo = ({taikhoannoid, sotienthem}) => {
+export const updateTaikhoanNo = ({taikhoannoid, sotienthem,cycle,sotienmoi}) => 
   new Promise((resolve,reject)=> {
     Realm.open(data).then(realm=> {
       realm.write(()=>{
         let tempid = new BSON.ObjectID(JSON.parse(JSON.stringify(taikhoannoid)))
-        let taiKhoanUpdated = realm.objectForPrimaryKey(TaiKhoanSchema.name,sotienthem)
+        let taiKhoanUpdated = realm.objectForPrimaryKey(TaiKhoanSchema.name,tempid)
         if(taiKhoanUpdated.no!=null) {
-        taiKhoanUpdated.no.sotien += sotienthem;
+        if(sotienthem) taiKhoanUpdated.no.sotien += sotienthem;
+        if(sotienmoi) taiKhoanUpdated.no.sotien = sotienmoi;
+        taiKhoanUpdated.no.sotien = cycle;
         resolve(true)
         }
         else resolve(false)
@@ -113,8 +115,8 @@ export const updateTaikhoanNo = ({taikhoannoid, sotienthem}) => {
       })
     }).catch((error)=> reject(error));
   })
-}
-export const updateTaikhoanTieudung = ({taikhoantieudungid, sotienthem}) => {
+
+export const updateTaikhoanTieudung = ({taikhoantieudungid, sotienthem}) => 
   new Promise((resolve,reject)=> {
     Realm.open(data).then(realm=> {
       realm.write(()=>{
@@ -129,8 +131,8 @@ export const updateTaikhoanTieudung = ({taikhoantieudungid, sotienthem}) => {
       })
     }).catch((error)=> reject(error));
   })
-}
-export const updateTaikhoanTietKiem = ({taikhoantietkiemid, sotienthem}) => {
+
+export const updateTaikhoanTietKiem = ({taikhoantietkiemid, sotienthem,cycle}) => 
   new Promise((resolve,reject)=> {
     Realm.open(data).then(realm=> {
       realm.write(()=>{
@@ -138,6 +140,7 @@ export const updateTaikhoanTietKiem = ({taikhoantietkiemid, sotienthem}) => {
         let taiKhoanUpdated = realm.objectForPrimaryKey(TaiKhoanSchema.name,tempid)
         if(taiKhoanUpdated.tietkiem!=null) {
         taiKhoanUpdated.tietkiem.sotien += sotienthem;
+        if(cycle) taiKhoanUpdated.tietkiem.kyhantietkiem = cycle;
         resolve(true)
         }
         else resolve(false)
@@ -145,7 +148,7 @@ export const updateTaikhoanTietKiem = ({taikhoantietkiemid, sotienthem}) => {
       })
     }).catch((error)=> reject(error));
   })
-}
+
 export const queryTaiKhoan = (option) =>
   new Promise((resolve,reject)=> {
     Realm.open(data).then(realm => {

@@ -18,7 +18,7 @@ export const fetchWallet= (walletId) => new Promise((resolve, reject) => {
 })
 export const saveWallet= ({walletId,walletName, color, amount}) => new Promise((resolve, reject) => {
     if(walletId ===undefined){
-        newtaikhoantietkiem={
+        let newtaikhoantietkiem={
             idtaikhoan: new BSON.ObjectID(),
             tentaikhoan: walletName,        
             bieutuong: '',
@@ -68,7 +68,7 @@ export const saveWallet= ({walletId,walletName, color, amount}) => new Promise((
 })
 
 export const querywallet=({walletName, minAmount, maxAmount}) => new Promise((resolve, reject) => {
-    queryTaiKhoan({deactivate:false,taikhoanieudung: true,tentaikhoan:walletName, walletminAmount:minAmount ,walletmaxAmount:maxAmount}).then((rs)=> {
+    queryTaiKhoan({deactivate:false,taikhoantieudung: true,tentaikhoan:walletName, walletminAmount:minAmount ,walletmaxAmount:maxAmount}).then((rs)=> {
         //console.log(JSON.stringify(rs))
         let rsarr=[]
         rs.forEach(element => {

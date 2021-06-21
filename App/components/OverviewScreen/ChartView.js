@@ -3,6 +3,7 @@ import { Dimensions, Image, Text, View } from 'react-native';
 import { PieChart } from 'react-native-svg-charts'
 import { icons } from '../../assets/constants';
 import { fetchCategory } from '../../logic/Component-CategoryEditor';
+import { percentageFormat } from '../../utils/formatNumber';
 import { increase_brightness } from '../../utils/increase_brightness';
 
 export class ChartView extends Component {
@@ -24,16 +25,19 @@ export class ChartView extends Component {
     fetchDataList = async (array, datas, total, title) => {
 
         var colorPercentage = '#a96300'
+
         for (var i in array) {
             total += array[i].amount
+        }
 
+        for (var i in array) {
             var icon = JSON.parse(JSON.stringify(await fetchCategory({ categoryId: array[i].categoryId })))
 
             colorPercentage = increase_brightness(colorPercentage, 20)
 
             var value = {
                 key: icon[0].tenhangmuc,
-                amount: array[i].amount,
+                amount: percentageFormat(array[i].amount / total * 100),
                 icon: icon[0].iconhangmuc,
                 svg: { fill: icon[0].color }
             }

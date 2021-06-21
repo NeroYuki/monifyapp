@@ -29,8 +29,6 @@ export class TimespanDefaultFragment extends Component {
         return (
             <View>
                 <RadioButton.Group
-
-
                     onValueChange={(value) => {
                         this.setState({ selectedType: value })
                         this.handleChangeValue(value)

@@ -10,7 +10,7 @@ import { RecurringModal } from "../../components/TransactionEditor/RecurringModa
 import { TransactionModal } from "../../components/TransactionEditor/TransactionModal";
 
 import Moment from 'moment'
-import { format, addDays, addMonths, addYears, startOfWeek, endOfWeek } from 'date-fns'
+import { format, addDays, addMonths, addYears, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear } from 'date-fns'
 import { queryTranCategories, queryTransactions } from "../../logic/Screen-Overview";
 
 export class OverviewScreen extends Component {
@@ -36,11 +36,14 @@ export class OverviewScreen extends Component {
             currentData: {},
 
             // Categories - Tab
-            currentOption: 'Expense',
+            currentOption: 'Expense', // Income
 
             // Period
             dateTime: "",
-            currentPeriod: 'month'
+            currentPeriod: 'month', // week, year, custom
+
+            startDate: '',
+            endDate: '',
         }
 
         this.onCategoriesPress = this.onCategoriesPress.bind(this)
@@ -67,7 +70,6 @@ export class OverviewScreen extends Component {
     }
 
     getDataOverview = async () => {
-
         var data = JSON.parse(JSON.stringify(
             await queryTransactions({
                 walletId: '60c96efa9bd6d1e6e1aed7a6',
@@ -88,7 +90,31 @@ export class OverviewScreen extends Component {
             overviewData: data,
             categoriesData: percentageData,
         })
+    }
 
+    getDataOverviewWith2Date = async (start, end) => {
+        var data = JSON.parse(JSON.stringify(
+            await queryTransactions({
+                walletId: '60c96efa9bd6d1e6e1aed7a6',
+                start_day: start,
+                end_day: end
+            })
+        ))
+
+        var percentageData = JSON.parse(JSON.stringify(
+            await queryTranCategories({
+                walletId: '60c96efa9bd6d1e6e1aed7a6',
+                start_day: start,
+                end_day: end
+            })
+        ))
+
+        console.log("Overview Data: ", data)
+
+        this.setState({
+            overviewData: data,
+            categoriesData: percentageData,
+        })
     }
 
     handleChangePeriod = (value) => {
@@ -98,26 +124,6 @@ export class OverviewScreen extends Component {
 
         console.log("Overview: - Change Period", this.state.currentPeriod)
 
-        // switch (this.state.currentPeriod) {
-        //     case 'week': {
-
-        //     }
-
-        //     case 'month': {
-        //         var basicFormat = new Date()
-
-        //         var date = {
-        //             currentTime: format(new Date(), 'MMM yyyy'),
-        //             startDate: '',
-        //             endDate: '',
-        //             otherFormat: new Date(basicFormat.setMonth(basicFormat.getMonth()))
-        //         };
-
-        //         this.setState({
-        //             dateTime: date
-        //         });
-        //     }
-        // }
 
         if (this.state.currentPeriod == 'week') {
             var start = startOfWeek(new Date(Date.now()), { weekStartsOn: 1 })
@@ -125,13 +131,13 @@ export class OverviewScreen extends Component {
 
             var date = {
                 currentTime: format(new Date(start), 'dd MMM') + ' - ' + format(new Date(end), 'dd MMM'),
-                startDate: start,
-                endDate: end,
                 otherFormat: '',
             }
 
             this.setState({
-                dateTime: date
+                dateTime: date,
+                startDate: start,
+                endDate: end,
             })
         }
         else if (this.state.currentPeriod == 'month') {
@@ -139,8 +145,6 @@ export class OverviewScreen extends Component {
 
             var date = {
                 currentTime: format(new Date(), 'MMM yyyy'),
-                startDate: '',
-                endDate: '',
                 otherFormat: new Date(basicFormat.setMonth(basicFormat.getMonth()))
             };
 
@@ -153,8 +157,6 @@ export class OverviewScreen extends Component {
 
             var date = {
                 currentTime: format(new Date(), 'yyyy'),
-                startDate: '',
-                endDate: '',
                 otherFormat: new Date(basicFormat.setMonth(basicFormat.getMonth()))
             };
 
@@ -162,8 +164,6 @@ export class OverviewScreen extends Component {
                 dateTime: date
             });
         }
-
-        console.log("Overview: - Change Period", this.state.dateTime)
 
         this.getDataOverview()
     }
@@ -174,8 +174,6 @@ export class OverviewScreen extends Component {
 
         var date = {
             currentTime: format(new Date(), 'MMM yyyy'),
-            startDate: '',
-            endDate: '',
             otherFormat: new Date(basicFormat.setMonth(basicFormat.getMonth()))
         };
 
@@ -185,39 +183,123 @@ export class OverviewScreen extends Component {
     }
 
     decreasePeriod() {
-        console.log("Decrease Period")
+        if (this.state.currentPeriod == 'week') {
+            var start = this.state.startDate
+            var end = this.state.endDate
 
-        var currentDate = this.state.dateTime.otherFormat
-        var newDate = new Date(currentDate.setMonth(currentDate.getMonth() - 1));
+            start = startOfWeek(start.setDate(start.getDate() - 7), { weekStartsOn: 1 })
+            end = endOfWeek(end.setDate(end.getDate() - 7), { weekStartsOn: 1 })
 
-        var date = {
-            currentTime: format(newDate, 'MMM yyyy'),
-            startDate: '',
-            endDate: '',
-            otherFormat: newDate
+            var date = {
+                currentTime: format(new Date(start), 'dd MMM') + ' - ' + format(new Date(end), 'dd MMM'),
+                otherFormat: '',
+            }
+
+            this.setState({
+                dateTime: date,
+                startDate: start,
+                endDate: end
+            })
+
+            this.getDataOverviewWith2Date(start, end)
         }
+        else if (this.state.currentPeriod == 'month') {
+            var currentDate = this.state.dateTime.otherFormat
+            var newDate = new Date(currentDate.setMonth(currentDate.getMonth() - 1));
 
-        this.setState({
-            dateTime: date
-        });
+            var start = startOfMonth(new Date(newDate), { startOfMonth: 1 })
+            var end = endOfMonth(new Date(newDate), { startOfMonth: 1 })
+
+            var date = {
+                currentTime: format(newDate, 'MMM yyyy'),
+                otherFormat: newDate
+            }
+
+            this.setState({
+                dateTime: date
+            });
+
+            this.getDataOverviewWith2Date(start, end)
+        }
+        else if (this.state.currentPeriod == 'year') {
+            var currentDate = this.state.dateTime.otherFormat
+            var newDate = new Date(currentDate.setMonth(currentDate.getMonth() - 12));
+
+            var start = startOfYear(new Date(newDate), { startOfYear: 1 })
+            var end = endOfYear(new Date(newDate), { startOfYear: 1 })
+
+            console.log("YEAR START: ", start, " - END: ", end)
+
+            var date = {
+                currentTime: format(newDate, 'yyyy'),
+                otherFormat: newDate
+            }
+
+            this.setState({
+                dateTime: date
+            });
+
+            this.getDataOverviewWith2Date(start, end)
+        }
     }
 
     increasePeriod() {
-        console.log("Increase Period")
+        if (this.state.currentPeriod == 'week') {
+            var start = this.state.startDate
+            var end = this.state.endDate
 
-        var currentDate = this.state.dateTime.otherFormat
-        var newDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
+            start = startOfWeek(start.setDate(start.getDate() + 7), { weekStartsOn: 1 })
+            end = endOfWeek(end.setDate(end.getDate() + 7), { weekStartsOn: 1 })
 
-        var date = {
-            currentTime: format(newDate, 'MMM yyyy'),
-            startDate: '',
-            endDate: '',
-            otherFormat: newDate
+            var date = {
+                currentTime: format(new Date(start), 'dd MMM') + ' - ' + format(new Date(end), 'dd MMM'),
+                otherFormat: '',
+            }
+
+            this.setState({
+                dateTime: date,
+                startDate: start,
+                endDate: end
+            })
+
+            this.getDataOverviewWith2Date(start, end)
         }
+        else if (this.state.currentPeriod == 'month') {
+            var currentDate = this.state.dateTime.otherFormat
+            var newDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
 
-        this.setState({
-            dateTime: date
-        });
+            var start = startOfMonth(new Date(newDate), { startOfMonth: 1 })
+            var end = endOfMonth(new Date(newDate), { startOfMonth: 1 })
+
+            var date = {
+                currentTime: format(newDate, 'MMM yyyy'),
+                otherFormat: newDate
+            }
+
+            this.setState({
+                dateTime: date
+            });
+
+            this.getDataOverviewWith2Date(start, end)
+        }
+        else if (this.state.currentPeriod == 'year') {
+            var currentDate = this.state.dateTime.otherFormat
+            var newDate = new Date(currentDate.setMonth(currentDate.getMonth() + 12));
+
+            var start = startOfYear(new Date(newDate), { startOfYear: 1 })
+            var end = endOfYear(new Date(newDate), { startOfYear: 1 })
+
+            var date = {
+                currentTime: format(newDate, 'yyyy'),
+                otherFormat: newDate
+            }
+
+            this.setState({
+                dateTime: date
+            });
+
+            this.getDataOverviewWith2Date(start, end)
+        }
     }
 
 

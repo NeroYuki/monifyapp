@@ -15,23 +15,23 @@ export class ItemsCategoriesTab extends Component {
         console.log("Item Categories Tab: - Constructor")
 
         this.state = {
-            data: [
-                {
-                    title: "Expenses",
-                    total: '+350.000',
-                    data: [
-                        {
-                            key: 'Salary',
-                            money: '450.000',
-                            percentage: '30%',
-                        },
-                        {
-                            key: 'Food',
-                            money: '300.000',
-                            percentage: '43%',
-                        },
-                    ]
-                }],
+            // data: [
+            //     {
+            //         title: "Expenses",
+            //         total: '+350.000',
+            //         data: [
+            //             {
+            //                 key: 'Salary',
+            //                 money: '450.000',
+            //                 percentage: '30%',
+            //             },
+            //             {
+            //                 key: 'Food',
+            //                 money: '300.000',
+            //                 percentage: '43%',
+            //             },
+            //         ]
+            //     }],
 
 
             expense: '',
@@ -82,32 +82,6 @@ export class ItemsCategoriesTab extends Component {
         else
             if (this.props.currentOption == 'Income')
                 this.fetchDataList(trans.income, expenses, total, 'Income')
-
-        // for (var i in trans.expense) {
-        //     total += trans.expense[i].amount
-
-        //     var icon = JSON.parse(JSON.stringify(await fetchCategory({ categoryId: trans.expense[i].categoryId })))
-        //     var value = {
-        //         amount: trans.expense[i].amount,
-        //         icon: icon,
-        //     }
-
-        //     expenses.push(value)
-        // }
-
-        // this.setState({
-        //     expense: [
-        //         {
-        //             title: 'Expenses',
-        //             // title: this.props.currentOption,
-        //             total: total,
-        //             data: expenses,
-        //         }
-        //     ]
-        // })
-
-        // console.log("ITEM ALL CATE: ", this.state.expense)
-
     }
 
     Item = ({ items }) => (

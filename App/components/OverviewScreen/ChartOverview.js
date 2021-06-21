@@ -27,7 +27,10 @@ export class ChartOverview extends Component {
 
         return (
             <View style={styles.container}>
-                <ChartView />
+                <ChartView
+                    currentOption={this.props.currentOption}
+                    data={this.state.data}
+                />
                 <ItemsCategoriesTab
                     currentOption={this.props.currentOption}
                     data={this.state.data}

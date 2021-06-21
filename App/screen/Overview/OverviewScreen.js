@@ -10,7 +10,7 @@ import { RecurringModal } from "../../components/TransactionEditor/RecurringModa
 import { TransactionModal } from "../../components/TransactionEditor/TransactionModal";
 
 import Moment from 'moment'
-import { format, addDays, addMonths, addYears } from 'date-fns'
+import { format, addDays, addMonths, addYears, startOfWeek, endOfWeek } from 'date-fns'
 import { queryTranCategories, queryTransactions } from "../../logic/Screen-Overview";
 
 export class OverviewScreen extends Component {
@@ -56,14 +56,10 @@ export class OverviewScreen extends Component {
         this.decreasePeriod = this.decreasePeriod.bind(this)
         this.increasePeriod = this.increasePeriod.bind(this)
         this.changeShowingOption = this.changeShowingOption.bind(this)
-
-
     }
 
     componentDidMount() {
-
         console.log("Overview Screen: - Component Did Mount")
-
 
         this.getDate()
 
@@ -81,7 +77,8 @@ export class OverviewScreen extends Component {
 
         var percentageData = JSON.parse(JSON.stringify(
             await queryTranCategories({
-                walletId: '60c96efa9bd6d1e6e1aed7a6'
+                walletId: '60c96efa9bd6d1e6e1aed7a6',
+                period: this.state.currentPeriod
             })
         ))
 
@@ -95,22 +92,90 @@ export class OverviewScreen extends Component {
     }
 
     handleChangePeriod = (value) => {
-        console.log("Overview: - Change Period", value)
-
         this.setState({
             currentPeriod: value
         })
+
+        console.log("Overview: - Change Period", this.state.currentPeriod)
+
+        // switch (this.state.currentPeriod) {
+        //     case 'week': {
+
+        //     }
+
+        //     case 'month': {
+        //         var basicFormat = new Date()
+
+        //         var date = {
+        //             currentTime: format(new Date(), 'MMM yyyy'),
+        //             startDate: '',
+        //             endDate: '',
+        //             otherFormat: new Date(basicFormat.setMonth(basicFormat.getMonth()))
+        //         };
+
+        //         this.setState({
+        //             dateTime: date
+        //         });
+        //     }
+        // }
+
+        if (this.state.currentPeriod == 'week') {
+            var start = startOfWeek(new Date(Date.now()), { weekStartsOn: 1 })
+            var end = endOfWeek(new Date(Date.now()), { weekStartsOn: 1 })
+
+            var date = {
+                currentTime: format(new Date(start), 'dd MMM') + ' - ' + format(new Date(end), 'dd MMM'),
+                startDate: start,
+                endDate: end,
+                otherFormat: '',
+            }
+
+            this.setState({
+                dateTime: date
+            })
+        }
+        else if (this.state.currentPeriod == 'month') {
+            var basicFormat = new Date()
+
+            var date = {
+                currentTime: format(new Date(), 'MMM yyyy'),
+                startDate: '',
+                endDate: '',
+                otherFormat: new Date(basicFormat.setMonth(basicFormat.getMonth()))
+            };
+
+            this.setState({
+                dateTime: date
+            });
+        }
+        else if (this.state.currentPeriod == 'year') {
+            var basicFormat = new Date()
+
+            var date = {
+                currentTime: format(new Date(), 'yyyy'),
+                startDate: '',
+                endDate: '',
+                otherFormat: new Date(basicFormat.setMonth(basicFormat.getMonth()))
+            };
+
+            this.setState({
+                dateTime: date
+            });
+        }
+
+        console.log("Overview: - Change Period", this.state.dateTime)
 
         this.getDataOverview()
     }
 
     getDate() {
-
         console.log("Overview DateTime")
         var basicFormat = new Date()
 
         var date = {
             currentTime: format(new Date(), 'MMM yyyy'),
+            startDate: '',
+            endDate: '',
             otherFormat: new Date(basicFormat.setMonth(basicFormat.getMonth()))
         };
 
@@ -127,6 +192,8 @@ export class OverviewScreen extends Component {
 
         var date = {
             currentTime: format(newDate, 'MMM yyyy'),
+            startDate: '',
+            endDate: '',
             otherFormat: newDate
         }
 
@@ -143,6 +210,8 @@ export class OverviewScreen extends Component {
 
         var date = {
             currentTime: format(newDate, 'MMM yyyy'),
+            startDate: '',
+            endDate: '',
             otherFormat: newDate
         }
 

@@ -2,6 +2,8 @@ import React, { Component } from 'react';
 import { Dimensions, Image, Text, View } from 'react-native';
 import { PieChart } from 'react-native-svg-charts'
 import { icons } from '../../assets/constants';
+import { fetchCategory } from '../../logic/Component-CategoryEditor';
+import { increase_brightness } from '../../utils/increase_brightness';
 
 export class ChartView extends Component {
 
@@ -12,46 +14,55 @@ export class ChartView extends Component {
             selectedIndex: "",
             selectedAmount: "",
             selectedIcon: "",
+
+            listData: [],
         }
+
+        this.getData()
+    }
+
+    fetchDataList = async (array, datas, total, title) => {
+
+        var colorPercentage = '#a96300'
+        for (var i in array) {
+            total += array[i].amount
+
+            var icon = JSON.parse(JSON.stringify(await fetchCategory({ categoryId: array[i].categoryId })))
+
+            colorPercentage = increase_brightness(colorPercentage, 20)
+
+            var value = {
+                key: icon[0].tenhangmuc,
+                amount: array[i].amount,
+                icon: icon[0].iconhangmuc,
+                svg: { fill: icon[0].color }
+            }
+
+            datas.push(value)
+        }
+
+        this.setState({
+            listData: datas
+        })
+    }
+
+    getData = async () => {
+
+        var trans = this.props.data
+        var datas = []
+        var total = 0
+
+        if (this.props.currentOption == 'Expense')
+            this.fetchDataList(trans.expense, datas, total, 'Expense')
+        else
+            if (this.props.currentOption == 'Income')
+                this.fetchDataList(trans.income, datas, total, 'Income')
     }
 
     render() {
 
         // Dummy Data
-        const data = [
-            {
-                key: 'Salary',
-                amount: '25',
-                icon: icons.salaryIcon,
-                svg: { fill: '#600080' },
-            },
-            {
-                key: 'Food',
-                amount: '15',
-                icon: icons.foodIcon,
-                svg: { fill: '#9900cc' },
-                // arc: { outerRadius: '130%' }
-            },
-            {
-                key: 'Electric Bill',
-                amount: '40',
-                icon: icons.electricBillIcon,
-                svg: { fill: '#c61aff' }
-            },
-            {
-                key: 'Internet',
-                amount: '10',
-                icon: icons.educationIcon,
-                svg: { fill: '#d966ff' }
-            },
-            {
-                key: 'Drug',
-                amount: '10',
-                icon: icons.investmentIcon,
-                svg: { fill: '#ecb3ff' }
-            }
-        ]
-
+        const data = this.state.listData
 
         const pieData = data.map((value) => {
             return {

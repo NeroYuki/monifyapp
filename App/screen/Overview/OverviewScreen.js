@@ -31,7 +31,7 @@ export class OverviewScreen extends Component {
             // All trans data 
             overviewData: {},
             categoriesData: {},
-            listData: [
+            listDataAtListTab: [
                 {
                     title: '',
                     total: 0,
@@ -41,6 +41,24 @@ export class OverviewScreen extends Component {
                                 sotienthunhap: null,
                                 sotientieudung: 0,
                             },
+                            icon: [
+                                {
+                                    color: '',
+                                    iconhangmuc: 10,
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+
+            listDataAtCategoriesTab: [
+                {
+                    title: '',
+                    total: 0,
+                    data: [
+                        {
+                            amount: 0,
                             icon: [
                                 {
                                     color: '',
@@ -92,8 +110,10 @@ export class OverviewScreen extends Component {
                 this.getDataOverview(), this.getPercentageData(), this.getDate()
             ]);
 
-            this.parseDataToProps(overviewData)
             this.setState({ isLoading: false, overviewData, categoriesData, dateTime });
+
+            this.parseDataToProps(overviewData)
+            this.getDataAtCategoriesTab()
         } catch (error) {
 
             console.log("LOADING......", error)
@@ -101,9 +121,12 @@ export class OverviewScreen extends Component {
                 isLoading: false
             })
         }
+    }
 
-        // this.getDate()
-        // this.getDataOverview()
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.currentOption != this.state.currentOption) {
+            this.getDataAtCategoriesTab()
+        }
     }
 
     getDate() {
@@ -157,15 +180,15 @@ export class OverviewScreen extends Component {
             })
         ))
 
-        this.parseDataToProps(data)
-
-
         // console.log("Overview Data: ", data)
 
         this.setState({
             overviewData: data,
             categoriesData: percentageData,
         })
+
+        this.parseDataToProps(data)
+        this.getDataAtCategoriesTab()
     }
 
     getDataOverviewWithPeriod = async (period) => {
@@ -183,13 +206,13 @@ export class OverviewScreen extends Component {
             })
         ))
 
-        this.parseDataToProps(data)
-
-
         this.setState({
             overviewData: data,
             categoriesData: percentageData,
         })
+
+        this.parseDataToProps(data)
+        this.getDataAtCategoriesTab()
     }
 
     handleChangePeriod = (value) => {
@@ -276,7 +299,7 @@ export class OverviewScreen extends Component {
             trans.push(value)
         }
 
-        this.setState({ listData: trans })
+        this.setState({ listDataAtListTab: trans })
     }
 
     decreasePeriod() {
@@ -399,6 +422,45 @@ export class OverviewScreen extends Component {
         }
     }
 
+    fetchDataList = async (array, data, total, title) => {
+        for (var i in array) {
+            total += array[i].amount
+
+            var icon = JSON.parse(JSON.stringify(await fetchCategory({ categoryId: array[i].categoryId })))
+            var value = {
+                amount: array[i].amount,
+                icon: icon,
+            }
+
+            data.push(value)
+        }
+
+        this.setState({
+            listDataAtCategoriesTab: [
+                {
+                    title: title,
+                    // title: this.props.currentOption,
+                    total: total,
+                    data: data,
+                }
+            ]
+        })
+    }
+
+    getDataAtCategoriesTab() {
+        var trans = this.state.categoriesData
+        var data = []
+        var total = 0
+
+        console.log("GET DATA AT CATEGORIES TAB ", this.state.currentOption)
+
+        if (this.state.currentOption == 'Expense')
+            this.fetchDataList(trans.expense, data, total, 'Expense')
+        else
+            if (this.state.currentOption == 'Income')
+                this.fetchDataList(trans.income, data, total, 'Income')
+    }
+
 
     // MARK: - CALL MODAL
     onCategoriesPress() {
@@ -456,13 +518,13 @@ export class OverviewScreen extends Component {
             (!this.state.chartView) ?
                 <ItemsOverView
                     onPressTransactionEditor={this.onPressTransactionEditor}
-                    data={this.state.listData}
+                    data={this.state.listDataAtListTab}
                     currentOption={this.state.currentOption}
                 />
                 :
                 <ChartOverview
                     onPressShowing={this.onPressShowing}
-                    data={this.state.categoriesData}
+                    data={this.state.listDataAtCategoriesTab}
                     currentOption={this.state.currentOption}
                 />
         )
@@ -470,7 +532,7 @@ export class OverviewScreen extends Component {
 
     render() {
 
-        console.log("Overview Screen: - Render")
+        console.log("Overview Screen: - Render PERIOD", this.state.currentOption)
 
         return (
             <SafeAreaView style={{ flex: 1 }}>

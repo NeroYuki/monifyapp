@@ -12,77 +12,52 @@ export class ItemsCategoriesTab extends Component {
     constructor(props) {
         super(props)
 
-        console.log("Item Categories Tab: - Constructor")
-
         this.state = {
-            // data: [
-            //     {
-            //         title: "Expenses",
-            //         total: '+350.000',
-            //         data: [
-            //             {
-            //                 key: 'Salary',
-            //                 money: '450.000',
-            //                 percentage: '30%',
-            //             },
-            //             {
-            //                 key: 'Food',
-            //                 money: '300.000',
-            //                 percentage: '43%',
-            //             },
-            //         ]
-            //     }],
-
-
-            expense: '',
-            income: '',
+            listData: '',
         };
 
-        this.getData()
+        // this.getData()
     }
 
-    componentDidMount() {
-        console.log("Item Categories Tab: - Component Did Mount")
-    }
+    // fetchDataList = async (array, data, total, title) => {
+    //     for (var i in array) {
+    //         total += array[i].amount
 
-    fetchDataList = async (array, datas, total, title) => {
-        for (var i in array) {
-            total += array[i].amount
+    //         var icon = JSON.parse(JSON.stringify(await fetchCategory({ categoryId: array[i].categoryId })))
+    //         var value = {
+    //             amount: array[i].amount,
+    //             icon: icon,
+    //         }
 
-            var icon = JSON.parse(JSON.stringify(await fetchCategory({ categoryId: array[i].categoryId })))
-            var value = {
-                amount: array[i].amount,
-                icon: icon,
-            }
+    //         data.push(value)
+    //     }
 
-            datas.push(value)
-        }
+    //     console.log(data)
 
-        this.setState({
-            expense: [
-                {
-                    title: title,
-                    // title: this.props.currentOption,
-                    total: total,
-                    data: datas,
-                }
-            ]
-        })
-    }
+    //     this.setState({
+    //         listData: [
+    //             {
+    //                 title: title,
+    //                 // title: this.props.currentOption,
+    //                 total: total,
+    //                 data: data,
+    //             }
+    //         ]
+    //     })
+    // }
 
-    getData = async () => {
-        console.log("Item Categories Tab: - Get Data")
+    // getData = async () => {
 
-        var trans = this.props.data
-        var expenses = []
-        var total = 0
+    //     var trans = this.props.data
+    //     var data = []
+    //     var total = 0
 
-        if (this.props.currentOption == 'Expense')
-            this.fetchDataList(trans.expense, expenses, total, 'Expense')
-        else
-            if (this.props.currentOption == 'Income')
-                this.fetchDataList(trans.income, expenses, total, 'Income')
-    }
+    //     if (this.props.currentOption == 'Expense')
+    //         this.fetchDataList(trans.expense, data, total, 'Expense')
+    //     else
+    //         if (this.props.currentOption == 'Income')
+    //             this.fetchDataList(trans.income, data, total, 'Income')
+    // }
 
     Item = ({ items }) => (
         <View style={styles.item}>
@@ -102,7 +77,7 @@ export class ItemsCategoriesTab extends Component {
                     </View>
 
                     <View style={{ flex: 1, justifyContent: 'center', alignItems: 'flex-end' }}>
-                        <Text style={styles.percentage}>{percentageFormat((items.amount / this.state.expense[0].total) * 100)}%</Text>
+                        <Text style={styles.percentage}>{percentageFormat((items.amount / this.props.data[0].total) * 100)}%</Text>
                     </View>
                 </View>
 
@@ -142,13 +117,12 @@ export class ItemsCategoriesTab extends Component {
 
     render() {
 
-        console.log("Item Categories Tab: - Render")
         return (
             <View style={styles.container}>
                 <SectionList
                     style={styles.selectionList}
                     scrollEnabled={false}
-                    sections={this.state.expense}
+                    sections={this.props.data}
                     renderItem={({ item }) => <this.Item items={item} />}
                     renderSectionHeader={({ section }) => <this.Header section={section} />}
                     renderSectionFooter={() => <this.Footer />}

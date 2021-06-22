@@ -7,7 +7,7 @@ import { COLORS } from "../../assets/constants";
 export class TimespanPicker extends Component {
     constructor(props) {
 
-        console.log("TIMESPAN PICKER: - CONSTRUCTOR")
+        // console.log("TIMESPAN PICKER: - CONSTRUCTOR")
         super(props)
         this.state = {
             isVisible: this.props.isVisible,
@@ -23,7 +23,7 @@ export class TimespanPicker extends Component {
 
     render() {
 
-        console.log("TIMESPAN PICKER: - Render ")
+        // console.log("TIMESPAN PICKER: - Render ")
         const style = stylesheet
         return (
             <Modal

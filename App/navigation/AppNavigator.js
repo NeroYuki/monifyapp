@@ -19,7 +19,7 @@ const tabOptions = {
 
 const CreateInput = (props) => {
   return (
-    <TouchableOpacity
+    <View
       style={{
         alignItems: 'center',
         justifyContent: 'center',
@@ -27,7 +27,8 @@ const CreateInput = (props) => {
         borderRadius: 19,
         backgroundColor: COLORS.yellow
       }}
-      onPress={() => console.log("Create Input")}>
+      onPress={() => console.log("Create Input")}
+      >
       <Image
         source={icons.plus}
         resizeMode='contain'
@@ -36,7 +37,7 @@ const CreateInput = (props) => {
           width: 19
         }}
       />
-    </TouchableOpacity>
+    </View>
   )
 }
 

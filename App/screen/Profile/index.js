@@ -28,7 +28,7 @@ export class ProfileScreen extends React.Component {
                             {/* Render Header */}
                             <ProfileHeader style={style.header_title} />
                             <Avatar.Image style={style.header_avatar} size={100} source={images.avatarPlaceholder}/>
-                            <Text style={style.header_username_text}>UsernameX</Text>
+                            <Text style={style.header_username_text}>Guest</Text>
                         </View>
                     </ImageBackground>                    
                 </View>

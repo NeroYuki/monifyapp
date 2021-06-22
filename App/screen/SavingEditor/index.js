@@ -93,7 +93,7 @@ export class SavingEditor extends Component {
                         title="Saving Name"
                         value={this.state.name}
                         description="Change name of the saving fund" 
-                        onPress={() => {this.setState({nameInputVisible: true})}}/>
+                        onPress={(mode === "edit") ? () => {this.setState({nameInputVisible: true})} : null}/>
 
                     <GenericSettingField
                         style={style.setting_entry}
@@ -101,7 +101,7 @@ export class SavingEditor extends Component {
                         color={this.state.color}
                         value={this.state.color}
                         description="Pick a color to represent the saving fund" 
-                        onPress={() => {this.setState({colorPickerVisible: true})}}/>  
+                        onPress={(mode === "edit") ? () => {this.setState({colorPickerVisible: true})} : null}/>  
 
                     <GenericSettingField
                         style={style.setting_entry}
@@ -114,7 +114,7 @@ export class SavingEditor extends Component {
                         title="Saving Expire on"
                         value={this.state.duration.toDateString()}
                         description="Indicate time the saving find should expire" 
-                        onPress={() => {this.setState({durationPickerVisible: true})}}
+                        onPress={(mode === "edit") ? () => {this.setState({durationPickerVisible: true})} : null}
                     />
 
                     <GenericSettingField
@@ -122,7 +122,7 @@ export class SavingEditor extends Component {
                         title="Interest Rate"
                         value={this.state.interest + " %"}
                         description="The interest rate of saving fund, change to this only apply from the next interest cycle" 
-                        onPress={() => {this.setState({interestInputVisible: true})}}
+                        onPress={(mode === "edit") ? () => {this.setState({interestInputVisible: true})} : null}
                     />
 
                     <GenericSettingField
@@ -130,7 +130,7 @@ export class SavingEditor extends Component {
                         title="Inherited Wallet"
                         value={this.getWalletText(this.state.applied_wallet)}
                         description="The wallet that will get the saving fund withdrawal amount after the fund expire" 
-                        onPress={() => {this.setState({walletSelectionVisible: true})}}
+                        onPress={(mode === "edit") ? () => {this.setState({walletSelectionVisible: true})} : null}
                     />
 
                     <GenericSettingField
@@ -138,7 +138,7 @@ export class SavingEditor extends Component {
                         title="Early Withdrawal Interest"
                         value={this.state.early_interest + " %"}
                         description="Interest rate if the saving find is withdrawn early" 
-                        onPress={() => {this.setState({earlyInterestInputVisible: true})}}
+                        onPress={(mode === "edit") ? () => {this.setState({earlyInterestInputVisible: true})} : null}
                     />
 
                     <GenericSettingField

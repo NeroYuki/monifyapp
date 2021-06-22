@@ -90,7 +90,7 @@ export class LoanEditor extends Component {
                         title="Loan Name"
                         value={this.state.name}
                         description="Change name of the loan " 
-                        onPress={() => {this.setState({nameInputVisible: true})}}/>
+                        onPress={(mode === "edit") ? () => {this.setState({nameInputVisible: true})} : null}/>
 
                     <GenericSettingField
                         style={style.setting_entry}
@@ -98,21 +98,21 @@ export class LoanEditor extends Component {
                         color={this.state.color}
                         value={this.state.color}
                         description="Pick a color to represent the loan" 
-                        onPress={() => {this.setState({colorPickerVisible: true})}}/>  
+                        onPress={(mode === "edit") ? () => {this.setState({colorPickerVisible: true})} : null}/>  
 
                     <GenericSettingField
                         style={style.setting_entry}
                         title="Loan Value"
                         value={this.state.amount}
                         description="The current value of the loan, can only be changed by transactions, or on creation" 
-                        onPress={(id)? null : () => {this.setState({amountInputVisible: true})} }/>
+                        onPress={(mode === "edit") ? (id)? null : () => {this.setState({amountInputVisible: true})} : null}/>
                     
                     <GenericSettingField
                         style={style.setting_entry}
                         title="Due Date"
                         value={this.state.duration.toDateString()}
                         description="Indicate time the loan is due to payment" 
-                        onPress={() => {this.setState({durationPickerVisible: true})}}
+                        onPress={(mode === "edit") ? () => {this.setState({durationPickerVisible: true})} : null}
                     />
 
                     <GenericSettingField
@@ -120,7 +120,7 @@ export class LoanEditor extends Component {
                         title="Interest Rate"
                         value={this.state.interest + " %"}
                         description="The interest rate of loan, change to this only apply from the next interest cycle" 
-                        onPress={() => {this.setState({interestInputVisible: true})}}
+                        onPress={(mode === "edit") ? () => {this.setState({interestInputVisible: true})} : null}
                     />
 
                     {(!id) && <GenericSettingField
@@ -128,7 +128,7 @@ export class LoanEditor extends Component {
                         title="Receiving Wallet"
                         value={this.getWalletText(this.state.applied_wallet)}
                         description="The wallet that will immediately receive the loaned fund after loan creation" 
-                        onPress={() => {this.setState({walletSelectionVisible: true})}}
+                        onPress={(mode === "edit") ? () => {this.setState({walletSelectionVisible: true})} : null}
                     />
                     }
 

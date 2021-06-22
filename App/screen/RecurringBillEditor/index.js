@@ -6,6 +6,7 @@ import { FAB, Snackbar } from "react-native-paper";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { fetchBill, saveBill } from "../../logic/screen-RecurringBillEditor";
 import { querywallet } from "../../logic/Screen-wallet";
+import moment from 'moment'
 
 export class RecurringBillEditor extends Component {
     constructor(props) {
@@ -58,19 +59,49 @@ export class RecurringBillEditor extends Component {
 
         if (id) {
             //console.log(this.state)
-            let data = await fetchBill(id)
-            console.log('UI', data)
-            if (!data) return
+            let arr_data = await fetchBill(id)
+            if (!arr_data || arr_data.length == 0) return
+            let data = arr_data[0]
+            let cycle_value = 0, cycle_type = ""
+            //console.log(data.chukygiaodichtheothang)
+            if (!data.chukygiaodichtheongay) {
+                if (data.chukygiaodichtheothang % 12 === 0) {
+                    cycle_value = data.chukygiaodichtheothang / 12
+                    cycle_type = "Year"
+                }
+                else {
+                    cycle_value = data.chukygiaodichtheothang
+                    cycle_type = "Month"
+                }
+            }
+            else {
+                if (data.chukygiaodichtheongay % 7 === 0) {
+                    cycle_value = data.chukygiaodichtheongay / 12
+                    cycle_type = "Week"
+                }
+                else {
+                    cycle_value = data.chukygiaodichtheongay
+                    cycle_type = "Day"
+                }
+            }
+
+            console.log(this.getWalletText(JSON.stringify(data.idtaikhoan).toString()))
+            
             this.setState({
-                // name: data.name,
-                // color: data.color,
-                // amount: data.amount,
+                name: data.name,
+                desc: data.ghichu,
+                color: data.color,
+                amount: data.sotienthunhap || data.sotientieudung ,
+                cycle_duration_value: cycle_value.toFixed(0),
+                cycle_duration_type: cycle_type,
+                applied_wallet: data.idtaikhoan,
+                icon: data.loaihangmucgd,
                 // duration: moment(JSON.stringify(data.expire_on), "YYYY-MM-DDTHH:mm:ss.SSSZ").toDate(),
                 // interest: data.interest,
-                // applied_wallet_values: wallet_selection,
-                // creation_date: moment(JSON.stringify(data.creationDate), "YYYY-MM-DDTHH:mm:ss.SSSZ").toDate()
+                applied_wallet_values: wallet_selection,
+                creation_date: moment(JSON.stringify(data.thoigian), "YYYY-MM-DDTHH:mm:ss.SSSZ").toDate()
             })
-            //console.log(this.state)
+            
         }
         else {
             this.setState({
@@ -110,14 +141,14 @@ export class RecurringBillEditor extends Component {
                         title="Recurring Bill Name"
                         value={this.state.name}
                         description="Change name of the bill"
-                        onPress={() => { this.setState({ nameInputVisible: true }) }} />
+                        onPress={(mode === "edit") ? () => { this.setState({ nameInputVisible: true }) } : null} />
 
                     <GenericSettingField
                         style={style.setting_entry}
                         title="Recurring Bill Description"
                         value={this.state.desc}
                         description="Change description of the bill"
-                        onPress={() => { this.setState({ descInputVisible: true }) }} />
+                        onPress={(mode === "edit") ? () => { this.setState({ descInputVisible: true }) } : null} />
 
                     <GenericSettingField
                         style={style.setting_entry}
@@ -125,21 +156,21 @@ export class RecurringBillEditor extends Component {
                         color={this.state.color}
                         value={this.state.color}
                         description="Pick a color to represent the bill"
-                        onPress={() => { this.setState({ colorPickerVisible: true }) }} />
+                        onPress={(mode === "edit") ? () => { this.setState({ colorPickerVisible: true }) } : null} />
 
                     <GenericSettingField
                         style={style.setting_entry}
                         title="Bill Value"
                         value={this.state.amount}
                         description="The current value of the bill, one transaction will be made based on this value every cycle. Do note that a transaction value can still be changed later"
-                        onPress={() => { this.setState({ amountInputVisible: true }) }} />
+                        onPress={(mode === "edit") ? () => { this.setState({ amountInputVisible: true }) } : null} />
 
                     <GenericSettingField
                         style={style.setting_entry}
                         title="Inherited Wallet"
                         value={this.getWalletText(this.state.applied_wallet)}
                         description="The wallet that will get the saving fund withdrawal amount after the fund expire" 
-                        onPress={() => {this.setState({walletSelectionVisible: true})}}
+                        onPress={(mode === "edit") ? () => {this.setState({walletSelectionVisible: true})} : null}
                     />
 
                     <GenericSettingField
@@ -147,7 +178,7 @@ export class RecurringBillEditor extends Component {
                         title="Category"
                         value={"Select..."}
                         description="The category attached to the transaction created by the recurring bills" 
-                        onPress={() => {this.setState({categoriesVisible: true})}}
+                        onPress={(mode === "edit") ? () => {this.setState({categoriesVisible: true})} : null}
                     />
 
                     <GenericSettingField
@@ -155,7 +186,7 @@ export class RecurringBillEditor extends Component {
                         title="Cycle Start Date"
                         value={this.state.cycle_start.toDateString()}
                         description="Indicate time the billing cycle begin"
-                        onPress={() => { this.setState({ cycleStartPickerVisible: true }) }}
+                        onPress={(mode === "edit") ? () => { this.setState({ cycleStartPickerVisible: true }) } : null}
                     />
 
                     <GenericSettingField
@@ -163,7 +194,7 @@ export class RecurringBillEditor extends Component {
                         title="Cycle Duration"
                         value={this.state.cycle_duration_value + " " + this.state.cycle_duration_type}
                         description="The length of the billing cycle as numeral value"
-                        onPress={() => { this.setState({ cycleDurationInputVisible: true }) }}
+                        onPress={(mode === "edit") ? () => { this.setState({ cycleDurationInputVisible: true }) } : null}
                     />
 
                     <GenericSettingField
@@ -171,7 +202,7 @@ export class RecurringBillEditor extends Component {
                         title="Cycle Type"
                         value={this.state.cycle_duration_type}
                         description="The type of the billing cycle"
-                        onPress={() => { this.setState({ cycleTypeSelectionVisible: true }) }}
+                        onPress={(mode === "edit") ? () => { this.setState({ cycleTypeSelectionVisible: true }) } : null}
                     />
 
                     <GenericSettingField

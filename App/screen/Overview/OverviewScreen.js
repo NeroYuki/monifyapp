@@ -12,6 +12,7 @@ import { TransactionModal } from "../../components/TransactionEditor/Transaction
 import Moment from 'moment'
 import { format, addDays, addMonths, addYears, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear } from 'date-fns'
 import { queryTranCategories, queryTransactions } from "../../logic/Screen-Overview";
+import { fetchCategory } from "../../logic/Component-CategoryEditor";
 
 export class OverviewScreen extends Component {
     constructor(props) {
@@ -30,6 +31,26 @@ export class OverviewScreen extends Component {
             // All trans data 
             overviewData: {},
             categoriesData: {},
+            listData: [
+                {
+                    title: '',
+                    total: 0,
+                    data: [
+                        {
+                            datas: {
+                                sotienthunhap: null,
+                                sotientieudung: 0,
+                            },
+                            icon: [
+                                {
+                                    color: '',
+                                    iconhangmuc: 10,
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
 
             // Tap on item report then set data on this
             // List - Tab 
@@ -70,6 +91,8 @@ export class OverviewScreen extends Component {
             const [overviewData, categoriesData, dateTime] = await Promise.all([
                 this.getDataOverview(), this.getPercentageData(), this.getDate()
             ]);
+
+            this.parseDataToProps(overviewData)
             this.setState({ isLoading: false, overviewData, categoriesData, dateTime });
         } catch (error) {
 
@@ -134,6 +157,9 @@ export class OverviewScreen extends Component {
             })
         ))
 
+        this.parseDataToProps(data)
+
+
         // console.log("Overview Data: ", data)
 
         this.setState({
@@ -156,6 +182,9 @@ export class OverviewScreen extends Component {
                 period: period
             })
         ))
+
+        this.parseDataToProps(data)
+
 
         this.setState({
             overviewData: data,
@@ -211,7 +240,44 @@ export class OverviewScreen extends Component {
         this.getDataOverviewWithPeriod(value)
     }
 
+    parseDataToProps = async (overviewData) => {
+        var dataFetched = overviewData.trans
 
+        var trans = []
+
+        for (var i in dataFetched) {
+
+            var datas = []
+            var total = 0
+
+            for (var j in dataFetched[i].data) {
+                var icon = JSON.parse(JSON.stringify(await fetchCategory({ categoryId: dataFetched[i].data[j].loaihangmucgd })))
+                datas.push({
+                    icon: icon,
+                    datas: dataFetched[i].data[j],
+                })
+
+
+                // total = total + (dataFetched[i].data[j].sotientieudung) ? -dataFetched[i].data[j].sotientieudung : +dataFetched[i].data[j].sotienthunhap
+                if (dataFetched[i].data[j].sotientieudung != null) {
+                    total -= dataFetched[i].data[j].sotientieudung
+                } else {
+                    total += dataFetched[i].data[j].sotienthunhap
+                }
+            }
+
+
+            var value = {
+                title: dataFetched[i].time,
+                total: total,
+                data: datas,
+            }
+
+            trans.push(value)
+        }
+
+        this.setState({ listData: trans })
+    }
 
     decreasePeriod() {
         if (this.state.currentPeriod == 'week') {
@@ -390,7 +456,7 @@ export class OverviewScreen extends Component {
             (!this.state.chartView) ?
                 <ItemsOverView
                     onPressTransactionEditor={this.onPressTransactionEditor}
-                    data={this.state.overviewData.trans}
+                    data={this.state.listData}
                     currentOption={this.state.currentOption}
                 />
                 :
@@ -408,64 +474,64 @@ export class OverviewScreen extends Component {
 
         return (
             <SafeAreaView style={{ flex: 1 }}>
-                <ScrollView style={{ flex: 1 }}>
-                    <View style={{ flex: 1 }}>
+                {/* <ScrollView style={{ flex: 1 }}> */}
+                <View style={{ flex: 1 }}>
 
-                        <WalletHeader
-                            data={this.state.overviewData}
-                            currentTab={this.state.chartView}
-                            onCategoriesPress={this.onChartCategoriesPress}
-                            onListPress={this.onListPress}
+                    <WalletHeader
+                        data={this.state.overviewData}
+                        currentTab={this.state.chartView}
+                        onCategoriesPress={this.onChartCategoriesPress}
+                        onListPress={this.onListPress}
+                    />
+
+                    <View style={{ flex: 1 }}>
+                        <TabSwitcher
+                            text={this.state.dateTime.currentTime}
+                            onTimeTextPress={this.onTimeTextPress}
+                            decreasePeriod={this.decreasePeriod}
+                            increasePeriod={this.increasePeriod}
                         />
 
-                        <View style={{ flex: 1 }}>
-                            <TabSwitcher
-                                text={this.state.dateTime.currentTime}
-                                onTimeTextPress={this.onTimeTextPress}
-                                decreasePeriod={this.decreasePeriod}
-                                increasePeriod={this.increasePeriod}
+                        <this.reportView />
+                    </View>
+                </View>
+
+                {
+                    (this.state.isLoading)
+                        ? <View></View>
+                        : <View>
+                            <TransactionModal
+                                isVisible={this.state.visible}
+                                onRequestClose={() => this.setState({ visible: false })}
+                                currentData={this.state.currentData}
+                                onCategoriesPress={this.onCategoriesPress}
+                                onRecurringPress={this.onRecurringPress}
                             />
 
-                            <this.reportView />
+
+
+                            <ExpenseOrIncomeModal
+                                isVisible={this.state.expenseOrIncomeVisible}
+                                currentOption='Expense'
+                                changeShowingOption={this.changeShowingOption}
+                                closePeriod={() => {
+                                    this.setState({ expenseOrIncomeVisible: false })
+                                }}
+                            />
+
+
+                            <TimespanPicker
+                                isVisible={this.state.periodVisible}
+                                currentPeriod={this.state.currentPeriod}
+                                handleChangePeriod={this.handleChangePeriod}
+                                onRequestClose={() => {
+                                    this.setState({ periodVisible: false })
+                                }}
+                            />
                         </View>
-                    </View>
+                }
 
-                    {
-                        (this.state.isLoading)
-                            ? <View></View>
-                            : <View>
-                                <TransactionModal
-                                    isVisible={this.state.visible}
-                                    onRequestClose={() => this.setState({ visible: false })}
-                                    currentData={this.state.currentData}
-                                    onCategoriesPress={this.onCategoriesPress}
-                                    onRecurringPress={this.onRecurringPress}
-                                />
-
-
-
-                                <ExpenseOrIncomeModal
-                                    isVisible={this.state.expenseOrIncomeVisible}
-                                    currentOption='Expense'
-                                    changeShowingOption={this.changeShowingOption}
-                                    closePeriod={() => {
-                                        this.setState({ expenseOrIncomeVisible: false })
-                                    }}
-                                />
-
-
-                                <TimespanPicker
-                                    isVisible={this.state.periodVisible}
-                                    currentPeriod={this.state.currentPeriod}
-                                    handleChangePeriod={this.handleChangePeriod}
-                                    onRequestClose={() => {
-                                        this.setState({ periodVisible: false })
-                                    }}
-                                />
-                            </View>
-                    }
-
-                </ScrollView>
+                {/* </ScrollView> */}
 
             </SafeAreaView>
 

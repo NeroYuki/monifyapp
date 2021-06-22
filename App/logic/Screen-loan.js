@@ -2,6 +2,7 @@ import {queryTaiKhoan,insertTaiKhoan, deleteTaiKhoan, deactiavteTaiKhoan}from '.
 import {BSON} from 'realm'
 import { updateTaiKhoan } from '../services/TaiKhoanCRUD';
 import { saveTransaction } from './Component-TransactionEditor';
+import { createLoanPayment } from './Screen-payment';
 
 
 export const fetchLoan= (loanId) => new Promise((resolve, reject) => {
@@ -35,7 +36,7 @@ export const saveLoan= ({loanId,loanName, color, amount, expire_on, interest, cr
                 sotien: amount,
                // color: color,
                 laisuatno: interest,
-                kyhanno: cycle,
+                kyhanno: 0,
                 ngaybatdauno:creationDate ,
                 ngaytradukien: expire_on,
                 sotientradukien: amount,  
@@ -51,7 +52,12 @@ export const saveLoan= ({loanId,loanName, color, amount, expire_on, interest, cr
             //     categoryId:             
             
             // })
-            return resolve(true)
+            // if(applied_wallet_id != "")createLoanPayment({from_wallet_id:applied_wallet_id,for_loan_id:tk.idtaikhoan,amount:amount})
+            return resolve({
+                result: true,
+                loan: tk,
+                message: "tao tai khoan no thanh cong"
+            })
 
         }, (reason) => {return reject(reason)})
     }
@@ -83,7 +89,6 @@ export const saveLoan= ({loanId,loanName, color, amount, expire_on, interest, cr
             if(typeof amount!=  'undefined') rs.no.sotien=amount        
             if(typeof color!=  'undefined')  rs.color= color
             if(typeof interest!=  'undefined') rs.no.laisuatno =interest
-            if(typeof cycle!=  'undefined') rs.no.kyhanno =cycle
             if(typeof expire_on!=  'undefined') rs.no.ngaytradukien =expire_on
             //console.log(JSON.parse(JSON.stringify(rs)))
             resolve(updateTaiKhoan(rs))

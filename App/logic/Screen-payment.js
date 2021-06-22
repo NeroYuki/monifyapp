@@ -12,7 +12,7 @@ export const createLoanPayment= ({from_wallet_id,for_loan_id,amount}) => new Pro
     let userid = JSON.parse(JSON.stringify(new BSON.ObjectID()))
     let catid =JSON.parse(JSON.stringify(new BSON.ObjectID()))
     let temp = queryHangMucGiaoDich({tenhangmuc:'Loan Payment'}).then((tk)=>{
-        if (temp==[]){
+        if (tk==[]){
             let hangmuc={
                 idhangmucgiaodich:new BSON.ObjectID(catid),
                 idnguoidung:new BSON.ObjectID(userid),
@@ -30,7 +30,7 @@ export const createLoanPayment= ({from_wallet_id,for_loan_id,amount}) => new Pro
             }).catch(err=>reject({result:false,message:err}))
         }
         else {
-            catid = JSON.parse(JSON.stringify(temp[0].idhangmucgiaodich))
+            catid = JSON.parse(JSON.stringify(tk[0].idhangmucgiaodich))
         }
     },(er)=>{
         reject(er)
@@ -72,9 +72,9 @@ export const createLoanPayment= ({from_wallet_id,for_loan_id,amount}) => new Pro
             resolve('that bai')
             return
         }
-        resolve('that bai')
-        return
-    },(er)=>(reject(er)))
+         //resolve('that bai')
+        // return
+    },(er)=>(reject(console.error(er))))
 })
 
 
@@ -83,7 +83,7 @@ export const createSavingDeposit= ({from_wallet_id,for_saving_id,amount}) => new
     let userid = JSON.parse(JSON.stringify(new BSON.ObjectID()))
     let catid =JSON.parse(JSON.stringify(new BSON.ObjectID()))
     let temp = queryHangMucGiaoDich({tenhangmuc:'Saving Deposit'}).then((tk)=>{
-        if (temp==[]){
+        if (tk==[]){
             let hangmuc={
                 idhangmucgiaodich:new BSON.ObjectID(catid),
                 idnguoidung:new BSON.ObjectID(userid),
@@ -101,7 +101,7 @@ export const createSavingDeposit= ({from_wallet_id,for_saving_id,amount}) => new
             }).catch(err=>reject({result:false,message:err}))
         }
         else {
-            catid = JSON.parse(JSON.stringify(temp[0].idhangmucgiaodich))
+            catid = JSON.parse(JSON.stringify(tk[0].idhangmucgiaodich))
         }
     },(er)=>{
         reject(er)
@@ -142,7 +142,7 @@ export const createSavingDeposit= ({from_wallet_id,for_saving_id,amount}) => new
         else if(rs==false) {
             reject({result:false,message:'Tạo transaction thất bại'})
         }
-        reject({result:false,message:'Tạo transaction thất bại'})
+        //reject({result:false,message:'Tạo transaction thất bại'})
     },(er)=>(reject(er)))
 
 })
@@ -153,7 +153,7 @@ export const createSavingWithdraw= ({for_wallet_id,from_saving_id,amount}) => ne
     let userid = JSON.parse(JSON.stringify(new BSON.ObjectID()))
     let catid =JSON.parse(JSON.stringify(new BSON.ObjectID()))
     let temp = queryHangMucGiaoDich({tenhangmuc:'Saving withdraw'}).then((tk)=>{
-        if (temp==[]){
+        if (tk==[]){
             let hangmuc={
                 idhangmucgiaodich:new BSON.ObjectID(catid),
                 idnguoidung:new BSON.ObjectID(userid),
@@ -171,7 +171,7 @@ export const createSavingWithdraw= ({for_wallet_id,from_saving_id,amount}) => ne
             }).catch(err=>reject({result:false,message:err}))
         }
         else {
-            catid = JSON.parse(JSON.stringify(temp[0].idhangmucgiaodich))
+            catid = JSON.parse(JSON.stringify(tk[0].idhangmucgiaodich))
         }
     },(er)=>{
         reject(er)
@@ -212,7 +212,7 @@ export const createSavingWithdraw= ({for_wallet_id,from_saving_id,amount}) => ne
         else if(rs==false) {
             reject({result:false,message:'Tạo transaction thất bại'})
         }
-        reject({result:false,message:'Tạo transaction thất bại'})
+       // reject({result:false,message:'Tạo transaction thất bại'})
     },(er)=>(reject(er)))
 
 
@@ -221,7 +221,7 @@ export const createWalletTransfer= ({from_wallet_id,for_wallet_id,amount}) => ne
     let userid = JSON.parse(JSON.stringify(new BSON.ObjectID()))
     let catid =JSON.parse(JSON.stringify(new BSON.ObjectID()))
     let temp = queryHangMucGiaoDich({tenhangmuc:'Wallet tranfer receive'}).then((tk)=>{
-        if (temp==[]){
+        if (tk==[]){
             let hangmuc={
                 idhangmucgiaodich:new BSON.ObjectID(catid),
                 idnguoidung:new BSON.ObjectID(userid),
@@ -239,14 +239,14 @@ export const createWalletTransfer= ({from_wallet_id,for_wallet_id,amount}) => ne
             }).catch(err=>reject({result:false,message:err}))
         }
         else {
-            catid = JSON.parse(JSON.stringify(temp[0].idhangmucgiaodich))
+            catid = JSON.parse(JSON.stringify(tk[0].idhangmucgiaodich))
         }
     },(er)=>{
         reject(er)
     })
     let catid2 =JSON.parse(JSON.stringify(new BSON.ObjectID()))
-    let temp = queryHangMucGiaoDich({tenhangmuc:'Wallet tranfer withdraw'}).then((tk)=>{
-        if (temp==[]){
+    let temp2 = queryHangMucGiaoDich({tenhangmuc:'Wallet tranfer withdraw'}).then((tk)=>{
+        if (tk==[]){
             let hangmuc={
                 idhangmucgiaodich:new BSON.ObjectID(catid2),
                 idnguoidung:new BSON.ObjectID(userid),
@@ -264,7 +264,7 @@ export const createWalletTransfer= ({from_wallet_id,for_wallet_id,amount}) => ne
             }).catch(err=>reject({result:false,message:err}))
         }
         else {
-            catid2 = JSON.parse(JSON.stringify(temp[0].idhangmucgiaodich))
+            catid2 = JSON.parse(JSON.stringify(tk[0].idhangmucgiaodich))
         }
     },(er)=>{
         reject(er)
@@ -304,6 +304,6 @@ export const createWalletTransfer= ({from_wallet_id,for_wallet_id,amount}) => ne
         else if(rs==false) {
             reject({result:false,message:'Tạo transaction thất bại'})
         }
-        reject({result:false,message:'Tạo transaction thất bại'})
+       // reject({result:false,message:'Tạo transaction thất bại'})
     },(er)=>(reject(er)))
 })

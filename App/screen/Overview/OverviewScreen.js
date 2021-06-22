@@ -13,6 +13,8 @@ import Moment from 'moment'
 import { format, addDays, addMonths, addYears, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear } from 'date-fns'
 import { queryTranCategories, queryTransactions } from "../../logic/Screen-Overview";
 import { fetchCategory } from "../../logic/Component-CategoryEditor";
+import { percentageFormat } from "../../utils/formatNumber";
+import { increase_brightness } from "../../utils/increase_brightness";
 
 export class OverviewScreen extends Component {
     constructor(props) {
@@ -69,6 +71,9 @@ export class OverviewScreen extends Component {
                     ]
                 }
             ],
+
+            listDataChart: [],
+
 
             // Tap on item report then set data on this
             // List - Tab 
@@ -447,18 +452,54 @@ export class OverviewScreen extends Component {
         })
     }
 
+    fetchDataChart = async (array, datas, total, title) => {
+
+        datas = []
+        total = 0
+
+        var colorPercentage = '#a96300'
+
+        for (var i in array) {
+            total += array[i].amount
+        }
+
+        for (var i in array) {
+            var icon = JSON.parse(JSON.stringify(await fetchCategory({ categoryId: array[i].categoryId })))
+
+            colorPercentage = increase_brightness(colorPercentage, 20)
+
+            var value = {
+                key: icon[0].tenhangmuc,
+                amount: percentageFormat(array[i].amount / total * 100),
+                icon: icon[0].iconhangmuc,
+                svg: { fill: icon[0].color }
+            }
+
+            datas.push(value)
+        }
+
+        this.setState({
+            listDataChart: datas
+        })
+    }
+
     getDataAtCategoriesTab() {
         var trans = this.state.categoriesData
         var data = []
         var total = 0
 
-        console.log("GET DATA AT CATEGORIES TAB ", this.state.currentOption)
-
-        if (this.state.currentOption == 'Expense')
+        if (this.state.currentOption == 'Expense') {
             this.fetchDataList(trans.expense, data, total, 'Expense')
+            this.fetchDataChart(trans.expense, data, total, 'Expense')
+        }
+
         else
-            if (this.state.currentOption == 'Income')
+            if (this.state.currentOption == 'Income') {
                 this.fetchDataList(trans.income, data, total, 'Income')
+                this.fetchDataChart(trans.income, data, total, 'Income')
+
+            }
+
     }
 
 
@@ -524,6 +565,7 @@ export class OverviewScreen extends Component {
                 :
                 <ChartOverview
                     onPressShowing={this.onPressShowing}
+                    chartData={this.state.listDataChart}
                     data={this.state.listDataAtCategoriesTab}
                     currentOption={this.state.currentOption}
                 />

@@ -155,11 +155,11 @@ export const queryTaiKhoan = (option) =>
         }
         if(option.tentaikhoan)
         {
-          Target = Target.filtered('tentaikhoan==$0',option.tentaikhoan)
+          Target = Target.filtered('tentaikhoan CONTAINS[c] "' + option.tentaikhoan + '"')
         }
         if(option.idtaikhoan){
           Target = Target.filtered('idtaikhoan==$0',option.idtaikhoan)
-        //  console.log(JSON.stringify(Target))
+          //console.log(JSON.stringify(Target))
         }
         if(option.nguoidungid){
           Target= Target.filtered('idnguoidung==$0',option.nguoidungid)
@@ -174,35 +174,36 @@ export const queryTaiKhoan = (option) =>
           Target= Target.filtered('no.idtkno==$0',option.idtkno)
         }
         if(option.thoigiantao){
-        Taget=Taget.filtered('thoigiantao==$0',option.thoigiantao)
+          Taget=Taget.filtered('thoigiantao==$0',option.thoigiantao)
         }
         if(option.taikhoanno){
-          filterUnwantedno(Target)
+          Target = filterUnwantedno(Target)
         }
         if(option.taikhoantietkiem){
-          filterUnwantedtietkiem(Target)
+          Target = filterUnwantedtietkiem(Target)
         }
         if(option.taikhoantieudung){
-          filterUnwantedtieudung(Target)
+          Target = filterUnwantedtieudung(Target)
         }
         if(option.nominAmount){
-          Target= Target.filtered('no.sotien>=$0',option.idtkno)
+          Target= Target.filtered('no.sotien>=$0',option.nominAmount)
         }
         if(option.nomaxAmount){
-          Target= Target.filtered('no.sotien<=$0',option.idtkno)
+          Target= Target.filtered('no.sotien<=$0',option.nomaxAmount)
         }
         if(option.tietkiemminAmount){
-          Target= Target.filtered('tietkiem.sotien>=$0',option.idtkno)
+          Target= Target.filtered('tietkiem.sotien>=$0',option.tietkiemminAmount)
         }
         if(option.tietkiemmaxAmount){
-          Target= Target.filtered('tietkiem.sotien<=$0',option.idtkno)
+          Target= Target.filtered('tietkiem.sotien<=$0',option.tietkiemmaxAmount)
         }        
         if(option.walletminAmount){
-          Target= Target.filtered('tieudung.sotien>=$0',option.idtkno)
+          Target= Target.filtered('tieudung.sotien>=$0',option.walletminAmount)
         }
         if(option.walletmaxAmount){
-          Target= Target.filtered('tieudung.sotien<=$0',option.idtkno)
+          Target= Target.filtered('tieudung.sotien<=$0',option.walletmaxAmount)
         }
+        //console.log('CRUD')
         resolve(Target)
       })
     }).catch((error)=>{ console.error(error); reject (error)});

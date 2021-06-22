@@ -4,6 +4,8 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { FAB, Searchbar, Dialog, Paragraph, Button } from "react-native-paper";
 import { SavingDepositModal, SavingEntry, SavingSearchModal, SavingWithdrawModal } from "../../components";
 import { stylesheet } from './style'
+import { deleteSaving, querySaving } from "../../logic/Screen-saving";
+import moment from "moment";
 
 export class SavingManager extends Component {
     constructor(props) {
@@ -11,49 +13,76 @@ export class SavingManager extends Component {
         
         this.state = {
             savingList: [
-                {
-                    id: '1',
-                    name: 'BIDV Saving',
-                    due_duratuion: '88 days',
-                    amount: '2.200.000 đ',
-                    interest_string: '2% / year',
-                    color: '#ffdddd'
-                },
-                {
-                    id: '2',
-                    name: 'Piggybank',
-                    due_duratuion: 'Never',
-                    interest_string: 'None',
-                    amount: '3.400.000 đ',
-                    color: '#ddffdd',
-                },
             ],
             advanceSearchVisible: false,
             deactivatePromptVisible: false,
             deletePromptVisible: false,
             depositModalVisible: false,
             withdrawModalVisible: false,
+            selectedId: "",
+            quickQueryString: "",
+            unsubscribe: undefined,
         }
+    }
+
+    componentDidMount() {
+        this.fetchData()
+        const unsubscribe = this.props.navigation.addListener('focus', () => {
+            //console.log('focus')
+            this.fetchData()
+        });
+    
+        // Return the function to unsubscribe from the event so it gets removed on unmount
+        this.setState({unsubscribe: unsubscribe})
+    }
+
+    componentWillUnmount() {
+        if (this.state.unsubscribe) {
+            this.state.unsubscribe()
+        }
+    }
+
+    async fetchData() {
+        let data = await querySaving({savingName: this.state.quickQueryString})
+        //console.log(data)
+        this.setState({
+            savingList: data
+        })
+    }
+
+    async queryData(input) {
+        let data = await querySaving({savingName: input.name_input, minAmount: input.min_amount, maxAmount: input.max_amount})
+        this.setState({
+            savingList: data
+        })
     }
 
     render() {
         const style = stylesheet
         const savingDisplay = this.state.savingList.map((val) => {
+            //console.log(val)
             return <SavingEntry
-                key={val.id} style={[style.saving_entry, {backgroundColor: val.color}]} name={val.name} due_duration={val.due_duratuion} amount={val.amount} interest_string={val.interest_string}
+                key={val.savingId} style={[style.saving_entry, {backgroundColor: val.color}]} name={val.name} due_duration={moment(JSON.stringify(val.expire_on), "YYYY-MM-DDTHH:mm:ss.SSSZ").format("DD/MM/YYYY")} amount={(val.amount + " đ")} interest_string={(val.interest + "%")} 
                 onDepositPress={() => {this.setState({depositModalVisible: true})}}
                 onWithdrawPress={() => {this.setState({withdrawModalVisible: true})}}
                 onDeactivatePress={() => {this.setState({deactivatePromptVisible: true})}}
-                onViewPress={() => {this.props.navigation.navigate("SavingEditor")}}
-                onDeletePress={() => {this.setState({deletePromptVisible: true})}}
-                onEditPress={() => {this.props.navigation.navigate("SavingEditor")}}
+                onViewPress={() => {this.props.navigation.navigate("SavingEditor", {mode: "view", id: val.savingId})}}
+                onDeletePress={() => {this.setState({deletePromptVisible: true,  selectedId: val.savingId})}}
+                onEditPress={() => {this.props.navigation.navigate("SavingEditor", {mode: "edit", id: val.savingId})}}
             ></SavingEntry>
         })
 
         return (
             <View style={style.container}>
                 <View style={style.search_bar}>
-                    <Searchbar style={{flex: 1}}></Searchbar>
+                    <Searchbar style={{flex: 1}}
+                    onChangeText={(e) => {
+                        //console.log(e)
+                            this.setState({
+                                quickQueryString: e
+                            })
+                        this.fetchData()
+                    }}></Searchbar>
                     <TouchableOpacity style={{backgroundColor: 'white', elevation: 5, borderRadius: 5, marginLeft: 2}}
                         onPress={() => {this.setState({advanceSearchVisible: true})}}>
                         <Icon name="menu-down" size={40}></Icon>
@@ -65,13 +94,17 @@ export class SavingManager extends Component {
                 <FAB style={style.fab}
                     big
                     icon='plus'
-                    onPress={() => {this.props.navigation.navigate("SavingEditor")}}
+                    onPress={() => {this.props.navigation.navigate("SavingEditor", {mode: "edit", id: ""})}}
                 />
 
                 <SavingSearchModal isVisible={this.state.advanceSearchVisible} 
                     onRequestClose={() => {this.setState({advanceSearchVisible: false})}} 
-                    onFilterRequest={(data) => {console.log(data); }}>
+                    onFilterRequest={(data) => {
+                        console.log(data); 
+                        this.queryData(data)
+                    }}>
                 </SavingSearchModal>
+
 
                 <SavingDepositModal isVisible={this.state.depositModalVisible} 
                     onRequestClose={() => {this.setState({depositModalVisible: false})}}>
@@ -88,7 +121,16 @@ export class SavingManager extends Component {
                     </Dialog.Content>
                     <Dialog.Actions>
                     <Button onPress={() => {this.setState({deletePromptVisible: false})}}>Cancel</Button>
-                        <Button mode='contained' onPress={() => {this.setState({deletePromptVisible: false})}}>Confirm</Button>
+                    <Button mode='contained' onPress={async () => {
+                        if (this.state.selectedId) {
+                            let result = await deleteSaving(this.state.selectedId)
+                            if (result) {
+                                this.setState({selectedId: ""})
+                                this.fetchData()
+                            }
+                        }
+                        this.setState({deletePromptVisible: false})}
+                    }>Confirm</Button>
                     </Dialog.Actions>
                 </Dialog>
 

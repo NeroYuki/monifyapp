@@ -4,6 +4,7 @@ import { GenericSelectionModal, GenericSettingField } from "../../components";
 import { stylesheet } from './style'
 import { FAB, Snackbar } from 'react-native-paper'
 import { fetchSetting, saveSetting } from "../../logic/Screen-AppearanceSetting";
+import sessionStore from "../../logic/sessionStore";
 
 export class AppearanceSetting extends Component {
     constructor(props) {
@@ -51,7 +52,7 @@ export class AppearanceSetting extends Component {
         console.log("Save Setting")
 
         var caidattest = {
-            idnguoidung: '60c5c67c3576c0078f3bc622',
+            idnguoidung: sessionStore.activeUserId,
             loaitien: this.state.currencyCurrent,
             chedo: this.state.appThemeCurrent,
             ngonngu: this.state.languageCurrent,
@@ -141,6 +142,7 @@ export class AppearanceSetting extends Component {
                     icon="content-save"
                     onPress={async () => {
                         const data = {
+                            idnguoidung: sessionStore.activeUserId,
                             loaitien: this.state.currencyCurrent,
                             ngonngu: this.state.languageCurrent,
                             chedonghiemngat: (this.state.strictModeCurrent === "Enable")? true : false,

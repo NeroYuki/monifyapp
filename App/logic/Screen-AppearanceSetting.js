@@ -13,7 +13,6 @@ export const saveSetting = (setting) =>
             chedonghiemngat: setting.chedonghiemngat,
         }
 
-        console.log("SAVE SETTING TESSTTT: ", new BSON.ObjectID(null))
         insertCaiDat(sSet).then(set => {
             if (!set)
                 reject({ result: false, message: 'Lưu cài đặt thất bại' })

@@ -4,7 +4,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { FAB, Searchbar, Dialog, Paragraph, Button } from "react-native-paper";
 import { SavingDepositModal, SavingEntry, SavingSearchModal, SavingWithdrawModal } from "../../components";
 import { stylesheet } from './style'
-import { deleteSaving, querySaving } from "../../logic/Screen-saving";
+import { deactivateSaving, deleteSaving, querySaving } from "../../logic/Screen-saving";
 import moment from "moment";
 
 export class SavingManager extends Component {
@@ -44,7 +44,7 @@ export class SavingManager extends Component {
 
     async fetchData() {
         let data = await querySaving({savingName: this.state.quickQueryString})
-        //console.log(data)
+        console.log(data)
         this.setState({
             savingList: data
         })
@@ -62,10 +62,11 @@ export class SavingManager extends Component {
         const savingDisplay = this.state.savingList.map((val) => {
             //console.log(val)
             return <SavingEntry
-                key={val.savingId} style={[style.saving_entry, {backgroundColor: val.color}]} name={val.name} due_duration={moment(JSON.stringify(val.expire_on), "YYYY-MM-DDTHH:mm:ss.SSSZ").format("DD/MM/YYYY")} amount={(val.amount + " đ")} interest_string={(val.interest + "%")} 
-                onDepositPress={() => {this.setState({depositModalVisible: true})}}
-                onWithdrawPress={() => {this.setState({withdrawModalVisible: true})}}
-                onDeactivatePress={() => {this.setState({deactivatePromptVisible: true})}}
+                key={val.savingId} style={[style.saving_entry, {backgroundColor: val.color}]} name={val.name + ((val.deactivate)? " (Deactivated)" : "" )} due_duration={moment(JSON.stringify(val.expire_on), "YYYY-MM-DDTHH:mm:ss.SSSZ").format("DD/MM/YYYY")} amount={(val.amount + " đ")} interest_string={(val.interest + "%")} 
+                active={!val.deactivate}
+                onDepositPress={() => {this.setState({depositModalVisible: true, selectedId: val.savingId})}}
+                onWithdrawPress={() => {this.setState({withdrawModalVisible: true,  selectedId: val.savingId})}}
+                onDeactivatePress={() => {this.setState({deactivatePromptVisible: true, selectedId: val.savingId})}}
                 onViewPress={() => {this.props.navigation.navigate("SavingEditor", {mode: "view", id: val.savingId})}}
                 onDeletePress={() => {this.setState({deletePromptVisible: true,  selectedId: val.savingId})}}
                 onEditPress={() => {this.props.navigation.navigate("SavingEditor", {mode: "edit", id: val.savingId})}}
@@ -107,11 +108,13 @@ export class SavingManager extends Component {
 
 
                 <SavingDepositModal isVisible={this.state.depositModalVisible} 
-                    onRequestClose={() => {this.setState({depositModalVisible: false})}}>
+                    onRequestClose={() => {this.setState({depositModalVisible: false})}}
+                    srcId={this.state.selectedId}>
                 </SavingDepositModal>
                 
                 <SavingWithdrawModal isVisible={this.state.withdrawModalVisible} 
-                    onRequestClose={() => {this.setState({withdrawModalVisible: false})}}>
+                    onRequestClose={() => {this.setState({withdrawModalVisible: false})}}
+                    srcId={this.state.selectedId}>
                 </SavingWithdrawModal>
 
                 <Dialog visible={this.state.deletePromptVisible} onDismiss={() => {this.setState({deletePromptVisible: false})}}>
@@ -141,7 +144,16 @@ export class SavingManager extends Component {
                     </Dialog.Content>
                     <Dialog.Actions>
                     <Button onPress={() => {this.setState({deactivatePromptVisible: false})}}>Cancel</Button>
-                        <Button mode='contained' onPress={() => {this.setState({deactivatePromptVisible: false})}}>Confirm</Button>
+                        <Button mode='contained' onPress={async () => {
+                            if (this.state.selectedId) {
+                                let result = await deactivateSaving(this.state.selectedId)
+                                if (result) {
+                                    this.setState({selectedId: ""})
+                                    this.fetchData()
+                                }
+                            }
+                            this.setState({deactivatePromptVisible: false})}
+                        }>Confirm</Button>
                     </Dialog.Actions>
                 </Dialog>
             </View>

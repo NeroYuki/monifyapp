@@ -3,7 +3,7 @@ import { ScrollView, Text, TouchableOpacity, View } from "react-native";
 import { FAB, Searchbar, Dialog, Paragraph, Button } from "react-native-paper";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { LoanEntry, LoanPaymentModal, LoanSearchModal } from "../../components";
-import { deleteLoan, queryLoan } from "../../logic/Screen-loan";
+import { deactivateLoan, deleteLoan, queryLoan } from "../../logic/Screen-loan";
 import { stylesheet } from './style'
 import moment from 'moment'
 
@@ -44,7 +44,7 @@ export class LoanManager extends Component {
 
     async fetchData() {
         let data = await queryLoan({loanName: this.state.quickQueryString})
-        //console.log(data)
+        console.log(data)
         this.setState({
             loanList: data
         })
@@ -61,9 +61,10 @@ export class LoanManager extends Component {
         const style = stylesheet
         const loanDisplay = this.state.loanList.map((val) => {
             return <LoanEntry
-                key={val.loanId} style={[style.loan_entry, {backgroundColor: val.color}]} name={val.name} due_duration={moment(JSON.stringify(val.expire_on), "YYYY-MM-DDTHH:mm:ss.SSSZ").format("DD/MM/YYYY")} amount={(val.amount + " đ")} interest_string={(val.interest + "%")}
-                onPaymentPress={() => {this.setState({paymentModalVisible: true})}}
-                onDeactivatePress={() => {this.setState({deactivatePromptVisible: true})}}
+                key={val.loanId} style={[style.loan_entry, {backgroundColor: val.color}]} name={val.name + ((val.deactivate)? " (Deactivated)" : "")} due_duration={moment(JSON.stringify(val.expire_on), "YYYY-MM-DDTHH:mm:ss.SSSZ").format("DD/MM/YYYY")} amount={(val.amount + " đ")} interest_string={(val.interest + "%")}
+                active={!val.deactivate}
+                onPaymentPress={() => {this.setState({paymentModalVisible: true, selectedId: val.loanId})}}
+                onDeactivatePress={() => {this.setState({deactivatePromptVisible: true, selectedId: val.loanId})}}
                 onViewPress={() => {this.props.navigation.navigate("LoanEditor", {mode: "view", id: val.loanId})}}
                 onDeletePress={() => {this.setState({deletePromptVisible: true, selectedId: val.loanId})}}
                 onEditPress={() => {this.props.navigation.navigate("LoanEditor", {mode: "edit", id: val.loanId})}}
@@ -103,7 +104,8 @@ export class LoanManager extends Component {
                 </LoanSearchModal>
 
                 <LoanPaymentModal isVisible={this.state.paymentModalVisible} 
-                    onRequestClose={() => {this.setState({paymentModalVisible: false})}} >
+                    onRequestClose={() => {this.setState({paymentModalVisible: false})}} 
+                    srcId={this.state.selectedId}>
                 </LoanPaymentModal>
 
                 <Dialog visible={this.state.deletePromptVisible} onDismiss={() => {this.setState({deletePromptVisible: false})}}>
@@ -133,7 +135,16 @@ export class LoanManager extends Component {
                     </Dialog.Content>
                     <Dialog.Actions>
                     <Button onPress={() => {this.setState({deactivatePromptVisible: false})}}>Cancel</Button>
-                        <Button mode='contained' onPress={() => {this.setState({deactivatePromptVisible: false})}}>Confirm</Button>
+                        <Button mode='contained' onPress={async () => {
+                            if (this.state.selectedId) {
+                                let result = await deactivateLoan(this.state.selectedId)
+                                if (result) {
+                                    this.setState({selectedId: ""})
+                                    this.fetchData()
+                                }
+                            }
+                            this.setState({deactivatePromptVisible: false})}
+                        }>Confirm</Button>
                     </Dialog.Actions>
                 </Dialog>
             </View>

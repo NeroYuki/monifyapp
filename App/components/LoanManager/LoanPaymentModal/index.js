@@ -5,14 +5,40 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Divider } from 'react-native-paper'
 import { GenericSelectionModal } from "../..";
 import { COLORS } from "../../../assets/constants";
+import { querywallet } from "../../../logic/Screen-wallet";
 
 export class LoanPaymentModal extends Component {
     constructor(props) {
         super(props)
         this.state = {
             walletOption: ['Cash Money', 'Secret Fund'],
-            isWalletSelectionVisible: false
+            isWalletSelectionVisible: false,
+            walletSelectedId: "",
         }
+        this.getWalletText = this.getWalletText.bind(this)
+    }
+
+    async componentDidMount() {
+        let wallet_selection = []
+        let wallet_query_result = await querywallet({})
+        wallet_query_result.forEach((val) => {
+            wallet_selection.push({
+                key: val.walletId,
+                text: val.name,
+            })
+        })
+
+        this.setState({
+            walletOption: wallet_selection
+        })   
+    }
+
+    getWalletText(id) {
+        if (!id) return
+        //Fucking String object, not string primitive was returned. Fuck whoever code the fetching function
+        id = id.toString()
+        let appliedWalletIndex = this.state.walletOption.findIndex((val) => {return val.key === id})
+        return (appliedWalletIndex !== -1)? this.state.walletOption[appliedWalletIndex].text : ""
     }
 
     render() {
@@ -80,7 +106,7 @@ export class LoanPaymentModal extends Component {
                                     <Icon name="arrow-left" size={24} />
                                     <Text
                                         style={styles.info_field_item_text}
-                                    >BIDV Account</Text>
+                                    >{this.getWalletText(this.state.walletSelectedId)}</Text>
                                 </View>
                             </TouchableOpacity>
                             <Divider style={{ height: 1 }} />
@@ -100,11 +126,19 @@ export class LoanPaymentModal extends Component {
                             </TouchableOpacity>
                         </View>
                     </View>
-                    <GenericSelectionModal
-                        isVisible={this.state.isWalletSelectionVisible}
+                    {this.state.isWalletSelectionVisible && <GenericSelectionModal
+                        keyMode={true}
+                        isVisible={this.state.walletSelectionVisible}
                         onRequestClose={() => { this.setState({ isWalletSelectionVisible: false }) }}
                         selectionEntry={this.state.walletOption}
-                    ></GenericSelectionModal>
+                        onSelection={(val) => {
+                            console.log(val)
+                            this.setState({
+                                isWalletSelectionVisible: false,
+                                walletSelectedId: val,
+                            })
+                        }}> </GenericSelectionModal>
+                    }
                 </View>
             </Modal>
         )

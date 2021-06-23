@@ -5,7 +5,8 @@ import { COLORS } from "../../assets/constants";
 
 import { RadioButton } from "react-native-paper"
 import { iconData } from "../../appdata/iconData";
-import { saveCategory } from "../../logic/Component-CategoryEditor";
+import { fetchCategory, saveCategory } from "../../logic/Component-CategoryEditor";
+import sessionStore from '../../logic/sessionStore'
 
 export class CategoryEditor extends Component {
     constructor(props) {
@@ -16,6 +17,26 @@ export class CategoryEditor extends Component {
             selectedIcon: '',
             DATA: iconData
         }
+        this.fetchData = this.fetchData.bind(this)
+    }
+
+    componentDidMount() {
+        console.log('call fetch', this.props.editId)
+        if (this.props.editId) {
+            this.fetchData()
+        }
+    }
+
+    async fetchData() {
+        let arr_res = await fetchCategory({categoryId: this.props.editId})
+        if (arr_res.length === 0) return
+        let res = arr_res[0]
+        console.log(res) 
+        this.setState({
+            name: res.tenhangmuc,
+            selectedIcon: res.iconhangmuc,
+            selectedType: (res.loaihangmuc.chitieu)? "Expense" : "Income"
+        })
     }
 
     RenderItem = ({ items }) => (
@@ -54,8 +75,9 @@ export class CategoryEditor extends Component {
             )
         }
         else {
-            hangmucgiaodich = {
-                userid: '60c0cb55a09b8f641df3ca14',
+            let hangmucgiaodich = {
+                category_id: (this.props.editId)? this.props.editId : null,
+                userid: sessionStore.activeUserId,
                 name: this.state.name,
                 icon: String(this.state.selectedIcon),
                 loaihangmuc: (this.state.selectedType == 'Income') ? 'thunhap' : 'chitieu',
@@ -91,6 +113,7 @@ export class CategoryEditor extends Component {
                                 height: '100%',
                                 fontSize: 17
                             }}
+                            value={this.state.name}
                             placeholder="Required"
                             onChangeText={text => {
                                 // console.log(text)

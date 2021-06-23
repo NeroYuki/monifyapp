@@ -90,12 +90,12 @@ export class AddNewTransaction extends Component {
             console.log('SAVING UPDATE')
             let updating_saving_info = await checkSavingsForCycle()
             console.log(updating_saving_info)
-            console.log('LOAN UPDATE')
-            let updating_loan_info = await checkLoansForCycle()
-            console.log(updating_loan_info)
-            console.log('BILL UPDATE')
-            let updating_bill_info = await checkBillForCycle()
-            console.log(updating_bill_info)
+            // console.log('LOAN UPDATE')
+            // let updating_loan_info = await checkLoansForCycle()
+            // console.log(updating_loan_info)
+            // console.log('BILL UPDATE')
+            // let updating_bill_info = await checkBillForCycle()
+            // console.log(updating_bill_info)
         }
     }
 

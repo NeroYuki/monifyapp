@@ -114,6 +114,7 @@ export const checkSavingsForCycle = () => new Promise((resolve,reject)=>{
             let different_in_time = today.getTime()-ngaystart.addMonths(cycle).getTime()/(1000 * 3600 * 24 * 30)
             let different_in_time2 = ngayrutdukien.getTime()-ngaystart.addMonths(cycle).getTime()/(1000 * 3600 * 24 * 30)
             if(different_in_time < different_in_time2){
+                console.log('branch 1a')
                 if(cycle < (different_in_time%1)){
                     let tempamount = amount * Math.pow(laisuattruochan,(different_in_time%1)- cycle) - amount
                     cycle = (different_in_time%1)
@@ -122,6 +123,7 @@ export const checkSavingsForCycle = () => new Promise((resolve,reject)=>{
                     let update_res = await updateTaikhoanTietKiem({taikhoantietkiemid: id,sotienthem: amount, cycle : cycle})
                     console.log(update_res)
                     if(idtaikhoanthuhuong){
+                        console.log('branch 3b')
                         //Possible failure
                         createSavingWithdraw({for_wallet_id:idtaikhoanthuhuong,from_saving_id:id,amount:tempamount})
                         rs.push({
@@ -143,6 +145,7 @@ export const checkSavingsForCycle = () => new Promise((resolve,reject)=>{
             }
             else{
                 if(cycle < (different_in_time%1)){
+                    console.log('branch 2a')
                     let tempamount = amount * Math.pow(laisuat,(different_in_time%1)- cycle) - amount
                     cycle = (different_in_time%1)
                     //Possible failure
@@ -150,6 +153,7 @@ export const checkSavingsForCycle = () => new Promise((resolve,reject)=>{
                     console.log(update_res)
                     if(idtaikhoanthuhuong){
                         //Possible failure
+                        console.log('branch 3a')
                         createSavingWithdraw({for_wallet_id:idtaikhoanthuhuong,from_saving_id:id,amount:tempamount})
                         rs.push({
                             savingId:id,

@@ -75,7 +75,7 @@ export class RecurringBillManager extends Component {
         const style = stylesheet
         const billDisplay = this.state.billList.map((val) => {
             //TODO: calculate next transaction
-            const id = JSON.stringify(val.idgiaodichtheochuky)
+            const id = val.idgiaodichtheochuky
             //console.log(val.idgiaodichtheochuky)
             return <RecurringBillEntry
                 key={id} style={[style.bill_entry, {backgroundColor: val.color}]} name={val.name} next_tran={moment(JSON.stringify(val.thoigianbatdau), "YYYY-MM-DDTHH:mm:ss.SSSZ").format("DD/MM/YYYY")} amount={((val.sotienthunhap || val.sotientieudung) + " đ")} desc={val.ghichu}

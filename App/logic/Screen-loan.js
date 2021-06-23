@@ -3,6 +3,7 @@ import {BSON} from 'realm'
 import { updateTaiKhoan } from '../services/TaiKhoanCRUD';
 import { saveTransaction } from './Component-TransactionEditor';
 import { createLoanPayment } from './Screen-payment';
+import sessionStore from './sessionStore';
 
 
 export const fetchLoan= (loanId) => new Promise((resolve, reject) => {
@@ -28,7 +29,7 @@ export const saveLoan= ({loanId,loanName, color, amount, expire_on, interest, cr
             bieutuong: '',
             color: color,
             thoigiantao: creationDate,
-            //idnguoidung: 'objectId',
+            idnguoidung: sessionStore.activeUserId,
             tieudung:null,
             tietkiem:null,
             no:{

@@ -1,7 +1,7 @@
 import {queryTaiKhoan,insertTaiKhoan, deleteTaiKhoan, deactiavteTaiKhoan}from '../services/TaiKhoanCRUD';
 import {BSON} from 'realm'
 import { updateTaiKhoan } from '../services/TaiKhoanCRUD';
-
+import sessionStore from './sessionStore';
 
 export const fetchWallet= (walletId) => new Promise((resolve, reject) => {
     queryTaiKhoan({idtaikhoan:new BSON.ObjectID(walletId)}).then((tk)=> {
@@ -24,7 +24,7 @@ export const saveWallet= ({walletId,walletName, color, amount}) => new Promise((
             bieutuong: '',
             color: color,
             thoigiantao: new Date(),
-            //idnguoidung: 'objectId',
+            idnguoidung: sessionStore.activeUserId,
             tieudung:{
                 idtktieudung: new BSON.ObjectID(),
                 sotien: amount,

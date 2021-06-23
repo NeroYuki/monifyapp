@@ -1,6 +1,7 @@
 import {queryTaiKhoan,insertTaiKhoan, deleteTaiKhoan, deactiavteTaiKhoan}from '../services/TaiKhoanCRUD';
 import {BSON} from 'realm'
 import { updateTaiKhoan } from '../services/TaiKhoanCRUD';
+import sessionStore from './sessionStore';
 
 
 export const fetchSaving= (savingId) => new Promise((resolve, reject) => {
@@ -28,7 +29,7 @@ export const saveSaving= ({savingId,savingName, color, amount, expire_on,interes
             bieutuong: '',
             color: color,
             thoigiantao: creationDate,
-            //idnguoidung: 'objectId',
+            idnguoidung: sessionStore.activeUserId,
             tieudung:null,
             tietkiem:{
                 idtktietkiem: new BSON.ObjectID(),

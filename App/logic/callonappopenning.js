@@ -49,8 +49,9 @@ export const checkLoansForCycle = () => new Promise((resolve,reject)=>{
             }
 
         });
+        
         resolve(rs)
-    },((er)=> reject(er)))
+    },((er)=> {console.error(er); reject(er)}))
 })
 export const checkSavingsForCycle = () => new Promise((resolve,reject)=>{
     let today= new Date()

@@ -1,6 +1,48 @@
-import { queryTaiKhoan, updateTaikhoanNo, updateTaikhoanTietKiem } from "../services/TaiKhoanCRUD"
+import { insertHangMucGiaoDich } from "../services/HangMucGiaoDichCRUD"
+import { saveCategory } from "./Component-CategoryEditor"
 import { createSavingWithdraw } from "./Screen-payment"
+import { checkNguoiDung, fetchuser, login, register } from "./Screen-User"
+import catIcon from '../assets/constants/icons'
+import sessionStore from '../logic/sessionStore'
+import { querywallet } from "./Screen-wallet"
+import { queryTaiKhoan, updateTaikhoanTietKiem, updateTaikhoanNo } from "../services/TaiKhoanCRUD"
 
+export const checkInitialLaunch = () => new Promise((resolve, reject) => {
+    //check if there is any user account
+        checkNguoiDung().then( async (res) => {
+        if(res) { 
+            let user = await login({username: "Guest", password: "1"})
+            sessionStore.activeUserId = user.toString()
+            let wallets = await querywallet({})
+            if (wallets.length > 0) sessionStore.activeWalletId = wallets[0].walletId
+            console.log(user)
+            resolve(true)
+        }
+        else {
+            //if cant find any user user, create default data
+            register({
+                username: "Guest",
+                password: "1",
+                email: "test@gmail.com"
+            })
+            saveCategory({
+                userid: "60d213a4b04324a927bae538",
+                name: "Default",
+                color: "",
+                icon: String(catIcon.investmentIcon.source),
+                loaihangmuc: 'chitieu'
+            })
+            saveCategory({
+                userid: "60d213a4b04324a927bae538",
+                name: "Default",
+                color: "",
+                icon: String(catIcon.investmentIcon.source),
+                loaihangmuc: 'thunhap'
+            })
+            resolve(false)
+        }
+    },(er)=>{console.error(er);})
+})
 
 export const checkLoansForCycle = () => new Promise((resolve,reject)=>{
     let today= new Date()
@@ -57,9 +99,10 @@ export const checkSavingsForCycle = () => new Promise((resolve,reject)=>{
     let today= new Date()
     let rs= []
     queryTaiKhoan({taikhoantietkiem: true}).then((tk)=>{
-        tk.forEach(element => {
+        tk.forEach(async (element) => {
+            //console.log(tk)
             let id = element.idtaikhoan
-            let idtaikhoanthuhuong = applied_wallet_id
+            let idtaikhoanthuhuong = element.tietkiem.idtkduocthuhuong
             let laisuat = element.tietkiem.laisuattietkiem
             let laisuattruochan = element.tietkiem.laisuattruochan
             let amount= element.tietkiem.sotien
@@ -67,7 +110,7 @@ export const checkSavingsForCycle = () => new Promise((resolve,reject)=>{
             let cycle
             if( element.tietkiem.kyhantietkiem) cycle = element.tietkiem.kyhantietkiem
             else cycle =0
-            let ngaystart = element.tietkiem.creationDate
+            let ngaystart = element.tietkiem.ngaybatdau
 
             let different_in_time = today.getTime()-ngaystart.addMonths(cycle).getTime()/(1000 * 3600 * 24 * 30)
             let different_in_time2 = ngayrutdukien.getTime()-ngaystart.addMonths(cycle).getTime()/(1000 * 3600 * 24 * 30)
@@ -75,9 +118,12 @@ export const checkSavingsForCycle = () => new Promise((resolve,reject)=>{
                 if(cycle < (different_in_time%1)){
                     let tempamount = amount * Math.pow(laisuattruochan,(different_in_time%1)- cycle) - amount
                     cycle = (different_in_time%1)
-                    updateTaikhoanTietKiem({taikhoantietkiemid: id,sotienthem: amount, cycle : cycle})
-       
+
+                    //Possible failure
+                    let update_res = await updateTaikhoanTietKiem({taikhoantietkiemid: id,sotienthem: amount, cycle : cycle})
+                    console.log(update_res)
                     if(idtaikhoanthuhuong){
+                        //Possible failure
                         createSavingWithdraw({for_wallet_id:idtaikhoanthuhuong,from_saving_id:id,amount:tempamount})
                         rs.push({
                             savingId:id,
@@ -100,9 +146,11 @@ export const checkSavingsForCycle = () => new Promise((resolve,reject)=>{
                 if(cycle < (different_in_time%1)){
                     let tempamount = amount * Math.pow(laisuat,(different_in_time%1)- cycle) - amount
                     cycle = (different_in_time%1)
-                    updateTaikhoanTietKiem({taikhoantietkiemid: id,sotienthem: amount, cycle : cycle})
-
+                    //Possible failure
+                    let update_res = await updateTaikhoanTietKiem({taikhoantietkiemid: id,sotienthem: amount, cycle : cycle})
+                    console.log(update_res)
                     if(idtaikhoanthuhuong){
+                        //Possible failure
                         createSavingWithdraw({for_wallet_id:idtaikhoanthuhuong,from_saving_id:id,amount:tempamount})
                         rs.push({
                             savingId:id,

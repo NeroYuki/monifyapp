@@ -27,6 +27,7 @@ export const checkBillForCycle = () =>
         }
         else
         {
+            console.log('6 - saving trans')
             await saveTransaction({
                 userId:i.idnguoidung,
                 note:i.ghichu,

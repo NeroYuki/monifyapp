@@ -7,7 +7,6 @@ import { COLORS } from "../../assets/constants";
 import { currencyFormat } from "../../utils/formatNumber";
 
 export class WalletHeader extends Component {
-
     // Change Color in Button when choose "List" or "Categories"
     TabSelectedButton = () => {
         return (
@@ -57,9 +56,6 @@ export class WalletHeader extends Component {
 
     render() {
         const style = stylesheet
-
-        console.log("HELLO", this.props.currentTab)
-
         return (
             <Surface style={style.surface}>
                 <View style={style.selector}>

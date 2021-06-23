@@ -6,68 +6,7 @@ import { currencyFormat } from '../../utils/formatNumber';
 
 
 export class ItemsOverView extends Component {
-
-    constructor(props) {
-        super(props)
-
-        console.log("Items Overview - Constructor")
-
-        this.state = {
-            data: ''
-        };
-
-
-    }
-
-    getData = async () => {
-        var dataFetched = this.props.data
-
-        console.log('Items Overview Get Data: ', dataFetched)
-
-        var trans = []
-
-        for (var i in dataFetched) {
-
-            var datas = []
-            var total = 0
-
-            for (var j in dataFetched[i].data) {
-                var icon = JSON.parse(JSON.stringify(await fetchCategory({ categoryId: dataFetched[i].data[j].loaihangmucgd })))
-                datas.push({
-                    icon: icon,
-                    datas: dataFetched[i].data[j],
-                })
-
-                // total = total + (dataFetched[i].data[j].sotientieudung) ? -dataFetched[i].data[j].sotientieudung : +dataFetched[i].data[j].sotienthunhap
-                if (dataFetched[i].data[j].sotientieudung != null) {
-                    total -= dataFetched[i].data[j].sotientieudung
-                } else {
-                    total += dataFetched[i].data[j].sotienthunhap
-                }
-            }
-
-            var value = {
-                title: dataFetched[i].time,
-                total: total,
-                data: datas,
-            }
-
-            trans.push(value)
-        }
-
-        this.setState({ data: trans })
-    }
-
-    componentDidMount = async () => {
-
-        console.log("Items Overview - Component Dit Mount")
-        this.getData()
-    }
-
-
-
     Item = ({ items }) => (
-
         <TouchableOpacity
             style={styles.item}
             // onPress={this.props.onPressTransactionEditor}
@@ -127,13 +66,12 @@ export class ItemsOverView extends Component {
     );
 
     render() {
-        console.log('Items Overview: - Render')
         return (
             <View style={styles.container}>
                 <SectionList
                     style={styles.selectionList}
                     scrollEnabled={false}
-                    sections={this.state.data}
+                    sections={this.props.data}
                     renderItem={({ item }) => <this.Item items={item} />}
                     renderSectionHeader={({ section }) => <this.Header section={section} />}
                     renderSectionFooter={() => <this.Footer />}

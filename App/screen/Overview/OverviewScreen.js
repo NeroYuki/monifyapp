@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { SafeAreaView, ScrollView, View, StyleSheet } from "react-native";
+import { SafeAreaView, ScrollView, View, StyleSheet, Text } from "react-native";
 import { Button, Modal } from "react-native-paper";
 import { COLORS } from "../../assets/constants";
 import { CategoriesModal, TabSwitcher, TimespanPicker, TransactionEditor, WalletHeader } from "../../components";
@@ -10,8 +10,11 @@ import { RecurringModal } from "../../components/TransactionEditor/RecurringModa
 import { TransactionModal } from "../../components/TransactionEditor/TransactionModal";
 
 import Moment from 'moment'
-import { format, addDays, addMonths, addYears } from 'date-fns'
+import { format, addDays, addMonths, addYears, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear } from 'date-fns'
 import { queryTranCategories, queryTransactions } from "../../logic/Screen-Overview";
+import { fetchCategory } from "../../logic/Component-CategoryEditor";
+import { percentageFormat } from "../../utils/formatNumber";
+import { increase_brightness } from "../../utils/increase_brightness";
 
 export class OverviewScreen extends Component {
     constructor(props) {
@@ -30,15 +33,63 @@ export class OverviewScreen extends Component {
             // All trans data 
             overviewData: {},
             categoriesData: {},
+            listDataAtListTab: [
+                {
+                    title: '',
+                    total: 0,
+                    data: [
+                        {
+                            datas: {
+                                sotienthunhap: null,
+                                sotientieudung: 0,
+                            },
+                            icon: [
+                                {
+                                    color: '',
+                                    iconhangmuc: 10,
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+
+            listDataAtCategoriesTab: [
+                {
+                    title: '',
+                    total: 0,
+                    data: [
+                        {
+                            amount: 0,
+                            icon: [
+                                {
+                                    color: '',
+                                    iconhangmuc: 10,
+                                }
+                            ]
+                        }
+                    ]
+                }
+            ],
+
+            listDataChart: [],
+
 
             // Tap on item report then set data on this
             // List - Tab 
             currentData: {},
 
             // Categories - Tab
-            currentOption: 'Expense',
+            currentOption: 'Expense', // Income
 
+            // Period
             dateTime: "",
+            currentPeriod: 'month', // week, year, custom
+
+            startDate: '',
+            endDate: '',
+
+            isLoading: true,
         }
 
         this.onCategoriesPress = this.onCategoriesPress.bind(this)
@@ -54,36 +105,37 @@ export class OverviewScreen extends Component {
         this.decreasePeriod = this.decreasePeriod.bind(this)
         this.increasePeriod = this.increasePeriod.bind(this)
         this.changeShowingOption = this.changeShowingOption.bind(this)
-
-
     }
 
-    componentDidMount() {
-
+    async componentDidMount() {
         console.log("Overview Screen: - Component Did Mount")
 
+        try {
+            const [overviewData, categoriesData, dateTime] = await Promise.all([
+                this.getDataOverview(), this.getPercentageData(), this.getDate()
+            ]);
 
-        this.getDate()
+            this.setState({ isLoading: false, overviewData, categoriesData, dateTime });
 
-        this.getDataOverview()
+            this.parseDataToProps(overviewData)
+            this.getDataAtCategoriesTab()
+        } catch (error) {
+
+            console.log("LOADING......", error)
+            this.setState({
+                isLoading: false
+            })
+        }
     }
 
-    getDataOverview = async () => {
-
-        var data = JSON.parse(JSON.stringify(await queryTransactions({ walletId: '60c96efa9bd6d1e6e1aed7a6' })))
-        var percentageData = JSON.parse(JSON.stringify(await queryTranCategories({ walletId: '60c96efa9bd6d1e6e1aed7a6' })))
-
-        // console.log("PERCENTAGE", percentageData)
-
-        this.setState({
-            overviewData: data,
-            categoriesData: percentageData,
-        })
-
+    componentDidUpdate(prevProps, prevState) {
+        if (prevState.currentOption != this.state.currentOption) {
+            this.getDataAtCategoriesTab()
+        }
     }
 
     getDate() {
-        // Becuz getMonth() start from 0. You need to date.getMonth() - 1 to achieve what u want
+        console.log("Overview GET DateTime")
         var basicFormat = new Date()
 
         var date = {
@@ -91,41 +143,363 @@ export class OverviewScreen extends Component {
             otherFormat: new Date(basicFormat.setMonth(basicFormat.getMonth()))
         };
 
+        return date
+    }
+
+    getPercentageData = async () => {
+        var percentageData = JSON.parse(JSON.stringify(
+            await queryTranCategories({
+                walletId: '60c96efa9bd6d1e6e1aed7a6',
+                period: this.state.currentPeriod
+            })
+        ))
+
+        return percentageData
+    }
+
+    getDataOverview = async () => {
+        var data = JSON.parse(JSON.stringify(
+            await queryTransactions({
+                walletId: '60c96efa9bd6d1e6e1aed7a6',
+                period: this.state.currentPeriod
+            })
+        ))
+
+        return data
+    }
+
+    getDataOverviewWith2Date = async (start, end) => {
+        var data = JSON.parse(JSON.stringify(
+            await queryTransactions({
+                walletId: '60c96efa9bd6d1e6e1aed7a6',
+                start_day: start,
+                end_day: end
+            })
+        ))
+
+        var percentageData = JSON.parse(JSON.stringify(
+            await queryTranCategories({
+                walletId: '60c96efa9bd6d1e6e1aed7a6',
+                start_day: start,
+                end_day: end
+            })
+        ))
+
+        // console.log("Overview Data: ", data)
+
         this.setState({
-            dateTime: date
-        });
+            overviewData: data,
+            categoriesData: percentageData,
+        })
+
+        this.parseDataToProps(data)
+        this.getDataAtCategoriesTab()
+    }
+
+    getDataOverviewWithPeriod = async (period) => {
+        var data = JSON.parse(JSON.stringify(
+            await queryTransactions({
+                walletId: '60c96efa9bd6d1e6e1aed7a6',
+                period: period
+            })
+        ))
+
+        var percentageData = JSON.parse(JSON.stringify(
+            await queryTranCategories({
+                walletId: '60c96efa9bd6d1e6e1aed7a6',
+                period: period
+            })
+        ))
+
+        this.setState({
+            overviewData: data,
+            categoriesData: percentageData,
+        })
+
+        this.parseDataToProps(data)
+        this.getDataAtCategoriesTab()
+    }
+
+    handleChangePeriod = (value) => {
+        this.setState({
+            currentPeriod: value
+        })
+
+        if (value == 'week') {
+            var start = startOfWeek(new Date(Date.now()), { weekStartsOn: 1 })
+            var end = endOfWeek(new Date(Date.now()), { weekStartsOn: 1 })
+
+            var date = {
+                currentTime: format(new Date(start), 'dd MMM') + ' - ' + format(new Date(end), 'dd MMM'),
+                otherFormat: '',
+            }
+
+            this.setState({
+                dateTime: date,
+                startDate: start,
+                endDate: end,
+            })
+        }
+        else if (value == 'month') {
+            var basicFormat = new Date()
+
+            var date = {
+                currentTime: format(new Date(), 'MMM yyyy'),
+                otherFormat: new Date(basicFormat.setMonth(basicFormat.getMonth()))
+            };
+
+            this.setState({
+                dateTime: date
+            });
+        }
+        else if (value == 'year') {
+            var basicFormat = new Date()
+
+            var date = {
+                currentTime: format(new Date(), 'yyyy'),
+                otherFormat: new Date(basicFormat.setMonth(basicFormat.getMonth()))
+            };
+
+            this.setState({
+                dateTime: date
+            });
+        }
+
+        this.getDataOverviewWithPeriod(value)
+    }
+
+    parseDataToProps = async (overviewData) => {
+        var dataFetched = overviewData.trans
+
+        var trans = []
+
+        for (var i in dataFetched) {
+
+            var datas = []
+            var total = 0
+
+            for (var j in dataFetched[i].data) {
+                var icon = JSON.parse(JSON.stringify(await fetchCategory({ categoryId: dataFetched[i].data[j].loaihangmucgd })))
+                datas.push({
+                    icon: icon,
+                    datas: dataFetched[i].data[j],
+                })
+
+
+                // total = total + (dataFetched[i].data[j].sotientieudung) ? -dataFetched[i].data[j].sotientieudung : +dataFetched[i].data[j].sotienthunhap
+                if (dataFetched[i].data[j].sotientieudung != null) {
+                    total -= dataFetched[i].data[j].sotientieudung
+                } else {
+                    total += dataFetched[i].data[j].sotienthunhap
+                }
+            }
+
+
+            var value = {
+                title: dataFetched[i].time,
+                total: total,
+                data: datas,
+            }
+
+            trans.push(value)
+        }
+
+        this.setState({ listDataAtListTab: trans })
     }
 
     decreasePeriod() {
-        console.log("Decrease Period")
+        if (this.state.currentPeriod == 'week') {
+            var start = this.state.startDate
+            var end = this.state.endDate
 
-        var currentDate = this.state.dateTime.otherFormat
-        var newDate = new Date(currentDate.setMonth(currentDate.getMonth() - 1));
+            start = startOfWeek(start.setDate(start.getDate() - 7), { weekStartsOn: 1 })
+            end = endOfWeek(end.setDate(end.getDate() - 7), { weekStartsOn: 1 })
 
-        var date = {
-            currentTime: format(newDate, 'MMM yyyy'),
-            otherFormat: newDate
+            var date = {
+                currentTime: format(new Date(start), 'dd MMM') + ' - ' + format(new Date(end), 'dd MMM'),
+                otherFormat: '',
+            }
+
+            this.setState({
+                dateTime: date,
+                startDate: start,
+                endDate: end
+            })
+
+            this.getDataOverviewWith2Date(start, end)
         }
+        else if (this.state.currentPeriod == 'month') {
+            var currentDate = this.state.dateTime.otherFormat
+            var newDate = new Date(currentDate.setMonth(currentDate.getMonth() - 1));
 
-        this.setState({
-            dateTime: date
-        });
+            var start = startOfMonth(new Date(newDate), { startOfMonth: 1 })
+            var end = endOfMonth(new Date(newDate), { startOfMonth: 1 })
+
+            var date = {
+                currentTime: format(newDate, 'MMM yyyy'),
+                otherFormat: newDate
+            }
+
+            this.setState({
+                dateTime: date
+            });
+
+            this.getDataOverviewWith2Date(start, end)
+        }
+        else if (this.state.currentPeriod == 'year') {
+            var currentDate = this.state.dateTime.otherFormat
+            var newDate = new Date(currentDate.setMonth(currentDate.getMonth() - 12));
+
+            var start = startOfYear(new Date(newDate), { startOfYear: 1 })
+            var end = endOfYear(new Date(newDate), { startOfYear: 1 })
+
+            console.log("YEAR START: ", start, " - END: ", end)
+
+            var date = {
+                currentTime: format(newDate, 'yyyy'),
+                otherFormat: newDate
+            }
+
+            this.setState({
+                dateTime: date
+            });
+
+            this.getDataOverviewWith2Date(start, end)
+        }
     }
 
     increasePeriod() {
-        console.log("Increase Period")
+        if (this.state.currentPeriod == 'week') {
+            var start = this.state.startDate
+            var end = this.state.endDate
 
-        var currentDate = this.state.dateTime.otherFormat
-        var newDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
+            start = startOfWeek(start.setDate(start.getDate() + 7), { weekStartsOn: 1 })
+            end = endOfWeek(end.setDate(end.getDate() + 7), { weekStartsOn: 1 })
 
-        var date = {
-            currentTime: format(newDate, 'MMM yyyy'),
-            otherFormat: newDate
+            var date = {
+                currentTime: format(new Date(start), 'dd MMM') + ' - ' + format(new Date(end), 'dd MMM'),
+                otherFormat: '',
+            }
+
+            this.setState({
+                dateTime: date,
+                startDate: start,
+                endDate: end
+            })
+
+            this.getDataOverviewWith2Date(start, end)
+        }
+        else if (this.state.currentPeriod == 'month') {
+            var currentDate = this.state.dateTime.otherFormat
+            var newDate = new Date(currentDate.setMonth(currentDate.getMonth() + 1));
+
+            var start = startOfMonth(new Date(newDate), { startOfMonth: 1 })
+            var end = endOfMonth(new Date(newDate), { startOfMonth: 1 })
+
+            var date = {
+                currentTime: format(newDate, 'MMM yyyy'),
+                otherFormat: newDate
+            }
+
+            this.setState({
+                dateTime: date
+            });
+
+            this.getDataOverviewWith2Date(start, end)
+        }
+        else if (this.state.currentPeriod == 'year') {
+            var currentDate = this.state.dateTime.otherFormat
+            var newDate = new Date(currentDate.setMonth(currentDate.getMonth() + 12));
+
+            var start = startOfYear(new Date(newDate), { startOfYear: 1 })
+            var end = endOfYear(new Date(newDate), { startOfYear: 1 })
+
+            var date = {
+                currentTime: format(newDate, 'yyyy'),
+                otherFormat: newDate
+            }
+
+            this.setState({
+                dateTime: date
+            });
+
+            this.getDataOverviewWith2Date(start, end)
+        }
+    }
+
+    fetchDataList = async (array, data, total, title) => {
+        for (var i in array) {
+            total += array[i].amount
+
+            var icon = JSON.parse(JSON.stringify(await fetchCategory({ categoryId: array[i].categoryId })))
+            var value = {
+                amount: array[i].amount,
+                icon: icon,
+            }
+
+            data.push(value)
         }
 
         this.setState({
-            dateTime: date
-        });
+            listDataAtCategoriesTab: [
+                {
+                    title: title,
+                    // title: this.props.currentOption,
+                    total: total,
+                    data: data,
+                }
+            ]
+        })
+    }
+
+    fetchDataChart = async (array, datas, total, title) => {
+
+        datas = []
+        total = 0
+
+        var colorPercentage = '#a96300'
+
+        for (var i in array) {
+            total += array[i].amount
+        }
+
+        for (var i in array) {
+            var icon = JSON.parse(JSON.stringify(await fetchCategory({ categoryId: array[i].categoryId })))
+
+            colorPercentage = increase_brightness(colorPercentage, 20)
+
+            var value = {
+                key: icon[0].tenhangmuc,
+                amount: percentageFormat(array[i].amount / total * 100),
+                icon: icon[0].iconhangmuc,
+                svg: { fill: icon[0].color }
+            }
+
+            datas.push(value)
+        }
+
+        this.setState({
+            listDataChart: datas
+        })
+    }
+
+    getDataAtCategoriesTab() {
+        var trans = this.state.categoriesData
+        var data = []
+        var total = 0
+
+        if (this.state.currentOption == 'Expense') {
+            this.fetchDataList(trans.expense, data, total, 'Expense')
+            this.fetchDataChart(trans.expense, data, total, 'Expense')
+        }
+
+        else
+            if (this.state.currentOption == 'Income') {
+                this.fetchDataList(trans.income, data, total, 'Income')
+                this.fetchDataChart(trans.income, data, total, 'Income')
+
+            }
+
     }
 
 
@@ -177,17 +551,22 @@ export class OverviewScreen extends Component {
     // MARK: - ACTION
     reportView = () => {
         console.log("Overview Screen: - Report view")
+
+        if (this.state.isLoading) {
+            return <View></View>
+        }
         return (
             (!this.state.chartView) ?
                 <ItemsOverView
                     onPressTransactionEditor={this.onPressTransactionEditor}
-                    data={this.state.overviewData.trans}
+                    data={this.state.listDataAtListTab}
                     currentOption={this.state.currentOption}
                 />
                 :
                 <ChartOverview
                     onPressShowing={this.onPressShowing}
-                    data={this.state.categoriesData}
+                    chartData={this.state.listDataChart}
+                    data={this.state.listDataAtCategoriesTab}
                     currentOption={this.state.currentOption}
                 />
         )
@@ -195,7 +574,7 @@ export class OverviewScreen extends Component {
 
     render() {
 
-        console.log("Overview Screen: - Render")
+        console.log("Overview Screen: - Render PERIOD", this.state.currentOption)
 
         return (
             <SafeAreaView style={{ flex: 1 }}>
@@ -209,7 +588,7 @@ export class OverviewScreen extends Component {
                             onListPress={this.onListPress}
                         />
 
-                        <SafeAreaView style={{ flex: 1 }}>
+                        <View style={{ flex: 1 }}>
                             <TabSwitcher
                                 text={this.state.dateTime.currentTime}
                                 onTimeTextPress={this.onTimeTextPress}
@@ -218,35 +597,46 @@ export class OverviewScreen extends Component {
                             />
 
                             <this.reportView />
-                        </SafeAreaView>
+                        </View>
                     </View>
 
+                    {
+                        (this.state.isLoading)
+                            ? <View></View>
+                            : <View>
+                                <TransactionModal
+                                    isVisible={this.state.visible}
+                                    onRequestClose={() => this.setState({ visible: false })}
+                                    currentData={this.state.currentData}
+                                    onCategoriesPress={this.onCategoriesPress}
+                                    onRecurringPress={this.onRecurringPress}
+                                />
+
+
+
+                                <ExpenseOrIncomeModal
+                                    isVisible={this.state.expenseOrIncomeVisible}
+                                    currentOption='Expense'
+                                    changeShowingOption={this.changeShowingOption}
+                                    closePeriod={() => {
+                                        this.setState({ expenseOrIncomeVisible: false })
+                                    }}
+                                />
+
+
+                                <TimespanPicker
+                                    isVisible={this.state.periodVisible}
+                                    currentPeriod={this.state.currentPeriod}
+                                    handleChangePeriod={this.handleChangePeriod}
+                                    onRequestClose={() => {
+                                        this.setState({ periodVisible: false })
+                                    }}
+                                />
+                            </View>
+                    }
 
                 </ScrollView>
 
-                <TransactionModal
-                    isVisible={this.state.visible}
-                    onRequestClose={() => this.setState({ visible: false })}
-                    currentData={this.state.currentData}
-                    onCategoriesPress={this.onCategoriesPress}
-                    onRecurringPress={this.onRecurringPress}
-                />
-
-                <ExpenseOrIncomeModal
-                    isVisible={this.state.expenseOrIncomeVisible}
-                    currentOption='Expense'
-                    changeShowingOption={this.changeShowingOption}
-                    closePeriod={() => {
-                        this.setState({ expenseOrIncomeVisible: false })
-                    }}
-                />
-
-                <TimespanPicker
-                    isVisible={this.state.periodVisible}
-                    onRequestClose={() => {
-                        this.setState({ periodVisible: false })
-                    }}
-                />
             </SafeAreaView>
 
         )

@@ -9,6 +9,9 @@ import { RecurringModal } from '../../components/TransactionEditor/RecurringModa
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { saveTransaction } from '../../logic/Component-TransactionEditor';
 import { queryTaiKhoan } from '../../services/TaiKhoanCRUD';
+import sessionStore from '../../logic/sessionStore';
+import { checkLoansForCycle, checkSavingsForCycle, checkInitialLaunch } from '../../logic/callonappopenning';
+import { checkBillForCycle } from '../../logic/CallOnAppCheckBill';
 
 export class AddNewTransaction extends Component {
 
@@ -66,15 +69,34 @@ export class AddNewTransaction extends Component {
 
         let GiaoDich = {
             // transactionId: '60c36b9f7ab578ff8656f01b',
-            userId: '60c0cb55a09b8f641df3ca14',
+            userId: sessionStore.activeUserId,
             occur_date: this.state.currentDate,
-            walletId: '60c96efa9bd6d1e6e1aed7a6',
+            walletId: sessionStore.activeWalletId,
             amount: parseInt(this.state.money),
             categoryId: this.state.icon.id,
             note: this.state.note,
         }
 
         console.log(JSON.parse(JSON.stringify(await saveTransaction(GiaoDich))))
+    }
+
+    async componentDidMount() {
+        console.log("add trans mounted")
+        let res = await checkInitialLaunch()
+        console.log(res)
+        //check routine
+        if (sessionStore.activeUserId) {
+            //FIXME: weird shit happen
+            console.log('SAVING UPDATE')
+            let updating_saving_info = await checkSavingsForCycle()
+            console.log(updating_saving_info)
+            console.log('LOAN UPDATE')
+            let updating_loan_info = await checkLoansForCycle()
+            console.log(updating_loan_info)
+            console.log('BILL UPDATE')
+            let updating_bill_info = await checkBillForCycle()
+            console.log(updating_bill_info)
+        }
     }
 
     render() {

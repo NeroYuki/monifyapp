@@ -133,7 +133,7 @@ export class OverviewScreen extends Component {
             this.getDataAtCategoriesTab()
         } catch (error) {
 
-            console.log("LOADING......", error)
+            console.log("OVERVIEW: LOADING......", error)
             this.setState({
                 isLoading: false
             })

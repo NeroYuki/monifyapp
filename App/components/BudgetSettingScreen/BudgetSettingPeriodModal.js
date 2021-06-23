@@ -17,7 +17,6 @@ export class BudgetSettingPeriodModal extends Component {
 
     render() {
 
-        console.log("PERIOD", this.state.selectedType)
         return (
             <Modal
                 animationType="fade"

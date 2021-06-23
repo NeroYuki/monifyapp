@@ -157,6 +157,8 @@ export const saveTransaction = ({ transactionId, userId, note, amount, walletId,
                         sotien = -giaodich.sotientieudung
                         let chedo = await fetchSetting()
                         if (chedo.chedonghiemngat) {
+
+                            // Lỗi ở chỗ nào
                             await queryTaiKhoan({ idtaikhoan: giaodich.idtaikhoan }).then(async taikhoan => {
                                 if (!taikhoan) {
                                     reject({ result: false, message: 'Không tồn tại tài khoản' })

@@ -77,7 +77,19 @@ export class OverviewScreen extends Component {
 
             // Tap on item report then set data on this
             // List - Tab 
-            currentData: {},
+            currentData: {
+                datas: {
+                    ghichu: '',
+                    sotienthunhap: null,
+                    sotientieudung: 0,
+                },
+                icon: [
+                    {
+                        color: '',
+                        iconhangmuc: '',
+                    }
+                ]
+            },
 
             // Categories - Tab
             currentOption: 'Expense', // Income
@@ -611,8 +623,6 @@ export class OverviewScreen extends Component {
                                     onCategoriesPress={this.onCategoriesPress}
                                     onRecurringPress={this.onRecurringPress}
                                 />
-
-
 
                                 <ExpenseOrIncomeModal
                                     isVisible={this.state.expenseOrIncomeVisible}

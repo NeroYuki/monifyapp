@@ -8,6 +8,9 @@ import { CategoriesModal } from "../CategoriesModal";
 
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { RecurringModal } from "./RecurringModal";
+import { currencyFormat } from "../../utils/formatNumber";
+import { deleteTransaction, deleteTransactiontrig } from "../../logic/Component-TransactionEditor";
+import { deleteGiaoDich } from "../../services/GiaoDichCRUD";
 
 
 export class TransactionModal extends Component {
@@ -15,16 +18,29 @@ export class TransactionModal extends Component {
     constructor(props) {
         super(props)
 
+        console.log("TRANSACTION MODAL: - CONSTRUCTOR")
+
         this.state = {
             categoriesVisible: false,
             recurringVisible: false,
-
-            customDate: new Date(),
             showPickerDialog: false,
+
+            // Data 
+            money: '',
+            icon: '',
+            note: '',
+            currentDate: '',
+            recurring: 'Never repeat',
         }
 
         this.openCategoriesModal = this.openCategoriesModal.bind(this)
         this.onChangeDateTime = this.onChangeDateTime.bind(this)
+        this.handleDeleteTransaction = this.handleDeleteTransaction.bind(this)
+    }
+
+
+    componentDidMount() {
+        console.log("TRANSACTION MODAL: - Component Did Mount")
     }
 
     openCategoriesModal() {
@@ -33,17 +49,29 @@ export class TransactionModal extends Component {
         })
     }
 
-    onChangeDateTime(event, selectedDate) {
+    onChangeDateTime = (event, selectedDate) => {
+        console.log(selectedDate)
 
-        const currentDate = selectedDate || this.state.customDate;
+        const date = selectedDate || this.state.currentDate;
+
+        console.log("CHOOSDE DATE: ", date)
         this.setState({
-            customDate: currentDate,
-            showPickerDialog: false
+            currentDate: date,
+            showPickerDialog: (Platform.OS === 'ios')
         })
     }
 
-    render() {
+    handleDeleteTransaction = async () => {
+        try {
+            let transactionID = this.props.currentData.datas.idgiaodich
+            console.log("DELETE TRANS", transactionID)
+            await deleteTransactiontrig({ transactionId: transactionID })
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
+    render() {
         return (
             <Modal
                 animationType='fade'
@@ -69,7 +97,12 @@ export class TransactionModal extends Component {
                                     fontSize: 40,
                                     fontWeight: '300'
                                 }}
-                                defaultValue={this.props.currentData.money}
+                                defaultValue={
+                                    (this.props.currentData.datas.sotienthunhap == null)
+                                        ? (this.props.currentData.datas.sotientieudung.toString())
+                                        : (this.props.currentData.datas.sotienthunhap.toString())
+                                }
+
                                 placeholder='0'
                                 onChangeText={text => console.log(text)}
                             />
@@ -82,8 +115,15 @@ export class TransactionModal extends Component {
                                 }}
                             >
                                 <View style={styles.info_field_item}>
-                                    <Icon name="sack" size={24} />
-                                    <Text style={styles.info_field_item_text}>{this.props.currentData.key}</Text>
+                                    <Image
+                                        source={this.props.currentData.icon[0].iconhangmuc}
+                                        resizeMode='contain'
+                                        style={{
+                                            height: 24,
+                                            width: 24,
+                                        }}
+                                    />
+                                    <Text style={styles.info_field_item_text}>{this.props.currentData.icon[0].tenhangmuc}</Text>
                                 </View>
                             </TouchableOpacity>
                             <Divider style={{ height: 1 }} />
@@ -97,7 +137,7 @@ export class TransactionModal extends Component {
                                         fontSize: 17,
                                         marginLeft: 16,
                                     }}
-                                    defaultValue={this.props.currentData.describe}
+                                    defaultValue={this.props.currentData.datas.ghichu}
                                     placeholder="Note"
                                     onChangeText={text => console.log(text)}
                                 />
@@ -109,7 +149,7 @@ export class TransactionModal extends Component {
                             >
                                 <View style={styles.info_field_item}>
                                     <Icon name="calendar" size={24} />
-                                    <Text style={styles.info_field_item_text}>Tuesday, 5 Mar</Text>
+                                    <Text style={styles.info_field_item_text}>{this.props.currentData.datas.thoigian}</Text>
 
                                 </View>
                             </TouchableOpacity>
@@ -131,7 +171,10 @@ export class TransactionModal extends Component {
                         </View>
 
                         <View style={{ height: 64, marginBottom: 16, flexDirection: 'row' }}>
-                            <TouchableOpacity style={{ height: 64, width: 64 }}>
+                            <TouchableOpacity
+                                style={{ height: 64, width: 64 }}
+                                onPress={this.handleDeleteTransaction}
+                            >
                                 <Image
                                     source={icons.trash}
                                     resizeMode='cover'
@@ -141,7 +184,11 @@ export class TransactionModal extends Component {
                                     }}
                                 />
                             </TouchableOpacity>
-                            <TouchableOpacity style={{ flex: 1, justifyContent: 'center', marginRight: 16, marginLeft: 16 }}>
+                            <TouchableOpacity
+                                style={{
+                                    flex: 1, justifyContent: 'center', marginRight: 16, marginLeft: 16
+
+                                }}>
                                 <View style={styles.button}>
                                     <Text style={{ fontSize: 17, color: COLORS.white }}> SAVE </Text>
                                 </View>
@@ -164,16 +211,16 @@ export class TransactionModal extends Component {
                     {this.state.showPickerDialog && (
                         <DateTimePicker
                             testID="dateTimePicker"
-                            value={this.state.customDate}
+                            value={this.props.currentDate}
                             mode={'date'}
                             is24Hour={true}
-                            display='default'
+                            display="default"
                             onChange={this.onChangeDateTime}
                             style={{
                                 height: 40,
                                 width: 400,
                                 backgroundColor: COLORS.white,
-                                color: COLORS.black
+                                color: COLORS.white
 
                             }}
                         />

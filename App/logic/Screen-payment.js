@@ -5,11 +5,11 @@ import { saveCategory } from "./Component-CategoryEditor"
 import { saveTransaction } from "./Component-TransactionEditor"
 import { fetchLoan } from "./Screen-loan"
 import { fetchWallet } from "./Screen-wallet"
+import sessionStore from "./sessionStore"
 
 
-
-export const createLoanPayment= ({from_wallet_id,for_loan_id,amount}) => new Promise((resolve,reject) =>{
-    let userid = "60d213a4b04324a927bae538"
+export const createLoanPayment= ({from_wallet_id,for_loan_id,amount}) => new Promise(async(resolve,reject) =>{
+    let userid = sessionStore.activeWalletId
     let catid =JSON.parse(JSON.stringify(new BSON.ObjectID()))
     let temp = await(queryHangMucGiaoDich({tenhangmuc:'Default',loaihangmuc:'ChiTieu'}).then((tk)=>{
         if (tk==[]){
@@ -35,7 +35,7 @@ export const createLoanPayment= ({from_wallet_id,for_loan_id,amount}) => new Pro
         }
     },(er)=>{
         reject(er)
-    })) 
+    }))
    
     
     updateTaikhoanNo({taikhoannoid: for_loan_id, sotienthem: (-amount)}).then((rs)=>
@@ -64,8 +64,8 @@ export const createLoanPayment= ({from_wallet_id,for_loan_id,amount}) => new Pro
 
 
 
-export const createSavingDeposit= ({from_wallet_id,for_saving_id,amount}) => new Promise((resolve,reject) =>{
-    let userid = "60d213a4b04324a927bae538"
+export const createSavingDeposit= ({from_wallet_id,for_saving_id,amount}) => new Promise(async(resolve,reject) =>{
+    let userid = sessionStore.activeWalletId
     let catid =JSON.parse(JSON.stringify(new BSON.ObjectID()))
     let temp = await(queryHangMucGiaoDich({tenhangmuc:'Default',loaihangmuc:'ChiTieu'}).then((tk)=>{
         if (tk==[]){
@@ -118,10 +118,10 @@ export const createSavingDeposit= ({from_wallet_id,for_saving_id,amount}) => new
 
 
 
-export const createSavingWithdraw= ({for_wallet_id,from_saving_id,amount}) => new Promise((resolve,reject) =>{
-    let userid = "60d213a4b04324a927bae538"
+export const createSavingWithdraw= ({for_wallet_id,from_saving_id,amount}) => new Promise(async(resolve,reject) =>{
+    let userid =sessionStore.activeWalletId
     let catid =JSON.parse(JSON.stringify(new BSON.ObjectID()))
-    let temp = queryHangMucGiaoDich({tenhangmuc:'Default',loaihangmuc:'ThuNhap'}).then((tk)=>{
+    let temp = await(queryHangMucGiaoDich({tenhangmuc:'Default',loaihangmuc:'ThuNhap'}).then((tk)=>{
         if (tk==[]){
             // let hangmuc={
             //     idhangmucgiaodich:new BSON.ObjectID(catid),
@@ -145,7 +145,7 @@ export const createSavingWithdraw= ({for_wallet_id,from_saving_id,amount}) => ne
         }
     },(er)=>{
         reject(er)
-    })
+    }))
    
     
     updateTaikhoanTietKiem({taikhoantietkiemid: from_saving_id, sotienthem: -amount}).then((rs)=>
@@ -171,10 +171,11 @@ export const createSavingWithdraw= ({for_wallet_id,from_saving_id,amount}) => ne
 })
 
 
-export const createWalletTransfer= ({from_wallet_id,for_wallet_id,amount}) => new Promise((resolve,reject) =>{
-    let userid = "60d213a4b04324a927bae538"
+export const createWalletTransfer= ({from_wallet_id,for_wallet_id,amount}) => new Promise(async(resolve,reject) =>{
+    let userid =sessionStore.activeWalletId
     let catid =JSON.parse(JSON.stringify(new BSON.ObjectID()))
-    let temp = queryHangMucGiaoDich({tenhangmuc:'Default',loaihangmuc:'ThuNhap'}).then((tk)=>{
+    let catid2 =JSON.parse(JSON.stringify(new BSON.ObjectID()))
+    let temp =await( queryHangMucGiaoDich({tenhangmuc:'Default',loaihangmuc:'ThuNhap'}).then((tk)=>{
         if (tk==[]){
             // let hangmuc={
             //     idhangmucgiaodich:new BSON.ObjectID(catid),
@@ -198,9 +199,8 @@ export const createWalletTransfer= ({from_wallet_id,for_wallet_id,amount}) => ne
         }
     },(er)=>{
         reject(er)
-    })
-    let catid2 =JSON.parse(JSON.stringify(new BSON.ObjectID()))
-    let temp2 = queryHangMucGiaoDich({tenhangmuc:'Default',loaihangmuc:'ChiTieu'}).then((tk)=>{
+    }))
+    let temp2 = await(queryHangMucGiaoDich({tenhangmuc:'Default',loaihangmuc:'ChiTieu'}).then((tk)=>{
         if (tk==[]){
             // let hangmuc={
             //     idhangmucgiaodich:new BSON.ObjectID(catid2),
@@ -224,9 +224,9 @@ export const createWalletTransfer= ({from_wallet_id,for_wallet_id,amount}) => ne
         }
     },(er)=>{
         reject(er)
-    })
+    }))
 
-    await(saveTransaction({
+    saveTransaction({
         userId:userid,
         note:'Wallet tranfer withdraw',
         amount:amount,
@@ -241,7 +241,7 @@ export const createWalletTransfer= ({from_wallet_id,for_wallet_id,amount}) => ne
         walletid:for_wallet_id,
         occur_date: new Date(),
         categoryId: catid
-    })
+    }
     ).then(resolve({result:true, message:' tao wallet tranfer thanh cong',})
     ,((er)=>{reject({result:false,message:'tao transaction that bai'})})))
 })

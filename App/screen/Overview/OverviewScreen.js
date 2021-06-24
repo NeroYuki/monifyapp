@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { SafeAreaView, ScrollView, View, StyleSheet, Text } from "react-native";
+import { SafeAreaView, ScrollView, View, StyleSheet, Text, RefreshControl } from "react-native";
 import { Button, Modal } from "react-native-paper";
 import { COLORS } from "../../assets/constants";
 import { CategoriesModal, TabSwitcher, TimespanPicker, TransactionEditor, WalletHeader } from "../../components";
@@ -32,13 +32,14 @@ export class OverviewScreen extends Component {
             periodVisible: false,
             expenseOrIncomeVisible: false,
             changeWalletModalVisible: false,
+            isRefreshing: false,
 
             // All trans data 
             overviewData: {},
             categoriesData: {},
             listDataAtListTab: [
                 {
-                    title: '',
+                    title: '2011-10-05T14:48:00.000Z',
                     total: 0,
                     data: [
                         {
@@ -616,6 +617,38 @@ export class OverviewScreen extends Component {
 
         sessionStore.activeWalletId = val
 
+        this.reloadData()
+    }
+
+    // MARK: - ACTION
+    reportView = () => {
+        console.log("Overview Screen: - Report view")
+
+        if (this.state.isLoading) {
+            return <View></View>
+        }
+        return (
+            (!this.state.chartView) ?
+                <ItemsOverView
+                    onPressTransactionEditor={this.onPressTransactionEditor}
+                    data={this.state.listDataAtListTab}
+                    currentOption={this.state.currentOption}
+                />
+                :
+                <ChartOverview
+                    onPressShowing={this.onPressShowing}
+                    chartData={this.state.listDataChart}
+                    data={this.state.listDataAtCategoriesTab}
+                    currentOption={this.state.currentOption}
+                />
+        )
+    }
+
+    wait = (timeout) => {
+        return new Promise(resolve => setTimeout(resolve, timeout));
+    }
+
+    reloadData = async () => {
         try {
             const [overviewData, categoriesData, dateTime, walletList] = await Promise.all([
                 this.getDataOverview(), this.getPercentageData(), this.getDate(), this.getListOfWallet()
@@ -643,28 +676,19 @@ export class OverviewScreen extends Component {
         }
     }
 
-    // MARK: - ACTION
-    reportView = () => {
-        console.log("Overview Screen: - Report view")
+    onRefresh = () => {
+        this.setState({
+            isRefreshing: true,
+        })
 
-        if (this.state.isLoading) {
-            return <View></View>
-        }
-        return (
-            (!this.state.chartView) ?
-                <ItemsOverView
-                    onPressTransactionEditor={this.onPressTransactionEditor}
-                    data={this.state.listDataAtListTab}
-                    currentOption={this.state.currentOption}
-                />
-                :
-                <ChartOverview
-                    onPressShowing={this.onPressShowing}
-                    chartData={this.state.listDataChart}
-                    data={this.state.listDataAtCategoriesTab}
-                    currentOption={this.state.currentOption}
-                />
-        )
+        this.wait(1000).then(() => {
+
+            this.reloadData()
+
+            this.setState({
+                isRefreshing: false
+            })
+        });
     }
 
     render() {
@@ -674,7 +698,15 @@ export class OverviewScreen extends Component {
             <View style={{ flex: 1 }}>
                 <SafeAreaView style={{ flex: 0, backgroundColor: '#ff92a7' }} />
                 <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightGray }}>
-                    <ScrollView style={{ flex: 1 }}>
+                    <ScrollView
+                        style={{ flex: 1, backgroundColor: COLORS.lightGray }}
+                        refreshControl={
+                            <RefreshControl
+                                refreshing={this.state.isRefreshing}
+                                onRefresh={this.onRefresh}
+                            />
+                        }
+                    >
                         <View style={{ flex: 1, backgroundColor: COLORS.lightGray }}>
 
                             <WalletHeader

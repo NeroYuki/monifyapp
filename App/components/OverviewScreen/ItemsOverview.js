@@ -1,3 +1,4 @@
+import { format } from 'date-fns';
 import React, { Component } from 'react';
 import { View, StyleSheet, SectionList, Text, Image, TouchableOpacity } from 'react-native';
 import { COLORS, icons } from '../../assets/constants';
@@ -51,7 +52,7 @@ export class ItemsOverView extends Component {
     Header = ({ section }) => (
         <View style={styles.header}>
             <View style={{ flex: 1, flexDirection: 'row', justifyContent: 'space-between' }}>
-                <Text style={styles.titleHeader}>{section.title}</Text>
+                <Text style={styles.titleHeader}>{format(new Date(section.title), 'eee, dd MMM')}</Text>
                 <Text style={styles.totalHeader}>{currencyFormat(section.total)}</Text>
             </View>
 
@@ -86,11 +87,11 @@ const styles = StyleSheet.create({
         marginTop: 20,
         minHeight: 60,
         width: '100%',
-        backgroundColor: COLORS.white
+        backgroundColor: COLORS.lightGray
     },
 
     selectionList: {
-
+        backgroundColor: COLORS.white
     },
 
     header: {
@@ -99,7 +100,7 @@ const styles = StyleSheet.create({
     },
     footer: {
         height: 20,
-        backgroundColor: COLORS.grayBackground,
+        backgroundColor: COLORS.lightGray,
         marginTop: -1
     },
     item: {
@@ -118,7 +119,7 @@ const styles = StyleSheet.create({
     titleHeader: {
         marginTop: 16,
         marginLeft: 20,
-        color: COLORS.blueText
+        color: COLORS.darkGray
     },
 
     totalHeader: {

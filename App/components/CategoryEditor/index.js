@@ -15,6 +15,7 @@ export class CategoryEditor extends Component {
             name: '',
             selectedType: 'Income',
             selectedIcon: '',
+            color: '',
             DATA: iconData
         }
         this.fetchData = this.fetchData.bind(this)
@@ -28,14 +29,14 @@ export class CategoryEditor extends Component {
     }
 
     async fetchData() {
-        let arr_res = await fetchCategory({categoryId: this.props.editId})
+        let arr_res = await fetchCategory({ categoryId: this.props.editId })
         if (arr_res.length === 0) return
         let res = arr_res[0]
-        console.log(res) 
+        console.log(res)
         this.setState({
             name: res.tenhangmuc,
             selectedIcon: res.iconhangmuc,
-            selectedType: (res.loaihangmuc.chitieu)? "Expense" : "Income"
+            selectedType: (res.loaihangmuc.chitieu) ? "Expense" : "Income"
         })
     }
 
@@ -43,7 +44,10 @@ export class CategoryEditor extends Component {
         <TouchableOpacity
             style={{ justifyContent: 'center', alignItems: 'center', height: 48, width: 48, marginVertical: 8, marginHorizontal: 8, }}
             onPress={() => {
-                this.setState({ selectedIcon: items.item.source })
+                this.setState({
+                    selectedIcon: items.item.source,
+                    color: items.item.color
+                })
             }}
         >
             <Image
@@ -76,12 +80,12 @@ export class CategoryEditor extends Component {
         }
         else {
             let hangmucgiaodich = {
-                category_id: (this.props.editId)? this.props.editId : null,
+                category_id: (this.props.editId) ? this.props.editId : null,
                 userid: sessionStore.activeUserId,
                 name: this.state.name,
                 icon: String(this.state.selectedIcon),
                 loaihangmuc: (this.state.selectedType == 'Income') ? 'thunhap' : 'chitieu',
-                color: '#fdfd96'
+                color: this.state.color
             }
 
             console.log("Hang Muc Giao dich", hangmucgiaodich)

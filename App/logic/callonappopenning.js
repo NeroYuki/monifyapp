@@ -45,8 +45,9 @@ export const checkInitialLaunch = () => new Promise((resolve, reject) => {
 })
 
 export const checkLoansForCycle = () => new Promise((resolve,reject)=>{
-    let today= new Date()
-    let rs= []
+    let today= new Date() //get what is today
+    let rs= [] // empty result array
+
     queryTaiKhoan({taikhoanno: true}).then((tk)=>{
         tk.forEach(element => {
             let id = element.idtaikhoan
@@ -91,7 +92,6 @@ export const checkLoansForCycle = () => new Promise((resolve,reject)=>{
             }
 
         });
-        
         resolve(rs)
     },((er)=> {console.error(er); reject(er)}))
 })

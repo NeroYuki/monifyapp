@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS, icons, SIZES, FONTS } from '../../assets/constants';
 import Svg, { G, Circle, Line, } from 'react-native-svg';
+import { currencyFormat } from '../../utils/formatNumber';
 
 export class BudgetHeader extends Component {
 
@@ -44,7 +45,7 @@ export class BudgetHeader extends Component {
                             height={this.radius * 2}
                             viewBox={`0 0 ${halfCircle * 2} ${halfCircle * 2}`}
                         >
-                            <G rotation='-90' origin={`${halfCircle}, ${halfCircle}`}>
+                            <G rotation='90' origin={`${halfCircle}, ${halfCircle}`}>
                                 <Circle
                                     cx='50%'
                                     cy='50%'
@@ -64,7 +65,9 @@ export class BudgetHeader extends Component {
                                     strokeDasharray={cirleCircumFerence}
 
                                     // Set Progress data
-                                    strokeDashoffset={cirleCircumFerence * (this.props.current / this.props.total)}
+                                    strokeDashoffset={
+                                        cirleCircumFerence * (this.props.current / this.props.total)
+                                    }
                                     strokeLinecap='round'
                                 />
                             </G>
@@ -73,10 +76,15 @@ export class BudgetHeader extends Component {
                             StyleSheet.absoluteFillObject,
                             { justifyContent: 'center', alignItems: 'center', flex: 1 }
                         ]}>
-                            <Image
-                                source={icons.setting}
-                                resizeMode='contain'
-                            />
+                            <TouchableOpacity
+                                onPress={() => console.log((this.props.current / this.props.total))}
+                            >
+                                <Image
+                                    source={icons.setting}
+                                    resizeMode='contain'
+                                />
+                            </TouchableOpacity>
+
                         </View>
                     </View>
                     <View style={{ flex: 1 }}></View>
@@ -87,12 +95,12 @@ export class BudgetHeader extends Component {
                         fontSize: 24,
                         color: COLORS.white,
                         fontWeight: 'bold'
-                    }}> {this.props.total} VND</Text>
+                    }}> {currencyFormat(this.props.total - this.props.current)} VND</Text>
                     <Text style={{
                         top: 8,
                         fontSize: 17,
                         color: COLORS.lightText
-                    }}>LEFT TO SPEND</Text>
+                    }}>BALANCE LEFT</Text>
                 </View>
 
             </View >

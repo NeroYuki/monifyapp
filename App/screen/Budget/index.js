@@ -1,15 +1,14 @@
+import { format } from 'date-fns';
 import React from 'react';
-import { Image, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { COLORS, icons, images, SIZES } from '../../assets/constants';
-import { FONTS } from '../../assets/constants/theme';
-import { BudgetHeader, CategoriesModal, TabSwitcher } from '../../components';
+import { Image, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
+import { images } from '../../assets/constants';
+import { BudgetHeader, TabSwitcher } from '../../components';
 import { ExpenseReportView } from '../../components/BudgetScreen/ExpenseReportView';
-import { Greet } from '../../components/BudgetScreen/Greet';
 import { IncomeReportView } from '../../components/BudgetScreen/IncomeReportView';
-import { Messages } from '../../components/BudgetScreen/Messages';
 import { BudgetSettingModal } from '../../components/BudgetSettingScreen/BudgetSettingModel';
-import { fetchBugetList } from '../../logic/Screen-Budget';
-import { queryTranCategories } from '../../logic/Screen-Overview';
+import { fetchBugetList } from '../../logic/Screen-budget';
+import { queryTranCategories, queryTransactions } from '../../logic/Screen-Overview';
+import sessionStore from '../../logic/sessionStore';
 
 
 export class BudgetScreen extends React.Component {
@@ -20,23 +19,35 @@ export class BudgetScreen extends React.Component {
 
         this.state = {
             income: {
-                current: '320.000',
-                total: '600.000'
+                sotienmuctieu: 1,
+                idmuctieu: '',
+                ngaybatdau: '',
+                ngayketthuc: ''
             },
 
             expense: {
-                current: '',
-                total: '',
+                sotienmuctieu: 1,
+                idmuctieu: '',
+                ngaybatdau: '',
+                ngayketthuc: ''
             },
 
             balance: {
-                current: '',
-                total: '',
+                sotienmuctieu: 1,
+                idmuctieu: '',
+                ngaybatdau: '',
+                ngayketthuc: ''
             },
 
-            transData: '',
+            transData: {
+                expenseCurrent: 0,
+                incomeCurrent: 0,
+                balanceCurrent: 0
+            },
 
             currentPeriod: 'month',
+            startDate: '',
+            endDate: '',
 
             settingVisible: false,
 
@@ -55,63 +66,55 @@ export class BudgetScreen extends React.Component {
         this.getAllBudgetData()
     }
 
+
+
     getAllBudgetData = async () => {
-
-        // const data = this.getAllTransactionData()
-
-        // DATAS TRANS 
+        // Total money of Wallet 
         var transData = JSON.parse(JSON.stringify(
-            await queryTranCategories({
-                walletId: '60c96efa9bd6d1e6e1aed7a6',
+            await queryTransactions({
+                walletId: sessionStore.activeWalletId,
                 period: this.state.currentPeriod
             })
         ))
 
-        console.log(transData)
-
-
-        // var budgetData = JSON.parse(JSON.stringify(
-        //     await fetchBugetList({})
-        // ))
-
-        // console.log(budgetData)
-
+        var balanceCurrent = transData.income - transData.expense
         this.setState({
-            transData: transData
+            transData: {
+                expenseCurrent: transData.expense,
+                incomeCurrent: transData.income,
+                balanceCurrent,
+            }
         })
 
+        // Target Money: Income, Expense, Balance 
+        var budgetData = JSON.parse(JSON.stringify(await fetchBugetList()))
+        this.setUpBudgetData(budgetData)
 
+        console.log(this.state)
+    }
 
+    setUpBudgetData = (budgetData) => {
+        for (var i in budgetData) {
+            if (budgetData[i].loaimuctieu.tietkiemdenmuc) {
+                this.setState({
+                    income: budgetData[i],
+                })
+            }
+            else if (budgetData[i].loaimuctieu.tieudungquamuc) {
+                this.setState({
+                    expense: budgetData[i],
+                })
+            } else if (budgetData[i].loaimuctieu.sodutoithieu) {
+                this.setState({
+                    balance: budgetData[i],
+                })
+            }
 
-
-        // var data = JSON.parse(JSON.stringify(await fetchBugetList({})))
-        // for (var i in data) {
-        //     console.log(data[i].sotienmuctieu, ' - ', data[i].loaimuctieu)
-        // if (data[i].loaimuctieu.tietkiemdenmuc) {
-        //     this.setState({
-        //         income: {
-        //             total: moneyTarget
-        //         }
-        //     })
-        // }
-        // else if (data[i].loaimuctieu.tieudungquamuc) {
-        //     this.setState({
-        //         expense: {
-        //             total: moneyTarget
-        //         }
-        //     })
-        // }
-        // else if ((data[i].loaimuctieu.sodutoithieu)) {
-        //     this.setState({
-        //         total: {
-        //             total: moneyTarget
-        //         }
-        //     })
-        // }
-        // }
-
-        // console.log(this.state)
-
+            this.setState({
+                startDate: budgetData[i].ngaybatdau,
+                endDate: budgetData[i].ngayketthuc,
+            })
+        }
     }
 
     showSettingScreen = () => {
@@ -121,51 +124,58 @@ export class BudgetScreen extends React.Component {
     }
 
     render() {
-        console.log("BUDGET - render")
-
         return (
             <SafeAreaView style={styles.container}>
                 <View style={styles.container}>
-                    {/* <ScrollView showsVerticalScrollIndicator={false}> */}
-                    {/* Banner Photo */}
-                    <View style={{ height: 400 }}>
-                        <Image
-                            source={images.backgroundBlue}
-                            resizeMode='cover'
-                            style={{
-                                height: '100%',
-                                width: '100%'
-                            }}
+                    <ScrollView showsVerticalScrollIndicator={false}>
+                        {/* Banner Photo */}
+                        <View style={{ height: 400 }}>
+                            <Image
+                                source={images.backgroundBlue}
+                                resizeMode='cover'
+                                style={{
+                                    height: '100%',
+                                    width: '100%'
+                                }}
+                            />
+                        </View>
+
+                        {/* Detail of Budget */}
+                        <View style={styles.detailBudget}>
+                            <TabSwitcher
+                                text="TeXT"
+                                onTimeTextPress={this.showSettingScreen} />
+
+                            <IncomeReportView
+                                title="Income"
+                                current={this.state.transData.incomeCurrent}
+                                total={this.state.income.sotienmuctieu}
+                            />
+
+                            <IncomeReportView
+                                title="Expense"
+                                current={this.state.transData.expenseCurrent}
+                                total={this.state.expense.sotienmuctieu}
+                            />
+
+                        </View>
+
+                        {/* Render Header */}
+                        <BudgetHeader
+                            current={this.state.transData.balanceCurrent}
+                            total={this.state.balance.sotienmuctieu}
+                            onClick={this.showSettingScreen}
                         />
-                    </View>
 
-                    {/* Detail of Budget */}
-                    <View style={styles.detailBudget}>
-                        <TabSwitcher text="March 2021"
-                            onTimeTextPress={this.showSettingScreen} />
+                        <BudgetSettingModal
+                            income={this.state.income}
+                            expense={this.state.expense}
+                            balance={this.state.balance}
+                            isVisible={this.state.settingVisible}
+                            onRequestClose={() => { this.setState({ settingVisible: false }) }}
+                        ></BudgetSettingModal>
 
-                        <IncomeReportView
-                            current={this.state.income.current}
-                            total={this.state.income.total}
-                        />
-
-                        <ExpenseReportView />
-
-                    </View>
-
-                    {/* Render Header */}
-                    <BudgetHeader
-                        current={this.state.income.current}
-                        total={this.state.income.total}
-                        onClick={this.showSettingScreen}
-                    />
-
-                    <BudgetSettingModal
-                        isVisible={this.state.settingVisible}
-                        onRequestClose={() => { this.setState({ settingVisible: false }) }}
-                    ></BudgetSettingModal>
-
-                    {/* </ScrollView> */}
+                    </ScrollView>
 
                 </View >
             </SafeAreaView>

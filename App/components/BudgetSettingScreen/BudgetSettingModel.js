@@ -4,6 +4,7 @@ import { View, Modal, Text, TouchableOpacity, SafeAreaView, TextInput, ScrollVie
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { COLORS } from '../../assets/constants';
 import { saveBudget } from "../../logic/Screen-budget";
+import sessionStore from "../../logic/sessionStore";
 import { BudgetSettingPeriodModal } from "./BudgetSettingPeriodModal";
 
 // import { saveBudget } from "../../logic/Screen-Budget";
@@ -58,7 +59,7 @@ export class BudgetSettingModal extends Component {
         if (this.state.income != '') {
             var value = {
                 // budgetId: '60c2d5fe651fc49ab59d4400',
-                userId: '60c96efa9bd6d1e6e1aed7a6',
+                userId: sessionStore.activeWalletId,
                 name: this.state.name,
                 amount: parseInt(this.state.income),
                 loaimuctieu: 'TietKiemDenMuc', //TieuDungQuaMuc, SoDuToiThieu, TietKiemDenMuc
@@ -72,7 +73,7 @@ export class BudgetSettingModal extends Component {
         if (this.state.expense != '') {
             var value = {
                 // budgetId: '60c2d5fe651fc49ab59d4400',
-                userId: '60c96efa9bd6d1e6e1aed7a6',
+                userId: sessionStore.activeWalletId,
                 name: this.state.name,
                 amount: parseInt(this.state.expense),
                 loaimuctieu: 'TieuDungQuaMuc', //TieuDungQuaMuc, SoDuToiThieu, TietKiemDenMuc
@@ -85,7 +86,7 @@ export class BudgetSettingModal extends Component {
         if (this.state.balance != '') {
             var value = {
                 // budgetId: '60c2d5fe651fc49ab59d4400',
-                userId: '60c96efa9bd6d1e6e1aed7a6',
+                userId: sessionStore.activeWalletId,
                 name: this.state.name,
                 amount: parseInt(this.state.balance),
                 loaimuctieu: 'SoDuToiThieu', //TieuDungQuaMuc, SoDuToiThieu, TietKiemDenMuc

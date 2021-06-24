@@ -253,48 +253,48 @@ export const checkGoalForBudget = (budgetId) => new Promise(async(resolve,reject
         if(budget[0].ngayketthuc.setHours(0,0,0,0)>=today){   //nếu như chưa quá hạn mục tiêu
             if(budget.loaimuctieu.tietkiemdenmuc==true){    // tietkiem
                 if(predictresult > goalmoney){
-                    resolve({result:true, message:'bạn có khả năng cao sẽ hoàn thành mục tiêu thu nhập đề ra'})
+                    resolve({result:1, message:'Bạn có khả năng cao sẽ hoàn thành mục tiêu thu nhập đề ra'})
                 }
                 else{
-                    resolve({result:true, message:'thu nhập của bạn có khả năng sẽ chưa đủ để hoàn thành mục tiêu'})
+                    resolve({result:2, message:'Thu nhập của bạn có khả năng sẽ chưa đủ để hoàn thành mục tiêu'})
                 }
             }else if(budget.loaimuctieu.tieudungquamuc==true){ //tieu dung
                 if(predictresult > goalmoney){
-                    resolve({result:true, message:'tỉ lệ cao rằng bạn sẽ vượt quá mức tiêu dùng bạn đề ra'})
+                    resolve({result:2, message:'Tỉ lệ cao rằng bạn sẽ vượt quá mức tiêu dùng bạn đề ra'})
                 }
                 else{
-                    resolve({result:true, message:'bạn có khả năng cao sẽ hoàn thành mục tiêu chi tiêu đề ra'})
+                    resolve({result:1, message:'Bạn có khả năng cao sẽ hoàn thành mục tiêu chi tiêu đề ra'})
                 }
             }else if(budget.loaimuctieu.sodutoithieu==true){ // so du
                 if(predictresult > goalmoney){
-                    resolve({result:true, message:'chương trình dự đoán rằng số dư của bạn sẽ vượt quá mục tiêu đề ra'})
+                    resolve({result:1, message:'Chương trình dự đoán rằng số dư của bạn sẽ vượt quá mục tiêu đề ra'})
                 }
                 else{
-                    resolve({result:true, message:'chương trình dự đoán rằng số dư của bạn sẽ không vượt quá'})
+                    resolve({result:2, message:'Chương trình dự đoán rằng số dư của bạn sẽ không vượt quá'})
                 }
             }
         }
         else{           // nếu như quá hạn 
             if(budget.loaimuctieu.tietkiemdenmuc==true){   // tiết kiệm
                 if(transmapresult.get(budget.ngayketthuc.setHours(0,0,0,0)) > goalmoney){
-                    resolve({result:true, message:'bạn đã hoàn thành mục tiêu'})
+                    resolve({result:3, message:'Bạn đã hoàn thành mục tiêu'})
                 }
                 else{
-                    resolve({result:true, message:'bạn đã không hoàn thành mục tiêu'})
+                    resolve({result:4, message:'Bạn đã không hoàn thành mục tiêu'})
                 }
             }else if(budget.loaimuctieu.tieudungquamuc==true){ //tiêu dùng
                 if(transmapresult.get(budget.ngayketthuc.setHours(0,0,0,0)) > goalmoney){
-                    resolve({result:true, message:'bạn đã không hoàn thành mục tiêu'})
+                    resolve({result:4, message:'Bạn đã không hoàn thành mục tiêu'})
                 }
                 else{
-                    resolve({result:true, message:'bạn đã hoàn thành mục tiêu'})
-                }
+                    resolve({result:3, message:'Bạn đã hoàn thành mục tiêu'})
+                }1
             }else if(budget.loaimuctieu.sodutoithieu==true){ //số dư
                 if(transmapresult.get(budget.ngayketthuc.setHours(0,0,0,0)) > goalmoney){
-                    resolve({result:true, message:'bạn đã hoàn thành mục tiêu'})
+                    resolve({result:3, message:'Bạn đã hoàn thành mục tiêu'})
                 }
                 else{
-                    resolve({result:true, message:'bạn đã không hoàn thành mục tiêu'})
+                    resolve({result:4, message:'Bạn đã không hoàn thành mục tiêu'})
                 }
             }
         }

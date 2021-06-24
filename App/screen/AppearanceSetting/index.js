@@ -4,6 +4,7 @@ import { GenericSelectionModal, GenericSettingField } from "../../components";
 import { stylesheet } from './style'
 import { FAB, Snackbar } from 'react-native-paper'
 import { fetchSetting, saveSetting } from "../../logic/Screen-AppearanceSetting";
+import sessionStore from "../../logic/sessionStore";
 
 export class AppearanceSetting extends Component {
     constructor(props) {
@@ -50,15 +51,17 @@ export class AppearanceSetting extends Component {
     handleSaveSetting = async () => {
         console.log("Save Setting")
 
-        var caidattest = {
-            idnguoidung: '60c5c67c3576c0078f3bc622',
-            loaitien: this.state.currencyCurrent,
-            chedo: this.state.appThemeCurrent,
-            ngonngu: this.state.languageCurrent,
-            chedonghiemngat: (this.state.strictModeCurrent == 'Enable') ? true : false,
-        }
+        console.log(sessionStore.activeWalletId)
 
-        console.log(await saveSetting(caidattest))
+        // var caidattest = {
+        //     idnguoidung: sessionStore.activeUserId,
+        //     loaitien: this.state.currencyCurrent,
+        //     chedo: this.state.appThemeCurrent,
+        //     ngonngu: this.state.languageCurrent,
+        //     chedonghiemngat: (this.state.strictModeCurrent == 'Enable') ? true : false,
+        // }
+
+        // console.log(await saveSetting(caidattest))
     }
 
     async componentDidMount() {
@@ -69,7 +72,7 @@ export class AppearanceSetting extends Component {
             appThemeCurrent: obj.chedo,
             currencyCurrent: obj.loaitien,
             languageCurrent: obj.ngonngu,
-            strictModeCurrent: (obj.chedonghiemngat === true)? "Enable" : "Disable"
+            strictModeCurrent: (obj.chedonghiemngat === true) ? "Enable" : "Disable"
         })
     }
 
@@ -143,20 +146,20 @@ export class AppearanceSetting extends Component {
                         const data = {
                             loaitien: this.state.currencyCurrent,
                             ngonngu: this.state.languageCurrent,
-                            chedonghiemngat: (this.state.strictModeCurrent === "Enable")? true : false,
+                            chedonghiemngat: (this.state.strictModeCurrent === "Enable") ? true : false,
                             chedo: this.state.appThemeCurrent,
                         }
                         let res = await saveSetting(data)
-                        if (res.result === true) this.setState({snackbarMessage: "Your settings have been saved"})
-                        else this.setState({snackbarMessage: "Failed to save your settings"})
+                        if (res.result === true) this.setState({ snackbarMessage: "Your settings have been saved" })
+                        else this.setState({ snackbarMessage: "Failed to save your settings" })
 
-                        this.setState({snackbarMessageVisible: true})
+                        this.setState({ snackbarMessageVisible: true })
                     }}
                 />
 
                 <Snackbar
                     visible={this.state.snackbarMessageVisible}
-                    onDismiss={() => {this.setState({snackbarMessageVisible: false})}}>
+                    onDismiss={() => { this.setState({ snackbarMessageVisible: false }) }}>
                     {this.state.snackbarMessage}
                 </Snackbar>
 

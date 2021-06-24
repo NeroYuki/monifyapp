@@ -48,8 +48,8 @@ export class WalletEditor extends Component {
                         style={style.setting_entry}
                         title="Wallet Name"
                         value={this.state.name}
-                        description="Change name of the wallet" 
-                        onPress={(mode === "edit") ? () => {this.setState({nameInputVisible: true})} : null}/>
+                        description="Change name of the wallet"
+                        onPress={(mode === "edit") ? () => { this.setState({ nameInputVisible: true }) } : null} />
 
                     <GenericSettingField
                         style={style.setting_entry}
@@ -57,7 +57,7 @@ export class WalletEditor extends Component {
                         color={this.state.color}
                         value={this.state.color}
                         description="Pick a color to represent the wallet"
-                        onPress={(mode === "edit") ? () => {this.setState({colorPickerVisible: true})} : null}/>
+                        onPress={(mode === "edit") ? () => { this.setState({ colorPickerVisible: true }) } : null} />
 
                     <GenericSettingField
                         style={style.setting_entry}
@@ -69,48 +69,51 @@ export class WalletEditor extends Component {
                         style={style.setting_entry}
                         title="Creation Date"
                         value={this.state.creation_date.toDateString()}
-                        description="Creation date of the saving fund, cannot be changed" 
+                        description="Creation date of the saving fund, cannot be changed"
                     />
                 </ScrollView>
 
                 {mode === "edit" && <FAB style={style.fab}
                     big
                     icon="content-save"
-                    onPress={ async () => {
+                    onPress={async () => {
                         const id = this.props.route.params.id
+
                         let saved_data = {
-                            walletId: (id)? id : undefined,
+                            walletId: (id) ? id : undefined,
                             walletName: this.state.name,
                             color: this.state.color,
                             amount: parseFloat(this.state.amount)
                         }
+
                         let data_result = await saveWallet(saved_data)
                         console.log(data_result)
-                        if (data_result) this.setState({snackbarMessage: "Your wallet info have been saved"})
-                        else this.setState({snackbarMessage: "Failed to save your wallet info"})
 
-                        this.setState({snackbarMessageVisible: true})
+                        if (data_result) this.setState({ snackbarMessage: "Your wallet info have been saved" })
+                        else this.setState({ snackbarMessage: "Failed to save your wallet info" })
+
+                        this.setState({ snackbarMessageVisible: true })
                     }}
                 />}
 
                 <Snackbar
                     visible={this.state.snackbarMessageVisible}
-                    onDismiss={() => {this.setState({snackbarMessageVisible: false})}}>
+                    onDismiss={() => { this.setState({ snackbarMessageVisible: false }) }}>
                     {this.state.snackbarMessage}
                 </Snackbar>
 
                 <GenericInputModal
                     initialValue={this.state.name}
                     isVisible={this.state.nameInputVisible}
-                    onRequestClose={() => {this.setState({nameInputVisible: false})}}
-                    onSubmit={(val) => {this.setState({nameInputVisible: false, name: val})}}
+                    onRequestClose={() => { this.setState({ nameInputVisible: false }) }}
+                    onSubmit={(val) => { this.setState({ nameInputVisible: false, name: val }) }}
                 />
 
                 <ColorPickerModal
                     initialValue={this.state.color}
                     isVisible={this.state.colorPickerVisible}
-                    onRequestClose={() => {this.setState({colorPickerVisible: false})}}
-                    onSubmit={(val) => {this.setState({colorPickerVisible: false, color: val})}}
+                    onRequestClose={() => { this.setState({ colorPickerVisible: false }) }}
+                    onSubmit={(val) => { this.setState({ colorPickerVisible: false, color: val }) }}
                 />
 
             </View>

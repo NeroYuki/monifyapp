@@ -12,6 +12,7 @@ export class ProfileScreen extends React.Component {
     }
 
     render() {
+
         const style = stylesheet
 
         return (
@@ -23,17 +24,17 @@ export class ProfileScreen extends React.Component {
                         resizeMode='cover'
                         style={style.header_background}
                     >
-                        
+
                         <View style={style.header_content}>
                             {/* Render Header */}
                             <ProfileHeader style={style.header_title} />
-                            <Avatar.Image style={style.header_avatar} size={100} source={images.avatarPlaceholder}/>
-                            <Text style={style.header_username_text}>UsernameX</Text>
+                            <Avatar.Image style={style.header_avatar} size={100} source={images.avatarPlaceholder} />
+                            <Text style={style.header_username_text}>Guest</Text>
                         </View>
-                    </ImageBackground>                    
+                    </ImageBackground>
                 </View>
 
-                
+
 
                 {/* Detail of Budget */}
                 <View style={style.allWallet}>
@@ -43,7 +44,7 @@ export class ProfileScreen extends React.Component {
                     <DescriptiveButton icon="repeat" title="Recurring Bills" style={style.button_entry} onPress={() => { this.props.navigation.push("RecurringBill") }}></DescriptiveButton>
                 </View>
 
-                
+
 
             </View >
         );

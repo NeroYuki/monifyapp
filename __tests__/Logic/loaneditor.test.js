@@ -1,4 +1,5 @@
 import { saveLoan,fetchLoan, queryLoan, deleteLoan } from '../../App/logic/Screen-loan'
+import { queryTaiKhoan } from '../../App/services/TaiKhoanCRUD'
 const today = new Date()
 test('loaneditortest',async ()=> {
     await(saveLoan({loanName:'noxau',amount: 5000000,color: '#123456',expire_on:today,interest: 0.5,creationDate:today,cycle:30})
@@ -23,6 +24,13 @@ test('loanquery',async()=>{
         expect(rs[0].name).toBe('opka')
     }
     ))
+})
+
+test('loan query', async() =>{
+    let rs = await(queryTaiKhoan({tentaikhoan:'opka'}))
+    console.log(typeof rs[0].thoigiantao)
+    console.log(typeof (new Date(rs[0].thoigiantao)))
+    //console.log(rs[0].loanId)
 })
 test('delete okpa',async()=>{
     rs =await(queryLoan({loanName:'opka'}))

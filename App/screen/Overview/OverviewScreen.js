@@ -15,6 +15,7 @@ import { queryTranCategories, queryTransactions } from "../../logic/Screen-Overv
 import { fetchCategory } from "../../logic/Component-CategoryEditor";
 import { percentageFormat } from "../../utils/formatNumber";
 import { increase_brightness } from "../../utils/increase_brightness";
+import sessionStore from "../../logic/sessionStore";
 
 export class OverviewScreen extends Component {
     constructor(props) {
@@ -161,7 +162,7 @@ export class OverviewScreen extends Component {
     getPercentageData = async () => {
         var percentageData = JSON.parse(JSON.stringify(
             await queryTranCategories({
-                walletId: '60c96efa9bd6d1e6e1aed7a6',
+                walletId: sessionStore.activeWalletId,
                 period: this.state.currentPeriod
             })
         ))
@@ -172,7 +173,7 @@ export class OverviewScreen extends Component {
     getDataOverview = async () => {
         var data = JSON.parse(JSON.stringify(
             await queryTransactions({
-                walletId: '60c96efa9bd6d1e6e1aed7a6',
+                walletId: sessionStore.activeWalletId,
                 period: this.state.currentPeriod
             })
         ))
@@ -183,7 +184,7 @@ export class OverviewScreen extends Component {
     getDataOverviewWith2Date = async (start, end) => {
         var data = JSON.parse(JSON.stringify(
             await queryTransactions({
-                walletId: '60c96efa9bd6d1e6e1aed7a6',
+                walletId: sessionStore.activeWalletId,
                 start_day: start,
                 end_day: end
             })
@@ -191,7 +192,7 @@ export class OverviewScreen extends Component {
 
         var percentageData = JSON.parse(JSON.stringify(
             await queryTranCategories({
-                walletId: '60c96efa9bd6d1e6e1aed7a6',
+                walletId: sessionStore.activeWalletId,
                 start_day: start,
                 end_day: end
             })
@@ -211,14 +212,14 @@ export class OverviewScreen extends Component {
     getDataOverviewWithPeriod = async (period) => {
         var data = JSON.parse(JSON.stringify(
             await queryTransactions({
-                walletId: '60c96efa9bd6d1e6e1aed7a6',
+                walletId: sessionStore.activeWalletId,
                 period: period
             })
         ))
 
         var percentageData = JSON.parse(JSON.stringify(
             await queryTranCategories({
-                walletId: '60c96efa9bd6d1e6e1aed7a6',
+                walletId: sessionStore.activeWalletId,
                 period: period
             })
         ))

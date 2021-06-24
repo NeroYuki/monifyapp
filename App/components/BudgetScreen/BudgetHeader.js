@@ -80,7 +80,7 @@ export class BudgetHeader extends Component {
                                 onPress={() => console.log((this.props.current / this.props.total))}
                             >
                                 <Image
-                                    source={icons.setting}
+                                    source={icons.earth}
                                     resizeMode='contain'
                                 />
                             </TouchableOpacity>

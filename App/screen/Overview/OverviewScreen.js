@@ -262,6 +262,8 @@ export class OverviewScreen extends Component {
             var start = startOfWeek(new Date(Date.now()), { weekStartsOn: 1 })
             var end = endOfWeek(new Date(Date.now()), { weekStartsOn: 1 })
 
+            console.log(start, " - ", end)
+
             var date = {
                 currentTime: format(new Date(start), 'dd MMM') + ' - ' + format(new Date(end), 'dd MMM'),
                 otherFormat: '',

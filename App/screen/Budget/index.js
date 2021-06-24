@@ -46,8 +46,8 @@ export class BudgetScreen extends React.Component {
             },
 
             currentPeriod: 'month',
-            startDate: '',
-            endDate: '',
+            startDate: '2011-10-05T14:48:00.000Z',
+            endDate: '2011-10-05T14:48:00.000Z',
 
             settingVisible: false,
 
@@ -95,7 +95,6 @@ export class BudgetScreen extends React.Component {
             }
         })
 
-        console.log(this.state)
     }
 
     setUpBudgetData = (budgetData) => {
@@ -116,8 +115,8 @@ export class BudgetScreen extends React.Component {
             }
 
             this.setState({
-                startDate: budgetData[i].ngaybatdau,
-                endDate: budgetData[i].ngayketthuc,
+                startDate: new Date(budgetData[i].ngaybatdau).toISOString(),
+                endDate: new Date(budgetData[i].ngayketthuc).toISOString(),
             })
         }
     }
@@ -131,7 +130,6 @@ export class BudgetScreen extends React.Component {
     render() {
         const buttonWidth = Dimensions.get('window').width - 100;
 
-
         return (
             <SafeAreaView style={styles.container}>
                 {
@@ -141,20 +139,17 @@ export class BudgetScreen extends React.Component {
                             <ScrollView showsVerticalScrollIndicator={false}>
                                 {/* Banner Photo */}
                                 <View style={{ height: 400 }}>
-                                    <Image
-                                        source={images.backgroundBlue}
-                                        resizeMode='cover'
-                                        style={{
-                                            height: '100%',
-                                            width: '100%'
-                                        }}
-                                    />
+
+                                    <View style={{ flex: 1, backgroundColor: COLORS.lightBlue }}>
+
+                                    </View>
                                 </View>
 
                                 {/* Detail of Budget */}
                                 <View style={styles.detailBudget}>
                                     <TabSwitcher
-                                        text="TeXT"
+
+                                        text={format(new Date(this.state.startDate), 'dd MMM') + ' - ' + format(new Date(this.state.endDate), 'dd MMM')}
                                         onTimeTextPress={this.showSettingScreen} />
 
                                     <IncomeReportView
@@ -182,8 +177,12 @@ export class BudgetScreen extends React.Component {
                                     income={this.state.income}
                                     expense={this.state.expense}
                                     balance={this.state.balance}
+                                    isHaveBudgetData={this.state.isHaveBudgetData}
                                     isVisible={this.state.settingVisible}
-                                    onRequestClose={() => { this.setState({ settingVisible: false }) }}
+                                    onRequestClose={() => {
+                                        this.setState({ settingVisible: false })
+                                        this.getAllBudgetData()
+                                    }}
                                 />
 
                             </ScrollView>
@@ -201,14 +200,16 @@ export class BudgetScreen extends React.Component {
                             </TouchableOpacity>
 
                             <BudgetSettingModal
+                                income={this.state.income}
+                                expense={this.state.expense}
+                                balance={this.state.balance}
                                 isVisible={this.state.settingVisible}
+                                isHaveBudgetData={this.state.isHaveBudgetData}
                                 onRequestClose={() => {
-
                                     console.log("EXIT SETTINGGGG")
                                     this.setState({ settingVisible: false })
-                                    // this.getAllBudgetData()
+                                    this.getAllBudgetData()
                                 }}
-                                onRequestClose={() => { this.setState({ settingVisible: false }) }}
                             />
                         </View>
                 }

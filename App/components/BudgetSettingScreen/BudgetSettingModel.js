@@ -71,11 +71,10 @@ export class BudgetSettingModal extends Component {
             )
         }
         else {
-
             try {
                 if (this.state.income != 0) {
                     var value = {
-                        // budgetId: '60c2d5fe651fc49ab59d4400',
+                        budgetId: (this.props.income.idmuctieu != '') ? this.props.income.idmuctieu : null,
                         userId: sessionStore.activeWalletId,
                         name: this.state.name,
                         amount: parseInt(this.state.income),
@@ -88,7 +87,7 @@ export class BudgetSettingModal extends Component {
 
                 if (this.state.expense != 0) {
                     var value = {
-                        // budgetId: '60c2d5fe651fc49ab59d4400',
+                        budgetId: (this.props.expense.idmuctieu != '') ? this.props.expense.idmuctieu : null,
                         userId: sessionStore.activeWalletId,
                         name: this.state.name,
                         amount: parseInt(this.state.expense),
@@ -101,7 +100,7 @@ export class BudgetSettingModal extends Component {
 
                 if (this.state.balance != 0) {
                     var value = {
-                        // budgetId: '60c2d5fe651fc49ab59d4400',
+                        budgetId: (this.props.balance.idmuctieu != '') ? this.props.balance.idmuctieu : null,
                         userId: sessionStore.activeWalletId,
                         name: this.state.name,
                         amount: parseInt(this.state.balance),
@@ -132,8 +131,6 @@ export class BudgetSettingModal extends Component {
                     ]
                 )
             }
-
-
         }
 
     }
@@ -207,9 +204,11 @@ export class BudgetSettingModal extends Component {
                                 <TextInput
                                     style={{
                                         height: '100%',
+                                        paddingLeft: 4,
                                         fontSize: 17
                                     }}
                                     placeholder="Type your income target"
+                                    defaultValue={(this.props.income.sotienmuctieu != 1) ? this.props.income.sotienmuctieu.toString() : ' '}
                                     onChangeText={number => {
                                         console.log(number)
 
@@ -227,9 +226,11 @@ export class BudgetSettingModal extends Component {
                                 <TextInput
                                     style={{
                                         height: '100%',
+                                        paddingLeft: 4,
                                         fontSize: 17
                                     }}
                                     placeholder="Type your expense target"
+                                    defaultValue={(this.props.expense.sotienmuctieu != 1) ? this.props.expense.sotienmuctieu.toString() : ' '}
                                     onChangeText={number => {
                                         console.log(number)
 
@@ -247,9 +248,11 @@ export class BudgetSettingModal extends Component {
                                 <TextInput
                                     style={{
                                         height: '100%',
+                                        paddingLeft: 4,
                                         fontSize: 17
                                     }}
                                     placeholder="Type your balance target"
+                                    defaultValue={(this.props.balance.sotienmuctieu != 1) ? this.props.balance.sotienmuctieu.toString() : ' '}
                                     onChangeText={number => {
                                         console.log(number)
 
@@ -271,7 +274,9 @@ export class BudgetSettingModal extends Component {
 
                         <TouchableOpacity
                             style={{ paddingTop: 16, flex: 1, justifyContent: 'center', marginRight: 16, marginLeft: 16 }}
-
+                            onPress={() => {
+                                console.log(this.props.income)
+                            }}
                         >
                             <View style={[styles.button, { backgroundColor: COLORS.red }]}>
                                 <Text style={{ fontSize: 17, color: COLORS.white }}> DELETE </Text>

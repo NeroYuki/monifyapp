@@ -6,6 +6,7 @@ export const plus = require('../images/plus-icon.png')
 export const setting = require('../images/setting-icon.png')
 export const plusUnfill = require('../images/add-icon-unfill.png')
 export const trash = require('../images/trash-icon.png')
+export const earth = require('../images/earth-icon.png')
 
 export const foodIcon = require('../images/food-icon.png')
 export const bonusIcon = require('../images/bonus-icon.png')
@@ -35,5 +36,6 @@ export default {
     housewareIcon,
     investmentIcon,
     salaryIcon,
-    petrolIcon
+    petrolIcon,
+    earth,
 }

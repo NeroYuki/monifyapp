@@ -4,6 +4,7 @@ import { updateTaiKhoan } from '../services/TaiKhoanCRUD';
 import { saveTransaction } from './Component-TransactionEditor';
 import { createLoanPayment } from './Screen-payment';
 import sessionStore from './sessionStore';
+import { queryHangMucGiaoDich } from '../services/HangMucGiaoDichCRUD';
 
 
 export const fetchLoan= (loanId) => new Promise((resolve, reject) => {
@@ -43,16 +44,36 @@ export const saveLoan= ({loanId,loanName, color, amount, expire_on, interest, cr
                 sotientradukien: amount,  
             },
         }
-        insertTaiKhoan(newtaikhoanno).then((tk)=>{
-            //TODO: make insert transaction
-            // saveTransaction({
-            //     note: 'Receiving money from loan',
-            //     amount: amount, 
-            //     walletId: applied_wallet_id, 
-            //     occur_date: new Date(), 
-            //     categoryId:             
+        insertTaiKhoan(newtaikhoanno).then( async (tk)=>{
+            let userid = new BSON.ObjectID(sessionStore.activeWalletId)
+            let catid =JSON.parse(JSON.stringify(new BSON.ObjectID()))
+            let temp = await(queryHangMucGiaoDich({tenhangmuc:'Default',loaihangmuc:'ThuNhap'}).then((tk)=>{
+                if (tk==[]){
+                    return reject({result:false,message:'khong tim thay hang muc giao dich'})
+                }
+                else {
+                    catid = JSON.parse(JSON.stringify(tk[0].idhangmucgiaodich))
+                }
+            },(er)=>{
+                reject(er)
+            }))
             
-            // })
+            //TODO: make insert transaction
+            let res = await saveTransaction({
+                userId: userid,
+                note: 'Receiving money from loan',
+                amount: amount, 
+                walletId: applied_wallet_id, 
+                occur_date: new Date(), 
+                categoryId: catid         
+            })
+            if (res.result === false) {
+                console.log(res)
+                return resolve({
+                    result: false,
+                    message: 'khong tao duoc giao dich'
+                })
+            }
             // if(applied_wallet_id != "")createLoanPayment({from_wallet_id:applied_wallet_id,for_loan_id:tk.idtaikhoan,amount:amount})
             return resolve({
                 result: true,
@@ -102,7 +123,7 @@ export const saveLoan= ({loanId,loanName, color, amount, expire_on, interest, cr
 export const queryLoan=({loanName, minAmount, maxAmount, expire_in_days}) => new Promise((resolve, reject) => {
     let today = new Date()
     let endday = today.addDays(expire_in_days)
-    queryTaiKhoan({deactivate:false,taikhoanno: true,tentaikhoan:loanName, nominAmount:minAmount ,nomaxAmount:maxAmount}).then((rs)=> {
+    queryTaiKhoan({taikhoanno: true,tentaikhoan:loanName, nominAmount:minAmount ,nomaxAmount:maxAmount}).then((rs)=> {
         let rsarr=[]
         rs.forEach(element => {
             //if(element.no.expire_on<=expire_in_days)
@@ -114,7 +135,8 @@ export const queryLoan=({loanName, minAmount, maxAmount, expire_in_days}) => new
                     amount: element.no.sotien,
                     expire_on: element.no.ngaytradukien, 
                     interest: element.no.laisuatno,
-                    creationDate: element.no.ngaybatdauno
+                    creationDate: element.no.ngaybatdauno,
+                    deactivate: element.deactivate,
                 }
             )
         });

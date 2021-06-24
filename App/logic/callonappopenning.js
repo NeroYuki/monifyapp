@@ -6,6 +6,8 @@ import catIcon from '../assets/constants/icons'
 import sessionStore from '../logic/sessionStore'
 import { querywallet } from "./Screen-wallet"
 import { queryTaiKhoan, updateTaikhoanTietKiem, updateTaikhoanNo } from "../services/TaiKhoanCRUD"
+import { fetchBudget } from "./Screen-budget"
+import { fetchTransaction } from "./Component-TransactionEditor"
 
 export const checkInitialLaunch = () => new Promise((resolve, reject) => {
     //check if there is any user account
@@ -90,11 +92,11 @@ export const checkLoansForCycle = () => new Promise((resolve,reject)=>{
                     }          
                 }
             }
-
         });
         resolve(rs)
     },((er)=> {console.error(er); reject(er)}))
 })
+
 export const checkSavingsForCycle = () => new Promise((resolve,reject)=>{
     let today= new Date()
     let rs= []
@@ -173,7 +175,16 @@ export const checkSavingsForCycle = () => new Promise((resolve,reject)=>{
         resolve(rs)
     },((er)=> reject(er)))
 })
-
+export const checkGoalForBudget = (budgetId) => new Promise((resolve,reject)=>{
+    let today = new Date()
+    fetchBudget({budgetId:budgetId}).then((bg)=>{
+        if(bg==[]) return reject({result: false,message: 'budget ko ton tai'})
+        let budget = bg[0]
+        let end_day=budget[0].ngayketthuc
+        let start_day= budget[0].ngaybatdau
+        fetchTransaction()
+    })
+})
 Date.prototype.addDays = function(days) {
     var date = new Date(this.valueOf());
     date.setDate(date.getDate() + days);
@@ -183,4 +194,29 @@ Date.prototype.addMonths = function(days) {
     var date = new Date(this.valueOf());
     date.setMonth(date.getMonth() + days);
     return date;
+}
+
+function linearRegression(y,x){
+    var lr = {};
+    var n = y.length;
+    var sum_x = 0;
+    var sum_y = 0;
+    var sum_xy = 0;
+    var sum_xx = 0;
+    var sum_yy = 0;
+
+    for (var i = 0; i < y.length; i++) {
+
+        sum_x += x[i];
+        sum_y += y[i];
+        sum_xy += (x[i]*y[i]);
+        sum_xx += (x[i]*x[i]);
+        sum_yy += (y[i]*y[i]);
+    } 
+
+    lr['slope'] = (n * sum_xy - sum_x * sum_y) / (n*sum_xx - sum_x * sum_x);
+    lr['intercept'] = (sum_y - lr.slope * sum_x)/n;
+    lr['r2'] = Math.pow((n*sum_xy - sum_x*sum_y)/Math.sqrt((n*sum_xx-sum_x*sum_x)*(n*sum_yy-sum_y*sum_y)),2);
+
+    return lr;
 }

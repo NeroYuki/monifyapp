@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { View, Modal, Text, TouchableOpacity, SafeAreaView, TextInput, ScrollView, StyleSheet } from "react-native";
+import { View, Modal, Text, TouchableOpacity, SafeAreaView, TextInput, ScrollView, StyleSheet, Alert } from "react-native";
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { COLORS } from '../../assets/constants';
@@ -56,49 +56,89 @@ export class BudgetSettingModal extends Component {
     handleSaveBudget = async () => {
         console.log("SAVE BUTTON", this.state)
 
-        if (this.state.income != '') {
-            var value = {
-                // budgetId: '60c2d5fe651fc49ab59d4400',
-                userId: sessionStore.activeWalletId,
-                name: this.state.name,
-                amount: parseInt(this.state.income),
-                loaimuctieu: 'TietKiemDenMuc', //TieuDungQuaMuc, SoDuToiThieu, TietKiemDenMuc
-                period: this.changeTypeOfPeriod(this.state.periodCurrent),
-                //year, month, week
+        if (this.state.income == 0 || this.state.expense == 0 || this.state.balance == 0) {
+            Alert.alert(
+                "Something wrong!",
+                "Please fill in all the field",
+                [
+                    {
+                        text: "Cancel",
+                        onPress: () => console.log("Cancel Pressed"),
+                        style: "cancel"
+                    },
+                    { text: "OK", onPress: () => console.log("OK Pressed") }
+                ]
+            )
+        }
+        else {
+
+            try {
+                if (this.state.income != 0) {
+                    var value = {
+                        // budgetId: '60c2d5fe651fc49ab59d4400',
+                        userId: sessionStore.activeWalletId,
+                        name: this.state.name,
+                        amount: parseInt(this.state.income),
+                        loaimuctieu: 'TietKiemDenMuc', //TieuDungQuaMuc, SoDuToiThieu, TietKiemDenMuc
+                        period: this.changeTypeOfPeriod(this.state.periodCurrent),
+                        //year, month, week
+                    }
+                    console.log("INCOME SAVE: ", JSON.parse(JSON.stringify(await saveBudget(value))))
+                }
+
+                if (this.state.expense != 0) {
+                    var value = {
+                        // budgetId: '60c2d5fe651fc49ab59d4400',
+                        userId: sessionStore.activeWalletId,
+                        name: this.state.name,
+                        amount: parseInt(this.state.expense),
+                        loaimuctieu: 'TieuDungQuaMuc', //TieuDungQuaMuc, SoDuToiThieu, TietKiemDenMuc
+                        period: this.changeTypeOfPeriod(this.state.periodCurrent), //year, month, week
+                    }
+
+                    console.log("EXPENSE SAVE: ", JSON.parse(JSON.stringify(await saveBudget(value))))
+                }
+
+                if (this.state.balance != 0) {
+                    var value = {
+                        // budgetId: '60c2d5fe651fc49ab59d4400',
+                        userId: sessionStore.activeWalletId,
+                        name: this.state.name,
+                        amount: parseInt(this.state.balance),
+                        loaimuctieu: 'SoDuToiThieu', //TieuDungQuaMuc, SoDuToiThieu, TietKiemDenMuc
+                        period: this.changeTypeOfPeriod(this.state.periodCurrent), //year, month, week
+                    }
+
+                    console.log("BALANCE SAVE: ", JSON.parse(JSON.stringify(await saveBudget(value))))
+                }
+
+                Alert.alert(
+                    "Successfully to create budget",
+                    [
+                        { text: "OK", onPress: () => console.log("OK Pressed") }
+                    ]
+                )
+            } catch (error) {
+                Alert.alert(
+                    "Something wrong!",
+                    { error },
+                    [
+                        {
+                            text: "Cancel",
+                            onPress: () => console.log("Cancel Pressed"),
+                            style: "cancel"
+                        },
+                        { text: "OK", onPress: () => console.log("OK Pressed") }
+                    ]
+                )
             }
-            console.log("INCOME SAVE: ", JSON.parse(JSON.stringify(await saveBudget(value))))
+
+
         }
 
-
-        if (this.state.expense != '') {
-            var value = {
-                // budgetId: '60c2d5fe651fc49ab59d4400',
-                userId: sessionStore.activeWalletId,
-                name: this.state.name,
-                amount: parseInt(this.state.expense),
-                loaimuctieu: 'TieuDungQuaMuc', //TieuDungQuaMuc, SoDuToiThieu, TietKiemDenMuc
-                period: this.changeTypeOfPeriod(this.state.periodCurrent), //year, month, week
-            }
-
-            console.log("EXPENSE SAVE: ", JSON.parse(JSON.stringify(await saveBudget(value))))
-        }
-
-        if (this.state.balance != '') {
-            var value = {
-                // budgetId: '60c2d5fe651fc49ab59d4400',
-                userId: sessionStore.activeWalletId,
-                name: this.state.name,
-                amount: parseInt(this.state.balance),
-                loaimuctieu: 'SoDuToiThieu', //TieuDungQuaMuc, SoDuToiThieu, TietKiemDenMuc
-                period: this.changeTypeOfPeriod(this.state.periodCurrent), //year, month, week
-            }
-
-            console.log("BALANCE SAVE: ", JSON.parse(JSON.stringify(await saveBudget(value))))
-        }
     }
 
     render() {
-
         console.log("BUDGET SETTING - render")
         return (
             <Modal
@@ -114,7 +154,7 @@ export class BudgetSettingModal extends Component {
                             <TouchableOpacity style={{ marginLeft: 16, height: 32, width: 32 }} >
                                 <Icon size={32} name='close' onPress={this.props.onRequestClose} />
                             </TouchableOpacity>
-                            <Text style={{ flex: 1, textAlign: 'center', marginRight: 16 }}> EDIT BUDGET </Text>
+                            <Text style={{ flex: 1, textAlign: 'center', marginRight: 16 }}> BUDGET </Text>
                             <View style={{ height: 32, width: 32, marginRight: 16 }}></View>
                         </View>
 

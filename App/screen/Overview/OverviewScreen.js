@@ -671,82 +671,85 @@ export class OverviewScreen extends Component {
         console.log("Overview Screen: - Render")
 
         return (
-            <SafeAreaView style={{ flex: 1 }}>
-                <ScrollView style={{ flex: 1 }}>
-                    <View style={{ flex: 1 }}>
+            <View style={{ flex: 1 }}>
+                <SafeAreaView style={{ flex: 0, backgroundColor: '#ff92a7' }} />
+                <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightGray }}>
+                    <ScrollView style={{ flex: 1 }}>
+                        <View style={{ flex: 1, backgroundColor: COLORS.lightGray }}>
 
-                        <WalletHeader
-                            data={this.state.overviewData}
-                            currentTab={this.state.chartView}
-                            onCategoriesPress={this.onChartCategoriesPress}
-                            onListPress={this.onListPress}
+                            <WalletHeader
+                                data={this.state.overviewData}
+                                currentTab={this.state.chartView}
+                                onCategoriesPress={this.onChartCategoriesPress}
+                                onListPress={this.onListPress}
 
-                            handleChooseWallet={this.handleShowListOfWallet}
-                        />
-
-                        <View style={{ flex: 1 }}>
-                            <TabSwitcher
-                                text={this.state.dateTime.currentTime}
-                                onTimeTextPress={this.onTimeTextPress}
-                                decreasePeriod={this.decreasePeriod}
-                                increasePeriod={this.increasePeriod}
+                                handleChooseWallet={this.handleShowListOfWallet}
                             />
 
-                            <this.reportView />
-                        </View>
-                    </View>
-
-                    {
-                        (this.state.isLoading)
-                            ? <View></View>
-                            : <View>
-                                <TransactionModal
-                                    isVisible={this.state.visible}
-                                    onRequestClose={() => this.setState({ visible: false })}
-                                    currentData={this.state.currentData}
-                                    onCategoriesPress={this.onCategoriesPress}
-                                    onRecurringPress={this.onRecurringPress}
+                            <View style={{ flex: 1 }}>
+                                <TabSwitcher
+                                    text={this.state.dateTime.currentTime}
+                                    onTimeTextPress={this.onTimeTextPress}
+                                    decreasePeriod={this.decreasePeriod}
+                                    increasePeriod={this.increasePeriod}
                                 />
 
-                                <ExpenseOrIncomeModal
-                                    isVisible={this.state.expenseOrIncomeVisible}
-                                    currentOption='Expense'
-                                    changeShowingOption={this.changeShowingOption}
-                                    closePeriod={() => {
-                                        this.setState({ expenseOrIncomeVisible: false })
-                                    }}
-                                />
-
-                                <TimespanPicker
-                                    isVisible={this.state.periodVisible}
-                                    currentPeriod={this.state.currentPeriod}
-                                    handleChangePeriod={this.handleChangePeriod}
-
-                                    startDate={this.state.startDate}
-                                    endDate={this.state.endDate}
-                                    handleSetStartDate={(value) => this.setState({ startDate: value })}
-                                    handleSetEndDate={(value) => this.setState({ endDate: value })}
-
-                                    onRequestClose={() => {
-                                        this.setState({ periodVisible: false })
-                                    }}
-                                />
-
-                                <ChangeWalletModal
-                                    isVisible={this.state.changeWalletModalVisible}
-                                    data={this.state.walletList}
-                                    currentWallet={this.state.currentWallet}
-                                    handleChangeWallet={this.handleChangeWallet}
-                                    closePeriod={() => {
-                                        this.setState({ changeWalletModalVisible: false })
-                                    }}
-                                />
+                                <this.reportView />
                             </View>
-                    }
+                        </View>
 
-                </ScrollView>
+                        {
+                            (this.state.isLoading)
+                                ? <View></View>
+                                : <View>
+                                    <TransactionModal
+                                        isVisible={this.state.visible}
+                                        onRequestClose={() => this.setState({ visible: false })}
+                                        currentData={this.state.currentData}
+                                        onCategoriesPress={this.onCategoriesPress}
+                                        onRecurringPress={this.onRecurringPress}
+                                    />
 
-            </SafeAreaView>
+                                    <ExpenseOrIncomeModal
+                                        isVisible={this.state.expenseOrIncomeVisible}
+                                        currentOption='Expense'
+                                        changeShowingOption={this.changeShowingOption}
+                                        closePeriod={() => {
+                                            this.setState({ expenseOrIncomeVisible: false })
+                                        }}
+                                    />
+
+                                    <TimespanPicker
+                                        isVisible={this.state.periodVisible}
+                                        currentPeriod={this.state.currentPeriod}
+                                        handleChangePeriod={this.handleChangePeriod}
+
+                                        startDate={this.state.startDate}
+                                        endDate={this.state.endDate}
+                                        handleSetStartDate={(value) => this.setState({ startDate: value })}
+                                        handleSetEndDate={(value) => this.setState({ endDate: value })}
+
+                                        onRequestClose={() => {
+                                            this.setState({ periodVisible: false })
+                                        }}
+                                    />
+
+                                    <ChangeWalletModal
+                                        isVisible={this.state.changeWalletModalVisible}
+                                        data={this.state.walletList}
+                                        currentWallet={this.state.currentWallet}
+                                        handleChangeWallet={this.handleChangeWallet}
+                                        closePeriod={() => {
+                                            this.setState({ changeWalletModalVisible: false })
+                                        }}
+                                    />
+                                </View>
+                        }
+
+                    </ScrollView>
+
+                </SafeAreaView>
+            </View >
 
         )
     }

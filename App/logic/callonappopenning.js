@@ -151,23 +151,162 @@ export const checkSavingsForCycle = () => new Promise((resolve,reject)=>{
     },((er)=> reject(er)))
 })
 export const checkGoalForBudget = (budgetId) => new Promise(async(resolve,reject)=>{
-    let today = new Date()
+    let today = new Date().setHours(0,0,0,0)
     fetchBudget({budgetId:budgetId}).then((bg)=>{
         if(bg==[]) return reject({result: false,message: 'budget ko ton tai'})
         //budgetid
         let budget = bg[0]
-        //startday + endday
-        let end_day=budget[0].ngayketthuc
+        //startday + endday for calculation 
+        let end_day=budget.ngayketthuc.setHours(0,0,0,0)
         if(today<end_day) end_day = today
-        let start_day= budget[0].ngaybatdau
-        //query all transaction
-        if(budget.idnguoidung==null) return reject({result:false,message: 'muc tieu khong co tai khoan'})
-        let transaclist = await(queryTransactions({start_day:start_day,end_day:end_day,walletId:budget.idnguoidung}))
+        let start_day= budget.ngaybatdau.setHours(0,0,0,0)
         //fetch wallet info get current money amount
         let wallet = await(fetchWallet(budget.idnguoidung))
+        let currentmoney = wallet.amount
+        // số tiền mục tiêu
+        let goalmoney = budget.sotienmuctieu
+        //query all transaction
+        if(budget.idnguoidung==null) return reject({result:false,message: 'muc tieu khong co tai khoan'})
+        let queryresult = await(queryTransactions({start_day:start_day,end_day:end_day,walletId:wallet.walletId}))
+        let transaclist=queryresult.trans
+        let income = queryresult.income
+        let expense= queryresult.expense
+        //
+        //new mapdata
+        let transactionmapthunhap = new Map()
+        let transactionmaptieudung = new Map()
+        let transmapresult = new Map()
+        // tao array ngay
+        let dayarr = getDaysArray(start_day,end_day)
+        //khoi tao gia tri ban dau
+        dayarr.forEach(element => {
+            element.setHours(0,0,0,0)   //có thể cần tới
+            transactionmapthunhap.set(element,0)
+            transactionmaptieudung.set(element,0)
+            transmapresult.set(element,0)
+        });
 
+        //sap xep cac transaction vao map
+        transaclist.forEach(element => {
+            element.time.setHours(0,0,0,0)       //có thể cần tới 
+            if (element.data.sotientieudung)
+                transactionmaptieudung.set(element.time,element.data.sotientieudung) //expense
+            else if (element.data.sotienthunhap)
+                transactionmapthunhap.set(element.time,element.data.sotienthunhap) //income
+        });
+        // khoi tao gia tri cho linear regession
+        let datearr=[]
+        let valuearr=[]
+        let tempamountofmoney = 0
+        let basemoney = currentmoney - income + expense
+
+        //check loại mục tiêu nào để tính 
+        if(budget.loaimuctieu.tietkiemdenmuc==true){
+            transactionmapthunhap.forEach((value,key)=>{
+                tempamountofmoney += value
+                transmapresult.set(key,tempamountofmoney)
+            })
+
+            //
+            transmapresult.forEach((value,key)=>{
+                datearr.push( Math.floor((key.getTime()-start_day.getTime()) / (1000 * 3600 * 24 * 30)))
+                valuearr.push(value)
+            })
+        }
+        else if(budget.loaimuctieu.tieudungquamuc==true){
+            transactionmaptieudung.forEach((value,key)=>{
+                tempamountofmoney += value
+                transmapresult.set(key,tempamountofmoney)
+            })
+
+            //
+            transmapresult.forEach((value,key)=>{
+                datearr.push( Math.floor((key.getTime()-start_day.getTime()) / (1000 * 3600 * 24 * 30)))
+                valuearr.push(value)
+            })
+        }
+
+        else if(budget.loaimuctieu.sodutoithieu==true){
+            transactionmapthunhap.forEach((value,key)=>{
+                tempamountofmoney += value
+                transmapresult.set(key,tempamountofmoney)
+            })
+            transactionmaptieudung.forEach((value,key)=>{
+                tempamountofmoney -= value
+                transmapresult.set(key,tempamountofmoney)
+            })
+            //
+            transmapresult.forEach((value,key)=>{
+                datearr.push( Math.floor((key.getTime()-start_day.getTime()) / (1000 * 3600 * 24 * 30)))
+                valuearr.push(basemoney+value)
+            })
+        }else {
+            reject({result:false,message:'muc tieu ca nhan khong co loai muc tieu' })
+        }
+
+
+        //linear progression
+        let linearresult = linearRegression(valuearr,datearr)
+        //gia tri sau khi predict
+        let predictresult = linearresult.interest + linearresult.slope*((budget.ngayketthuc.setHours(0,0,0,0).getTime()-start_day.getTime())/ (1000 * 3600 * 24 * 30))
+        
+        if(budget[0].ngayketthuc.setHours(0,0,0,0)>=today){   //nếu như chưa quá hạn mục tiêu
+            if(budget.loaimuctieu.tietkiemdenmuc==true){    // tietkiem
+                if(predictresult > goalmoney){
+                    resolve({result:true, message:'bạn có khả năng cao sẽ hoàn thành mục tiêu thu nhập đề ra'})
+                }
+                else{
+                    resolve({result:true, message:'thu nhập của bạn có khả năng sẽ chưa đủ để hoàn thành mục tiêu'})
+                }
+            }else if(budget.loaimuctieu.tieudungquamuc==true){ //tieu dung
+                if(predictresult > goalmoney){
+                    resolve({result:true, message:'tỉ lệ cao rằng bạn sẽ vượt quá mức tiêu dùng bạn đề ra'})
+                }
+                else{
+                    resolve({result:true, message:'bạn có khả năng cao sẽ hoàn thành mục tiêu chi tiêu đề ra'})
+                }
+            }else if(budget.loaimuctieu.sodutoithieu==true){ // so du
+                if(predictresult > goalmoney){
+                    resolve({result:true, message:'chương trình dự đoán rằng số dư của bạn sẽ vượt quá mục tiêu đề ra'})
+                }
+                else{
+                    resolve({result:true, message:'chương trình dự đoán rằng số dư của bạn sẽ không vượt quá'})
+                }
+            }
+        }
+        else{           // nếu như quá hạn 
+            if(budget.loaimuctieu.tietkiemdenmuc==true){   // tiết kiệm
+                if(transmapresult.get(budget.ngayketthuc.setHours(0,0,0,0)) > goalmoney){
+                    resolve({result:true, message:'bạn đã hoàn thành mục tiêu'})
+                }
+                else{
+                    resolve({result:true, message:'bạn đã không hoàn thành mục tiêu'})
+                }
+            }else if(budget.loaimuctieu.tieudungquamuc==true){ //tiêu dùng
+                if(transmapresult.get(budget.ngayketthuc.setHours(0,0,0,0)) > goalmoney){
+                    resolve({result:true, message:'bạn đã không hoàn thành mục tiêu'})
+                }
+                else{
+                    resolve({result:true, message:'bạn đã hoàn thành mục tiêu'})
+                }
+            }else if(budget.loaimuctieu.sodutoithieu==true){ //số dư
+                if(transmapresult.get(budget.ngayketthuc.setHours(0,0,0,0)) > goalmoney){
+                    resolve({result:true, message:'bạn đã hoàn thành mục tiêu'})
+                }
+                else{
+                    resolve({result:true, message:'bạn đã không hoàn thành mục tiêu'})
+                }
+            }
+        }
     })
 })
+var getDaysArray = function(start, end) {
+    for(var arr=[],dt=new Date(start); dt<=end; dt.setDate(dt.getDate()+1)){
+        arr.push(new Date(dt));
+    }
+    return arr;
+};
+
 Date.prototype.addDays = function(days) {
     var date = new Date(this.valueOf());
     date.setDate(date.getDate() + days);

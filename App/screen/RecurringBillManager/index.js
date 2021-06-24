@@ -3,7 +3,7 @@ import { ScrollView, Text, View, TouchableOpacity } from "react-native";
 import { FAB, Searchbar, Dialog, Paragraph, Button } from "react-native-paper";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RecurringBillEntry, RecurringBillSearchModal } from "../../components";
-import { queryBill } from "../../logic/Screen-RecurringBillManager";
+import { pauseBill, queryBill, resumeBill } from "../../logic/Screen-RecurringBillManager";
 import { stylesheet } from './style'
 import moment from 'moment'
 
@@ -13,22 +13,6 @@ export class RecurringBillManager extends Component {
 
         this.state = {
             billList: [
-                {
-                    id: '1',
-                    name: 'Netflix Subscription',
-                    next_tran: '12 days',
-                    amount: '202.000 đ',
-                    desc: 'Monthly subscription for Netflix',
-                    color: '#ffdddd'
-                },
-                {
-                    id: '2',
-                    name: 'Electricity Bill',
-                    next_tran: '8 days',
-                    amount: '0 đ',
-                    desc: 'Monthly electricity bill',
-                    color: '#ddffdd',
-                },
             ],
             advanceSearchVisible: false,
             deletePromptVisible: false,
@@ -36,6 +20,9 @@ export class RecurringBillManager extends Component {
             quickQueryString: "",
             unsubscribe: undefined,
         }
+
+        this.handlePauseBill = this.handlePauseBill.bind(this)
+        this.handleResumeBill = this.handleResumeBill.bind(this)
     }
 
     componentDidMount() {
@@ -71,14 +58,31 @@ export class RecurringBillManager extends Component {
         })
     }
 
+    async handlePauseBill(id) {
+        console.log(id)
+        let result = await pauseBill({billId: id})
+        console.log(result)
+        this.fetchData()
+    }
+
+    async handleResumeBill(id) {
+        console.log(id)
+        let result = await resumeBill({billId: id})
+        console.log(result)
+        this.fetchData()
+    }
+
     render() {
         const style = stylesheet
         const billDisplay = this.state.billList.map((val) => {
             //TODO: calculate next transaction
-            const id = JSON.stringify(val.idgiaodichtheochuky)
+            const id = new String(val.idgiaodichtheochuky).toString()
             //console.log(val.idgiaodichtheochuky)
             return <RecurringBillEntry
-                key={id} style={[style.bill_entry, {backgroundColor: val.color}]} name={val.name} next_tran={moment(JSON.stringify(val.thoigianbatdau), "YYYY-MM-DDTHH:mm:ss.SSSZ").format("DD/MM/YYYY")} amount={((val.sotienthunhap || val.sotientieudung) + " đ")} desc={val.ghichu}
+                key={id} style={[style.bill_entry, {backgroundColor: val.color}]} name={val.name + ((val.pause) ? " (Paused)" : "")} next_tran={moment(JSON.stringify(val.thoigianbatdau), "YYYY-MM-DDTHH:mm:ss.SSSZ").format("DD/MM/YYYY")} amount={((val.sotienthunhap || val.sotientieudung) + " đ")} desc={val.ghichu}
+                paused={val.pause}
+                onPausePress={() => {this.handlePauseBill(id)}}
+                onResumePress={() => {this.handleResumeBill(id)}}
                 onViewPress={() => {this.props.navigation.navigate("RecurringBillEditor", {mode: "view", id: id})}}
                 onDeletePress={() => {this.setState({deletePromptVisible: true, selectedId: id})}}
                 onEditPress={() => {this.props.navigation.navigate("RecurringBillEditor", {mode: "edit", id: id})}}

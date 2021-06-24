@@ -51,15 +51,13 @@ export class AppearanceSetting extends Component {
     handleSaveSetting = async () => {
         console.log("Save Setting")
 
-        console.log(sessionStore.activeWalletId)
-
-        // var caidattest = {
-        //     idnguoidung: sessionStore.activeUserId,
-        //     loaitien: this.state.currencyCurrent,
-        //     chedo: this.state.appThemeCurrent,
-        //     ngonngu: this.state.languageCurrent,
-        //     chedonghiemngat: (this.state.strictModeCurrent == 'Enable') ? true : false,
-        // }
+        var caidattest = {
+            idnguoidung: sessionStore.activeUserId,
+            loaitien: this.state.currencyCurrent,
+            chedo: this.state.appThemeCurrent,
+            ngonngu: this.state.languageCurrent,
+            chedonghiemngat: (this.state.strictModeCurrent == 'Enable') ? true : false,
+        }
 
         // console.log(await saveSetting(caidattest))
     }
@@ -144,6 +142,7 @@ export class AppearanceSetting extends Component {
                     icon="content-save"
                     onPress={async () => {
                         const data = {
+                            idnguoidung: sessionStore.activeUserId,
                             loaitien: this.state.currencyCurrent,
                             ngonngu: this.state.languageCurrent,
                             chedonghiemngat: (this.state.strictModeCurrent === "Enable") ? true : false,

@@ -13,8 +13,7 @@ const useComponentWillMount = (func) => {
 function RootNavigator() {
     //This is the very first thing the app will try to run before any rendering
     useComponentWillMount(async () => {
-        let res = await checkInitialLaunch()
-        console.log(res)
+        
     });
 
     return (

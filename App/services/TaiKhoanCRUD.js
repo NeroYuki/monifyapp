@@ -107,7 +107,6 @@ export const updateTaikhoanNo = ({ taikhoannoid, sotienthem, cycle, sotienmoi })
         if (taiKhoanUpdated.no != null) {
           if (sotienthem) taiKhoanUpdated.no.sotien += sotienthem;
           if (sotienmoi) taiKhoanUpdated.no.sotien = sotienmoi;
-          taiKhoanUpdated.no.sotien = cycle;
           resolve(true)
         }
         else resolve(false)
@@ -153,7 +152,7 @@ export const queryTaiKhoan = (option) =>
     Realm.open(data).then(realm => {
       realm.write(() => {
         let Target = realm.objects(TaiKhoanSchema.name)
-        if (option.deactivate) {
+        if (option.deactivate !== undefined) {
           Target = Target.filtered('deactivate==$0', option.deactivate)
         }
         if (option.tentaikhoan) {

@@ -9,7 +9,7 @@ export const COLORS = {
     blueText: '#007AFF',
 
     black: '#000000',
-    blackBlur: 'rgba(0, 0, 0, 0.2)',
+    blackBlur: 'rgba(0, 0, 0, 0.6)',
 
     white: '#FFFFFF',
     lightWhite: 'rgba(255, 255, 255, 0.5)',

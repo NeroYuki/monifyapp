@@ -9,13 +9,14 @@ import { ItemsOverView } from "../../components/OverviewScreen/ItemsOverview";
 import { RecurringModal } from "../../components/TransactionEditor/RecurringModal";
 import { TransactionModal } from "../../components/TransactionEditor/TransactionModal";
 
-import Moment from 'moment'
 import { format, addDays, addMonths, addYears, startOfWeek, endOfWeek, startOfMonth, endOfMonth, startOfYear, endOfYear } from 'date-fns'
 import { queryTranCategories, queryTransactions } from "../../logic/Screen-Overview";
 import { fetchCategory } from "../../logic/Component-CategoryEditor";
 import { percentageFormat } from "../../utils/formatNumber";
 import { increase_brightness } from "../../utils/increase_brightness";
 import sessionStore from "../../logic/sessionStore";
+import { ChangeWalletModal } from "../../components/OverviewScreen/ChangeWalletModal";
+import { querywallet } from "../../logic/Screen-wallet";
 
 export class OverviewScreen extends Component {
     constructor(props) {
@@ -30,6 +31,7 @@ export class OverviewScreen extends Component {
             chartView: false,
             periodVisible: false,
             expenseOrIncomeVisible: false,
+            changeWalletModalVisible: false,
 
             // All trans data 
             overviewData: {},
@@ -92,6 +94,10 @@ export class OverviewScreen extends Component {
                 ]
             },
 
+            // Wallet 
+            walletList: [],
+            currentWallet: '',
+
             // Categories - Tab
             currentOption: 'Expense', // Income
 
@@ -124,11 +130,20 @@ export class OverviewScreen extends Component {
         console.log("Overview Screen: - Component Did Mount")
 
         try {
-            const [overviewData, categoriesData, dateTime] = await Promise.all([
-                this.getDataOverview(), this.getPercentageData(), this.getDate()
+            const [overviewData, categoriesData, dateTime, walletList] = await Promise.all([
+                this.getDataOverview(), this.getPercentageData(), this.getDate(), this.getListOfWallet()
             ]);
 
-            this.setState({ isLoading: false, overviewData, categoriesData, dateTime });
+            const currentWallet = sessionStore.activeWalletId
+
+            this.setState({
+                isLoading: false,
+                overviewData,
+                categoriesData,
+                dateTime,
+                walletList,
+                currentWallet
+            });
 
             this.parseDataToProps(overviewData)
             this.getDataAtCategoriesTab()
@@ -145,6 +160,11 @@ export class OverviewScreen extends Component {
         if (prevState.currentOption != this.state.currentOption) {
             this.getDataAtCategoriesTab()
         }
+    }
+
+    getListOfWallet = async () => {
+        let data = await querywallet({ walletName: '' })
+        return data
     }
 
     getDate() {
@@ -576,6 +596,51 @@ export class OverviewScreen extends Component {
         })
     }
 
+    handleShowListOfWallet = () => {
+        console.log("CHOOSE WALLET")
+
+        this.setState({
+            changeWalletModalVisible: true
+        })
+    }
+
+    handleChangeWallet = async (val) => {
+        console.log("HANDLE CHANGE WALLET ID: ", val)
+
+        this.setState({
+            currentWallet: val,
+            changeWalletModalVisible: !this.state.changeWalletModalVisible
+        })
+
+        sessionStore.activeWalletId = val
+
+        try {
+            const [overviewData, categoriesData, dateTime, walletList] = await Promise.all([
+                this.getDataOverview(), this.getPercentageData(), this.getDate(), this.getListOfWallet()
+            ]);
+
+            const currentWallet = sessionStore.activeWalletId
+
+            this.setState({
+                isLoading: false,
+                overviewData,
+                categoriesData,
+                dateTime,
+                walletList,
+                currentWallet
+            });
+
+            this.parseDataToProps(overviewData)
+            this.getDataAtCategoriesTab()
+        } catch (error) {
+
+            console.log("OVERVIEW: LOADING......", error)
+            this.setState({
+                isLoading: false
+            })
+        }
+    }
+
     // MARK: - ACTION
     reportView = () => {
         console.log("Overview Screen: - Report view")
@@ -601,8 +666,7 @@ export class OverviewScreen extends Component {
     }
 
     render() {
-
-        console.log("Overview Screen: - Render PERIOD", this.state.currentOption)
+        console.log("Overview Screen: - Render")
 
         return (
             <SafeAreaView style={{ flex: 1 }}>
@@ -614,6 +678,8 @@ export class OverviewScreen extends Component {
                             currentTab={this.state.chartView}
                             onCategoriesPress={this.onChartCategoriesPress}
                             onListPress={this.onListPress}
+
+                            handleChooseWallet={this.handleShowListOfWallet}
                         />
 
                         <View style={{ flex: 1 }}>
@@ -649,7 +715,6 @@ export class OverviewScreen extends Component {
                                     }}
                                 />
 
-
                                 <TimespanPicker
                                     isVisible={this.state.periodVisible}
                                     currentPeriod={this.state.currentPeriod}
@@ -662,6 +727,16 @@ export class OverviewScreen extends Component {
 
                                     onRequestClose={() => {
                                         this.setState({ periodVisible: false })
+                                    }}
+                                />
+
+                                <ChangeWalletModal
+                                    isVisible={this.state.changeWalletModalVisible}
+                                    data={this.state.walletList}
+                                    currentWallet={this.state.currentWallet}
+                                    handleChangeWallet={this.handleChangeWallet}
+                                    closePeriod={() => {
+                                        this.setState({ changeWalletModalVisible: false })
                                     }}
                                 />
                             </View>

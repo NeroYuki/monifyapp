@@ -121,7 +121,7 @@ export class WalletManager extends Component {
                 </WalletSearchModal>
 
                 <WalletTransferModal isVisible={this.state.transferModalVisible}
-                    onRequestClose={() => { this.setState({ transferModalVisible: false }) }} 
+                    onRequestClose={() => { this.setState({ transferModalVisible: false }) }}
                     srcId={this.state.selectedId}>
                 </WalletTransferModal>
 

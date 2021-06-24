@@ -60,7 +60,9 @@ export class WalletHeader extends Component {
             <Surface style={style.surface}>
                 <View style={style.selector}>
                     <Text style={style.selector_text}>Overview: </Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={this.props.handleChooseWallet}
+                    >
                         <Text style={style.info_field_text_highlight}>My Wallet
                             <Icon name="chevron-down" size={20} />
                         </Text>

@@ -20,6 +20,7 @@ export class CategoriesModal extends Component {
             income_cat_list: [],
             expense_cat_list: [],
             editMode: false,
+            selectingId: "",
         }
 
         this.onAddCategoryPress = this.onAddCategoryPress.bind(this)
@@ -67,6 +68,7 @@ export class CategoriesModal extends Component {
         console.log('Add Category')
         this.setState({
             isAddCategoryPromptVisible: true,
+            selectingId: "",
         })
     }
 
@@ -104,7 +106,14 @@ export class CategoriesModal extends Component {
                                 <Text style={[style.modal_text, style.content_list_text]}>{val.type}</Text>
                             </TouchableOpacity>
                             {(this.state.editMode) && 
-                                <TouchableOpacity style={style.category_entry_content}>
+                                <TouchableOpacity style={style.category_entry_content}
+                                onPress={() => {
+                                    console.log(val)
+                                    this.setState({
+                                        isAddCategoryPromptVisible: true,
+                                        selectingId: val.id,
+                                    })
+                                }}>
                                     <Icon name="square-edit-outline" size={25} color="#fff" style={{}}></Icon>
                                 </TouchableOpacity>
                             }
@@ -137,7 +146,13 @@ export class CategoriesModal extends Component {
                                 <Text style={[style.modal_text, style.content_list_text]}>{val.type}</Text>
                             </TouchableOpacity>
                             {(this.state.editMode) && 
-                                <TouchableOpacity style={style.category_entry_content}>
+                                <TouchableOpacity style={style.category_entry_content}
+                                onPress={() => {
+                                    this.setState({
+                                        isAddCategoryPromptVisible: true,
+                                        selectingId: val.id,
+                                    })
+                                }}>
                                     <Icon name="square-edit-outline" size={25} color="#fff" style={{}}></Icon>
                                 </TouchableOpacity>
                             }
@@ -184,7 +199,7 @@ export class CategoriesModal extends Component {
                         </View>
                         <PModal visible={this.state.isAddCategoryPromptVisible} onDismiss={() => { this.setState({ isAddCategoryPromptVisible: false }) }} onRequestClose={() => { this.setState({ isAddCategoryPromptVisible: false }) }}
                             contentContainerStyle={style.transaction_container} style={style.transaction}>
-                            <CategoryEditor onDismiss={() => {
+                            <CategoryEditor editId={this.state.selectingId} onDismiss={() => {
                                 this.setState({ isAddCategoryPromptVisible: false })
                                 this.getData()
                             }} />

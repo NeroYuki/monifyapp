@@ -88,7 +88,7 @@ export const querySaving=({savingName, minAmount, maxAmount, expire_in_days}) =>
     let today = new Date()
     let endday = today
     if (expire_in_days) endday.addDays(expire_in_days)
-    queryTaiKhoan({deactivate:false, taikhoantietkiem: true,tentaikhoan:savingName, tietkiemminAmount:minAmount ,tietkiemmaxAmount:maxAmount}).then((rs)=> {
+    queryTaiKhoan({taikhoantietkiem: true,tentaikhoan:savingName, tietkiemminAmount:minAmount ,tietkiemmaxAmount:maxAmount}).then((rs)=> {
         let rsarr=[]
         //console.log(rs)
         rs.forEach(element => {
@@ -104,6 +104,7 @@ export const querySaving=({savingName, minAmount, maxAmount, expire_in_days}) =>
                     applied_wallet_id:element.tietkiem.idtkduocthuhuong,
                     early_interest:element.tietkiem.laisuattruochan,
                     creationDate: element.tietkiem.ngaybatdau,
+                    deactivate: element.deactivate
                 }
             )
         });

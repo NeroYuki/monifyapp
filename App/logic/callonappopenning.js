@@ -4,10 +4,11 @@ import { createSavingWithdraw } from "./Screen-payment"
 import { checkNguoiDung, fetchuser, login, register } from "./Screen-User"
 import catIcon from '../assets/constants/icons'
 import sessionStore from '../logic/sessionStore'
-import { querywallet } from "./Screen-wallet"
+import { fetchWallet, querywallet } from "./Screen-wallet"
 import { queryTaiKhoan, updateTaikhoanTietKiem, updateTaikhoanNo } from "../services/TaiKhoanCRUD"
 import { fetchBudget } from "./Screen-budget"
-import { fetchTransaction } from "./Component-TransactionEditor"
+import { deactivateSaving } from "./Screen-saving"
+import { queryTransactions } from "./Screen-Overview"
 
 export const checkInitialLaunch = () => new Promise((resolve, reject) => {
     //check if there is any user account
@@ -47,50 +48,45 @@ export const checkInitialLaunch = () => new Promise((resolve, reject) => {
 })
 
 export const checkLoansForCycle = () => new Promise((resolve,reject)=>{
-    let today= new Date() //get what is today
-    let rs= [] // empty result array
-
-    queryTaiKhoan({taikhoanno: true}).then((tk)=>{
-        tk.forEach(element => {
+    let rs= []
+    queryTaiKhoan({taikhoanno: true, deactivate: false}).then((tk)=>{
+        tk.forEach(async (element) => {
+            //iterate thru all loan account thats still active
+            console.log(element)
+            let no_info = element.no
+            // since lastCheckedDate is not present, reduce the number of possible case
+            //possible case:
+            //1. due date arrived
+            let today = new Date()
+            let due_date = no_info.ngaytradukien
+            let start_date = no_info.ngaybatdauno
+            let current_amount = no_info.sotien
+            let interest = no_info.laisuatno
             let id = element.idtaikhoan
-            let laisuat = element.no.laisuatno
-            let amount= element.no.sotien
-            let ngaytradukien = element.no.ngaytradukien
-            let cycle = element.no.kyhano
-            let ngaystart = element.no.ngaybatdauno
-            let different_in_time
-            if(cycle!= -1){               
-                if(today>=ngaytradukien){
-                    different_in_time = (ngaytradukien.getTime()-ngaystart.addMonths(cycle).getTime())/(1000 * 3600 * 24 * 30)
-                    if(different_in_time >= 1){
-                        let temp= different_in_time % 1
-                        cycle += temp
-                        amount = amount*Math.pow(laisuat,temp)
-                    }
-                    cycle = -1
-                    updateTaikhoanNo({taikhoannoid: id,sotienmoi: amount, cycle : cycle})
-                    rs.push({
-                        loadId:id,
-                        name: element.tentaikhoan,
-                        eventName:2,
-                        current_amount: amount,
-                    })
-                }
-                else{
-                    different_in_time = (today.getTime()-ngaystart.addMonths(cycle).getTime())/(1000 * 3600 * 24 * 30)
-                    if(different_in_time>=1){
-                        let temp= different_in_time % 1
-                        cycle += temp
-                        amount = amount*Math.pow(laisuat,temp)
-                        updateTaikhoanNo({taikhoannoid: id,sotienmoi: amount, cycle : cycle})
-                        rs.push({
-                            loadId:id,
-                            name: element.tentaikhoan,
-                            eventName:1,
-                            current_amount: amount,
-                        })
-                    }          
-                }
+            let name = element.tentaikhoan
+            console.log(due_date.getTime() - today.getTime())
+            if (due_date.getTime() - today.getTime() < 0) {
+                //if due date arrive, update the loan amount to the loan + interest amount
+                //calculate past cycle count (in month)
+                let past_cycle = Math.floor((due_date.getTime() - start_date.getTime()) / (1000 * 3600 * 24 * 30))
+                console.log(past_cycle)
+                let total_amount = current_amount * Math.pow(1 + (interest / 100), past_cycle)
+                console.log(total_amount) 
+                // update loan info with new amount value
+                let update_result = await updateTaikhoanNo({
+                    taikhoantietkiemid: id,
+                    sotienthem: total_amount - current_amount,
+                })
+                if (!update_result) return reject("failed amount update")
+                rs.push({
+                    loanId: id,
+                    name: name,
+                    eventname: 2,
+                    current_amount: total_amount
+                })
+            }
+            else {
+                // //do nothing, you cant do much really
             }
         });
         resolve(rs)
@@ -98,91 +94,78 @@ export const checkLoansForCycle = () => new Promise((resolve,reject)=>{
 })
 
 export const checkSavingsForCycle = () => new Promise((resolve,reject)=>{
-    let today= new Date()
     let rs= []
-    queryTaiKhoan({taikhoantietkiem: true}).then((tk)=>{
+    queryTaiKhoan({taikhoantietkiem: true, deactivate: true }).then((tk)=>{
         tk.forEach(async (element) => {
-            //console.log(tk)
+            //iterate thru all saving account thats still active
+            console.log(element)
+            let tietkiem_info = element.tietkiem
+            // since lastCheckedDate is not present, reduce the number of possible case
+            //possible case:
+            //1. due date arrived
+            let today = new Date()
+            let due_date = tietkiem_info.ngayrutdukien
+            let start_date = tietkiem_info.ngaybatdau
+            let current_amount = tietkiem_info.sotien
+            let interest = tietkiem_info.laisuattietkiem
             let id = element.idtaikhoan
-            let idtaikhoanthuhuong = element.tietkiem.idtkduocthuhuong
-            let laisuat = element.tietkiem.laisuattietkiem
-            let laisuattruochan = element.tietkiem.laisuattruochan
-            let amount= element.tietkiem.sotien
-            let ngayrutdukien = element.tietkiem.ngayrutdukien
-            let cycle
-            if( element.tietkiem.kyhantietkiem) cycle = element.tietkiem.kyhantietkiem
-            else cycle =0
-            let ngaystart = element.tietkiem.ngaybatdau
-
-            let different_in_time = today.getTime()-ngaystart.addMonths(cycle).getTime()/(1000 * 3600 * 24 * 30)
-            let different_in_time2 = ngayrutdukien.getTime()-ngaystart.addMonths(cycle).getTime()/(1000 * 3600 * 24 * 30)
-            if(different_in_time < different_in_time2){
-                if(cycle < (different_in_time%1)){
-                    let tempamount = amount * Math.pow(laisuattruochan,(different_in_time%1)- cycle) - amount
-                    cycle = (different_in_time%1)
-
-                    //Possible failure
-                    let update_res = await updateTaikhoanTietKiem({taikhoantietkiemid: id,sotienthem: amount, cycle : cycle})
-                    console.log(update_res)
-                    if(idtaikhoanthuhuong){
-                        //Possible failure
-                        createSavingWithdraw({for_wallet_id:idtaikhoanthuhuong,from_saving_id:id,amount:tempamount})
-                        rs.push({
-                            savingId:id,
-                            name: element.tentaikhoan,
-                            eventName:1 ,
-                            current_amount:amount,
-                        })
-                    }
-                    else{
-                        rs.push({
-                            savingId:id,
-                            name: element.tentaikhoan,
-                            eventName:1 ,
-                            current_amount:amount+tempamount,
-                        })
-                    }
-                }
+            let inherited_wallet_id = JSON.stringify(tietkiem_info.idtkduocthuhuong)
+            let name = element.tentaikhoan
+            console.log(due_date.getTime() - today.getTime())
+            if (due_date.getTime() - today.getTime() < 0) {
+                //if due date arrive, update the saving amount to the saving + interest amount, then withdraw all to inherited wallet
+                //calculate past cycle count (in month)
+                let past_cycle = Math.floor((due_date.getTime() - start_date.getTime()) / (1000 * 3600 * 24 * 30))
+                console.log(past_cycle)
+                let total_amount = current_amount * Math.pow(1 + (interest / 100), past_cycle)
+                console.log(total_amount) 
+                // update saving info with new amount value
+                let update_result = await updateTaikhoanTietKiem({
+                    taikhoantietkiemid: id,
+                    sotienthem: total_amount - current_amount,
+                })
+                if (!update_result) return reject("failed amount update")
+                // make a withdrawal to the inherited wallet
+                let withdraw_result = await createSavingWithdraw({
+                    for_wallet_id: inherited_wallet_id,
+                    from_saving_id: id,
+                    amount: total_amount,
+                    note: "Auto withdrawal from saving"
+                })
+                if (withdraw_result.result === false) return reject("failed creating withdrawal")
+                //deactivate this saving
+                let deactivate_result = await deactivateSaving(id)
+                if (!deactivate_result) return reject("failed deactivate saving")
+                rs.push({
+                    savingId: id,
+                    name: name,
+                    eventname: 2,
+                    current_amount: total_amount
+                })
             }
-            else{
-                if(cycle < (different_in_time%1)){
-                    let tempamount = amount * Math.pow(laisuat,(different_in_time%1)- cycle) - amount
-                    cycle = (different_in_time%1)
-                    //Possible failure
-                    let update_res = await updateTaikhoanTietKiem({taikhoantietkiemid: id,sotienthem: amount, cycle : cycle})
-                    console.log(update_res)
-                    if(idtaikhoanthuhuong){
-                        //Possible failure
-                        createSavingWithdraw({for_wallet_id:idtaikhoanthuhuong,from_saving_id:id,amount:tempamount})
-                        rs.push({
-                            savingId:id,
-                            name: element.tentaikhoan,
-                            eventName:2,
-                            current_amount:amount,
-                        })
-                    }
-                    else {
-                        rs.push({
-                            savingId:id,
-                            name: element.tentaikhoan,
-                            eventName:2,
-                            current_amount:amount+tempamount,
-                        })
-                    }
-                }
+            else {
+                // //do nothing, you cant do much really
             }
         });
         resolve(rs)
     },((er)=> reject(er)))
 })
-export const checkGoalForBudget = (budgetId) => new Promise((resolve,reject)=>{
+export const checkGoalForBudget = (budgetId) => new Promise(async(resolve,reject)=>{
     let today = new Date()
     fetchBudget({budgetId:budgetId}).then((bg)=>{
         if(bg==[]) return reject({result: false,message: 'budget ko ton tai'})
+        //budgetid
         let budget = bg[0]
+        //startday + endday
         let end_day=budget[0].ngayketthuc
+        if(today<end_day) end_day = today
         let start_day= budget[0].ngaybatdau
-        fetchTransaction()
+        //query all transaction
+        if(budget.idnguoidung==null) return reject({result:false,message: 'muc tieu khong co tai khoan'})
+        let transaclist = await(queryTransactions({start_day:start_day,end_day:end_day,walletId:budget.idnguoidung}))
+        //fetch wallet info get current money amount
+        let wallet = await(fetchWallet(budget.idnguoidung))
+
     })
 })
 Date.prototype.addDays = function(days) {

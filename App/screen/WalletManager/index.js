@@ -81,7 +81,7 @@ export class WalletManager extends Component {
         const walletDisplay = this.state.walletList.map((val) => {
             return <WalletEntry
                 key={val.walletId} style={[style.wallet_entry, { backgroundColor: val.color }]} name={val.name} last_tran={val.last_tran} amount={(val.amount + " đ")}
-                onTransferPress={() => { this.setState({ transferModalVisible: true }) }}
+                onTransferPress={() => { this.setState({ transferModalVisible: true, selectedId: val.walletId }) }}
                 onViewPress={() => { this.props.navigation.navigate("WalletEditor", { mode: "view", id: val.walletId }) }}
                 onDeletePress={() => { this.setState({ deletePromptVisible: true, selectedId: val.walletId }) }}
                 onEditPress={() => { this.props.navigation.navigate("WalletEditor", { mode: "edit", id: val.walletId }) }}
@@ -121,7 +121,8 @@ export class WalletManager extends Component {
                 </WalletSearchModal>
 
                 <WalletTransferModal isVisible={this.state.transferModalVisible}
-                    onRequestClose={() => { this.setState({ transferModalVisible: false }) }} >
+                    onRequestClose={() => { this.setState({ transferModalVisible: false }) }} 
+                    srcId={this.state.selectedId}>
                 </WalletTransferModal>
 
                 <Dialog visible={this.state.deletePromptVisible} onDismiss={() => { this.setState({ deletePromptVisible: false }) }}>

@@ -14,6 +14,20 @@ const TimespanPickerNavigation = (props) => {
     else console.log("TTimeSpanPicker: ERROR CHANGE PERIOD")
   }
 
+  handleSetStartDate = (value) => {
+    if (props.handleSetStartDate) {
+      props.handleSetStartDate(value)
+    }
+    else console.log("TimeSpanPicker Navigation: ERROR CHANGE CUSTOM")
+  }
+
+  handleSetEndDate = (value) => {
+    if (props.handleSetEndDate) {
+      props.handleSetEndDate(value)
+    }
+    else console.log("TimeSpanPicker Navigation: ERROR CHANGE CUSTOM")
+  }
+
   return (
     <Tab.Navigator initialRouteName="Period"
       tabBarOptions={{
@@ -30,7 +44,19 @@ const TimespanPickerNavigation = (props) => {
             handleChangePeriod={this.handleChangePeriod}
           />}
       />
-      <Tab.Screen name="Custom" component={CustomTimespanFragment} options={{ tabBarLabel: 'Custom' }} />
+      <Tab.Screen
+        name="Custom"
+        options={{ tabBarLabel: 'Custom' }}
+        children={() =>
+          <CustomTimespanFragment
+            startDate={props.startDate}
+            endDate={props.endDate}
+
+            handleSetStartDate={this.handleSetStartDate}
+            handleSetEndDate={this.handleSetEndDate}
+          />
+        }
+      />
     </Tab.Navigator>
   );
 }

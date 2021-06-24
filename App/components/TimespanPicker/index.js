@@ -21,6 +21,20 @@ export class TimespanPicker extends Component {
             console.log("Timespan Picker error change period")
     }
 
+    handleSetStartDate = (value) => {
+        if (this.props.handleSetStartDate) {
+            this.props.handleSetStartDate(value)
+        }
+        else console.log("TimeSpanPicker: ERROR CHANGE CUSTOM")
+    }
+
+    handleSetEndDate = (value) => {
+        if (this.props.handleSetEndDate) {
+            this.props.handleSetEndDate(value)
+        }
+        else console.log("TimeSpanPicker: ERROR CHANGE CUSTOM")
+    }
+
     render() {
 
         // console.log("TIMESPAN PICKER: - Render ")
@@ -43,8 +57,13 @@ export class TimespanPicker extends Component {
                     <View style={style.main_view}>
                         <Text style={style.main_view_header}>BUDGET PERIOD</Text>
                         <TimespanPickerNavigation
+                            startDate={this.props.startDate}
+                            endDate={this.props.endDate}
                             currentPeriod={this.props.currentPeriod}
                             handleChangePeriod={this.handleChangePeriod}
+
+                            handleSetStartDate={this.handleSetStartDate}
+                            handleSetEndDate={this.handleSetEndDate}
                         />
                     </View>
                 </View>

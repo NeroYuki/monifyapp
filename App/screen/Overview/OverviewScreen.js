@@ -99,8 +99,8 @@ export class OverviewScreen extends Component {
             dateTime: "",
             currentPeriod: 'month', // week, year, custom
 
-            startDate: '',
-            endDate: '',
+            startDate: new Date(),
+            endDate: new Date(),
 
             isLoading: true,
         }
@@ -276,6 +276,21 @@ export class OverviewScreen extends Component {
             this.setState({
                 dateTime: date
             });
+        }
+        else {
+            // console.log("CUSTOM PERIOD ", this.state.startDate, '  -  ', this.state.endDate)
+
+            var date = {
+                currentTime: format(new Date(this.state.startDate), 'dd MMM') + ' - ' + format(new Date(this.state.endDate), 'dd MMM'),
+                otherFormat: '',
+            }
+
+            this.setState({
+                dateTime: date,
+            })
+
+            this.getDataOverviewWith2Date(this.state.startDate, this.state.endDate)
+            return
         }
 
         this.getDataOverviewWithPeriod(value)
@@ -639,6 +654,12 @@ export class OverviewScreen extends Component {
                                     isVisible={this.state.periodVisible}
                                     currentPeriod={this.state.currentPeriod}
                                     handleChangePeriod={this.handleChangePeriod}
+
+                                    startDate={this.state.startDate}
+                                    endDate={this.state.endDate}
+                                    handleSetStartDate={(value) => this.setState({ startDate: value })}
+                                    handleSetEndDate={(value) => this.setState({ endDate: value })}
+
                                     onRequestClose={() => {
                                         this.setState({ periodVisible: false })
                                     }}

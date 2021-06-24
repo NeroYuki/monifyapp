@@ -28,7 +28,6 @@ export const stylesheet = StyleSheet.create({
     },
     custom_selection: {
         flex: 1,
-        flexDirection: 'row',
     },
     custom_selection_column: {
         flex: 1,

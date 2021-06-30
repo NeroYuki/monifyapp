@@ -6,6 +6,7 @@ import { WalletEntry, WalletSearchModal, WalletTransferModal } from "../../compo
 import { deleteWallet, querywallet } from "../../logic/Screen-wallet";
 import { stylesheet } from './style'
 import { withNavigation } from '@react-navigation/native';
+import { currencyFormat } from "../../utils/formatNumber";
 
 export class WalletManager extends Component {
     constructor(props) {
@@ -80,7 +81,7 @@ export class WalletManager extends Component {
         const style = stylesheet
         const walletDisplay = this.state.walletList.map((val) => {
             return <WalletEntry
-                key={val.walletId} style={[style.wallet_entry, { backgroundColor: val.color }]} name={val.name} last_tran={val.last_tran} amount={(val.amount + " đ")}
+                key={val.walletId} style={[style.wallet_entry, { backgroundColor: val.color }]} name={val.name} last_tran={val.last_tran} amount={(currencyFormat(parseFloat(val.amount)))}
                 onTransferPress={() => { this.setState({ transferModalVisible: true, selectedId: val.walletId }) }}
                 onViewPress={() => { this.props.navigation.navigate("WalletEditor", { mode: "view", id: val.walletId }) }}
                 onDeletePress={() => { this.setState({ deletePromptVisible: true, selectedId: val.walletId }) }}

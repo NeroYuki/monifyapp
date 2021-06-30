@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { SafeAreaView, ScrollView, View, StyleSheet, Text, RefreshControl } from "react-native";
-import { Button, Modal } from "react-native-paper";
+import { Button, Modal, Snackbar } from "react-native-paper";
 import { COLORS } from "../../assets/constants";
 import { CategoriesModal, TabSwitcher, TimespanPicker, TransactionEditor, WalletHeader } from "../../components";
 import { ChartOverview } from "../../components/OverviewScreen/ChartOverview";
@@ -110,6 +110,9 @@ export class OverviewScreen extends Component {
             endDate: new Date(),
 
             isLoading: true,
+
+            snackbarMessage: "",
+            snackbarMessageVisible: false,
         }
 
         this.onCategoriesPress = this.onCategoriesPress.bind(this)
@@ -727,6 +730,7 @@ export class OverviewScreen extends Component {
                                 />
 
                                 <this.reportView />
+                                
                             </View>
                         </View>
 
@@ -734,13 +738,14 @@ export class OverviewScreen extends Component {
                             (this.state.isLoading)
                                 ? <View></View>
                                 : <View>
-                                    <TransactionModal
+                                    {this.state.visible && <TransactionModal
                                         isVisible={this.state.visible}
                                         onRequestClose={() => this.setState({ visible: false })}
                                         currentData={this.state.currentData}
                                         onCategoriesPress={this.onCategoriesPress}
                                         onRecurringPress={this.onRecurringPress}
-                                    />
+                                        onComplete={(msg) => {this.setState({snackbarMessage: msg, snackbarMessageVisible: true, visible: false}); this.reloadData()}}
+                                    />}
 
                                     <ExpenseOrIncomeModal
                                         isVisible={this.state.expenseOrIncomeVisible}
@@ -775,11 +780,16 @@ export class OverviewScreen extends Component {
                                             this.setState({ changeWalletModalVisible: false })
                                         }}
                                     />
+
                                 </View>
                         }
-
+                        
                     </ScrollView>
-
+                    <Snackbar
+                        visible={this.state.snackbarMessageVisible}
+                        onDismiss={() => {this.setState({snackbarMessageVisible: false})}}>
+                        {this.state.snackbarMessage}
+                    </Snackbar>
                 </SafeAreaView>
             </View >
 

@@ -6,6 +6,7 @@ import { RecurringBillEntry, RecurringBillSearchModal } from "../../components";
 import { pauseBill, queryBill, resumeBill } from "../../logic/Screen-RecurringBillManager";
 import { stylesheet } from './style'
 import moment from 'moment'
+import { currencyFormat } from "../../utils/formatNumber";
 
 export class RecurringBillManager extends Component {
     constructor(props) {
@@ -79,7 +80,7 @@ export class RecurringBillManager extends Component {
             const id = new String(val.idgiaodichtheochuky).toString()
             //console.log(val.idgiaodichtheochuky)
             return <RecurringBillEntry
-                key={id} style={[style.bill_entry, {backgroundColor: val.color}]} name={val.name + ((val.pause) ? " (Paused)" : "")} next_tran={moment(JSON.stringify(val.thoigianbatdau), "YYYY-MM-DDTHH:mm:ss.SSSZ").format("DD/MM/YYYY")} amount={((val.sotienthunhap || val.sotientieudung) + " đ")} desc={val.ghichu}
+                key={id} style={[style.bill_entry, {backgroundColor: val.color}]} name={val.name + ((val.pause) ? " (Paused)" : "")} next_tran={moment(JSON.stringify(val.thoigianbatdau), "YYYY-MM-DDTHH:mm:ss.SSSZ").format("DD/MM/YYYY")} amount={(currencyFormat(parseFloat(val.sotientieudung || val.sotienthunhap)))} desc={val.ghichu}
                 paused={val.pause}
                 onPausePress={() => {this.handlePauseBill(id)}}
                 onResumePress={() => {this.handleResumeBill(id)}}

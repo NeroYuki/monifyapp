@@ -216,7 +216,7 @@ export const saveTransaction = ({ transactionId, userId, note, amount, walletId,
             let giaodich = {
                 idgiaodich: (transactionId) ? new BSON.ObjectID(transactionId) : null,
                 idnguoidung: (userId) ? new BSON.ObjectID(userId) : null,
-                thoigian: (occur_date) ? new Date(occur_date) : null,
+                thoigian: (occur_date) ? new Date(occur_date) : new Date(),
                 idtaikhoan: (walletId) ? new BSON.ObjectID(walletId) : null,
                 sotientieudung: null,
                 sotienthunhap: null,
@@ -224,6 +224,8 @@ export const saveTransaction = ({ transactionId, userId, note, amount, walletId,
                 ghichu: note,
             }
             let sotienchen
+
+            //console.log('LOGIC', giaodich)
 
             await queryGiaoDich({ idgiaodich: giaodich.idgiaodich }).then(async gd => {
                 if (gd.length != 0) {
@@ -342,9 +344,9 @@ export const saveTransaction = ({ transactionId, userId, note, amount, walletId,
                     })
                 }
             })
-            await insertGiaoDich(giaodich).then(async gd => {
+            await updateGiaoDich(giaodich).then(async gd => {
                 if (gd) {
-                    let sotien = (giaodich.sotienthunhap) ? giaodich.sotienthunhap : -giaodich.sotientieudung
+                    let sotien = (taikhoan[0].tieudung.sotien + sotienchen) - taikhoan[0].tieudung.sotien
                     await updateTaikhoanTieudung({ taikhoantieudungid: giaodich.idtaikhoan, sotienthem: sotien })
                         .then(async up => {
                             if (up) {

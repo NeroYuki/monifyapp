@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { View, StyleSheet, Text, SafeAreaView, TextInput, TouchableOpacity, Image } from 'react-native';
-import { Divider } from 'react-native-paper';
+import { Divider, Snackbar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { COLORS } from '../../assets/constants';
 import { CategoriesModal } from '../../components';
@@ -29,6 +29,9 @@ export class AddNewTransaction extends Component {
             note: '',
             currentDate: new Date(),
             recurring: 'Never repeat',
+
+            snackbarMessage: "",
+            snackbarMessageVisible: false,
         }
 
         this.openCategoriesModal = this.openCategoriesModal.bind(this)
@@ -76,7 +79,12 @@ export class AddNewTransaction extends Component {
             note: this.state.note,
         }
 
-        console.log(JSON.parse(JSON.stringify(await saveTransaction(GiaoDich))))
+        await saveTransaction(GiaoDich).then(
+            (res) => { this.setState({snackbarMessage: "Your new transaction info have been saved"})},
+            (e) => { this.setState({snackbarMessage: "Failed to save your new transaction info"})}
+        )
+
+        this.setState({snackbarMessageVisible: true})
     }
 
     async componentDidMount() {
@@ -112,6 +120,7 @@ export class AddNewTransaction extends Component {
                                 fontSize: 40,
                                 fontWeight: '300'
                             }}
+                            keyboardType='numeric'
                             placeholder='0'
                             onChangeText={text => this.setState({ money: text })}
                         />
@@ -216,6 +225,12 @@ export class AddNewTransaction extends Component {
                         </TouchableOpacity>
                     </View>
                 </View>
+
+                <Snackbar
+                    visible={this.state.snackbarMessageVisible}
+                    onDismiss={() => {this.setState({snackbarMessageVisible: false})}}>
+                    {this.state.snackbarMessage}
+                </Snackbar>
 
                 <RecurringModal
                     isVisible={this.state.recurringVisible}

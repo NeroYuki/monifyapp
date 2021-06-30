@@ -6,6 +6,7 @@ import { SavingDepositModal, SavingEntry, SavingSearchModal, SavingWithdrawModal
 import { stylesheet } from './style'
 import { deactivateSaving, deleteSaving, querySaving } from "../../logic/Screen-saving";
 import moment from "moment";
+import { currencyFormat } from "../../utils/formatNumber";
 
 export class SavingManager extends Component {
     constructor(props) {
@@ -62,7 +63,7 @@ export class SavingManager extends Component {
         const savingDisplay = this.state.savingList.map((val) => {
             //console.log(val)
             return <SavingEntry
-                key={val.savingId} style={[style.saving_entry, {backgroundColor: val.color}]} name={val.name + ((val.deactivate)? " (Deactivated)" : "" )} due_duration={moment(JSON.stringify(val.expire_on), "YYYY-MM-DDTHH:mm:ss.SSSZ").format("DD/MM/YYYY")} amount={(val.amount + " đ")} interest_string={(val.interest + "%")} 
+                key={val.savingId} style={[style.saving_entry, {backgroundColor: val.color}]} name={val.name + ((val.deactivate)? " (Deactivated)" : "" )} due_duration={moment(JSON.stringify(val.expire_on), "YYYY-MM-DDTHH:mm:ss.SSSZ").format("DD/MM/YYYY")} amount={(currencyFormat(parseFloat(val.amount)))} interest_string={(val.interest + "%")} 
                 active={!val.deactivate}
                 onDepositPress={() => {this.setState({depositModalVisible: true, selectedId: val.savingId})}}
                 onWithdrawPress={() => {this.setState({withdrawModalVisible: true,  selectedId: val.savingId})}}

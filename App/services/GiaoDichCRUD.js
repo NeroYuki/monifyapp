@@ -19,6 +19,7 @@ export const insertGiaoDich = (newGiaoDich) =>
   })
 
 export const updateGiaoDich = GiaoDich => new Promise((resolve, reject) => {
+  //console.log('DATA', GiaoDich)
   Realm.open(data).then(realm => {
     realm.write(() => {
       if ((GiaoDich.sotienthunhap != null && GiaoDich.sotientieudung == null) || (GiaoDich.sotienthunhap == null && GiaoDich.sotientieudung != null)) {

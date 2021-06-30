@@ -9,8 +9,11 @@ import { CategoriesModal } from "../CategoriesModal";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import { RecurringModal } from "./RecurringModal";
 import { currencyFormat } from "../../utils/formatNumber";
-import { deleteTransaction, deleteTransactiontrig } from "../../logic/Component-TransactionEditor";
+import { deleteTransaction, deleteTransactiontrig, saveTransaction } from "../../logic/Component-TransactionEditor";
 import { deleteGiaoDich } from "../../services/GiaoDichCRUD";
+import sessionStore from "../../logic/sessionStore";
+import { fetchCategory } from "../../logic/Component-CategoryEditor";
+import moment from 'moment';
 
 
 export class TransactionModal extends Component {
@@ -29,7 +32,7 @@ export class TransactionModal extends Component {
             money: '',
             icon: '',
             note: '',
-            currentDate: '',
+            currentDate: new Date(),
             recurring: 'Never repeat',
         }
 
@@ -39,8 +42,19 @@ export class TransactionModal extends Component {
     }
 
 
-    componentDidMount() {
+    async componentDidMount() {
         console.log("TRANSACTION MODAL: - Component Did Mount")
+        console.log(this.props.currentData.datas)
+        let arr_res = await fetchCategory({categoryId: this.props.currentData.datas.loaihangmucgd})
+        if (arr_res.length === 0) return
+        let res = arr_res[0]
+        console.log(res)
+        this.setState({
+            note: this.props.currentData.datas.ghichu,
+            icon: (res)? {type: res.tenhangmuc, id: res.idhangmucgiaodich, icon: res.iconhangmuc} : {},
+            money: (this.props.currentData.datas.sotienthunhap == null) ? (this.props.currentData.datas.sotientieudung.toString()) : (this.props.currentData.datas.sotienthunhap.toString()),
+            currentDate: moment(JSON.stringify(this.props.currentData.datas.thoigian), "YYYY-MM-DDTHH:mm:ss.SSSZ").toDate()
+        })
     }
 
     openCategoriesModal() {
@@ -66,8 +80,39 @@ export class TransactionModal extends Component {
             let transactionID = this.props.currentData.datas.idgiaodich
             console.log("DELETE TRANS", transactionID)
             await deleteTransactiontrig({ transactionId: transactionID })
+
+            if (this.props.onComplete) {
+                this.props.onComplete("Transaction has been deleted")
+            }
         } catch (error) {
             console.log(error)
+        }
+    }
+
+    handleSaveTransaction = async () => {
+        console.log("SAVE TRANSACTION");
+
+        // console.log(sessionStore.activeUserId, ' -- ', sessionStore.activeWalletId)
+
+        let GiaoDich = {
+            transactionId: this.props.currentData.datas.idgiaodich,
+            userId: sessionStore.activeUserId,
+            occur_date: this.state.currentDate,
+            walletId: sessionStore.activeWalletId,
+            amount: parseInt(this.state.money),
+            categoryId: this.state.icon.id,
+            note: this.state.note,
+        }
+
+        let complete_message = "default message"
+
+        await saveTransaction(GiaoDich).then(
+            (res) => { console.log(res); complete_message = "Your transaction info have been saved"},
+            (e) => { console.log(e); complete_message = "Failed to save your transaction info"}
+        )
+
+        if (this.props.onComplete) {
+            this.props.onComplete(complete_message)
         }
     }
 
@@ -102,7 +147,7 @@ export class TransactionModal extends Component {
                                         ? (this.props.currentData.datas.sotientieudung.toString())
                                         : (this.props.currentData.datas.sotienthunhap.toString())
                                 }
-
+                                keyboardType='numeric'
                                 placeholder='0'
                                 onChangeText={text => console.log(text)}
                             />
@@ -110,21 +155,28 @@ export class TransactionModal extends Component {
 
                         <View style={styles.info_field}>
                             <TouchableOpacity
-                                onPress={() => {
-                                    this.setState({ categoriesVisible: !this.state.categoriesVisible })
-                                }}
-                            >
-                                <View style={styles.info_field_item}>
-                                    <Image
-                                        source={this.props.currentData.icon[0].iconhangmuc}
-                                        resizeMode='contain'
-                                        style={{
-                                            height: 24,
-                                            width: 24,
-                                        }}
-                                    />
-                                    <Text style={styles.info_field_item_text}>{this.props.currentData.icon[0].tenhangmuc}</Text>
-                                </View>
+                            onPress={() => {
+                                this.setState({ categoriesVisible: !this.state.categoriesVisible })
+                            }}>
+                                {
+                                    (this.state.icon == '') ?
+                                        <View style={styles.info_field_item}>
+                                            <Icon name="sack" size={24} />
+                                            <Text style={styles.info_field_item_text}>Category</Text>
+                                        </View>
+                                        :
+                                        <View style={styles.info_field_item}>
+                                            <Image
+                                                source={this.state.icon.icon}
+                                                resizeMode='contain'
+                                                style={{
+                                                    height: 24,
+                                                    width: 24,
+                                                }}
+                                            />
+                                            <Text style={styles.info_field_item_text}>{this.state.icon.type}</Text>
+                                        </View>
+                                }
                             </TouchableOpacity>
                             <Divider style={{ height: 1 }} />
 
@@ -139,7 +191,7 @@ export class TransactionModal extends Component {
                                     }}
                                     defaultValue={this.props.currentData.datas.ghichu}
                                     placeholder="Note"
-                                    onChangeText={text => console.log(text)}
+                                    onChangeText={text => this.setState({ note: text })}
                                 />
                             </View>
                             <Divider style={{ height: 1 }} />
@@ -149,8 +201,7 @@ export class TransactionModal extends Component {
                             >
                                 <View style={styles.info_field_item}>
                                     <Icon name="calendar" size={24} />
-                                    <Text style={styles.info_field_item_text}>{this.props.currentData.datas.thoigian}</Text>
-
+                                    <Text style={styles.info_field_item_text}>{this.state.currentDate.toDateString()}</Text>
                                 </View>
                             </TouchableOpacity>
 
@@ -184,7 +235,7 @@ export class TransactionModal extends Component {
                                     }}
                                 />
                             </TouchableOpacity>
-                            <TouchableOpacity
+                            <TouchableOpacity onPress={this.handleSaveTransaction}
                                 style={{
                                     flex: 1, justifyContent: 'center', marginRight: 16, marginLeft: 16
 
@@ -211,7 +262,7 @@ export class TransactionModal extends Component {
                     {this.state.showPickerDialog && (
                         <DateTimePicker
                             testID="dateTimePicker"
-                            value={this.props.currentDate}
+                            value={this.state.currentDate}
                             mode={'date'}
                             is24Hour={true}
                             display="default"

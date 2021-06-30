@@ -153,7 +153,7 @@ export class WalletTransferModal extends Component {
                                 <Icon name="cash" size={24} />
                                 <Text
                                     style={[styles.info_field_item_text, {color: COLORS.gray}]}
-                                >{(this.props.srcId)? this.getWalletAmount(this.state.walletSelectedId) + (parseFloat(this.state.amount) || 0) : 0}</Text>
+                                >{(this.state.walletSelectedId)? this.getWalletAmount(this.state.walletSelectedId) + (parseFloat(this.state.amount) || 0) : 0}</Text>
                             </View>
                             <Divider style={{ height: 1 }} />
                         </View>

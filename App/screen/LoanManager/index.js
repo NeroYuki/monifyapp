@@ -6,6 +6,7 @@ import { LoanEntry, LoanPaymentModal, LoanSearchModal } from "../../components";
 import { deactivateLoan, deleteLoan, queryLoan } from "../../logic/Screen-loan";
 import { stylesheet } from './style'
 import moment from 'moment'
+import { currencyFormat } from "../../utils/formatNumber";
 
 export class LoanManager extends Component {
     constructor(props) {
@@ -61,7 +62,7 @@ export class LoanManager extends Component {
         const style = stylesheet
         const loanDisplay = this.state.loanList.map((val) => {
             return <LoanEntry
-                key={val.loanId} style={[style.loan_entry, {backgroundColor: val.color}]} name={val.name + ((val.deactivate)? " (Deactivated)" : "")} due_duration={moment(JSON.stringify(val.expire_on), "YYYY-MM-DDTHH:mm:ss.SSSZ").format("DD/MM/YYYY")} amount={(val.amount + " đ")} interest_string={(val.interest + "%")}
+                key={val.loanId} style={[style.loan_entry, {backgroundColor: val.color}]} name={val.name + ((val.deactivate)? " (Deactivated)" : "")} due_duration={moment(JSON.stringify(val.expire_on), "YYYY-MM-DDTHH:mm:ss.SSSZ").format("DD/MM/YYYY")} amount={(currencyFormat(parseFloat(val.amount)))} interest_string={(val.interest + "%")}
                 active={!val.deactivate}
                 onPaymentPress={() => {this.setState({paymentModalVisible: true, selectedId: val.loanId})}}
                 onDeactivatePress={() => {this.setState({deactivatePromptVisible: true, selectedId: val.loanId})}}

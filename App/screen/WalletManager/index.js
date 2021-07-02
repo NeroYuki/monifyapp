@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { FAB, Searchbar, Dialog, Paragraph, Button } from "react-native-paper";
+import { FAB, Searchbar, Dialog, Paragraph, Button, Snackbar } from "react-native-paper";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { WalletEntry, WalletSearchModal, WalletTransferModal } from "../../components";
 import { deleteWallet, querywallet } from "../../logic/Screen-wallet";
@@ -42,6 +42,9 @@ export class WalletManager extends Component {
             selectedId: "",
             quickQueryString: "",
             unsubscribe: undefined,
+
+            snackbarMessage: "",
+            snackbarMessageVisible: false,
         }
     }
 
@@ -108,6 +111,13 @@ export class WalletManager extends Component {
                 <ScrollView>
                     {walletDisplay}
                 </ScrollView>
+
+                <Snackbar
+                    visible={this.state.snackbarMessageVisible}
+                    onDismiss={() => {this.setState({snackbarMessageVisible: false})}}>
+                    {this.state.snackbarMessage}
+                </Snackbar>
+
                 <FAB style={style.fab}
                     big
                     icon="plus"
@@ -123,7 +133,15 @@ export class WalletManager extends Component {
 
                 <WalletTransferModal isVisible={this.state.transferModalVisible}
                     onRequestClose={() => { this.setState({ transferModalVisible: false }) }}
-                    srcId={this.state.selectedId}>
+                    srcId={this.state.selectedId}
+                    onComplete={(msg) => {
+                        this.setState({
+                            snackbarMessage: msg,
+                            snackbarMessageVisible: true,
+                            transferModalVisible: false,
+                        })
+                        this.fetchData()
+                    }}>
                 </WalletTransferModal>
 
                 <Dialog visible={this.state.deletePromptVisible} onDismiss={() => { this.setState({ deletePromptVisible: false }) }}>

@@ -78,6 +78,7 @@ export class SavingWithdrawModal extends Component {
             Alert.alert("Invalid wallet selection")
             return
         }
+        let message = ""
         // createWalletTransfer({
         //     from_wallet_id: this.props.srcId,
         //     for_wallet_id: this.state.walletSelectedId,
@@ -91,8 +92,17 @@ export class SavingWithdrawModal extends Component {
             note: this.state.note,
         }).catch(err => {
             console.log(err)
+            message = "Failed to create saving withdrawal"
+            if (this.props.onComplete) {
+                this.props.onComplete(message)
+            }
+            return
         })
         console.log(res)
+        message = "Successfully created saving withdrawal"
+        if (this.props.onComplete) {
+            this.props.onComplete(message)
+        }
     }
 
     render() {

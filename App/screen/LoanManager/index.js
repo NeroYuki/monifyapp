@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { ScrollView, Text, TouchableOpacity, View } from "react-native";
-import { FAB, Searchbar, Dialog, Paragraph, Button } from "react-native-paper";
+import { FAB, Searchbar, Dialog, Paragraph, Button, Snackbar } from "react-native-paper";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { LoanEntry, LoanPaymentModal, LoanSearchModal } from "../../components";
 import { deactivateLoan, deleteLoan, queryLoan } from "../../logic/Screen-loan";
@@ -23,6 +23,9 @@ export class LoanManager extends Component {
             selectedId: "",
             quickQueryString: "",
             unsubscribe: undefined,
+
+            snackbarMessage: "",
+            snackbarMessageVisible: false,
         }
     }
 
@@ -91,6 +94,13 @@ export class LoanManager extends Component {
                 <ScrollView>
                     {loanDisplay}
                 </ScrollView>
+
+                <Snackbar
+                    visible={this.state.snackbarMessageVisible}
+                    onDismiss={() => {this.setState({snackbarMessageVisible: false})}}>
+                    {this.state.snackbarMessage}
+                </Snackbar>
+
                 <FAB style={style.fab}
                     big
                     icon="plus"
@@ -106,7 +116,15 @@ export class LoanManager extends Component {
 
                 <LoanPaymentModal isVisible={this.state.paymentModalVisible} 
                     onRequestClose={() => {this.setState({paymentModalVisible: false})}} 
-                    srcId={this.state.selectedId}>
+                    srcId={this.state.selectedId}
+                    onComplete={(msg) => {
+                        this.setState({
+                            snackbarMessage: msg,
+                            snackbarMessageVisible: true,
+                            paymentModalVisible: false,
+                        })
+                        this.fetchData()
+                    }}>
                 </LoanPaymentModal>
 
                 <Dialog visible={this.state.deletePromptVisible} onDismiss={() => {this.setState({deletePromptVisible: false})}}>

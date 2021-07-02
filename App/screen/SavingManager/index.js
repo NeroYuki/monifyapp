@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { ScrollView, Text, View, TouchableOpacity } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
-import { FAB, Searchbar, Dialog, Paragraph, Button } from "react-native-paper";
+import { FAB, Searchbar, Dialog, Paragraph, Button, Snackbar } from "react-native-paper";
 import { SavingDepositModal, SavingEntry, SavingSearchModal, SavingWithdrawModal } from "../../components";
 import { stylesheet } from './style'
 import { deactivateSaving, deleteSaving, querySaving } from "../../logic/Screen-saving";
@@ -23,6 +23,9 @@ export class SavingManager extends Component {
             selectedId: "",
             quickQueryString: "",
             unsubscribe: undefined,
+
+            snackbarMessage: "",
+            snackbarMessageVisible: false,
         }
     }
 
@@ -93,6 +96,13 @@ export class SavingManager extends Component {
                 <ScrollView>
                     {savingDisplay}
                 </ScrollView>
+
+                <Snackbar
+                    visible={this.state.snackbarMessageVisible}
+                    onDismiss={() => {this.setState({snackbarMessageVisible: false})}}>
+                    {this.state.snackbarMessage}
+                </Snackbar>
+
                 <FAB style={style.fab}
                     big
                     icon='plus'
@@ -110,12 +120,28 @@ export class SavingManager extends Component {
 
                 <SavingDepositModal isVisible={this.state.depositModalVisible} 
                     onRequestClose={() => {this.setState({depositModalVisible: false})}}
-                    srcId={this.state.selectedId}>
+                    srcId={this.state.selectedId}
+                    onComplete={(msg) => {
+                        this.setState({
+                            snackbarMessage: msg,
+                            snackbarMessageVisible: true,
+                            depositModalVisible: false,
+                        })
+                        this.fetchData()
+                    }}>
                 </SavingDepositModal>
                 
                 <SavingWithdrawModal isVisible={this.state.withdrawModalVisible} 
                     onRequestClose={() => {this.setState({withdrawModalVisible: false})}}
-                    srcId={this.state.selectedId}>
+                    srcId={this.state.selectedId}
+                    onComplete={(msg) => {
+                        this.setState({
+                            snackbarMessage: msg,
+                            snackbarMessageVisible: true,
+                            withdrawModalVisible: false,
+                        })
+                        this.fetchData()
+                    }}>
                 </SavingWithdrawModal>
 
                 <Dialog visible={this.state.deletePromptVisible} onDismiss={() => {this.setState({deletePromptVisible: false})}}>

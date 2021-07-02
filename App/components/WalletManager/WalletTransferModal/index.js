@@ -57,17 +57,28 @@ export class WalletTransferModal extends Component {
         return (appliedWalletIndex !== -1)? this.state.walletOption[appliedWalletIndex].amount : 0
     }
 
-    onHandleTransfer() {
+    async onHandleTransfer() {
         if (!this.props.srcId || this.state.walletSelectedId === this.props.srcId) {
             Alert.alert("Invalid wallet selection")
             return
         }
-        createWalletTransfer({
+        await createWalletTransfer({
             from_wallet_id: this.props.srcId,
             for_wallet_id: this.state.walletSelectedId,
             amount: parseFloat(this.state.amount) || 0,
             note: this.state.note
-        })
+        }).then(
+            (res) => {
+                if (this.props.onComplete) {
+                    this.props.onComplete("Successfully created wallet transfer transactions")
+                }
+            },
+            (e) => {
+                if (this.props.onComplete) {
+                    this.props.onComplete("Failed to create wallet transfer transactions")
+                }
+            }
+        )
     }
 
     render() {

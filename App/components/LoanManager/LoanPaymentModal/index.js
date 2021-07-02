@@ -82,6 +82,7 @@ export class LoanPaymentModal extends Component {
         //     amount: parseFloat(this.state.amount) || 0,
         //     note: this.state.note
         // })
+        let message = ""
         let res = await createLoanPayment({
             from_wallet_id: this.state.walletSelectedId,
             for_loan_id: this.props.srcId,
@@ -89,8 +90,17 @@ export class LoanPaymentModal extends Component {
             note: this.state.note,
         }).catch(err => {
             console.log(err)
+            message = "Failed to create loan payment"
+            if (this.props.onComplete) {
+                this.props.onComplete(message)
+            }
+            return
         })
         console.log(res)
+        message = "Successfully created loan payment"
+        if (this.props.onComplete) {
+            this.props.onComplete(message)
+        }
     }
 
 

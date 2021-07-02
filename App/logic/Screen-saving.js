@@ -29,7 +29,7 @@ export const saveSaving= ({savingId,savingName, color, amount, expire_on,interes
             bieutuong: '',
             color: color,
             thoigiantao: creationDate,
-            idnguoidung: sessionStore.activeUserId,
+            idnguoidung: new BSON.ObjectID(sessionStore.activeUserId),
             tieudung:null,
             tietkiem:{
                 idtktietkiem: new BSON.ObjectID(),

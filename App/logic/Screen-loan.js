@@ -30,7 +30,7 @@ export const saveLoan = ({ loanId, loanName, color, amount, expire_on, interest,
             bieutuong: '',
             color: color,
             thoigiantao: creationDate,
-            idnguoidung: sessionStore.activeUserId,
+            idnguoidung: new BSON.ObjectID(sessionStore.activeUserId),
             tieudung: null,
             tietkiem: null,
             no: {

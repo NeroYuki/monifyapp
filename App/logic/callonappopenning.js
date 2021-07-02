@@ -96,21 +96,22 @@ export const checkLoansForCycle = () => new Promise((resolve, reject) => {
 })
 export const checkSavingsForCycle = () => new Promise((resolve, reject) => {
     let rs = []
-    queryTaiKhoan({ taikhoantietkiem: true, deactivate: true }).then((tk) => {
+    queryTaiKhoan({ taikhoantietkiem: true, deactivate: false }).then((tk) => {
         tk.forEach(async (element) => {
             //iterate thru all saving account thats still active
-            console.log(element)
+            //console.log(element)
             let tietkiem_info = element.tietkiem
             // since lastCheckedDate is not present, reduce the number of possible case
             //possible case:
             //1. due date arrived
+            //console.log(element)
             let today = new Date()
             let due_date = tietkiem_info.ngayrutdukien
             let start_date = tietkiem_info.ngaybatdau
             let current_amount = tietkiem_info.sotien
             let interest = tietkiem_info.laisuattietkiem
             let id = element.idtaikhoan
-            let inherited_wallet_id = JSON.stringify(tietkiem_info.idtkduocthuhuong)
+            let inherited_wallet_id = tietkiem_info.idtkduocthuhuong
             let name = element.tentaikhoan
             console.log(due_date.getTime() - today.getTime())
             if (due_date.getTime() - today.getTime() < 0) {
@@ -119,7 +120,7 @@ export const checkSavingsForCycle = () => new Promise((resolve, reject) => {
                 let past_cycle = Math.floor((due_date.getTime() - start_date.getTime()) / (1000 * 3600 * 24 * 30))
                 console.log(past_cycle)
                 let total_amount = current_amount * Math.pow(1 + (interest / 100), past_cycle)
-                console.log(total_amount)
+                // console.log(total_amount)
                 // update saving info with new amount value
                 let update_result = await updateTaikhoanTietKiem({
                     taikhoantietkiemid: id,

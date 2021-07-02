@@ -225,17 +225,18 @@ export const saveTransaction = ({ transactionId, userId, note, amount, walletId,
             }
             let sotienchen
 
-            //console.log('LOGIC', giaodich)
+            console.log('LOGIC', amount)
 
             await queryGiaoDich({ idgiaodich: giaodich.idgiaodich }).then(async gd => {
                 if (gd.length != 0) {
+                    giaodich.idgiaodich = gd[0].idgiaodich
                     if (!categoryId) {
                         giaodich.loaihangmucgd = new BSON.ObjectID(gd[0].loaihangmucgd)
                     }
                     if (!userId) {
                         giaodich.idnguoidung = new BSON.ObjectID(gd[0].idnguoidung)
                     }
-                    if (walletId) {
+                    if (!walletId) {
                         giaodich.idtaikhoan = new BSON.ObjectID(gd[0].idtaikhoan)
                     }
                     if (!note) {
@@ -244,6 +245,8 @@ export const saveTransaction = ({ transactionId, userId, note, amount, walletId,
                     if (!occur_date) {
                         giaodich.thoigian = new Date(gd[0].thoigian)
                     }
+
+                    //set up default value for amount fields
                     giaodich.sotientieudung = gd[0].sotientieudung
                     giaodich.sotienthunhap = gd[0].sotienthunhap
                     await queryHangMucGiaoDich({ idhangmucgiaodich: giaodich.loaihangmucgd }).then(hangmuc => {
@@ -304,6 +307,8 @@ export const saveTransaction = ({ transactionId, userId, note, amount, walletId,
                 }
             })
 
+            let g_taikhoan;
+
             await fetchSetting().then(async chedo => {
                 if (chedo.chedonghiemngat) {
                     await queryTaiKhoan({ idtaikhoan: giaodich.idtaikhoan }).then(async taikhoan => {
@@ -311,6 +316,7 @@ export const saveTransaction = ({ transactionId, userId, note, amount, walletId,
                             reject({ result: false, message: 'Không tồn tại tài khoản' })
                             return
                         }
+                        g_taikhoan = taikhoan[0]
                         console.log(JSON.parse(JSON.stringify(taikhoan)), sotienchen)
                         if (taikhoan[0].tieudung.sotien + sotienchen < 0) {
                             reject({ result: false, message: 'Chế độ nghiêm ngặt không cho phép trừ số tiền quá tài khoản ' })
@@ -334,10 +340,11 @@ export const saveTransaction = ({ transactionId, userId, note, amount, walletId,
                             reject({ result: false, message: 'Không tồn tại tài khoản' })
                             return
                         }
-                        await deleteTransactiontrig({ transactionId: transactionId }).catch(err => {
-                            reject({ result: false, message: err })
-                            return
-                        })
+                        g_taikhoan = taikhoan[0]
+                        // await deleteTransactiontrig({ transactionId: transactionId }).catch(err => {
+                        //     reject({ result: false, message: err })
+                        //     return
+                        // })
                     }).catch(er => {
                         reject({ result: false, message: er })
                         return
@@ -346,7 +353,7 @@ export const saveTransaction = ({ transactionId, userId, note, amount, walletId,
             })
             await updateGiaoDich(giaodich).then(async gd => {
                 if (gd) {
-                    let sotien = (taikhoan[0].tieudung.sotien + sotienchen) - taikhoan[0].tieudung.sotien
+                    let sotien = (g_taikhoan.tieudung.sotien + sotienchen) - g_taikhoan.tieudung.sotien
                     await updateTaikhoanTieudung({ taikhoantieudungid: giaodich.idtaikhoan, sotienthem: sotien })
                         .then(async up => {
                             if (up) {

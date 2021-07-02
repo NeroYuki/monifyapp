@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet, Text, SafeAreaView, TextInput, TouchableOpacity, Image } from 'react-native';
+import { View, StyleSheet, Text, SafeAreaView, TextInput, TouchableOpacity, Image, Alert } from 'react-native';
 import { Divider, Snackbar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { COLORS } from '../../assets/constants';
@@ -95,9 +95,21 @@ export class AddNewTransaction extends Component {
         //check routine
         if (sessionStore.activeUserId) {
             //FIXME: weird shit happen
-            console.log(await checkSavingsForCycle())
-            console.log(await checkLoansForCycle())
-            console.log(await checkBillForCycle())
+            let message = ""
+            await checkSavingsForCycle().then(
+                res => {message += "Done checking for saving\n"}, 
+                er => {message += "Done checking for saving\n"}
+            )
+            await checkLoansForCycle().then(
+                res => {message += "Done checking for loan\n"}, 
+                er => {message += "Done checking for loan\n"}
+            )
+            await checkBillForCycle().then(
+                res => {message += "Done checking for bill\n"}, 
+                er => {message += "Done checking for bill\n"}
+            )
+
+            Alert.alert('Information', message)
         }
     }
 

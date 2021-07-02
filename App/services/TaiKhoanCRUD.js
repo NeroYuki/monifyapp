@@ -86,6 +86,7 @@ export const updateTaiKhoan = updateTaiKhoan =>
     Realm.open(data).then(realm => {
       realm.write(() => {
         let taiKhoanUpdated = realm.objectForPrimaryKey(TaiKhoanSchema.name, updateTaiKhoan.idtaikhoan)
+        //console.log('QUERY', taiKhoanUpdated)
         if (updateTaiKhoan.tentaikhoan != null) taiKhoanUpdated.tentaikhoan = updateTaiKhoan.tentaikhoan;
         if (updateTaiKhoan.bieutuong != null) taiKhoanUpdated.bieutuong = updateTaiKhoan.bieutuong;
         if (updateTaiKhoan.color != null) taiKhoanUpdated.color = updateTaiKhoan.color
@@ -120,6 +121,7 @@ export const updateTaikhoanTieudung = ({ taikhoantieudungid, sotienthem }) =>
       realm.write(() => {
         let tempid = new BSON.ObjectID(JSON.parse(JSON.stringify(taikhoantieudungid)))
         let taiKhoanUpdated = realm.objectForPrimaryKey(TaiKhoanSchema.name, tempid)
+        
         if (taiKhoanUpdated.tieudung != null) {
           taiKhoanUpdated.tieudung.sotien += sotienthem;
           resolve(true)

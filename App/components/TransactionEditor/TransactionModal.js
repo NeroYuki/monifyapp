@@ -99,7 +99,7 @@ export class TransactionModal extends Component {
             userId: sessionStore.activeUserId,
             occur_date: this.state.currentDate,
             walletId: sessionStore.activeWalletId,
-            amount: parseInt(this.state.money),
+            amount: parseFloat(this.state.money) || 0,
             categoryId: this.state.icon.id,
             note: this.state.note,
         }
@@ -149,7 +149,7 @@ export class TransactionModal extends Component {
                                 }
                                 keyboardType='numeric'
                                 placeholder='0'
-                                onChangeText={text => console.log(text)}
+                                onChangeText={text => this.setState({ money: text })}
                             />
                         </View>
 

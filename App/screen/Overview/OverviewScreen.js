@@ -202,6 +202,8 @@ export class OverviewScreen extends Component {
             })
         ))
 
+        //console.log(JSON.stringify(data.trans, {}, " "))
+
         return data
     }
 

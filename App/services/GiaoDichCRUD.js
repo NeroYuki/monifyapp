@@ -19,11 +19,23 @@ export const insertGiaoDich = (newGiaoDich) =>
   })
 
 export const updateGiaoDich = GiaoDich => new Promise((resolve, reject) => {
-  //console.log('DATA', GiaoDich)
   Realm.open(data).then(realm => {
     realm.write(() => {
+      console.log('DATA', GiaoDich)
       if ((GiaoDich.sotienthunhap != null && GiaoDich.sotientieudung == null) || (GiaoDich.sotienthunhap == null && GiaoDich.sotientieudung != null)) {
-        let updateGiaoDich = realm.objectForPrimaryKey(GiaoDichSchema.name, GiaoDich.idgiaodich)
+        // let tempid = new BSON.ObjectID(GiaoDich.idgiaodich)
+        // console.log('TEMPID', tempid)
+        console.log(JSON.stringify(GiaoDichSchema, {}, " "))
+        let updateGiaoDich_arr = realm.objects(GiaoDichSchema.name).filtered("idgiaodich==$0", GiaoDich.idgiaodich);
+        let updateGiaoDich
+        if (updateGiaoDich_arr.length > 0) {
+          updateGiaoDich = updateGiaoDich_arr[0]
+        }
+        else {
+          reject('Không tìm thấy giao dịch')
+          return
+        }
+        console.log('QUERY', updateGiaoDich)
         if (GiaoDich.thoigian) {
           updateGiaoDich.thoigian = GiaoDich.thoigian
         }

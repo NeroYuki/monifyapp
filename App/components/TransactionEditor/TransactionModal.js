@@ -45,13 +45,13 @@ export class TransactionModal extends Component {
     async componentDidMount() {
         console.log("TRANSACTION MODAL: - Component Did Mount")
         console.log(this.props.currentData.datas)
-        let arr_res = await fetchCategory({categoryId: this.props.currentData.datas.loaihangmucgd})
+        let arr_res = await fetchCategory({ categoryId: this.props.currentData.datas.loaihangmucgd })
         if (arr_res.length === 0) return
         let res = arr_res[0]
         console.log(res)
         this.setState({
             note: this.props.currentData.datas.ghichu,
-            icon: (res)? {type: res.tenhangmuc, id: res.idhangmucgiaodich, icon: res.iconhangmuc} : {},
+            icon: (res) ? { type: res.tenhangmuc, id: res.idhangmucgiaodich, icon: res.iconhangmuc } : {},
             money: (this.props.currentData.datas.sotienthunhap == null) ? (this.props.currentData.datas.sotientieudung.toString()) : (this.props.currentData.datas.sotienthunhap.toString()),
             currentDate: moment(JSON.stringify(this.props.currentData.datas.thoigian), "YYYY-MM-DDTHH:mm:ss.SSSZ").toDate()
         })
@@ -107,8 +107,8 @@ export class TransactionModal extends Component {
         let complete_message = "default message"
 
         await saveTransaction(GiaoDich).then(
-            (res) => { console.log(res); complete_message = "Your transaction info have been saved"},
-            (e) => { console.log(e); complete_message = "Failed to save your transaction info"}
+            (res) => { console.log(res); complete_message = "Your transaction info have been saved" },
+            (e) => { console.log(e); complete_message = "Failed to save your transaction info" }
         )
 
         if (this.props.onComplete) {
@@ -155,9 +155,9 @@ export class TransactionModal extends Component {
 
                         <View style={styles.info_field}>
                             <TouchableOpacity
-                            onPress={() => {
-                                this.setState({ categoriesVisible: !this.state.categoriesVisible })
-                            }}>
+                                onPress={() => {
+                                    this.setState({ categoriesVisible: !this.state.categoriesVisible })
+                                }}>
                                 {
                                     (this.state.icon == '') ?
                                         <View style={styles.info_field_item}>
@@ -207,7 +207,7 @@ export class TransactionModal extends Component {
 
                             <Divider style={{ height: 1 }} />
 
-                            <TouchableOpacity
+                            {/* <TouchableOpacity
                                 onPress={() => {
                                     this.setState({ recurringVisible: !this.state.recurringVisible })
                                 }}
@@ -216,7 +216,7 @@ export class TransactionModal extends Component {
                                     <Icon name="repeat" size={24} />
                                     <Text style={styles.info_field_item_text}>Make Recurring</Text>
                                 </View>
-                            </TouchableOpacity>
+                            </TouchableOpacity> */}
 
                             <Divider style={{ height: 1 }} />
                         </View>
@@ -247,12 +247,12 @@ export class TransactionModal extends Component {
                         </View>
                     </View>
 
-                    <RecurringModal
+                    {/* <RecurringModal
                         isVisible={this.state.recurringVisible}
                         closePeriod={() => {
                             this.setState({ recurringVisible: false })
                         }}
-                    />
+                    /> */}
 
                     <CategoriesModal
                         isVisible={this.state.categoriesVisible}

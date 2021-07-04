@@ -80,11 +80,11 @@ export class AddNewTransaction extends Component {
         }
 
         await saveTransaction(GiaoDich).then(
-            (res) => { this.setState({snackbarMessage: "Your new transaction info have been saved"})},
-            (e) => { this.setState({snackbarMessage: "Failed to save your new transaction info"})}
+            (res) => { this.setState({ snackbarMessage: "Your new transaction info have been saved" }) },
+            (e) => { this.setState({ snackbarMessage: "Failed to save your new transaction info" }) }
         )
 
-        this.setState({snackbarMessageVisible: true})
+        this.setState({ snackbarMessageVisible: true })
     }
 
     async componentDidMount() {
@@ -97,16 +97,16 @@ export class AddNewTransaction extends Component {
             //FIXME: weird shit happen
             let message = ""
             await checkSavingsForCycle().then(
-                res => {message += "Done checking for saving\n"}, 
-                er => {message += "Done checking for saving\n"}
+                res => { message += "Done checking for saving\n" },
+                er => { message += "Done checking for saving\n" }
             )
             await checkLoansForCycle().then(
-                res => {message += "Done checking for loan\n"}, 
-                er => {message += "Done checking for loan\n"}
+                res => { message += "Done checking for loan\n" },
+                er => { message += "Done checking for loan\n" }
             )
             await checkBillForCycle().then(
-                res => {message += "Done checking for bill\n"}, 
-                er => {message += "Done checking for bill\n"}
+                res => { message += "Done checking for bill\n" },
+                er => { message += "Done checking for bill\n" }
             )
 
             Alert.alert('Information', message)
@@ -193,7 +193,7 @@ export class AddNewTransaction extends Component {
 
                         <Divider style={{ height: 1 }} />
 
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             onPress={() => {
                                 this.setState({ recurringVisible: !this.state.recurringVisible })
                             }}
@@ -202,7 +202,7 @@ export class AddNewTransaction extends Component {
                                 <Icon name="repeat" size={24} />
                                 <Text style={styles.info_field_item_text}>Make Recurring</Text>
                             </View>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
 
                         <Divider style={{ height: 1 }} />
                     </View>
@@ -240,17 +240,17 @@ export class AddNewTransaction extends Component {
 
                 <Snackbar
                     visible={this.state.snackbarMessageVisible}
-                    onDismiss={() => {this.setState({snackbarMessageVisible: false})}}>
+                    onDismiss={() => { this.setState({ snackbarMessageVisible: false }) }}>
                     {this.state.snackbarMessage}
                 </Snackbar>
 
-                <RecurringModal
+                {/* <RecurringModal
                     isVisible={this.state.recurringVisible}
 
                     closePeriod={() => {
                         this.setState({ recurringVisible: false })
                     }}
-                />
+                /> */}
 
                 <CategoriesModal
                     isVisible={this.state.categoriesVisible}

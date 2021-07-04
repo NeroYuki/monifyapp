@@ -32,7 +32,7 @@ export const fetchSetting = () =>
         })
         cd = cd.reduce((s1, s2) => {
             return s1.thoigiantao > s2.thoigiantao ? s1 : s2
-        })
+        }, 0)
         console.log(JSON.parse(JSON.stringify(cd)))
         resolve(cd)
     })

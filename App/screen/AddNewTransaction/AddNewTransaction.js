@@ -3,7 +3,7 @@ import { View, StyleSheet, Text, SafeAreaView, TextInput, TouchableOpacity, Imag
 import { Divider, Snackbar } from 'react-native-paper';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { COLORS } from '../../assets/constants';
-import { CategoriesModal } from '../../components';
+import { CategoriesModal, SplashScreen } from '../../components';
 import { RecurringModal } from '../../components/TransactionEditor/RecurringModal';
 
 import DateTimePicker from '@react-native-community/datetimepicker';
@@ -12,6 +12,7 @@ import { queryTaiKhoan } from '../../services/TaiKhoanCRUD';
 import sessionStore from '../../logic/sessionStore';
 import { checkLoansForCycle, checkSavingsForCycle, checkInitialLaunch } from '../../logic/callonappopenning';
 import { checkBillForCycle } from '../../logic/CallOnAppCheckBill';
+import { initFormat } from '../../utils/formatNumber';
 
 export class AddNewTransaction extends Component {
 
@@ -32,6 +33,8 @@ export class AddNewTransaction extends Component {
 
             snackbarMessage: "",
             snackbarMessageVisible: false,
+
+            splashScreenVisible: true,
         }
 
         this.openCategoriesModal = this.openCategoriesModal.bind(this)
@@ -97,20 +100,26 @@ export class AddNewTransaction extends Component {
             //FIXME: weird shit happen
             let message = ""
             await checkSavingsForCycle().then(
-                res => { message += "Done checking for saving\n" },
-                er => { message += "Done checking for saving\n" }
+                res => { if (res.length > 1) message += "Done checking for saving\n" },
+                er => { message += "Error checking for saving\n" }
             )
             await checkLoansForCycle().then(
-                res => { message += "Done checking for loan\n" },
-                er => { message += "Done checking for loan\n" }
+                res => { if (res.length > 1) message += "Done checking for loan\n" },
+                er => { message += "Error checking for loan\n" }
             )
             await checkBillForCycle().then(
-                res => { message += "Done checking for bill\n" },
-                er => { message += "Done checking for bill\n" }
+                res => { if (res.length > 1) message += "Done checking for bill\n" },
+                er => { message += "Error checking for bill\n" }
             )
-
-            Alert.alert('Information', message)
+            if (message)
+                Alert.alert('Information', message)
         }
+
+        initFormat()
+
+        setTimeout(() => {
+            this.setState({splashScreenVisible: false})
+        }, 2000)
     }
 
     render() {
@@ -257,6 +266,11 @@ export class AddNewTransaction extends Component {
                     chooseIcon={this.handleChooseIcon}
                     onRequestClose={() => { this.setState({ categoriesVisible: false }) }}
                 />
+
+                {this.state.splashScreenVisible && <SplashScreen
+                    isVisible={this.state.splashScreenVisible}
+                    onRequestClose={() => {}}
+                ></SplashScreen>}
 
 
             </SafeAreaView>

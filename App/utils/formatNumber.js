@@ -1,12 +1,20 @@
+import { fetchSetting } from "../logic/Screen-AppearanceSetting"
 
 var format = 'VND'
 
-export function initFormat() {
-    
+export async function initFormat() {
+    let res = await fetchSetting()
+    if (res) {
+        if (res.loaitien.includes('VND')) format = 'VND'
+        else if (res.loaitien.includes('USD')) format = 'USD'
+    }
 }
 
 export function currencyFormat(num) {
-    return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.') + ' đ'
+    if (format === 'VND')
+        return num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.') + ' đ'
+    else
+        return '$ ' + num.toFixed(0).replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1,')
 };
 
 export function percentageFormat(num) {

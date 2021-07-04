@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { SafeAreaView, ScrollView, View, StyleSheet, Text, RefreshControl } from "react-native";
+import { SafeAreaView, ScrollView, View, StyleSheet, Text, RefreshControl, LogBox } from "react-native";
 import { Button, Modal, Snackbar } from "react-native-paper";
 import { COLORS } from "../../assets/constants";
 import { CategoriesModal, TabSwitcher, TimespanPicker, TransactionEditor, WalletHeader } from "../../components";
@@ -158,6 +158,8 @@ export class OverviewScreen extends Component {
                 isLoading: false
             })
         }
+
+        LogBox.ignoreLogs(['VirtualizedLists should never be nested']);
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -732,7 +734,7 @@ export class OverviewScreen extends Component {
                                 />
 
                                 <this.reportView />
-                                
+
                             </View>
                         </View>
 
@@ -746,7 +748,7 @@ export class OverviewScreen extends Component {
                                         currentData={this.state.currentData}
                                         onCategoriesPress={this.onCategoriesPress}
                                         onRecurringPress={this.onRecurringPress}
-                                        onComplete={(msg) => {this.setState({snackbarMessage: msg, snackbarMessageVisible: true, visible: false}); this.reloadData()}}
+                                        onComplete={(msg) => { this.setState({ snackbarMessage: msg, snackbarMessageVisible: true, visible: false }); this.reloadData() }}
                                     />}
 
                                     <ExpenseOrIncomeModal
@@ -785,11 +787,11 @@ export class OverviewScreen extends Component {
 
                                 </View>
                         }
-                        
+
                     </ScrollView>
                     <Snackbar
                         visible={this.state.snackbarMessageVisible}
-                        onDismiss={() => {this.setState({snackbarMessageVisible: false})}}>
+                        onDismiss={() => { this.setState({ snackbarMessageVisible: false }) }}>
                         {this.state.snackbarMessage}
                     </Snackbar>
                 </SafeAreaView>

@@ -6,7 +6,8 @@ import { BudgetHeader, TabSwitcher } from '../../components';
 import { ExpenseReportView } from '../../components/BudgetScreen/ExpenseReportView';
 import { IncomeReportView } from '../../components/BudgetScreen/IncomeReportView';
 import { BudgetSettingModal } from '../../components/BudgetSettingScreen/BudgetSettingModel';
-import { fetchBugetList } from '../../logic/Screen-budget';
+import { checkGoalForBudget } from '../../logic/callonappopenning';
+import { fetchBudget, fetchBugetList } from '../../logic/Screen-budget';
 import { queryTranCategories, queryTransactions } from '../../logic/Screen-Overview';
 import sessionStore from '../../logic/sessionStore';
 
@@ -62,8 +63,9 @@ export class BudgetScreen extends React.Component {
     componentDidMount = async () => {
         console.log("BUDGET - Component Did Mount")
 
-
         this.getAllBudgetData()
+
+        // console.log(await checkGoalForBudget('60e26298e4ddf0e2231fc8b1'))
     }
 
     getAllBudgetData = async () => {
@@ -71,7 +73,7 @@ export class BudgetScreen extends React.Component {
         // Target Money: Income, Expense, Balance 
         var budgetData = JSON.parse(JSON.stringify(await fetchBugetList()))
 
-        console.log("BUDGET DATAAAA ", budgetData)
+        // console.log("BUDGET DATAAAA ", budgetData)
         this.setState({
             isHaveBudgetData: (budgetData.length != 0)
         })

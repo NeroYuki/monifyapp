@@ -157,17 +157,17 @@ export const checkSavingsForCycle = () => new Promise((resolve, reject) => {
 export const checkGoalForBudget = (budgetId) => new Promise(async(resolve,reject)=>{
     //let today = new Date()
     let today = new Date().setHours(0,0,0,0)
-    fetchBudget({budgetId:budgetId}).then((bg)=>{
+    fetchBudget({budgetId:budgetId}).then(async(bg)=>{
         if(bg==[]) return reject({result: false,message: 'budget ko ton tai'})
         //budgetid
         let budget = bg[0]
         //startday + endday for calculation 
         let end_day=budget.ngayketthuc.setHours(0,0,0,0)
         if(today<end_day) end_day = today
-
         let start_day= budget.ngaybatdau.setHours(0,0,0,0)
         //fetch wallet info get current money amount
         let wallet = await(fetchWallet(budget.idnguoidung))
+        console.log(JSON.stringify(wallet))
         let currentmoney = wallet.amount
         // số tiền mục tiêu
         let goalmoney = budget.sotienmuctieu
@@ -304,7 +304,7 @@ export const checkGoalForBudget = (budgetId) => new Promise(async(resolve,reject
                 }
             }
         }
-    })
+    },(error)=> {console.error(error)})
 })
 var getDaysArray = function(start, end) {
     for(var arr=[],dt=new Date(start); dt<=end; dt.setDate(dt.getDate()+1)){

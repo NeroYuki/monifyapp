@@ -1,10 +1,12 @@
 import { queryTaiKhoan, insertTaiKhoan, deleteTaiKhoan, deactiavteTaiKhoan } from '../services/TaiKhoanCRUD';
-import { BSON } from 'realm'
+import { BSON, Results } from 'realm'
 import { updateTaiKhoan } from '../services/TaiKhoanCRUD';
 import sessionStore from './sessionStore';
 
 export const fetchWallet = (walletId) => new Promise((resolve, reject) => {
+    console.log(walletId)
     queryTaiKhoan({ idtaikhoan: new BSON.ObjectID(walletId) }).then((tk) => {
+        if(tk != {}){
         let rs =
         {
             walletId: JSON.parse(JSON.stringify(tk[0].idtaikhoan)),
@@ -14,6 +16,10 @@ export const fetchWallet = (walletId) => new Promise((resolve, reject) => {
             creationDate: tk[0].thoigiantao
         }
         resolve(rs)
+    }
+    else {
+        reject({result: false, message:'khong tim thay wallet trong fetch wallet'})
+    }
     }), reason => { reject(reason) }
 })
 export const saveWallet = ({ walletId, walletName, color, amount }) => new Promise((resolve, reject) => {

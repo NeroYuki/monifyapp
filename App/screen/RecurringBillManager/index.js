@@ -3,7 +3,7 @@ import { ScrollView, Text, View, TouchableOpacity } from "react-native";
 import { FAB, Searchbar, Dialog, Paragraph, Button } from "react-native-paper";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 import { RecurringBillEntry, RecurringBillSearchModal } from "../../components";
-import { pauseBill, queryBill, resumeBill } from "../../logic/Screen-RecurringBillManager";
+import { deleteBill, pauseBill, queryBill, resumeBill } from "../../logic/Screen-RecurringBillManager";
 import { stylesheet } from './style'
 import moment from 'moment'
 import { currencyFormat } from "../../utils/formatNumber";
@@ -129,7 +129,16 @@ export class RecurringBillManager extends Component {
                     </Dialog.Content>
                     <Dialog.Actions>
                         <Button onPress={() => { this.setState({ deletePromptVisible: false }) }}>Cancel</Button>
-                        <Button mode='contained' onPress={() => { this.setState({ deletePromptVisible: false }) }}>Confirm</Button>
+                        <Button mode='contained' onPress={async () => { 
+                            if (this.state.selectedId) {
+                                let result = await deleteBill({billId: this.state.selectedId})
+                                if (result) {
+                                    this.setState({selectedId: ""})
+                                    this.fetchData()
+                                }
+                            }
+                            this.setState({ deletePromptVisible: false }) 
+                        }}>Confirm</Button>
                     </Dialog.Actions>
                 </Dialog>
             </View>

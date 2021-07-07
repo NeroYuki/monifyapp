@@ -5,6 +5,7 @@ import { stylesheet } from './style'
 import { FAB, Snackbar } from 'react-native-paper'
 import { fetchSetting, saveSetting } from "../../logic/Screen-AppearanceSetting";
 import sessionStore from "../../logic/sessionStore";
+import { initFormat } from "../../utils/formatNumber";
 
 export class AppearanceSetting extends Component {
     constructor(props) {
@@ -153,6 +154,8 @@ export class AppearanceSetting extends Component {
                         else this.setState({ snackbarMessage: "Failed to save your settings" })
 
                         this.setState({ snackbarMessageVisible: true })
+
+                        initFormat()
                     }}
                 />
 

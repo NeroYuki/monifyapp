@@ -151,26 +151,22 @@ export const checkSavingsForCycle = () => new Promise((resolve, reject) => {
     }, ((er) => reject(er)))
 })
 export const checkGoalForBudget = (budgetId) => new Promise(async (resolve, reject) => {
+    //let today = new Date()
     let today = new Date().setHours(0, 0, 0, 0)
-
     fetchBudget({ budgetId: budgetId }).then(async (bg) => {
         if (bg == []) return reject({ result: false, message: 'budget ko ton tai' })
         //budgetid
         let budget = bg[0]
-
         //startday + endday for calculation 
         let end_day = budget.ngayketthuc.setHours(0, 0, 0, 0)
         if (today < end_day) end_day = today
         let start_day = budget.ngaybatdau.setHours(0, 0, 0, 0)
-
-
         //fetch wallet info get current money amount
-        let wallet = await fetchWallet(budget.idnguoidung)
+        let wallet = await (fetchWallet(budget.idnguoidung))
+        console.log(JSON.stringify(wallet))
         let currentmoney = wallet.amount
-
         // số tiền mục tiêu
         let goalmoney = budget.sotienmuctieu
-
         //query all transaction
         if (budget.idnguoidung == null) return reject({ result: false, message: 'muc tieu khong co tai khoan' })
         let queryresult = await (queryTransactions({ start_day: start_day, end_day: end_day, walletId: wallet.walletId }))
@@ -182,11 +178,9 @@ export const checkGoalForBudget = (budgetId) => new Promise(async (resolve, reje
         let transactionmapthunhap = new Map()
         let transactionmaptieudung = new Map()
         let transmapresult = new Map()
-
         // tao array ngay
         let dayarr = getDaysArray(start_day, end_day)
         //khoi tao gia tri ban dau
-
         dayarr.forEach(element => {
             element.setHours(0, 0, 0, 0)   //có thể cần tới
             transactionmapthunhap.set(element, 0)
@@ -202,17 +196,13 @@ export const checkGoalForBudget = (budgetId) => new Promise(async (resolve, reje
             else if (element.data.sotienthunhap)
                 transactionmapthunhap.set(element.time, element.data.sotienthunhap) //income
         });
-
         // khoi tao gia tri cho linear regession
         let datearr = []
         let valuearr = []
         let tempamountofmoney = 0
         let basemoney = currentmoney - income + expense
 
-
-        console.log(new Date(start_day).getTime())
-
-        // check loại mục tiêu nào để tính 
+        //check loại mục tiêu nào để tính 
         if (budget.loaimuctieu.tietkiemdenmuc == true) {
             transactionmapthunhap.forEach((value, key) => {
                 tempamountofmoney += value
@@ -300,7 +290,7 @@ export const checkGoalForBudget = (budgetId) => new Promise(async (resolve, reje
                 }
                 else {
                     resolve({ result: 3, message: 'Bạn đã hoàn thành mục tiêu' })
-                } 1
+                }
             } else if (budget.loaimuctieu.sodutoithieu == true) { //số dư
                 if (transmapresult.get(budget.ngayketthuc.setHours(0, 0, 0, 0)) > goalmoney) {
                     resolve({ result: 3, message: 'Bạn đã hoàn thành mục tiêu' })
@@ -310,7 +300,7 @@ export const checkGoalForBudget = (budgetId) => new Promise(async (resolve, reje
                 }
             }
         }
-    })
+    }, (error) => { console.error(error) })
 })
 var getDaysArray = function (start, end) {
     for (var arr = [], dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
@@ -318,7 +308,6 @@ var getDaysArray = function (start, end) {
     }
     return arr;
 };
-
 Date.prototype.addDays = function (days) {
     var date = new Date(this.valueOf());
     date.setDate(date.getDate() + days);

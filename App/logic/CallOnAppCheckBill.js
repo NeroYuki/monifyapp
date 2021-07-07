@@ -1,61 +1,60 @@
+import { updateGiaoDichChuKy, upsertGiaoDichChuKy } from '../services/GiaoDichChuKyCRUD'
 import { saveTransaction } from './Component-TransactionEditor'
 import { fetchBill, saveBill } from './screen-RecurringBillEditor'
+import { queryBill } from './Screen-RecurringBillManager'
+import moment from 'moment'
 
+//NOTE: WHY I HAVE TO REWRITE EVERYTHING
 export const checkBillForCycle = () =>
     new Promise(async (resolve, reject) => {
         let billAll
         await fetchBill({}).then((bill) => {
             billAll = bill
-            // console.log('0',JSON.parse(JSON.stringify(billAll)))
         }).catch((er) => {
             reject(er)
             return
         })
-        billAll = billAll.filter((bill) => {
-            return Math.floor(new Date(bill.thoigiancuoicungcheck).getTime() / 86400000) == Math.floor(new Date(Date.now()).getTime() / 86400000) && !bill.pause
-        })
-        let checkbill = []
-        for (let i of billAll) {
-            if (!i.idtaikhoan) {
-                let am = (i.sotientieudung != null) ? i.sotientieudung : i.sotienthunhap
-                let loaitien = (i.sotientieudung != null) ? 'tieudung' : 'thunhap'
-                checkbill.push({ billId: i.idgiaodichtheochuky, name: i.name, eventname: 3, amount: am, loaitien: loaitien })
-            }
-            else {
+       console.log(JSON.stringify(billAll, {}, "  "))
+       let res = []
+       
+       billAll.forEach( async (val) => {
+            const id = new String(val.idgiaodichtheochuky).toString()
+            let start_date = moment(JSON.stringify(val.thoigianbatdau), "YYYY-MM-DDTHH:mm:ss.SSSZ")
+            let adding_mode = 'day'
+            if (val.chukygiaodichtheothang) adding_mode = 'month'
+            let next_trans = start_date
+            //add one cycle first
+            if (adding_mode === 'day') next_trans = next_trans.add(val.chukygiaodichtheongay, 'days')
+            else next_trans = next_trans.add(val.chukygiaodichtheothang, 'months')
+            while (next_trans < Date.now() && !val.pause) {
+                //if its inside this loop, that mean there is at least one cycle elapsed, we will now make new transaction for each successful loop
                 await saveTransaction({
-                    userId: i.idnguoidung,
-                    note: i.ghichu,
-                    amount: (i.sotientieudung) ? i.sotientieudung : i.sotienthunhap,
-                    walletId: i.idtaikhoan,
+                    userId: val.idnguoidung,
+                    note: val.ghichu,
+                    amount: (val.sotientieudung) ? val.sotientieudung : val.sotienthunhap,
+                    walletId: val.idtaikhoan,
                     occur_date: new Date(Date.now()),
-                    categoryId: i.loaihangmucgd
+                    categoryId: val.loaihangmucgd
                 }).then(async (tran) => {
-                    let am = (i.sotientieudung != null) ? i.sotientieudung : i.sotienthunhap
-                    let loaitien = (i.sotientieudung != null) ? 'tieudung' : 'thunhap'
+                    //return operation result
+                    let am = (val.sotientieudung != null) ? val.sotientieudung : val.sotienthunhap
+                    let loaitien = (val.sotientieudung != null) ? 'tieudung' : 'thunhap'
                     console.log(JSON.parse(JSON.stringify(tran), 'Da vao day'))
-                    checkbill.push({ billId: i.idgiaodichtheochuky, name: i.name, eventname: 1, amount: am, loaitien: loaitien })
-                    await saveBill({ billId: i.idgiaodichtheochuky, cycle_start: new Date(Date.now()) }).catch(er => reject(er))
+                    res.push({ billId: val.idgiaodichtheochuky, name: val.name, eventname: 1, amount: am, loaitien: loaitien })
                 }).catch(err => {
-                    let am = (i.sotientieudung != null) ? i.sotientieudung : i.sotienthunhap
-                    let loaitien = (i.sotientieudung != null) ? 'tieudung' : 'thunhap'
-                    checkbill.push({ billId: i.idgiaodichtheochuky, name: i.name, eventname: 2, amount: am, loaitien: loaitien })
+                    //return operation result
+                    let am = (val.sotientieudung != null) ? val.sotientieudung : val.sotienthunhap
+                    let loaitien = (val.sotientieudung != null) ? 'tieudung' : 'thunhap'
+                    res.push({ billId: val.idgiaodichtheochuky, name: val.name, eventname: 2, amount: am, loaitien: loaitien })
                 })
+                //add another cycle for the next loop check
+                if (adding_mode === 'day') next_trans = next_trans.add(val.chukygiaodichtheongay, 'days')
+                else next_trans = next_trans.add(val.chukygiaodichtheothang, 'months')
             }
-        }
-        let bill
-        await fetchBill({}).then((b) => {
-            bill = b
-            // console.log('4',JSON.parse(JSON.stringify(bill)))
-        }).catch((er) => {
-            reject(er)
-            return
-        })
-        for (let i of bill) {
-            if (Math.floor(new Date(i.thoigiancuoicungcheck).getTime() / 86400000) < Math.floor(new Date(Date.now()).getTime() / 86400000)) {
-                await saveBill({ billId: i.idgiaodichtheochuky, cycle_start: new Date(Date.now()) }).then((bill) => {
-
-                }).catch(er => reject(er))
-            }
-        }
-        resolve(checkbill)
+            //test notify, please comment later
+            //res.push({ billId: val.idgiaodichtheochuky, name: val.name, eventname: 1, amount: 100000, loaitien: 'tieudung' })
+           //update last checked date for all 
+           let x = await upsertGiaoDichChuKy(val, {thoigiancuoicungcheck: new Date()})
+       })
+       resolve(res)
     })

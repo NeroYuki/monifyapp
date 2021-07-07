@@ -82,11 +82,17 @@ export const checkLoansForCycle = () => new Promise((resolve, reject) => {
                     loanId: id,
                     name: name,
                     eventname: 2,
-                    current_amount: total_amount
+                    amount: total_amount
                 })
             }
             else {
                 // //do nothing, you cant do much really
+                // rs.push({
+                //     loanId: id,
+                //     name: name,
+                //     eventname: 2,
+                //     amount: current_amount
+                // })
             }
         });
         resolve(rs)
@@ -95,7 +101,7 @@ export const checkLoansForCycle = () => new Promise((resolve, reject) => {
 
 export const checkSavingsForCycle = () => new Promise((resolve, reject) => {
     let rs = []
-    queryTaiKhoan({ taikhoantietkiem: true, deactivate: true }).then((tk) => {
+    queryTaiKhoan({ taikhoantietkiem: true, deactivate: false }).then((tk) => {
         tk.forEach(async (element) => {
             //iterate thru all saving account thats still active
             console.log(element)
@@ -140,11 +146,18 @@ export const checkSavingsForCycle = () => new Promise((resolve, reject) => {
                     savingId: id,
                     name: name,
                     eventname: 2,
-                    current_amount: total_amount
+                    amount: total_amount
                 })
             }
             else {
-                // //do nothing, you cant do much really
+                 //do nothing, you cant do much really
+                 //test notify data
+                // rs.push({
+                //     savingId: id,
+                //     name: name,
+                //     eventname: 2,
+                //     amount: current_amount
+                // })
             }
         });
         resolve(rs)

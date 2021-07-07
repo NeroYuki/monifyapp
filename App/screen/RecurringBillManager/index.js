@@ -49,7 +49,7 @@ export class RecurringBillManager extends Component {
         this.setState({
             billList: data
         })
-        console.log(data)
+        //console.log(data)
     }
 
     async queryData(input) {
@@ -78,9 +78,17 @@ export class RecurringBillManager extends Component {
         const billDisplay = this.state.billList.map((val) => {
             //TODO: calculate next transaction
             const id = new String(val.idgiaodichtheochuky).toString()
+            let start_date = moment(JSON.stringify(val.thoigianbatdau), "YYYY-MM-DDTHH:mm:ss.SSSZ")
+            let adding_mode = 'day'
+            if (val.chukygiaodichtheothang) adding_mode = 'month'
+            let next_trans = start_date
+            while (next_trans < Date.now()) {
+                if (adding_mode === 'day') next_trans = next_trans.add(val.chukygiaodichtheongay, 'days')
+                else next_trans = next_trans.add(val.chukygiaodichtheothang, 'months')
+            }
             //console.log(val.idgiaodichtheochuky)
             return <RecurringBillEntry
-                key={id} style={[style.bill_entry, {backgroundColor: val.color}]} name={val.name + ((val.pause) ? " (Paused)" : "")} next_tran={moment(JSON.stringify(val.thoigianbatdau), "YYYY-MM-DDTHH:mm:ss.SSSZ").format("DD/MM/YYYY")} amount={(currencyFormat(parseFloat(val.sotientieudung || val.sotienthunhap)))} desc={val.ghichu}
+                key={id} style={[style.bill_entry, {backgroundColor: val.color}]} name={val.name + ((val.pause) ? " (Paused)" : "")} next_tran={next_trans.format('DD/MM/YYYY')} amount={(currencyFormat(parseFloat(val.sotientieudung || val.sotienthunhap)))} desc={val.ghichu}
                 paused={val.pause}
                 onPausePress={() => {this.handlePauseBill(id)}}
                 onResumePress={() => {this.handleResumeBill(id)}}
@@ -133,6 +141,7 @@ export class RecurringBillManager extends Component {
                             if (this.state.selectedId) {
                                 let result = await deleteBill({billId: this.state.selectedId})
                                 if (result) {
+                                    console.log(result)
                                     this.setState({selectedId: ""})
                                     this.fetchData()
                                 }

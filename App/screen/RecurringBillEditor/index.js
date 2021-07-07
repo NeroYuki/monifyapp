@@ -7,6 +7,7 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 import { fetchBill, saveBill } from "../../logic/screen-RecurringBillEditor";
 import { querywallet } from "../../logic/Screen-wallet";
 import moment from 'moment'
+import sessionStore from "../../logic/sessionStore";
 
 export class RecurringBillEditor extends Component {
     constructor(props) {
@@ -59,7 +60,7 @@ export class RecurringBillEditor extends Component {
 
         if (id) {
             //console.log(this.state)
-            let arr_data = await fetchBill(id)
+            let arr_data = await fetchBill({billId: id})
             if (!arr_data || arr_data.length == 0) return
             let data = arr_data[0]
             let cycle_value = 0, cycle_type = ""
@@ -96,7 +97,7 @@ export class RecurringBillEditor extends Component {
                 cycle_duration_type: cycle_type,
                 applied_wallet: data.idtaikhoan,
                 icon: data.loaihangmucgd,
-                // duration: moment(JSON.stringify(data.expire_on), "YYYY-MM-DDTHH:mm:ss.SSSZ").toDate(),
+                cycle_start: moment(JSON.stringify(data.thoigianbatdau), "YYYY-MM-DDTHH:mm:ss.SSSZ").toDate(),
                 // interest: data.interest,
                 applied_wallet_values: wallet_selection,
                 creation_date: moment(JSON.stringify(data.thoigian), "YYYY-MM-DDTHH:mm:ss.SSSZ").toDate()
@@ -218,19 +219,27 @@ export class RecurringBillEditor extends Component {
                     icon="content-save"
                     onPress={async () => {
                         let cycle_duration_day = null, cycle_duration_month = null
-                        if (this.state.cycle_duration_type === "Day")
+                        if (this.state.cycle_duration_type === "Day") {
                             cycle_duration_day = this.state.cycle_duration_value
-                        else if (this.state.cycle_duration_type === "Week")
+                            cycle_duration_month = 'a'
+                        }
+                        else if (this.state.cycle_duration_type === "Week") {
                             cycle_duration_day = this.state.cycle_duration_value * 7
-                        else if (this.state.cycle_duration_type === "Month")
+                            cycle_duration_month = 'a'
+                        }
+                        else if (this.state.cycle_duration_type === "Month") {
                             cycle_duration_month = this.state.cycle_duration_value
-                        else if (this.state.cycle_duration_type === "Year")
+                            cycle_duration_day = 'a'
+                        }
+                        else if (this.state.cycle_duration_type === "Year") {
                             cycle_duration_month = this.state.cycle_duration_value * 12
+                            cycle_duration_day = 'a'
+                        }
 
                         let saved_data = {
                             billId: (id)? id : undefined,
                             loaihangmucId: (this.state.icon)? this.state.icon.id : "",
-                            userId: '60bf81c035582676b155066e',
+                            userId: sessionStore.activeUserId,
                             name: this.state.name,
                             note: this.state.desc,
                             color: this.state.color,

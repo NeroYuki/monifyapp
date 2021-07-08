@@ -1,4 +1,5 @@
 {
   "name": "Monifyapp",
-  "displayName": "Monifyapp"
+  "displayName": "Monifyapp",
+  "packagerOpts": { "config": "metro.config.js" }
 }

@@ -29,6 +29,7 @@ export const stylesheet = StyleSheet.create({
         color: COLORS.white,
         fontSize: 20,
         marginBottom: 20,
+        fontWeight: '500'
     },
 
     header: {

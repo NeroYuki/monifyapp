@@ -10,14 +10,20 @@ export class ExpenseOrIncomeModal extends Component {
     constructor(props) {
         super(props)
 
+        // console.log("Expense Or Icome: - Constructor")
+
         this.state = {
-            selectedType: this.props.periodCurrent
+            selectedType: this.props.currentOption
         }
+    }
+
+    componentDidMount() {
+        // console.log("Expense Or Icome: - Component Did mount")
     }
 
     render() {
 
-        console.log("PERIOD", this.state.selectedType)
+        // console.log("Expense Or Icome: - Render")
         return (
             <Modal
                 animationType="fade"
@@ -38,10 +44,12 @@ export class ExpenseOrIncomeModal extends Component {
                         <Text style={styles.title}> CATEGORY TYPE </Text>
 
                         <TouchableWithoutFeedback
-                            onPress={(this.props.changePeriod) ?
-                                () => this.props.changePeriod(this.state.selectedType)
-                                :
-                                () => { console.log(this.state.selectedType) }}
+                            onPress={
+                                (this.props.changeShowingOption) ?
+                                    () => this.props.changeShowingOption(this.state.selectedType)
+                                    :
+                                    () => console.log(this.state.selectedType)
+                            }
 
                         >
                             <Icon name='check' size={25} />
@@ -54,8 +62,8 @@ export class ExpenseOrIncomeModal extends Component {
                                 this.setState({ selectedType: value })
                             }}
                         >
-                            <RadioButton.Item label="EXPENSE" value="expense" />
-                            <RadioButton.Item label="INCOME" value="income" />
+                            <RadioButton.Item label="EXPENSE" value="Expense" />
+                            <RadioButton.Item label="INCOME" value="Income" />
                         </RadioButton.Group>
                     </View>
                 </View>

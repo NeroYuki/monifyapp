@@ -48,7 +48,12 @@ export class LoanSearchModal extends Component {
                         </Picker>
                     </View>
                     <Button mode='contained' onPress={() => {
-                        (this.props.onFilterRequest) ? this.props.onFilterRequest(this.state) : () => {console.log('default handler')}
+                        (this.props.onFilterRequest) ? this.props.onFilterRequest({
+                            name_input: this.state.name_input,
+                            min_amount: parseFloat(this.state.min_amount) || undefined,
+                            max_amount: parseFloat(this.state.max_amount) || undefined,
+                            sort_mode: this.state.sort_mode,
+                        }) : () => {console.log('default handler')}
                         this.props.onRequestClose()
                     }}
                         labelStyle={style.button_label}>Filter</Button>

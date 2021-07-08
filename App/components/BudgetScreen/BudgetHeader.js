@@ -2,6 +2,10 @@ import React, { Component } from 'react'
 import { Image, StatusBar, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { COLORS, icons, SIZES, FONTS } from '../../assets/constants';
 import Svg, { G, Circle, Line, } from 'react-native-svg';
+import { currencyFormat } from '../../utils/formatNumber';
+
+import { ProgressCircle } from 'react-native-svg-charts'
+
 
 export class BudgetHeader extends Component {
 
@@ -17,9 +21,19 @@ export class BudgetHeader extends Component {
         const halfCircle = this.radius + this.strokeWidth
         const cirleCircumFerence = 2 * Math.PI * this.radius
 
+        var currentData = this.props.current
+        var totalData = this.props.total
+
+        console.log(currentData, ' ', totalData)
+
+        if (currentData < 0) currentData = 0
+
+        const percentage = (currentData / totalData)
+
+
         return (
             <View style={styles.header}>
-                <View style={{ flexDirection: 'row', flex: 1 }}>
+                <View style={{ flexDirection: 'row', flex: 1, justifyContent: 'center', alignItems: 'center' }}>
                     <TouchableOpacity style={{ width: 25, height: 25, alignItems: 'center', justifyContent: 'center' }}
                         onPress={this.props.onClick}
                     >
@@ -36,47 +50,31 @@ export class BudgetHeader extends Component {
                 </View>
 
                 {/* Donut Chart */}
-                <View style={{ height: 270, flex: 1, flexDirection: 'row' }}>
+                <View style={{ height: 270, flex: 1, flexDirection: 'row', }}>
                     <View style={{ flex: 1 }}></View>
-                    <View style={{ top: 16, width: this.radius * 2, height: this.radius * 2 }}>
-                        <Svg
-                            width={this.radius * 2}
-                            height={this.radius * 2}
-                            viewBox={`0 0 ${halfCircle * 2} ${halfCircle * 2}`}
-                        >
-                            <G rotation='-90' origin={`${halfCircle}, ${halfCircle}`}>
-                                <Circle
-                                    cx='50%'
-                                    cy='50%'
-                                    stroke={COLORS.black}
-                                    strokeWidth={this.strokeWidth}
-                                    r={this.radius}
-                                    fill='transparent'
-                                    strokeOpacity={0.2}
-                                />
-                                <Circle
-                                    cx='50%'
-                                    cy='50%'
-                                    stroke={COLORS.white}
-                                    strokeWidth={this.strokeWidth}
-                                    r={this.radius}
-                                    fill='transparent'
-                                    strokeDasharray={cirleCircumFerence}
+                    <View style={{ justifyContent: 'center', top: 16, width: this.radius * 2, height: this.radius * 2 }}>
+                        <View style={{}}>
+                            <ProgressCircle
+                                style={{ height: 200 }}
+                                progress={percentage}
+                                strokeWidth={10}
+                                progressColor={'rgb(10,134,255)'}
+                            />
+                        </View>
 
-                                    // Set Progress data
-                                    strokeDashoffset={cirleCircumFerence * (this.props.current / this.props.total)}
-                                    strokeLinecap='round'
-                                />
-                            </G>
-                        </Svg>
                         <View style={[
                             StyleSheet.absoluteFillObject,
                             { justifyContent: 'center', alignItems: 'center', flex: 1 }
                         ]}>
-                            <Image
-                                source={icons.setting}
-                                resizeMode='contain'
-                            />
+                            <TouchableOpacity
+                            //onPress={() => console.log((this.props.current / this.props.total))}
+                            >
+                                <Image
+                                    source={icons.earth}
+                                    resizeMode='contain'
+                                />
+                            </TouchableOpacity>
+
                         </View>
                     </View>
                     <View style={{ flex: 1 }}></View>
@@ -87,12 +85,12 @@ export class BudgetHeader extends Component {
                         fontSize: 24,
                         color: COLORS.white,
                         fontWeight: 'bold'
-                    }}> {this.props.total} VND</Text>
+                    }}> {currencyFormat(totalData - currentData)} VND</Text>
                     <Text style={{
                         top: 8,
                         fontSize: 17,
                         color: COLORS.lightText
-                    }}>LEFT TO SPEND</Text>
+                    }}>BALANCE LEFT</Text>
                 </View>
 
             </View >

@@ -28,6 +28,7 @@ import { RecurringBillEntry } from './RecurringBillManager/RecurringBillEntry'
 import { RecurringBillSearchModal } from './RecurringBillManager/RecurringBillSearchModal'
 import { GenericInputModal } from './GenericInputModal'
 import { ColorPickerModal } from './ColorPickerModal'
+import { SplashScreen } from './SplashScreen'
  
 export {
     TabSwitcher,
@@ -60,4 +61,5 @@ export {
     ColorPickerModal,
     WalletTransferModal,
     LoanPaymentModal,
+    SplashScreen,
 }

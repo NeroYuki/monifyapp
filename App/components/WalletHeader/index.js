@@ -4,9 +4,9 @@ import { Button, Divider, Surface } from "react-native-paper";
 import { stylesheet } from './style'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { COLORS } from "../../assets/constants";
+import { currencyFormat } from "../../utils/formatNumber";
 
 export class WalletHeader extends Component {
-
     // Change Color in Button when choose "List" or "Categories"
     TabSelectedButton = () => {
         return (
@@ -56,32 +56,31 @@ export class WalletHeader extends Component {
 
     render() {
         const style = stylesheet
-
-        console.log("HELLO", this.props.currentTab)
-
         return (
             <Surface style={style.surface}>
                 <View style={style.selector}>
                     <Text style={style.selector_text}>Overview: </Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity
+                        onPress={this.props.handleChooseWallet}
+                    >
                         <Text style={style.info_field_text_highlight}>My Wallet
-                        <Icon name="chevron-down" size={20} />
+                            <Icon name="chevron-down" size={20} />
                         </Text>
                     </TouchableOpacity>
                 </View>
                 <View style={style.info_field}>
                     <View>
-                        <Text style={style.info_field_text_highlight}>500.000</Text>
+                        <Text style={style.info_field_text_highlight}>{currencyFormat(parseInt(this.props.data.income))}</Text>
                         <Text style={style.info_field_text}>INCOME</Text>
                     </View>
                     <Divider style={style.info_field_divider}></Divider>
                     <View>
-                        <Text style={style.info_field_text_highlight}>150.000</Text>
+                        <Text style={style.info_field_text_highlight}>{currencyFormat(parseInt(this.props.data.expense))}</Text>
                         <Text style={style.info_field_text}>EXPENSES</Text>
                     </View>
                     <Divider style={style.info_field_divider}></Divider>
                     <View>
-                        <Text style={style.info_field_text_highlight}>350.000</Text>
+                        <Text style={style.info_field_text_highlight}>{currencyFormat(parseInt(this.props.data.income) - parseInt(this.props.data.expense))}</Text>
                         <Text style={style.info_field_text}>BALANCE</Text>
                     </View>
                 </View>

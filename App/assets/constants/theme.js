@@ -7,9 +7,10 @@ export const COLORS = {
 
     blue: '#00A9EA',
     blueText: '#007AFF',
+    lightBlue: '#00B9FF',
 
     black: '#000000',
-    blackBlur: 'rgba(0, 0, 0, 0.2)',
+    blackBlur: 'rgba(0, 0, 0, 0.6)',
 
     white: '#FFFFFF',
     lightWhite: 'rgba(255, 255, 255, 0.5)',
@@ -19,12 +20,15 @@ export const COLORS = {
     gray: '#A9A9A9',
     lightGray: '#F8F8F8',
     grayBackground: '#F0F0F0',
+    darkGray: '#8E8E93',
 
     blueProgress: '#00B9FF',
     ligtBlueProgress: 'rgba(0, 185, 255, 0.2)',
 
     lightText: 'rgba(255, 255, 255, 0.7)',
     separateLine: '#E7E7E7',
+
+    red: '#ff6961',
 };
 export const SIZES = {
     // global sizes

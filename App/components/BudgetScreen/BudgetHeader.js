@@ -21,13 +21,15 @@ export class BudgetHeader extends Component {
         const halfCircle = this.radius + this.strokeWidth
         const cirleCircumFerence = 2 * Math.PI * this.radius
 
+        var currentData = this.props.current
+        var totalData = this.props.total
 
-        const currentData = this.props.current
-        const totalData = this.props.total
+        console.log(currentData, ' ', totalData)
 
         if (currentData < 0) currentData = 0
 
         const percentage = (currentData / totalData)
+
 
         return (
             <View style={styles.header}>
@@ -65,7 +67,7 @@ export class BudgetHeader extends Component {
                             { justifyContent: 'center', alignItems: 'center', flex: 1 }
                         ]}>
                             <TouchableOpacity
-                                onPress={() => console.log((this.props.current / this.props.total))}
+                            //onPress={() => console.log((this.props.current / this.props.total))}
                             >
                                 <Image
                                     source={icons.earth}

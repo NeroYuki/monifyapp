@@ -12,7 +12,7 @@ import { queryTaiKhoan } from '../../services/TaiKhoanCRUD';
 import sessionStore from '../../logic/sessionStore';
 import { checkLoansForCycle, checkSavingsForCycle, checkInitialLaunch } from '../../logic/callonappopenning';
 import { checkBillForCycle } from '../../logic/CallOnAppCheckBill';
-import { initFormat } from '../../utils/formatNumber';
+import { currencyFormat, initFormat } from '../../utils/formatNumber';
 
 export class AddNewTransaction extends Component {
 
@@ -95,30 +95,46 @@ export class AddNewTransaction extends Component {
         console.log("Add New Trans: - ComponentDidMount")
 
         await checkInitialLaunch()
+        await initFormat()
         //check routine
         if (sessionStore.activeUserId) {
-            //FIXME: weird shit happen
             let message = ""
             await checkSavingsForCycle().then(
-                res => { if (res.length > 1) message += "Done checking for saving\n" },
+                res => { 
+                    const status = ["...", "VALUE UPDATED", "EXPIRED"]
+                    res.forEach((val) => {
+                        message += `- Saving fund ${val.name} has ${status[val.eventname]} for ${currencyFormat(val.amount)}` + "\n"
+                    })
+                },
                 er => { message += "Error checking for saving\n" }
             )
             await checkLoansForCycle().then(
-                res => { if (res.length > 1) message += "Done checking for loan\n" },
+                res => {
+                    const status = ["...", "VALUE UPDATED", "EXPIRED"]
+                    res.forEach((val) => {
+                        message += `- Loan fund ${val.name} has ${status[val.eventname]} with ${currencyFormat(val.amount)} left` + "\n"
+                    })
+                },
                 er => { message += "Error checking for loan\n" }
             )
             await checkBillForCycle().then(
-                res => { if (res.length > 1) message += "Done checking for bill\n" },
+                res => {
+                    const status = ["...", "SUCCESSFULLY", "FAILED"]
+                    res.forEach((val) => {
+                        let isChiTieu = (val.loaitien === 'tieudung')? true : false
+                        message += `- Recurring bill ${val.name} has ${status[val.eventname]} made new transaction for ${currencyFormat(val.amount * (isChiTieu ? -1 : 1))}` + "\n"
+                    })
+                },
                 er => { message += "Error checking for bill\n" }
             )
             if (message)
                 Alert.alert('Information', message)
         }
 
-        initFormat()
+        
 
         setTimeout(() => {
-            this.setState({splashScreenVisible: false})
+            this.setState({ splashScreenVisible: false })
         }, 2000)
     }
 
@@ -202,7 +218,7 @@ export class AddNewTransaction extends Component {
 
                         <Divider style={{ height: 1 }} />
 
-                        {/* <TouchableOpacity
+                        <TouchableOpacity
                             onPress={() => {
                                 this.setState({ recurringVisible: !this.state.recurringVisible })
                             }}
@@ -211,7 +227,7 @@ export class AddNewTransaction extends Component {
                                 <Icon name="repeat" size={24} />
                                 <Text style={styles.info_field_item_text}>Make Recurring</Text>
                             </View>
-                        </TouchableOpacity> */}
+                        </TouchableOpacity>
 
                         <Divider style={{ height: 1 }} />
                     </View>
@@ -253,13 +269,13 @@ export class AddNewTransaction extends Component {
                     {this.state.snackbarMessage}
                 </Snackbar>
 
-                {/* <RecurringModal
+                <RecurringModal
                     isVisible={this.state.recurringVisible}
 
                     closePeriod={() => {
                         this.setState({ recurringVisible: false })
                     }}
-                /> */}
+                />
 
                 <CategoriesModal
                     isVisible={this.state.categoriesVisible}
@@ -269,7 +285,7 @@ export class AddNewTransaction extends Component {
 
                 {this.state.splashScreenVisible && <SplashScreen
                     isVisible={this.state.splashScreenVisible}
-                    onRequestClose={() => {}}
+                    onRequestClose={() => { }}
                 ></SplashScreen>}
 
 

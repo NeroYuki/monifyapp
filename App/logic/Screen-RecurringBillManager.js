@@ -1,6 +1,13 @@
 import {queryGiaoDichChuKy,updateGiaoDichChuKy,insertGiaoDichChuKy,deleteGiaoDichChuKy} from '../services/GiaoDichChuKyCRUD';
 import {BSON} from 'realm';
 
+export function convertToArray(realmObjectsArray)
+{
+    let copyOfJsonArray = Array.from(realmObjectsArray);
+    let jsonArray = JSON.parse(JSON.stringify(copyOfJsonArray));
+    return jsonArray;
+}
+
 export const queryBill = ({billName,minAmount,maxAmount}) =>
   new Promise((resolve, reject) => {
     queryGiaoDichChuKy({name: billName})
@@ -13,7 +20,8 @@ export const queryBill = ({billName,minAmount,maxAmount}) =>
         }
         else
         {
-            let kq=giaodich.filter(gd=>{
+            let kq_conv = convertToArray(giaodich)
+            kq_conv=kq_conv.filter(gd=>{
                 if(gd.sotientieudung)
                     if(minAmount&&maxAmount)
                         return gd.sotientieudung>=minAmount&&gd.sotientieudung<=maxAmount
@@ -35,7 +43,8 @@ export const queryBill = ({billName,minAmount,maxAmount}) =>
                 else
                     return gd
             })
-            resolve(kq)
+            
+            resolve(kq_conv)
         }
     }).catch(er => reject(er))
 })

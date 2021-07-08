@@ -135,6 +135,32 @@ export const updateGiaoDichChuKy=GiaoDichChuKy=> new Promise((resolve,reject)=>{
     }).catch((error)=>reject(error))
 })
 
+//time constraint so no error checking, use with extreme caution
+export const upsertGiaoDichChuKy = (GiaoDichChuKy, modified_field) => new Promise((resolve, reject) => {
+  Realm.open(data).then(realm => {
+    if (!(GiaoDichChuKy.sotienthunhap != null && GiaoDichChuKy.sotientieudung != null)) {
+      if ((GiaoDichChuKy.chukygiaodichtheongay == null && GiaoDichChuKy.chukygiaodichtheothang != null) || (GiaoDichChuKy.chukygiaodichtheongay != null && GiaoDichChuKy.chukygiaodichtheothang == null)) {
+        realm.write(() => {
+          //console.log(modified_field)
+          for (const [key, val] of Object.entries(modified_field)) {
+            console.log(val, key)
+            console.log(GiaoDichChuKy[key])
+            GiaoDichChuKy[key] = val
+          }
+          let updateGiaoDichChuKy = realm.create(GiaoDichTheoCKSchema.name, GiaoDichChuKy, 'modified')
+          resolve(updateGiaoDichChuKy)
+        })
+      }
+      else {
+        reject('Không được nhập tính chu kỳ theo ngày và cả theo tháng')
+      }
+    }
+    else {
+      reject('Không được nhập cả số tiền tiêu dùng và thu nhập')
+    }
+  }).catch((error) => reject(error))
+})
+
 export const deleteGiaoDichChuKy=GiaoDichChuKy=> new Promise((resolve,reject)=>{
     Realm.open(data).then(realm=>{
         let IDGiaoDichChuKyCop = (GiaoDichChuKy.idgiaodichtheochuky)?new BSON.ObjectID(JSON.parse(JSON.stringify(GiaoDichChuKy.idgiaodichtheochuky))):null

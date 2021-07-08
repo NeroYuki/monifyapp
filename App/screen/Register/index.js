@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Text, View } from 'react-native';
+import { Text, View, TouchableOpacity } from 'react-native';
 import { TextInput, Button } from 'react-native-paper';
 import { stylesheet } from './style'
 
@@ -47,9 +47,11 @@ export class Register extends React.Component {
                     <Button mode="contained" contentStyle={style.footer_button_content} style={style.footer_button}>
                         Create account
                     </Button>
-                    <Text style={style.footer_text}>
-                        Already have an account? <Text>Sign in</Text>
-                    </Text>
+                    <TouchableOpacity onPress={() => {this.props.navigation.navigate('Login')}}>
+                        <Text style={style.footer_text}>
+                            Already have an account? <Text>Sign in</Text>
+                        </Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         );

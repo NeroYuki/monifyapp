@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Text, View } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 import { TextInput, Button } from 'react-native-paper';
 import { stylesheet } from './style'
 
@@ -45,9 +46,11 @@ export class Login extends React.Component {
                     <Button mode="contained" contentStyle={style.footer_button_content} style={style.footer_button}>
                         Sign In
                     </Button>
-                    <Text style={style.footer_text}>
-                        Don't have an account? <Text>Create an account</Text>
-                    </Text>
+                    <TouchableOpacity onPress={() => {this.props.navigation.navigate('Register')}}>
+                        <Text style={style.footer_text}>
+                            Don't have an account? <Text>Create an account</Text>
+                        </Text>
+                    </TouchableOpacity>
                 </View>
             </View>
         );

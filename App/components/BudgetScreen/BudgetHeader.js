@@ -4,6 +4,9 @@ import { COLORS, icons, SIZES, FONTS } from '../../assets/constants';
 import Svg, { G, Circle, Line, } from 'react-native-svg';
 import { currencyFormat } from '../../utils/formatNumber';
 
+import { ProgressCircle } from 'react-native-svg-charts'
+
+
 export class BudgetHeader extends Component {
 
     percentage = 100
@@ -17,6 +20,14 @@ export class BudgetHeader extends Component {
     render() {
         const halfCircle = this.radius + this.strokeWidth
         const cirleCircumFerence = 2 * Math.PI * this.radius
+
+
+        const currentData = this.props.current
+        const totalData = this.props.total
+
+        if (currentData < 0) currentData = 0
+
+        const percentage = (currentData / totalData)
 
         return (
             <View style={styles.header}>
@@ -37,41 +48,18 @@ export class BudgetHeader extends Component {
                 </View>
 
                 {/* Donut Chart */}
-                <View style={{ height: 270, flex: 1, flexDirection: 'row' }}>
+                <View style={{ height: 270, flex: 1, flexDirection: 'row', }}>
                     <View style={{ flex: 1 }}></View>
-                    <View style={{ top: 16, width: this.radius * 2, height: this.radius * 2 }}>
-                        <Svg
-                            width={this.radius * 2}
-                            height={this.radius * 2}
-                            viewBox={`0 0 ${halfCircle * 2} ${halfCircle * 2}`}
-                        >
-                            <G rotation='90' origin={`${halfCircle}, ${halfCircle}`}>
-                                <Circle
-                                    cx='50%'
-                                    cy='50%'
-                                    stroke={COLORS.black}
-                                    strokeWidth={this.strokeWidth}
-                                    r={this.radius}
-                                    fill='transparent'
-                                    strokeOpacity={0.2}
-                                />
-                                <Circle
-                                    cx='50%'
-                                    cy='50%'
-                                    stroke={COLORS.white}
-                                    strokeWidth={this.strokeWidth}
-                                    r={this.radius}
-                                    fill='transparent'
-                                    strokeDasharray={cirleCircumFerence}
+                    <View style={{ justifyContent: 'center', top: 16, width: this.radius * 2, height: this.radius * 2 }}>
+                        <View style={{}}>
+                            <ProgressCircle
+                                style={{ height: 200 }}
+                                progress={percentage}
+                                strokeWidth={10}
+                                progressColor={'rgb(10,134,255)'}
+                            />
+                        </View>
 
-                                    // Set Progress data
-                                    strokeDashoffset={
-                                        cirleCircumFerence * (this.props.current / this.props.total)
-                                    }
-                                    strokeLinecap='round'
-                                />
-                            </G>
-                        </Svg>
                         <View style={[
                             StyleSheet.absoluteFillObject,
                             { justifyContent: 'center', alignItems: 'center', flex: 1 }
@@ -95,7 +83,7 @@ export class BudgetHeader extends Component {
                         fontSize: 24,
                         color: COLORS.white,
                         fontWeight: 'bold'
-                    }}> {currencyFormat(this.props.total - this.props.current)} VND</Text>
+                    }}> {currencyFormat(totalData - currentData)} VND</Text>
                     <Text style={{
                         top: 8,
                         fontSize: 17,

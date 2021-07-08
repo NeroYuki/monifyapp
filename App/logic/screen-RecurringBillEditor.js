@@ -7,10 +7,10 @@ export const fetchBill = ({ billId }) =>
         let ID = billId
         if (billId)
             ID = new BSON.ObjectID(billId)
-        queryGiaoDichChuKy({ idgiaodichtheochuky: ID })
-            .then(giaodich => {
-                resolve(giaodich)
-            }).catch(er => reject(er))
+            queryGiaoDichChuKy({ idgiaodichtheochuky: ID })
+                .then(giaodich => {
+                    resolve(giaodich)
+                }).catch(er => reject(er))
     })
 // số tiền khi cập nhật phải đưa tham số vào lại, nếu không giá trị sẻ lưu null vì amount được phép null, sau này khi người dùng muốn nhập thì nhập
 export const saveBill = ({ billId, userId, loaihangmucId, name, color, note, amount, cycle_start, cycle_duration_day, cycle_duration_month, creation_date, idtaikhoan }) =>
@@ -192,23 +192,23 @@ export const saveBill = ({ billId, userId, loaihangmucId, name, color, note, amo
             if (!Bill.idtaikhoan && BillUpdate.idtaikhoan) {
                 Bill.idtaikhoan = new BSON.ObjectID(BillUpdate.idtaikhoan)
             }
-            if (!Bill.chukygiaodichtheongay) {
-                Bill.chukygiaodichtheongay = BillUpdate.chukygiaodichtheongay
-            }
-            if (!Bill.chukygiaodichtheothang) {
-                Bill.chukygiaodichtheothang = BillUpdate.chukygiaodichtheothang
-            }
-            if (Bill.chukygiaodichtheongay) {
-                let date = new Date(cycle_start)
-                Bill.thoigiancuoicungcheck = new Date(date.setDate(date.getDate() + Bill.chukygiaodichtheongay))
-            }
-            if (Bill.chukygiaodichtheothang) {
-                let date = new Date(cycle_start)
-                Bill.thoigiancuoicungcheck = new Date(date.getFullYear() + Bill.chukygiaodichtheothang / 12, date.getMonth() + (Bill.chukygiaodichtheothang + 1) % 12, 0)
-                if (date.getDate() < Bill.thoigiancuoicungcheck.getDate()) {
-                    Bill.thoigiancuoicungcheck = new Date(date.getFullYear() + Bill.chukygiaodichtheothang / 12, date.getMonth() + (Bill.chukygiaodichtheothang + 1) % 12, date.getDate())
-                }
-            }
+            Bill.thoigiancuoicungcheck = new Date()
+            //input is guaranteed to satisfy the non-empty condition
+            // if (!Bill.chukygiaodichtheongay || !Bill.chukygiaodichtheothang) {
+            //     Bill.chukygiaodichtheongay = BillUpdate.chukygiaodichtheongay
+            //     Bill.chukygiaodichtheothang = BillUpdate.chukygiaodichtheothang
+            // }
+            // if (Bill.chukygiaodichtheongay) {
+            //     let date = new Date(cycle_start)
+            //     Bill.thoigiancuoicungcheck = new Date(date.setDate(date.getDate() + Bill.chukygiaodichtheongay))
+            // }
+            // if (Bill.chukygiaodichtheothang) {
+            //     let date = new Date(cycle_start)
+            //     Bill.thoigiancuoicungcheck = new Date(date.getFullYear() + Bill.chukygiaodichtheothang / 12, date.getMonth() + (Bill.chukygiaodichtheothang + 1) % 12, 0)
+            //     if (date.getDate() < Bill.thoigiancuoicungcheck.getDate()) {
+            //         Bill.thoigiancuoicungcheck = new Date(date.getFullYear() + Bill.chukygiaodichtheothang / 12, date.getMonth() + (Bill.chukygiaodichtheothang + 1) % 12, date.getDate())
+            //     }
+            // }
             updateGiaoDichChuKy(Bill).then(giaodich => {
                 if (giaodich != 'Không được nhập tính chu kỳ theo ngày và cả theo tháng' && giaodich != 'Không được nhập cả số tiền tiêu dùng và thu nhập') {
                     resolve({ result: true, message: 'Cập nhật thành công' })

@@ -6,8 +6,8 @@ import catIcon from '../assets/constants/icons'
 import sessionStore from '../logic/sessionStore'
 import { fetchWallet, querywallet } from "./Screen-wallet"
 import { queryTaiKhoan, updateTaikhoanTietKiem, updateTaikhoanNo } from "../services/TaiKhoanCRUD"
-import { deactivateSaving } from "./Screen-saving"
 import { fetchBudget } from "./Screen-budget"
+import { deactivateSaving } from "./Screen-saving"
 import { queryTransactions } from "./Screen-Overview"
 
 export const checkInitialLaunch = () => new Promise((resolve, reject) => {
@@ -16,12 +16,9 @@ export const checkInitialLaunch = () => new Promise((resolve, reject) => {
         if (res) {
             let user = await login({ username: "Guest", password: "1" })
             sessionStore.activeUserId = user.toString()
-
-            console.log("Initial User: ", sessionStore.activeUserId)
             let wallets = await querywallet({})
-
             if (wallets.length > 0) sessionStore.activeWalletId = wallets[0].walletId
-            // console.log(user)
+            console.log(user)
             resolve(true)
         }
         else {
@@ -85,35 +82,40 @@ export const checkLoansForCycle = () => new Promise((resolve, reject) => {
                     loanId: id,
                     name: name,
                     eventname: 2,
-                    current_amount: total_amount
+                    amount: total_amount
                 })
             }
             else {
                 // //do nothing, you cant do much really
+                // rs.push({
+                //     loanId: id,
+                //     name: name,
+                //     eventname: 2,
+                //     amount: current_amount
+                // })
             }
         });
-
         resolve(rs)
     }, ((er) => { console.error(er); reject(er) }))
 })
+
 export const checkSavingsForCycle = () => new Promise((resolve, reject) => {
     let rs = []
     queryTaiKhoan({ taikhoantietkiem: true, deactivate: false }).then((tk) => {
         tk.forEach(async (element) => {
             //iterate thru all saving account thats still active
-            //console.log(element)
+            console.log(element)
             let tietkiem_info = element.tietkiem
             // since lastCheckedDate is not present, reduce the number of possible case
             //possible case:
             //1. due date arrived
-            //console.log(element)
             let today = new Date()
             let due_date = tietkiem_info.ngayrutdukien
             let start_date = tietkiem_info.ngaybatdau
             let current_amount = tietkiem_info.sotien
             let interest = tietkiem_info.laisuattietkiem
             let id = element.idtaikhoan
-            let inherited_wallet_id = tietkiem_info.idtkduocthuhuong
+            let inherited_wallet_id = JSON.stringify(tietkiem_info.idtkduocthuhuong)
             let name = element.tentaikhoan
             console.log(due_date.getTime() - today.getTime())
             if (due_date.getTime() - today.getTime() < 0) {
@@ -122,7 +124,7 @@ export const checkSavingsForCycle = () => new Promise((resolve, reject) => {
                 let past_cycle = Math.floor((due_date.getTime() - start_date.getTime()) / (1000 * 3600 * 24 * 30))
                 console.log(past_cycle)
                 let total_amount = current_amount * Math.pow(1 + (interest / 100), past_cycle)
-                // console.log(total_amount)
+                console.log(total_amount)
                 // update saving info with new amount value
                 let update_result = await updateTaikhoanTietKiem({
                     taikhoantietkiemid: id,
@@ -144,17 +146,24 @@ export const checkSavingsForCycle = () => new Promise((resolve, reject) => {
                     savingId: id,
                     name: name,
                     eventname: 2,
-                    current_amount: total_amount
+                    amount: total_amount
                 })
             }
             else {
-                // //do nothing, you cant do much really
+                 //do nothing, you cant do much really
+                 //test notify data
+                // rs.push({
+                //     savingId: id,
+                //     name: name,
+                //     eventname: 2,
+                //     amount: current_amount
+                // })
             }
         });
         resolve(rs)
     }, ((er) => reject(er)))
 })
-export const checkGoalForBudget = (budgetId) => new Promise(async(resolve,reject)=>{
+export const checkGoalForBudget = (budgetId) => new Promise(async (resolve, reject) => {
     //let today = new Date()
     let today = new Date()
     fetchBudget({budgetId:budgetId}).then(async(bg)=>{
@@ -171,21 +180,20 @@ export const checkGoalForBudget = (budgetId) => new Promise(async(resolve,reject
         // số tiền mục tiêu
         let goalmoney = budget.sotienmuctieu
         //query all transaction
-        if(budget.idnguoidung==null) return reject({result:false,message: 'muc tieu khong co tai khoan'})
-        let queryresult = await(queryTransactions({start_day:start_day,end_day:end_day,walletId:wallet.walletId}))
-        let transaclist=queryresult.trans
+        if (budget.idnguoidung == null) return reject({ result: false, message: 'muc tieu khong co tai khoan' })
+        let queryresult = await (queryTransactions({ start_day: start_day, end_day: end_day, walletId: wallet.walletId }))
+        let transaclist = queryresult.trans
         let income = queryresult.income
-        let expense= queryresult.expense
+        let expense = queryresult.expense
         //
         //new mapdata
         let transactionmapthunhap = new Map()
         let transactionmaptieudung = new Map()
         let transmapresult = new Map()
         // tao array ngay
-        let dayarr = getDaysArray(start_day,end_day)
+        let dayarr = getDaysArray(start_day, end_day)
         //khoi tao gia tri ban dau
         dayarr.forEach(element => {
-            element //có thể cần tới
             transactionmapthunhap.set(element,0)
             transactionmaptieudung.set(element,0)
             transmapresult.set(element,0)
@@ -193,65 +201,64 @@ export const checkGoalForBudget = (budgetId) => new Promise(async(resolve,reject
 
         //sap xep cac transaction vao map
         transaclist.forEach(element => {
-            element.time     //có thể cần tới 
             if (element.data.sotientieudung)
-                transactionmaptieudung.set(element.time,element.data.sotientieudung) //expense
+                transactionmaptieudung.set(element.time, element.data.sotientieudung) //expense
             else if (element.data.sotienthunhap)
-                transactionmapthunhap.set(element.time,element.data.sotienthunhap) //income
+                transactionmapthunhap.set(element.time, element.data.sotienthunhap) //income
         });
         // khoi tao gia tri cho linear regession
-        let datearr=[]
-        let valuearr=[]
+        let datearr = []
+        let valuearr = []
         let tempamountofmoney = 0
         let basemoney = currentmoney - income + expense
 
         //check loại mục tiêu nào để tính 
-        if(budget.loaimuctieu.tietkiemdenmuc==true){
-            transactionmapthunhap.forEach((value,key)=>{
+        if (budget.loaimuctieu.tietkiemdenmuc == true) {
+            transactionmapthunhap.forEach((value, key) => {
                 tempamountofmoney += value
-                transmapresult.set(key,tempamountofmoney)
+                transmapresult.set(key, tempamountofmoney)
             })
 
             //
-            transmapresult.forEach((value,key)=>{
-                datearr.push( Math.floor((key.getTime()-start_day.getTime()) / (1000 * 3600 * 24 * 30)))
+            transmapresult.forEach((value, key) => {
+                datearr.push(Math.floor((key.getTime() - start_day.getTime()) / (1000 * 3600 * 24 * 30)))
                 valuearr.push(value)
             })
         }
-        else if(budget.loaimuctieu.tieudungquamuc==true){
-            transactionmaptieudung.forEach((value,key)=>{
+        else if (budget.loaimuctieu.tieudungquamuc == true) {
+            transactionmaptieudung.forEach((value, key) => {
                 tempamountofmoney += value
-                transmapresult.set(key,tempamountofmoney)
+                transmapresult.set(key, tempamountofmoney)
             })
 
             //
-            transmapresult.forEach((value,key)=>{
-                datearr.push( Math.floor((key.getTime()-start_day.getTime()) / (1000 * 3600 * 24 * 30)))
+            transmapresult.forEach((value, key) => {
+                datearr.push(Math.floor((key.getTime() - start_day.getTime()) / (1000 * 3600 * 24 * 30)))
                 valuearr.push(value)
             })
         }
 
-        else if(budget.loaimuctieu.sodutoithieu==true){
-            transactionmapthunhap.forEach((value,key)=>{
+        else if (budget.loaimuctieu.sodutoithieu == true) {
+            transactionmapthunhap.forEach((value, key) => {
                 tempamountofmoney += value
-                transmapresult.set(key,tempamountofmoney)
+                transmapresult.set(key, tempamountofmoney)
             })
-            transactionmaptieudung.forEach((value,key)=>{
+            transactionmaptieudung.forEach((value, key) => {
                 tempamountofmoney -= value
-                transmapresult.set(key,tempamountofmoney)
+                transmapresult.set(key, tempamountofmoney)
             })
             //
-            transmapresult.forEach((value,key)=>{
-                datearr.push( Math.floor((key.getTime()-start_day.getTime()) / (1000 * 3600 * 24 * 30)))
-                valuearr.push(basemoney+value)
+            transmapresult.forEach((value, key) => {
+                datearr.push(Math.floor((key.getTime() - start_day.getTime()) / (1000 * 3600 * 24 * 30)))
+                valuearr.push(basemoney + value)
             })
-        }else {
-            reject({result:false,message:'muc tieu ca nhan khong co loai muc tieu' })
+        } else {
+            reject({ result: false, message: 'muc tieu ca nhan khong co loai muc tieu' })
         }
 
 
         //linear progression
-        let linearresult = linearRegression(valuearr,datearr)
+        let linearresult = linearRegression(valuearr, datearr)
         //gia tri sau khi predict
         let predictresult = linearresult.interest + linearresult.slope*((budget.ngayketthuc.getTime()-start_day.getTime())/ (1000 * 3600 * 24 * 30))
         
@@ -260,22 +267,22 @@ export const checkGoalForBudget = (budgetId) => new Promise(async(resolve,reject
                 if(predictresult > goalmoney){
                     resolve({result:1, message:'Bạn có khả năng cao sẽ hoàn thành mục tiêu thu nhập đề ra'})
                 }
-                else{
-                    resolve({result:2, message:'Thu nhập của bạn có khả năng sẽ chưa đủ để hoàn thành mục tiêu'})
+                else {
+                    resolve({ result: 2, message: 'Thu nhập của bạn có khả năng sẽ chưa đủ để hoàn thành mục tiêu' })
                 }
-            }else if(budget.loaimuctieu.tieudungquamuc==true){ //tieu dung
-                if(predictresult > goalmoney){
-                    resolve({result:2, message:'Tỉ lệ cao rằng bạn sẽ vượt quá mức tiêu dùng bạn đề ra'})
+            } else if (budget.loaimuctieu.tieudungquamuc == true) { //tieu dung
+                if (predictresult > goalmoney) {
+                    resolve({ result: 2, message: 'Tỉ lệ cao rằng bạn sẽ vượt quá mức tiêu dùng bạn đề ra' })
                 }
-                else{
-                    resolve({result:1, message:'Bạn có khả năng cao sẽ hoàn thành mục tiêu chi tiêu đề ra'})
+                else {
+                    resolve({ result: 1, message: 'Bạn có khả năng cao sẽ hoàn thành mục tiêu chi tiêu đề ra' })
                 }
-            }else if(budget.loaimuctieu.sodutoithieu==true){ // so du
-                if(predictresult > goalmoney){
-                    resolve({result:1, message:'Chương trình dự đoán rằng số dư của bạn sẽ vượt quá mục tiêu đề ra'})
+            } else if (budget.loaimuctieu.sodutoithieu == true) { // so du
+                if (predictresult > goalmoney) {
+                    resolve({ result: 1, message: 'Chương trình dự đoán rằng số dư của bạn sẽ vượt quá mục tiêu đề ra' })
                 }
-                else{
-                    resolve({result:2, message:'Chương trình dự đoán rằng số dư của bạn sẽ không vượt quá'})
+                else {
+                    resolve({ result: 2, message: 'Chương trình dự đoán rằng số dư của bạn sẽ không vượt quá' })
                 }
             }
         }
@@ -284,29 +291,29 @@ export const checkGoalForBudget = (budgetId) => new Promise(async(resolve,reject
                 if(transmapresult.get(budget.ngayketthuc) > goalmoney){
                     resolve({result:3, message:'Bạn đã hoàn thành mục tiêu'})
                 }
-                else{
-                    resolve({result:4, message:'Bạn đã không hoàn thành mục tiêu'})
+                else {
+                    resolve({ result: 4, message: 'Bạn đã không hoàn thành mục tiêu' })
                 }
             }else if(budget.loaimuctieu.tieudungquamuc==true){ //tiêu dùng
                 if(transmapresult.get(budget.ngayketthuc) > goalmoney){
                     resolve({result:4, message:'Bạn đã không hoàn thành mục tiêu'})
                 }
-                else{
-                    resolve({result:3, message:'Bạn đã hoàn thành mục tiêu'})
+                else {
+                    resolve({ result: 3, message: 'Bạn đã hoàn thành mục tiêu' })
                 }
             }else if(budget.loaimuctieu.sodutoithieu==true){ //số dư
                 if(transmapresult.get(budget.ngayketthuc) > goalmoney){
                     resolve({result:3, message:'Bạn đã hoàn thành mục tiêu'})
                 }
-                else{
-                    resolve({result:4, message:'Bạn đã không hoàn thành mục tiêu'})
+                else {
+                    resolve({ result: 4, message: 'Bạn đã không hoàn thành mục tiêu' })
                 }
             }
         }
-    },(error)=> {console.error(error)})
+    }, (error) => { console.error(error) })
 })
-var getDaysArray = function(start, end) {
-    for(var arr=[],dt=new Date(start); dt<=end; dt.setDate(dt.getDate()+1)){
+var getDaysArray = function (start, end) {
+    for (var arr = [], dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
         arr.push(new Date(dt));
     }
     return arr;
@@ -320,4 +327,29 @@ Date.prototype.addMonths = function (days) {
     var date = new Date(this.valueOf());
     date.setMonth(date.getMonth() + days);
     return date;
+}
+
+function linearRegression(y, x) {
+    var lr = {};
+    var n = y.length;
+    var sum_x = 0;
+    var sum_y = 0;
+    var sum_xy = 0;
+    var sum_xx = 0;
+    var sum_yy = 0;
+
+    for (var i = 0; i < y.length; i++) {
+
+        sum_x += x[i];
+        sum_y += y[i];
+        sum_xy += (x[i] * y[i]);
+        sum_xx += (x[i] * x[i]);
+        sum_yy += (y[i] * y[i]);
+    }
+
+    lr['slope'] = (n * sum_xy - sum_x * sum_y) / (n * sum_xx - sum_x * sum_x);
+    lr['intercept'] = (sum_y - lr.slope * sum_x) / n;
+    lr['r2'] = Math.pow((n * sum_xy - sum_x * sum_y) / Math.sqrt((n * sum_xx - sum_x * sum_x) * (n * sum_yy - sum_y * sum_y)), 2);
+
+    return lr;
 }

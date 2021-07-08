@@ -217,7 +217,7 @@ export class BudgetScreen extends React.Component {
                                         onClick={this.showSettingScreen}
                                     />
 
-                                    <BudgetSettingModal
+                                    {this.state.settingVisible && <BudgetSettingModal
                                         income={this.state.income}
                                         expense={this.state.expense}
                                         balance={this.state.balance}
@@ -227,7 +227,7 @@ export class BudgetScreen extends React.Component {
                                             this.setState({ settingVisible: false })
                                             this.getAllBudgetData()
                                         }}
-                                    />
+                                    />}
 
                                 </ScrollView>
 
@@ -245,7 +245,7 @@ export class BudgetScreen extends React.Component {
                             <Text style={{ color: COLORS.white, fontSize: 18, }}> CREATE BUDGET </Text>
                         </TouchableOpacity>
 
-                        <BudgetSettingModal
+                        {this.state.settingVisible && <BudgetSettingModal
                             income={this.state.income}
                             expense={this.state.expense}
                             balance={this.state.balance}
@@ -256,7 +256,7 @@ export class BudgetScreen extends React.Component {
                                 this.setState({ settingVisible: false })
                                 this.getAllBudgetData()
                             }}
-                        />
+                        />}
                     </View>
 
 

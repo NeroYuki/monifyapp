@@ -25,9 +25,9 @@ export class BudgetSettingModal extends Component {
 
             periodCurrent: "Monthly",
             name: 'My Wallet',
-            income: 0,
-            expense: 0,
-            balance: 0,
+            income: "0",
+            expense: "0",
+            balance: "0",
             // income: (this.props.income.sotienmuctieu != 1) ? this.props.income.sotienmuctieu : 1,
             // expense: (this.props.expense.sotienmuctieu != 1) ? this.props.expense.sotienmuctieu : 1,
             // balance: (this.props.balance.sotienmuctieu != 1) ? this.props.balance.sotienmuctieu : 1,
@@ -38,14 +38,16 @@ export class BudgetSettingModal extends Component {
         this.changeTypeOfPeriod = this.changeTypeOfPeriod.bind(this)
     }
 
-    componentDidMount() {
+    async componentDidMount() {
         console.log("BUDGET SETTING - COMPONENT DID MOUNT")
 
-        this.setState({
-            income: this.props.income.sotienmuctieu,
-            expense: this.props.expense.sotienmuctieu,
-            balance: this.props.balance.sotienmuctieu,
+        await this.setState({
+            income: this.props.income.sotienmuctieu.toString(),
+            expense: this.props.expense.sotienmuctieu.toString(),
+            balance: this.props.balance.sotienmuctieu.toString(),
         })
+
+        console.log(this.state)
     }
 
     changePeriod(val) {
@@ -90,7 +92,7 @@ export class BudgetSettingModal extends Component {
                         budgetId: (this.props.income.idmuctieu != '') ? this.props.income.idmuctieu : null,
                         userId: sessionStore.activeWalletId,
                         name: this.state.name,
-                        amount: parseInt(this.state.income),
+                        amount: parseInt(this.state.income) || 1,
                         loaimuctieu: 'TietKiemDenMuc', //TieuDungQuaMuc, SoDuToiThieu, TietKiemDenMuc
                         period: this.changeTypeOfPeriod(this.state.periodCurrent),
                         //year, month, week
@@ -103,7 +105,7 @@ export class BudgetSettingModal extends Component {
                         budgetId: (this.props.expense.idmuctieu != '') ? this.props.expense.idmuctieu : null,
                         userId: sessionStore.activeWalletId,
                         name: this.state.name,
-                        amount: parseInt(this.state.expense),
+                        amount: parseInt(this.state.expense) || 1,
                         loaimuctieu: 'TieuDungQuaMuc', //TieuDungQuaMuc, SoDuToiThieu, TietKiemDenMuc
                         period: this.changeTypeOfPeriod(this.state.periodCurrent), //year, month, week
                     }
@@ -116,7 +118,7 @@ export class BudgetSettingModal extends Component {
                         budgetId: (this.props.balance.idmuctieu != '') ? this.props.balance.idmuctieu : null,
                         userId: sessionStore.activeWalletId,
                         name: this.state.name,
-                        amount: parseInt(this.state.balance),
+                        amount: parseInt(this.state.balance) || 1,
                         loaimuctieu: 'SoDuToiThieu', //TieuDungQuaMuc, SoDuToiThieu, TietKiemDenMuc
                         period: this.changeTypeOfPeriod(this.state.periodCurrent), //year, month, week
                     }
@@ -125,6 +127,7 @@ export class BudgetSettingModal extends Component {
                 }
 
                 Alert.alert(
+                    "Info",
                     "Successfully to create budget",
                     [
                         { text: "OK", onPress: () => console.log("OK Pressed") }
@@ -133,7 +136,7 @@ export class BudgetSettingModal extends Component {
             } catch (error) {
                 Alert.alert(
                     "Something wrong!",
-                    { error },
+                    error,
                     [
                         {
                             text: "Cancel",

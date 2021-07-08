@@ -1,6 +1,6 @@
 import { format } from 'date-fns';
 import React from 'react';
-import { Image, SafeAreaView, ScrollView, StyleSheet, View, Dimensions, Text, TouchableOpacity } from 'react-native';
+import { Image, SafeAreaView, ScrollView, StyleSheet, View, Dimensions, Text, RefreshControl, TouchableOpacity } from 'react-native';
 import { COLORS, images } from '../../assets/constants';
 import { BudgetHeader, TabSwitcher } from '../../components';
 import { ExpenseReportView } from '../../components/BudgetScreen/ExpenseReportView';
@@ -53,6 +53,9 @@ export class BudgetScreen extends React.Component {
             settingVisible: false,
 
             isHaveBudgetData: false,
+
+            isLoading: true,
+            isRefreshing: false,
         }
 
         this.showSettingScreen = this.showSettingScreen.bind(this)
@@ -65,7 +68,9 @@ export class BudgetScreen extends React.Component {
 
         this.getAllBudgetData()
 
-        // console.log(await checkGoalForBudget('60e26298e4ddf0e2231fc8b1'))
+        console.log("RESult INCOME", await checkGoalForBudget('60e26298e4ddf0e2231fc8b1'))
+        console.log("RESult EXPENSE", await checkGoalForBudget('60e26298e4ddf0e2231fc8b2'))
+        console.log("RESult BALANCE ", await checkGoalForBudget('60e26298e4ddf0e2231fc8b3'))
     }
 
     getAllBudgetData = async () => {
@@ -75,6 +80,7 @@ export class BudgetScreen extends React.Component {
 
         // console.log("BUDGET DATAAAA ", budgetData)
         this.setState({
+            isLoading: false,
             isHaveBudgetData: (budgetData.length != 0)
         })
 
@@ -129,94 +135,133 @@ export class BudgetScreen extends React.Component {
         })
     }
 
+    wait = (timeout) => {
+        return new Promise(resolve => setTimeout(resolve, timeout));
+    }
+
+
+    onRefresh = () => {
+        this.setState({
+            isRefreshing: true,
+        })
+
+        this.wait(1000).then(() => {
+
+            this.getAllBudgetData()
+
+            this.setState({
+                isRefreshing: false
+            })
+        });
+    }
+
+
     render() {
+
+        console.log("Budget - render")
         const buttonWidth = Dimensions.get('window').width - 100;
 
-        return (
+        if (this.state.isLoading) {
+            return (
+                <View></View>
+            )
+        }
+        else
+            return (
 
-            (this.state.isHaveBudgetData)
-                ? <View style={{ flex: 1 }}>
-                    <SafeAreaView style={{ flex: 0, backgroundColor: COLORS.lightBlue }} />
-                    <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightGray }}>
-                        <View style={styles.container}>
-                            <ScrollView showsVerticalScrollIndicator={false}>
-                                {/* Banner Photo */}
-                                <View style={{ height: 400 }}>
-                                    <View style={{ flex: 1, backgroundColor: COLORS.lightBlue }}>
+                (this.state.isHaveBudgetData)
+                    ? <View style={{ flex: 1 }}>
+                        <SafeAreaView style={{ flex: 0, backgroundColor: COLORS.lightBlue }} />
+                        <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.lightGray }}>
+                            <View style={styles.container}>
+
+                                <ScrollView
+                                    style={{ flex: 1, backgroundColor: COLORS.lightGray }}
+                                    showsVerticalScrollIndicator={false}
+                                    refreshControl={
+                                        <RefreshControl
+                                            refreshing={this.state.isRefreshing}
+                                            onRefresh={this.onRefresh}
+                                        />
+                                    }
+                                >
+                                    {/* Banner Photo */}
+                                    <View style={{ height: 400 }}>
+                                        <View style={{ flex: 1, backgroundColor: COLORS.lightBlue }}>
+                                        </View>
                                     </View>
-                                </View>
 
-                                {/* Detail of Budget */}
-                                <View style={[styles.detailBudget, { backgroundColor: COLORS.lightGray }]}>
-                                    <TabSwitcher
-                                        text={format(new Date(this.state.startDate), 'dd MMM') + ' - ' + format(new Date(this.state.endDate), 'dd MMM')}
-                                        onTimeTextPress={this.showSettingScreen} />
+                                    {/* Detail of Budget */}
+                                    <View style={[styles.detailBudget, { backgroundColor: COLORS.lightGray }]}>
+                                        <TabSwitcher
+                                            text={format(new Date(this.state.startDate), 'dd MMM') + ' - ' + format(new Date(this.state.endDate), 'dd MMM')}
+                                            onTimeTextPress={this.showSettingScreen} />
 
-                                    <IncomeReportView
-                                        title="Income"
-                                        current={this.state.transData.incomeCurrent}
-                                        total={this.state.income.sotienmuctieu}
+                                        <IncomeReportView
+                                            title="Income"
+                                            current={this.state.transData.incomeCurrent}
+                                            total={this.state.income.sotienmuctieu}
+                                        />
+
+                                        <IncomeReportView
+                                            title="Expense"
+                                            current={this.state.transData.expenseCurrent}
+                                            total={this.state.expense.sotienmuctieu}
+                                        />
+                                    </View>
+
+                                    {/* Render Header */}
+                                    <BudgetHeader
+                                        current={this.state.transData.balanceCurrent}
+                                        total={this.state.balance.sotienmuctieu}
+                                        onClick={this.showSettingScreen}
                                     />
 
-                                    <IncomeReportView
-                                        title="Expense"
-                                        current={this.state.transData.expenseCurrent}
-                                        total={this.state.expense.sotienmuctieu}
+                                    <BudgetSettingModal
+                                        income={this.state.income}
+                                        expense={this.state.expense}
+                                        balance={this.state.balance}
+                                        isHaveBudgetData={this.state.isHaveBudgetData}
+                                        isVisible={this.state.settingVisible}
+                                        onRequestClose={() => {
+                                            this.setState({ settingVisible: false })
+                                            this.getAllBudgetData()
+                                        }}
                                     />
-                                </View>
 
-                                {/* Render Header */}
-                                <BudgetHeader
-                                    current={this.state.transData.balanceCurrent}
-                                    total={this.state.balance.sotienmuctieu}
-                                    onClick={this.showSettingScreen}
-                                />
+                                </ScrollView>
 
-                                <BudgetSettingModal
-                                    income={this.state.income}
-                                    expense={this.state.expense}
-                                    balance={this.state.balance}
-                                    isHaveBudgetData={this.state.isHaveBudgetData}
-                                    isVisible={this.state.settingVisible}
-                                    onRequestClose={() => {
-                                        this.setState({ settingVisible: false })
-                                        this.getAllBudgetData()
-                                    }}
-                                />
+                            </View >
+                        </SafeAreaView>
+                    </View>
+                    :
+                    <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
+                        <TouchableOpacity
+                            style={[styles.button, { width: buttonWidth }]}
+                            onPress={() => {
+                                this.setState({ settingVisible: true })
+                            }}
+                        >
+                            <Text style={{ color: COLORS.white, fontSize: 18, }}> CREATE BUDGET </Text>
+                        </TouchableOpacity>
 
-                            </ScrollView>
-
-                        </View >
-                    </SafeAreaView>
-                </View>
-                :
-                <View style={[styles.container, { justifyContent: 'center', alignItems: 'center' }]}>
-                    <TouchableOpacity
-                        style={[styles.button, { width: buttonWidth }]}
-                        onPress={() => {
-                            this.setState({ settingVisible: true })
-                        }}
-                    >
-                        <Text style={{ color: COLORS.white, fontSize: 18, }}> CREATE BUDGET </Text>
-                    </TouchableOpacity>
-
-                    <BudgetSettingModal
-                        income={this.state.income}
-                        expense={this.state.expense}
-                        balance={this.state.balance}
-                        isVisible={this.state.settingVisible}
-                        isHaveBudgetData={this.state.isHaveBudgetData}
-                        onRequestClose={() => {
-                            console.log("EXIT SETTINGGGG")
-                            this.setState({ settingVisible: false })
-                            this.getAllBudgetData()
-                        }}
-                    />
-                </View>
+                        <BudgetSettingModal
+                            income={this.state.income}
+                            expense={this.state.expense}
+                            balance={this.state.balance}
+                            isVisible={this.state.settingVisible}
+                            isHaveBudgetData={this.state.isHaveBudgetData}
+                            onRequestClose={() => {
+                                console.log("EXIT SETTINGGGG")
+                                this.setState({ settingVisible: false })
+                                this.getAllBudgetData()
+                            }}
+                        />
+                    </View>
 
 
 
-        )
+            )
     }
 }
 

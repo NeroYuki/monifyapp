@@ -3,7 +3,7 @@ import { View, Modal, Text, TouchableOpacity, SafeAreaView, TextInput, ScrollVie
 
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { COLORS } from '../../assets/constants';
-import { saveBudget } from "../../logic/Screen-budget";
+import { deleteBudget, saveBudget } from "../../logic/Screen-budget";
 import sessionStore from "../../logic/sessionStore";
 import { BudgetSettingPeriodModal } from "./BudgetSettingPeriodModal";
 
@@ -28,11 +28,24 @@ export class BudgetSettingModal extends Component {
             income: 0,
             expense: 0,
             balance: 0,
+            // income: (this.props.income.sotienmuctieu != 1) ? this.props.income.sotienmuctieu : 1,
+            // expense: (this.props.expense.sotienmuctieu != 1) ? this.props.expense.sotienmuctieu : 1,
+            // balance: (this.props.balance.sotienmuctieu != 1) ? this.props.balance.sotienmuctieu : 1,
         }
 
         this.changePeriod = this.changePeriod.bind(this)
         this.handleSaveBudget = this.handleSaveBudget.bind(this)
         this.changeTypeOfPeriod = this.changeTypeOfPeriod.bind(this)
+    }
+
+    componentDidMount() {
+        console.log("BUDGET SETTING - COMPONENT DID MOUNT")
+
+        this.setState({
+            income: this.props.income.sotienmuctieu,
+            expense: this.props.expense.sotienmuctieu,
+            balance: this.props.balance.sotienmuctieu,
+        })
     }
 
     changePeriod(val) {
@@ -132,11 +145,71 @@ export class BudgetSettingModal extends Component {
                 )
             }
         }
+    }
 
+    handleDeleteBudget = async () => {
+        console.log("DELETE budget")
+
+        // console.log(await deleteBudget("60e26298e4ddf0e2231fc8b1"))
+        // console.log(await deleteBudget("60e26298e4ddf0e2231fc8b2"))
+        // console.log(await deleteBudget("60e26298e4ddf0e2231fc8b3"))
+
+        // try {
+        //     if (this.props.income != 0) {
+        //         var value = {
+        //             budgetId: (this.props.income.idmuctieu != '') ? this.props.income.idmuctieu : null,
+        //         }
+
+        //         console.log(value.budgetId)
+        //         await deleteBudget(value.budgetId)
+        //         //console.log("INCOME SAVE: ", JSON.parse(JSON.stringify(await deleteBudget(value.budgetId))))
+        //     }
+
+        //     if (this.props.expense != 0) {
+        //         var value = {
+        //             budgetId: (this.props.expense.idmuctieu != '') ? this.props.expense.idmuctieu : null,
+        //         }
+
+        //         console.log(value.budgetId)
+        //         await deleteBudget(value.budgetId)
+        //         //console.log("EXPENSE SAVE: ", JSON.parse(JSON.stringify(await deleteBudget(value.budgetId))))
+        //     }
+
+        //     if (this.props.balance != 0) {
+        //         var value = {
+        //             budgetId: (this.props.balance.idmuctieu != '') ? this.props.balance.idmuctieu : null,
+        //         }
+
+        //         console.log(value.budgetId)
+        //         await deleteBudget(value.budgetId)
+        //         //console.log("BALANCE SAVE: ", JSON.parse(JSON.stringify(await deleteBudget(value.budgetId))))
+        //     }
+
+        //     Alert.alert(
+        //         "Successfully to delete budget",
+        //         [
+        //             { text: "OK", onPress: () => console.log("OK Pressed") }
+        //         ]
+        //     )
+        // } catch (error) {
+        //     Alert.alert(
+        //         "Something wrong!",
+        //         { error },
+        //         [
+        //             {
+        //                 text: "Cancel",
+        //                 onPress: () => console.log("Cancel Pressed"),
+        //                 style: "cancel"
+        //             },
+        //             { text: "OK", onPress: () => console.log("OK Pressed") }
+        //         ]
+        //     )
+        // }
     }
 
     render() {
-        console.log("BUDGET SETTING - render")
+
+        console.log("BUDGET SETTING - RENDER")
         return (
             <Modal
                 animationType="slide"
@@ -272,16 +345,14 @@ export class BudgetSettingModal extends Component {
                             </View>
                         </TouchableOpacity>
 
-                        <TouchableOpacity
+                        {/* <TouchableOpacity
                             style={{ paddingTop: 16, flex: 1, justifyContent: 'center', marginRight: 16, marginLeft: 16 }}
-                            onPress={() => {
-                                console.log(this.props.income)
-                            }}
+                            onPress={this.handleDeleteBudget}
                         >
                             <View style={[styles.button, { backgroundColor: COLORS.red }]}>
                                 <Text style={{ fontSize: 17, color: COLORS.white }}> DELETE </Text>
                             </View>
-                        </TouchableOpacity>
+                        </TouchableOpacity> */}
 
                         <BudgetSettingPeriodModal
                             isVisible={this.state.periodVisible}

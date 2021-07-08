@@ -150,8 +150,8 @@ export const checkSavingsForCycle = () => new Promise((resolve, reject) => {
                 })
             }
             else {
-                 //do nothing, you cant do much really
-                 //test notify data
+                //do nothing, you cant do much really
+                //test notify data
                 // rs.push({
                 //     savingId: id,
                 //     name: name,
@@ -165,18 +165,17 @@ export const checkSavingsForCycle = () => new Promise((resolve, reject) => {
 })
 export const checkGoalForBudget = (budgetId) => new Promise(async (resolve, reject) => {
     //let today = new Date()
-    let today = new Date().setHours(0, 0, 0, 0)
+    let today = new Date()
     fetchBudget({ budgetId: budgetId }).then(async (bg) => {
         if (bg == []) return reject({ result: false, message: 'budget ko ton tai' })
         //budgetid
         let budget = bg[0]
         //startday + endday for calculation 
-        let end_day = budget.ngayketthuc.setHours(0, 0, 0, 0)
+        let end_day = budget.ngayketthuc
         if (today < end_day) end_day = today
-        let start_day = budget.ngaybatdau.setHours(0, 0, 0, 0)
+        let start_day = budget.ngaybatdau
         //fetch wallet info get current money amount
         let wallet = await (fetchWallet(budget.idnguoidung))
-        console.log(JSON.stringify(wallet))
         let currentmoney = wallet.amount
         // số tiền mục tiêu
         let goalmoney = budget.sotienmuctieu
@@ -195,7 +194,7 @@ export const checkGoalForBudget = (budgetId) => new Promise(async (resolve, reje
         let dayarr = getDaysArray(start_day, end_day)
         //khoi tao gia tri ban dau
         dayarr.forEach(element => {
-            element.setHours(0, 0, 0, 0)   //có thể cần tới
+            element //có thể cần tới
             transactionmapthunhap.set(element, 0)
             transactionmaptieudung.set(element, 0)
             transmapresult.set(element, 0)
@@ -203,7 +202,7 @@ export const checkGoalForBudget = (budgetId) => new Promise(async (resolve, reje
 
         //sap xep cac transaction vao map
         transaclist.forEach(element => {
-            element.time.setHours(0, 0, 0, 0)       //có thể cần tới 
+            element.time     //có thể cần tới 
             if (element.data.sotientieudung)
                 transactionmaptieudung.set(element.time, element.data.sotientieudung) //expense
             else if (element.data.sotienthunhap)
@@ -263,9 +262,9 @@ export const checkGoalForBudget = (budgetId) => new Promise(async (resolve, reje
         //linear progression
         let linearresult = linearRegression(valuearr, datearr)
         //gia tri sau khi predict
-        let predictresult = linearresult.interest + linearresult.slope * ((budget.ngayketthuc.setHours(0, 0, 0, 0).getTime() - start_day.getTime()) / (1000 * 3600 * 24 * 30))
+        let predictresult = linearresult.interest + linearresult.slope * ((budget.ngayketthuc.getTime() - start_day.getTime()) / (1000 * 3600 * 24 * 30))
 
-        if (budget[0].ngayketthuc.setHours(0, 0, 0, 0) >= today) {   //nếu như chưa quá hạn mục tiêu
+        if (budget.ngayketthuc >= today) {   //nếu như chưa quá hạn mục tiêu
             if (budget.loaimuctieu.tietkiemdenmuc == true) {    // tietkiem
                 if (predictresult > goalmoney) {
                     resolve({ result: 1, message: 'Bạn có khả năng cao sẽ hoàn thành mục tiêu thu nhập đề ra' })
@@ -291,21 +290,21 @@ export const checkGoalForBudget = (budgetId) => new Promise(async (resolve, reje
         }
         else {           // nếu như quá hạn 
             if (budget.loaimuctieu.tietkiemdenmuc == true) {   // tiết kiệm
-                if (transmapresult.get(budget.ngayketthuc.setHours(0, 0, 0, 0)) > goalmoney) {
+                if (transmapresult.get(budget.ngayketthuc) > goalmoney) {
                     resolve({ result: 3, message: 'Bạn đã hoàn thành mục tiêu' })
                 }
                 else {
                     resolve({ result: 4, message: 'Bạn đã không hoàn thành mục tiêu' })
                 }
             } else if (budget.loaimuctieu.tieudungquamuc == true) { //tiêu dùng
-                if (transmapresult.get(budget.ngayketthuc.setHours(0, 0, 0, 0)) > goalmoney) {
+                if (transmapresult.get(budget.ngayketthuc) > goalmoney) {
                     resolve({ result: 4, message: 'Bạn đã không hoàn thành mục tiêu' })
                 }
                 else {
                     resolve({ result: 3, message: 'Bạn đã hoàn thành mục tiêu' })
                 }
             } else if (budget.loaimuctieu.sodutoithieu == true) { //số dư
-                if (transmapresult.get(budget.ngayketthuc.setHours(0, 0, 0, 0)) > goalmoney) {
+                if (transmapresult.get(budget.ngayketthuc) > goalmoney) {
                     resolve({ result: 3, message: 'Bạn đã hoàn thành mục tiêu' })
                 }
                 else {

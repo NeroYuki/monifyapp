@@ -20,10 +20,10 @@ Danh sách thư viện có thể tham khảo file package.json
 
 #### Tác giả
 
-Nguyễn Ngọc Đăng - 18520557
-Hà Minh Hiệu - 18520736
-Hà Nhật Linh - 18520086
-Nguyễn Thành Long - 18520092
+* Nguyễn Ngọc Đăng - 18520557
+* Hà Minh Hiệu - 18520736
+* Hà Nhật Linh - 18520086
+* Nguyễn Thành Long - 18520092
 
 #### Giấy phép
 

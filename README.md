@@ -22,9 +22,6 @@ Danh sách thư viện có thể tham khảo file package.json
 
 Nguyễn Ngọc Đăng - 18520557
 Hà Minh Hiệu - 18520736
-
-Với sự hỗ trợ của
-
 Hà Nhật Linh - 18520086
 Nguyễn Thành Long - 18520092
 

@@ -7,6 +7,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest --testTimeout=30000",
+    "detox-build":"detox build -c android.emu.debug",
+    "detox-test" :"detox test -c android.emu.debug",
     "lint": "eslint ."
   },
   "dependencies": {
@@ -47,6 +49,7 @@
     "@testing-library/jest-native": "^4.0.1",
     "@testing-library/react-native": "^7.2.0",
     "babel-jest": "^26.6.3",
+    "detox": "^18.22.2",
     "eslint": "7.14.0",
     "jest": "^26.6.3",
     "metro-react-native-babel-preset": "^0.64.0",
@@ -62,5 +65,17 @@
     "transformIgnorePatterns": [
       "/node_modules/(!react-native-iphone-x-helper)"
     ]
+  },
+  "detox": {
+    "configurations": {
+      "android.emu.debug": {
+        "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
+        "build": "cd android && gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
+        "type": "android.emulator",
+        "name": "Pixel_3a_API_29"
+      }
+    },
+    "test-runner": "jest",
+    "testMatch": ["<roots>/**/*.spec.js"]
   }
 }

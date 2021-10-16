@@ -6,7 +6,7 @@ import ToolsNavigator from "../../navigation/ToolsNavigator";
 export class ToolsContainer extends Component {
     render() {
         return (
-            <ToolsNavigator />
+            <ToolsNavigator/>
         )
     }
 }

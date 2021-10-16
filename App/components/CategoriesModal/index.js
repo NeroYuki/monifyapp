@@ -164,6 +164,7 @@ export class CategoriesModal extends Component {
 
         return (
             <Modal
+                testID="CategoriesScreen"
                 animationType='slide'
                 transparent={true}
                 visible={this.props.isVisible}
@@ -172,7 +173,7 @@ export class CategoriesModal extends Component {
                 <SafeAreaView style={{ flex: 1 }}>
                     <View style={style.modal_view}>
                         <View style={style.header}>
-                            <TouchableOpacity onPress={this.props.onRequestClose}>
+                            <TouchableOpacity onPress={this.props.onRequestClose} testID="CategoryCloseIcon">
                                 <Icon name="close" size={25} color="#fff"></Icon>
                             </TouchableOpacity>
                             <Text style={[style.modal_text, style.modal_text_header]}>CATEGORIES</Text>
@@ -183,7 +184,7 @@ export class CategoriesModal extends Component {
                             }}>
                                 <Icon name="square-edit-outline" size={25} color="#fff"></Icon>
                             </TouchableHighlight>
-                            <TouchableHighlight onPress={this.onAddCategoryPress}>
+                            <TouchableHighlight onPress={this.onAddCategoryPress} testID="AddCategory">
                                 <Icon name="plus" size={25} color="#fff"></Icon>
                             </TouchableHighlight>
                         </View>

@@ -165,7 +165,7 @@ export class AddNewTransaction extends Component {
 
                     {/* Input  */}
                     <View style={styles.info_field}>
-                        <TouchableOpacity
+                        <TouchableOpacity testID = "IconCategory"
                             onPress={() => {
                                 this.setState({ categoriesVisible: !this.state.categoriesVisible })
                             }}>

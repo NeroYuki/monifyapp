@@ -113,11 +113,11 @@ const AppNavigator = () => {
         }
       })}
     >
-      <Tab.Screen name='Overview' component={OverviewScreen} />
-      <Tab.Screen name='Budget' component={BudgetScreen} />
-      <Tab.Screen name='CreateInput' component={AddNewTransaction} />
-      <Tab.Screen name='Profile' component={ProfileContainer} />
-      <Tab.Screen name='Tools' component={ToolsContainer} />
+      <Tab.Screen name='Overview' component={OverviewScreen} options={{tabBarTestID:"Overview"}}/>
+      <Tab.Screen name='Budget' component={BudgetScreen} options={{tabBarTestID:"Budget"}}/>
+      <Tab.Screen name='CreateInput' component={AddNewTransaction} options={{tabBarTestID:"CreateInput"}}/>
+      <Tab.Screen name='Profile' component={ProfileContainer} options={{tabBarTestID:"Profile"}}/>
+      <Tab.Screen name='Tools' component={ToolsContainer} options={{tabBarTestID:"Tools"}}/>
     </Tab.Navigator >
   );
 }

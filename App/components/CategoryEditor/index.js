@@ -41,7 +41,7 @@ export class CategoryEditor extends Component {
     }
 
     RenderItem = ({ items }) => (
-        <TouchableOpacity
+        <TouchableOpacity 
             style={{ justifyContent: 'center', alignItems: 'center', height: 48, width: 48, marginVertical: 8, marginHorizontal: 8, }}
             onPress={() => {
                 this.setState({
@@ -99,7 +99,7 @@ export class CategoryEditor extends Component {
 
     render() {
         return (
-            <View style={styles.container}>
+            <View style={styles.container} testID="CategoryScreen">
 
                 {/* Header  */}
                 <View style={{ height: 48, justifyContent: 'center', alignItems: 'center' }}>
@@ -112,7 +112,7 @@ export class CategoryEditor extends Component {
                         <Text style={{ marginTop: 16, color: COLORS.blueText }}> NAME </Text>
                     </View>
                     <View style={{ justifyContent: 'center', flex: 1, marginLeft: 20 }}>
-                        <TextInput
+                        <TextInput testID="InputCategoryName"
                             style={{
                                 height: '100%',
                                 fontSize: 17
@@ -143,7 +143,7 @@ export class CategoryEditor extends Component {
                             }}
                         >
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                                <RadioButton value="Income" />
+                                <RadioButton value="Income" testID="InputCategoryIncome"/>
                                 <Text style={{ fontSize: 15, paddingLeft: 8 }}>Income</Text>
                             </View>
                             <View style={{ flexDirection: 'row', alignItems: 'center' }}>
@@ -163,6 +163,7 @@ export class CategoryEditor extends Component {
 
                     <View style={{ flex: 1, marginLeft: 16 }}>
                         <FlatList
+                            testID="IconCategories"
                             style={{ flex: 1, padding: 8 }}
                             horizontal
                             data={this.state.DATA}
@@ -178,6 +179,7 @@ export class CategoryEditor extends Component {
 
                 <View style={{ height: 100, justifyContent: 'center', alignItems: 'center' }}>
                     <TouchableOpacity
+                        testID="SaveCategory"
                         style={styles.button}
                         onPress={this.handleSaveCategory}
                     >

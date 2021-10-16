@@ -7,8 +7,8 @@
     "ios": "react-native run-ios",
     "start": "react-native start",
     "test": "jest --testTimeout=30000",
-    "detox-build":"detox build -c android.emu.debug",
-    "detox-test" :"detox test -c android.emu.debug",
+    "detox-build": "detox build -c android.emu.debug",
+    "detox-test": "detox test -c android.emu.debug",
     "lint": "eslint ."
   },
   "dependencies": {
@@ -76,6 +76,8 @@
       }
     },
     "test-runner": "jest",
-    "testMatch": ["<roots>/**/*.spec.js"]
+    "testMatch": [
+      "<roots>/**/*.spec.js"
+    ]
   }
 }

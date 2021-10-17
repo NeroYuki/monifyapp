@@ -23,7 +23,7 @@ export const checkInitialLaunch = () => new Promise((resolve, reject) => {
         }
         else {
             //if cant find any user user, create default data
-            register({
+            await register({
                 username: "Guest",
                 password: "1",
                 email: "test@gmail.com"
@@ -42,6 +42,10 @@ export const checkInitialLaunch = () => new Promise((resolve, reject) => {
                 icon: String(catIcon.investmentIcon.source),
                 loaihangmuc: 'thunhap'
             })
+            let user = await login({ username: "Guest", password: "1" })
+            sessionStore.activeUserId = user.toString()
+            let wallets = await querywallet({})
+            if (wallets.length > 0) sessionStore.activeWalletId = wallets[0].walletId
             resolve(false)
         }
     }, (er) => { console.error(er); })

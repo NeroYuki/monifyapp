@@ -152,6 +152,7 @@ export class AddNewTransaction extends Component {
                     {/* Money Title  */}
                     <View style={styles.moneyTitle}>
                         <TextInput
+                            testID="MoneyTitle"
                             style={{
                                 height: '100%',
                                 fontSize: 40,
@@ -194,6 +195,7 @@ export class AddNewTransaction extends Component {
                         <View style={styles.info_field_item}>
                             <Icon name="notebook" size={24} />
                             <TextInput
+                                testID="NoteTransaction"
                                 style={{
                                     height: '100%',
                                     width: '100%',
@@ -253,6 +255,7 @@ export class AddNewTransaction extends Component {
                     {/* Button  */}
                     <View style={{ height: 64, top: 50, flexDirection: 'row' }}>
                         <TouchableOpacity
+                            testID="SaveTransaction"
                             style={{ flex: 1, justifyContent: 'center', marginRight: 16, marginLeft: 16 }}
                             onPress={this.handleSaveTransaction}
                         >

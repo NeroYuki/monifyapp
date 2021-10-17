@@ -61,6 +61,7 @@ export class WalletHeader extends Component {
                 <View style={style.selector}>
                     <Text style={style.selector_text}>Overview: </Text>
                     <TouchableOpacity
+                        testID="ChooseWallet"
                         onPress={this.props.handleChooseWallet}
                     >
                         <Text style={style.info_field_text_highlight}>My Wallet

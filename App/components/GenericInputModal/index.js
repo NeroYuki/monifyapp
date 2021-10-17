@@ -19,7 +19,7 @@ export class GenericInputModal extends Component {
             <Dialog visible={this.props.isVisible} onDismiss={this.props.onRequestClose}>
                 <Dialog.Title>{(this.props.title)? this.props.title : "Input Dialog"}</Dialog.Title>
                 <Dialog.Content>
-                    <TextInput mode='outlined' label="Insert the value" 
+                    <TextInput mode='outlined' label="Insert the value" testID="InputDialog"
                         placeholder={this.props.initialValue} 
                         onChangeText={(v) => {this.setState({val: v})}} 
                         keyboardType={(this.props.inputType)? this.props.inputType : "default"} 

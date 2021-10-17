@@ -20,3 +20,6 @@ export const takeScreenshot = (fileName) => {
     );
     }
 };
+
+export const sleep = duration =>
+  new Promise(resolve => setTimeout(() => resolve(), duration)); // function for pausing the execution of the test. Mainly used for waiting for a specific UI component to appear on the screen

@@ -28,7 +28,7 @@ export class GenericSettingField extends Component {
             <View style={[style.container, this.props.style]}>
                 {title_section}
                 <Divider></Divider>
-                <TouchableHighlight style={{backgroundColor: (this.props.color)? this.props.color : 'white'}}
+                <TouchableHighlight testID={this.props.testTouchaID} style={{backgroundColor: (this.props.color)? this.props.color : 'white'}}
                     underlayColor="#00000030"
                     onPress={(this.props.onPress) ? this.props.onPress : () => {
                         console.log("GenericSettingField: default handler")

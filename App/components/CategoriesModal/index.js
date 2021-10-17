@@ -191,7 +191,7 @@ export class CategoriesModal extends Component {
                         <View style={style.tab_switcher}>
                             <View style={style.tab_switcher_frame}>
                                 <TouchableHighlight style={expense_type_style} onPress={() => { this.setState({ typeSelection: 1 }) }}><Text style={expense_text_style}>Expense</Text></TouchableHighlight>
-                                <TouchableHighlight style={income_type_style} onPress={() => { this.setState({ typeSelection: 2 }) }}><Text style={income_text_style}>Income</Text></TouchableHighlight>
+                                <TouchableHighlight testID="IncomeCategory" style={income_type_style} onPress={() => { this.setState({ typeSelection: 2 }) }}><Text style={income_text_style}>Income</Text></TouchableHighlight>
                             </View>
                         </View>
                         <Divider style={{ backgroundColor: 'white', marginTop: 10 }}></Divider>

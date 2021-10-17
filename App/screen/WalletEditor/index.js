@@ -48,6 +48,7 @@ export class WalletEditor extends Component {
                         style={style.setting_entry}
                         title="Wallet Name"
                         value={this.state.name}
+                        testTouchaID="WalletName"
                         description="Change name of the wallet"
                         onPress={(mode === "edit") ? () => { this.setState({ nameInputVisible: true }) } : null} />
 
@@ -75,6 +76,7 @@ export class WalletEditor extends Component {
 
                 {mode === "edit" && <FAB style={style.fab}
                     big
+                    testID="SaveWallet"
                     icon="content-save"
                     onPress={async () => {
                         const id = this.props.route.params.id

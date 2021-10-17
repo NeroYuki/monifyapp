@@ -118,7 +118,9 @@ export class WalletManager extends Component {
                     {this.state.snackbarMessage}
                 </Snackbar>
 
-                <FAB style={style.fab}
+                <FAB 
+                    testID="PlusWalletProfile"
+                    style={style.fab}
                     big
                     icon="plus"
                     onPress={() => { this.props.navigation.navigate("WalletEditor", { mode: "edit", id: "" }) }}

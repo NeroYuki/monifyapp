@@ -78,7 +78,7 @@ export const insertTaiKhoan = (newTaiKhoan, loaitaikhoan) =>
           })
         }
       }
-    }).catch((error) => reject(console.error(error)))
+    }).catch((error) => reject(error))
   });
 
 export const updateTaiKhoan = updateTaiKhoan =>

@@ -1,5 +1,4 @@
-import {insertTaiKhoan,deleteTaiKhoan, updateTaiKhoan,queryTaiKhoan} from '../App/services/TaiKhoanCRUD';
-import {insertNewNguoiDung,updateNguoiDung,queryAllNguoiDung,deleteAllNguoiDung} from '../App/services/NguoiDungCRUD';
+import {insertTaiKhoan,deleteTaiKhoan, updateTaiKhoan,queryTaiKhoan} from '../../App/services/TaiKhoanCRUD';
 import {BSON} from 'realm'
 
  id = new BSON.ObjectID();
@@ -21,13 +20,13 @@ taikhoantest = {
 
 ///insert tai khoan tieu dung
 
-test('taikhoantietkiem test insert case1', async()=>{
+test('taikhoantieudung test insert case1', async()=>{
     await insertTaiKhoan(taikhoantest).then((tk)=>{
         expect(JSON.parse(JSON.stringify(tk)).tentaikhoan).toBe('tentest');
     });
     
 })
-test('taikhoantietkiem test insert case 2', async()=>{
+test('taikhoantieudung test insert case 2', async()=>{
     await insertTaiKhoan({
     idtaikhoan: new BSON.ObjectID(),
     tentaikhoan: 'tentest',
@@ -45,7 +44,7 @@ test('taikhoantietkiem test insert case 2', async()=>{
         expect(JSON.parse(JSON.stringify(tk)).bieutuong).toBe('icon');
     })
 })
-test('taikhoantietkiem test insert case 3', async()=>{
+test('taikhoantieudung test insert case 3', async()=>{
     await insertTaiKhoan({
     idtaikhoan: new BSON.ObjectID(),
     tentaikhoan: 'tien luong',
@@ -63,7 +62,7 @@ test('taikhoantietkiem test insert case 3', async()=>{
         expect(JSON.parse(JSON.stringify(tk)).tentaikhoan).toBe('tien luong');
     })
 })
-test('taikhoantietkiem test insert case 4', async()=>{
+test('taikhoantieudung test insert case 4', async()=>{
     await (expect(insertTaiKhoan({
     idtaikhoan: 99,
     tentaikhoan: 'tien luong',
@@ -79,7 +78,7 @@ test('taikhoantietkiem test insert case 4', async()=>{
     no: null
     })).rejects.toThrow());
 })
-test('taikhoantietkiem test insert case 5', async()=>{
+test('taikhoantieudung test insert case 5', async()=>{
     await (expect(insertTaiKhoan({
     idtaikhoan: 99,
     tentaikhoan: 99,
@@ -97,7 +96,7 @@ test('taikhoantietkiem test insert case 5', async()=>{
         expect(JSON.parse(JSON.stringify(tk))).toBe(null);
     })).rejects.toThrow());
 })
-test('taikhoantietkiem test insert case 6', async()=>{
+test('taikhoantieudung test insert case 6', async()=>{
     await(expect( insertTaiKhoan({
     idtaikhoan: 99,
     tentaikhoan: 99,
@@ -113,7 +112,7 @@ test('taikhoantietkiem test insert case 6', async()=>{
     no: null
     })).rejects.toThrow());
 })
-test('taikhoantietkiem test insert case 7', async()=>{
+test('taikhoantieudung test insert case 7', async()=>{
     await (expect(insertTaiKhoan({
     idtaikhoan: new BSON.ObjectID(),
     tentaikhoan: 99,
@@ -129,7 +128,7 @@ test('taikhoantietkiem test insert case 7', async()=>{
     no: null
     })).rejects.toThrow());
 })
-test('taikhoantietkiem test insert case 8', async()=>{
+test('taikhoantieudung test insert case 8', async()=>{
     await(expect( insertTaiKhoan({
     idtaikhoan: new BSON.ObjectID(),
     tentaikhoan:99,
@@ -145,7 +144,7 @@ test('taikhoantietkiem test insert case 8', async()=>{
     no: null
     })).rejects.toThrow());
 })
-test('taikhoantietkiem test insert case 9', async()=>{
+test('taikhoantieudung test insert case 9', async()=>{
     await(expect( insertTaiKhoan({
     idtaikhoan: new BSON.ObjectID(),
     tentaikhoan:99,
@@ -161,7 +160,7 @@ test('taikhoantietkiem test insert case 9', async()=>{
     no: null
     })).rejects.toThrow());
 })
-test('taikhoantietkiem test insert case 10', async()=>{
+test('taikhoantieudung test insert case 10', async()=>{
     await(expect(insertTaiKhoan({
     idtaikhoan: new BSON.ObjectID(),
     tentaikhoan:99,
@@ -177,7 +176,7 @@ test('taikhoantietkiem test insert case 10', async()=>{
     no: null
     })).rejects.toThrow());
 })
-test('taikhoantietkiem test insert case 11', async()=>{
+test('taikhoantieudung test insert case 11', async()=>{
     await(expect( insertTaiKhoan({
     idtaikhoan: 99,
     tentaikhoan:'tien luong',
@@ -193,7 +192,7 @@ test('taikhoantietkiem test insert case 11', async()=>{
     no: null
     })).rejects.toThrow());
 })
-test('taikhoantietkiem test insert case 12', async()=>{
+test('taikhoantieudung test insert case 12', async()=>{
     await (expect(insertTaiKhoan({
     idtaikhoan: 99,
     tentaikhoan:'tien luong',

@@ -1,5 +1,5 @@
 
-import {insertNewNguoiDung,updateNguoiDung,queryAllNguoiDung,deleteAllNguoiDung, queryNguoiDung, deleteNguoiDung} from '../App/services/NguoiDungCRUD';
+import {insertNewNguoiDung,updateNguoiDung,queryAllNguoiDung,deleteAllNguoiDung, queryNguoiDung, deleteNguoiDung} from '../../App/services/NguoiDungCRUD';
 import { BSON } from 'realm';
 newidnguoidung = new BSON.ObjectID()
 nguoiDung= {idnguoidung: new BSON.ObjectID(),username:'ahahavip',email: 'ahahavip@gmail.com', pass : 'minhhieu',deleted: false}

@@ -129,7 +129,7 @@ export const updateTaikhoanTieudung = ({ taikhoantieudungid, sotienthem }) =>
         else resolve(false)
         return
       })
-    }).catch((error) => { console.error(error); reject(error) });
+    }).catch((error) => {  reject(error) });
   })
 
 export const updateTaikhoanTietKiem = ({ taikhoantietkiemid, sotienthem, cycle }) =>
@@ -209,7 +209,7 @@ export const queryTaiKhoan = (option) =>
         //console.log('CRUD')
         resolve(Target)
       })
-    }).catch((error) => { console.error(error); reject(error) });
+    }).catch((error) => {  reject(error) });
   })
 
 

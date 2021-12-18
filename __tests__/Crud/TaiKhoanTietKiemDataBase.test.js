@@ -1,4 +1,4 @@
-import {insertTaiKhoan,deleteTaiKhoan, updateTaiKhoan,queryTaiKhoan} from '../App/services/TaiKhoanCRUD';
+import {insertTaiKhoan,deleteTaiKhoan, updateTaiKhoan,queryTaiKhoan} from '../../App/services/TaiKhoanCRUD';
 import {BSON} from 'realm'
 
 id = new BSON.ObjectID();
@@ -425,7 +425,7 @@ test('taikhoantieudung test insert case 13', async()=>{
         no: null
     })).rejects.toThrow());
 })
-test('taikhoantieudung test insert case 13', async()=>{
+test('taikhoantieudung test insert case 14', async()=>{
     await (expect(insertTaiKhoan({
         idtaikhoan: new BSON.ObjectID(),
         tentaikhoan: 'Tien luong',

@@ -1,4 +1,4 @@
-import {insertTaiKhoan,deleteTaiKhoan, updateTaiKhoan,queryTaiKhoan} from '../App/services/TaiKhoanCRUD';
+import { insertTaiKhoan } from '../../App/services/TaiKhoanCRUD';
 import {BSON} from 'realm'
 
 id = new BSON.ObjectID();

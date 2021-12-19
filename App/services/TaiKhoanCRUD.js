@@ -78,7 +78,7 @@ export const insertTaiKhoan = (newTaiKhoan, loaitaikhoan) =>
           })
         }
       }
-    }).catch((error) => reject(console.error(error)))
+    }).catch((error) => reject(error))
   });
 
 export const updateTaiKhoan = updateTaiKhoan =>
@@ -129,7 +129,7 @@ export const updateTaikhoanTieudung = ({ taikhoantieudungid, sotienthem }) =>
         else resolve(false)
         return
       })
-    }).catch((error) => { console.error(error); reject(error) });
+    }).catch((error) => { reject(error) });
   })
 
 export const updateTaikhoanTietKiem = ({ taikhoantietkiemid, sotienthem, cycle }) =>
@@ -177,7 +177,7 @@ export const queryTaiKhoan = (option) =>
           Target = Target.filtered('no.idtkno==$0', option.idtkno)
         }
         if (option.thoigiantao) {
-          Taget = Taget.filtered('thoigiantao==$0', option.thoigiantao)
+          Target = Target.filtered('thoigiantao==$0', option.thoigiantao)
         }
         if (option.taikhoanno) {
           Target = filterUnwantedno(Target)
@@ -201,15 +201,19 @@ export const queryTaiKhoan = (option) =>
           Target = Target.filtered('tietkiem.sotien<=$0', option.tietkiemmaxAmount)
         }
         if (option.walletminAmount) {
-          Target = Target.filtered('tieudung.sotien>=$0', option.walletminAmount)
+          //console.log(`tieudung.sotien >= ${option.walletminAmount}`)
+          //console.log(Target)
+          Target = Target.filtered(`tieudung.sotien >= ${option.walletminAmount}`)
         }
         if (option.walletmaxAmount) {
-          Target = Target.filtered('tieudung.sotien<=$0', option.walletmaxAmount)
+          //console.log(`tieudung.sotien <= ${option.walletmaxAmount}`)
+          //console.log(Target)
+          Target = Target.filtered(`tieudung.sotien <= ${option.walletmaxAmount}`)
         }
         //console.log('CRUD')
         resolve(Target)
       })
-    }).catch((error) => { console.error(error); reject(error) });
+    }).catch((error) => { console.log(error); reject(error) });
   })
 
 
@@ -220,10 +224,11 @@ export const deleteTaiKhoan = (taiKhoanID) => new Promise((resolve, reject) => {
       let tempid = new BSON.ObjectID(JSON.parse(JSON.stringify(taiKhoanID)))
       let deletedTaiKhoan = realm.objectForPrimaryKey(TaiKhoanSchema.name, tempid);
       //console.log(JSON.stringify(deletedTaiKhoan))
+      if (deletedTaiKhoan) return reject(false)
       realm.delete(deletedTaiKhoan);
       return resolve(true);
     });
-  }).catch((er) => { console.error(er); return reject(er) });
+  }).catch((er) => { return reject(er) });
 });
 export const deactiavteTaiKhoan = (taiKhoanID) => new Promise((resolve, reject) => {
   Realm.open(monifydata).then(realm => {

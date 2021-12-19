@@ -1,9 +1,10 @@
 import {takeScreenshot} from '../e2e/takeScreenshot'
+
 describe('Example', () => {
 
   beforeAll(async () => {
-    await device.launchApp();
-  });
+    await device.launchApp({ newInstance: true });
+  })
 
   it('add category', async () => {
     //Open screen add category

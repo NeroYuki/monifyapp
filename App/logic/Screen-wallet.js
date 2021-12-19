@@ -6,21 +6,22 @@ import sessionStore from './sessionStore';
 export const fetchWallet = (walletId) => new Promise((resolve, reject) => {
     console.log(walletId)
     queryTaiKhoan({ idtaikhoan: new BSON.ObjectID(walletId) }).then((tk) => {
-        if(tk != {}){
-        let rs =
-        {
-            walletId: JSON.parse(JSON.stringify(tk[0].idtaikhoan)),
-            name: tk[0].tentaikhoan,
-            color: tk[0].color,
-            amount: tk[0].tieudung.sotien,
-            creationDate: tk[0].thoigiantao
+        //console.log(tk)
+        if(tk[0]){
+            let rs =
+            {
+                walletId: JSON.parse(JSON.stringify(tk[0].idtaikhoan)),
+                name: tk[0].tentaikhoan,
+                color: tk[0].color,
+                amount: tk[0].tieudung.sotien,
+                creationDate: tk[0].thoigiantao
+            }
+            resolve(rs)
         }
-        resolve(rs)
-    }
-    else {
-        reject({result: false, message:'khong tim thay wallet trong fetch wallet'})
-    }
-    }), reason => { reject(reason) }
+        else {
+            reject({result: false, message:'khong tim thay wallet trong fetch wallet'})
+        }
+    }), reason => reject(reason)
 })
 export const saveWallet = ({ walletId, walletName, color, amount }) => new Promise((resolve, reject) => {
     if (walletId === undefined) {
@@ -32,7 +33,7 @@ export const saveWallet = ({ walletId, walletName, color, amount }) => new Promi
             bieutuong: '',
             color: color,
             thoigiantao: new Date(),
-            idnguoidung: BSON.ObjectID(sessionStore.activeUserId),
+            idnguoidung: BSON.ObjectID(sessionStore.activeUserId || null),
             tieudung: {
                 idtktieudung: new BSON.ObjectID(),
                 sotien: amount,
@@ -70,12 +71,12 @@ export const saveWallet = ({ walletId, walletName, color, amount }) => new Promi
                 no: null,
             }
             if (typeof walletName !== 'undefined') rs.tentaikhoan = walletName
-            if (typeof amount !== 'undefined') {
+            if (typeof amount !== 'undefined' || amount !== null) {
                 rs.tieudung.sotien = amount;
             }
             if (typeof color !== 'undefined') rs.color = color
             // console.log(JSON.stringify(rs))
-            updateTaiKhoan(rs).then(tk => resolve(true)), (reason) => reject(reason)
+            updateTaiKhoan(rs).then(tk => resolve(true), (reason) => reject(reason))
         }, (reason) => {
             reject(reason)
         }
@@ -101,17 +102,17 @@ export const querywallet = ({ walletName, minAmount, maxAmount }) => new Promise
         });
         //console.log(rsarr)
         resolve(rsarr)
-    }), reason => reject(reason)
+    }, reason => reject(reason))
 })
-export const deleteWallet = (walletId) => new Promise((resolve, reject) => {
+export const deleteWallet = (walletId) => new Promise(async (resolve, reject) => {
     try {
         let id = new BSON.ObjectId(walletId)
-        let rs = deleteTaiKhoan(id)
+        let rs = await deleteTaiKhoan(id)
         resolve(rs)
-        return true
+        return
     } catch (error) {
-        reject(console.error())
-        return false
+        reject(error)
+        return
     }
 })
 

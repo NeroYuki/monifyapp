@@ -1,5 +1,5 @@
 import {queryGiaoDichChuKy,updateGiaoDichChuKy,insertGiaoDichChuKy,deleteGiaoDichChuKy} from '../services/GiaoDichChuKyCRUD';
-import {BSON} from 'realm';
+import Realm, {BSON} from 'realm';
 
 export function convertToArray(realmObjectsArray)
 {

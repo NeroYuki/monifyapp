@@ -9,18 +9,23 @@ import { queryHangMucGiaoDich } from '../services/HangMucGiaoDichCRUD';
 
 export const fetchLoan = (loanId) => new Promise((resolve, reject) => {
     queryTaiKhoan({ idtaikhoan: new BSON.ObjectID(loanId) }).then((tk) => {
-        let rs =
-        {
-            loanId: JSON.parse(JSON.stringify(tk[0].idtaikhoan)),
-            name: tk[0].tentaikhoan,
-            color: tk[0].color,
-            amount: tk[0].no.sotien,
-            expire_on: tk[0].no.ngaytradukien,
-            interest: tk[0].no.laisuatno,
-            creationDate: tk[0].no.ngaybatdauno
+        if(tk[0]){
+            let rs =
+            {
+                loanId: JSON.parse(JSON.stringify(tk[0].idtaikhoan)),
+                name: tk[0].tentaikhoan,
+                color: tk[0].color,
+                amount: tk[0].no.sotien,
+                expire_on: tk[0].no.ngaytradukien,
+                interest: tk[0].no.laisuatno,
+                creationDate: tk[0].no.ngaybatdauno
+            }
+            return resolve(rs)
         }
-        return resolve(rs)
-    }), reason => { return reject(reason) }
+        else {
+            return reject("Không tìm thấy tài khoản")
+        }
+    }, reason => { return reject(reason) })
 })
 export const saveLoan = ({ loanId, loanName, color, amount, expire_on, interest, creationDate, cycle, applied_wallet_id = "" }) => new Promise((resolve, reject) => {
     if (loanId === undefined) {
@@ -45,10 +50,10 @@ export const saveLoan = ({ loanId, loanName, color, amount, expire_on, interest,
             },
         }
         insertTaiKhoan(newtaikhoanno).then(async (tk) => {
-            let userid = new BSON.ObjectID(sessionStore.activeWalletId)
+            let userid = new BSON.ObjectID(sessionStore.activeUserId)
             let catid = JSON.parse(JSON.stringify(new BSON.ObjectID()))
             let temp = await (queryHangMucGiaoDich({ tenhangmuc: 'Default', loaihangmuc: 'ThuNhap' }).then((tk) => {
-                if (tk == []) {
+                if (!tk[0]) {
                     return reject({ result: false, message: 'khong tim thay hang muc giao dich' })
                 }
                 else {
@@ -86,36 +91,41 @@ export const saveLoan = ({ loanId, loanName, color, amount, expire_on, interest,
     else {
         id = new BSON.ObjectId(loanId)
         queryTaiKhoan({ idtaikhoan: id }).then((tk) => {
-            let rs =
-            {
-                idtaikhoan: tk[0].idtaikhoan,
-                tentaikhoan: tk[0].tentaikhoan,
-                deactivate: tk[0].deactivate,
-                bieutuong: tk[0].bieutuong,
-                color: tk[0].color,
-                thoigiantao: tk[0].thoigiantao,
-                idnguoidung: tk[0].idnguoidung,
-                tieudung: null,
-                tietkiem: null,
-                no: {
-                    idtkno: tk[0].no.idtkno,
-                    sotien: tk[0].no.sotien,
-                    laisuatno: tk[0].no.laisuatno,
-                    kyhanno: tk[0].no.kyhanno,
-                    ngaybatdauno: tk[0].no.ngaybatdauno,
-                    ngaytradukien: tk[0].no.ngaytradukien,
-                    sotientradukien: tk[0].no.sotientradukien,
-                },
+            if(tk[0]) {
+                let rs =
+                {
+                    idtaikhoan: tk[0].idtaikhoan,
+                    tentaikhoan: tk[0].tentaikhoan,
+                    deactivate: tk[0].deactivate,
+                    bieutuong: tk[0].bieutuong,
+                    color: tk[0].color,
+                    thoigiantao: tk[0].thoigiantao,
+                    idnguoidung: tk[0].idnguoidung,
+                    tieudung: null,
+                    tietkiem: null,
+                    no: {
+                        idtkno: tk[0].no.idtkno,
+                        sotien: tk[0].no.sotien,
+                        laisuatno: tk[0].no.laisuatno,
+                        kyhanno: tk[0].no.kyhanno,
+                        ngaybatdauno: tk[0].no.ngaybatdauno,
+                        ngaytradukien: tk[0].no.ngaytradukien,
+                        sotientradukien: tk[0].no.sotientradukien,
+                    },
+                }
+                if (typeof loanName != 'undefined') rs.tentaikhoan = loanName
+                if (typeof amount != 'undefined') rs.no.sotien = amount
+                if (typeof color != 'undefined') rs.color = color
+                if (typeof interest != 'undefined') rs.no.laisuatno = interest
+                if (typeof expire_on != 'undefined') rs.no.ngaytradukien = expire_on
+                //console.log(JSON.parse(JSON.stringify(rs)))
+                resolve(updateTaiKhoan(rs))
+                return
             }
-            if (typeof loanName != 'undefined') rs.tentaikhoan = loanName
-            if (typeof amount != 'undefined') rs.no.sotien = amount
-            if (typeof color != 'undefined') rs.color = color
-            if (typeof interest != 'undefined') rs.no.laisuatno = interest
-            if (typeof expire_on != 'undefined') rs.no.ngaytradukien = expire_on
-            //console.log(JSON.parse(JSON.stringify(rs)))
-            resolve(updateTaiKhoan(rs))
-            return
-        })
+            else {
+                return reject("Không tìm thấy tài khoản")
+            }
+        }, (reason) => { return reject(reason) })
     }
 }
 )
@@ -144,7 +154,7 @@ export const queryLoan = ({ loanName, minAmount, maxAmount, expire_in_days }) =>
         // console.log(JSON.stringify(rsarr))
 
         resolve(rsarr)
-    }), reason => reject(reason)
+    }, reason => reject(reason))
 })
 export const deleteLoan = (loanId) => new Promise((resolve, reject) => {
     try {
@@ -153,17 +163,17 @@ export const deleteLoan = (loanId) => new Promise((resolve, reject) => {
         deleteTaiKhoan(id).then((tk) => {
             resolve(tk)
             return true
-        })
+        }, (reason) => { reject(reason); return false })
 
     } catch (error) {
-        reject(console.error(error))
+        reject(error)
         return false
     }
 })
 
-export const deactivateLoan = (loanId) => new Promise((resolve, reject) => {
+export const deactivateLoan = (loanId) => new Promise(async (resolve, reject) => {
     try {
-        let rs = deactiavteTaiKhoan(loanId)
+        let rs = await deactiavteTaiKhoan(loanId).catch((e) => {return reject(e)})
         resolve(rs)
         return true
     } catch (error) {

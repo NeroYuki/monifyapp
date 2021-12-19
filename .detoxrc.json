@@ -1,21 +1,29 @@
 {
   "testRunner": "jest",
   "runnerConfig": "e2e/config.json",
-  "configurations": {
-    "android.emu.debug": {
-      "type": "android.emulator",
-      "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
-      "build": "cd android && gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd ..",
+  "devices": {
+    "android.attached": {
+      "type": "android.attached",
       "device": {
-        "avdName": "Pixel_3a_API_29"
+        "adbName": "cd000ca4"
       }
-    },
-    "android.emu.release": {
-      "binaryPath": "android/app/build/outputs/apk/release/app-release.apk",
-      "build": "cd android && gradlew assembleRelease assembleAndroidTest -DtestBuildType=release && cd ..",
-      "type": "android.emulator",
-      "device": {
-        "avdName": "Pixel_3a_API_29"
+    }
+  },
+  "apps": {
+    "android.debug": {
+      "type": "android.apk",
+      "binaryPath": "android/app/build/outputs/apk/debug/app-debug.apk",
+      "testBinaryPath": "android/app/build/outputs/apk/androidTest/debug/app-debug-androidTest.apk",
+      "build": "cd android && gradlew assembleDebug assembleAndroidTest -DtestBuildType=debug && cd .."
+    }
+  },
+  "configurations": {
+    "android.device.debug": {
+      "app": "android.debug",
+      "device": "android.attached",
+      "session": {
+        "server": "ws://localhost:8099",
+        "sessionId": "detoxadbsession"
       }
     }
   }

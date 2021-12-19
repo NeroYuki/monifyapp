@@ -9,10 +9,10 @@ import sessionStore from "./sessionStore"
 
 
 export const createLoanPayment= ({from_wallet_id,for_loan_id,amount, note = ""}) => new Promise(async(resolve,reject) =>{
-    let userid = new BSON.ObjectID(sessionStore.activeWalletId)
+    let userid = new BSON.ObjectID(sessionStore.activeUserId)
     let catid =JSON.parse(JSON.stringify(new BSON.ObjectID()))
     let temp = await(queryHangMucGiaoDich({tenhangmuc:'Default',loaihangmuc:'ChiTieu'}).then((tk)=>{
-        if (tk==[]){
+        if (!tk[0]){
             // let hangmuc={
             //     idhangmucgiaodich:new BSON.ObjectID(catid),
             //     idnguoidung:new BSON.ObjectID(userid),
@@ -65,10 +65,10 @@ export const createLoanPayment= ({from_wallet_id,for_loan_id,amount, note = ""})
 
 
 export const createSavingDeposit= ({from_wallet_id,for_saving_id,amount, note = ""}) => new Promise(async(resolve,reject) =>{
-    let userid = new BSON.ObjectID(sessionStore.activeWalletId)
+    let userid = new BSON.ObjectID(sessionStore.activeUserId)
     let catid =JSON.parse(JSON.stringify(new BSON.ObjectID()))
     let temp = await(queryHangMucGiaoDich({tenhangmuc:'Default',loaihangmuc:'ChiTieu'}).then((tk)=>{
-        if (tk==[]){
+        if (!tk[0]){
             // let hangmuc={
             //     idhangmucgiaodich:new BSON.ObjectID(catid),
             //     idnguoidung:new BSON.ObjectID(userid),
@@ -120,10 +120,10 @@ export const createSavingDeposit= ({from_wallet_id,for_saving_id,amount, note = 
 
 
 export const createSavingWithdraw= ({for_wallet_id,from_saving_id,amount, note = ""}) => new Promise(async(resolve,reject) =>{
-    let userid = new BSON.ObjectID(sessionStore.activeWalletId)
+    let userid = new BSON.ObjectID(sessionStore.activeUserId)
     let catid =JSON.parse(JSON.stringify(new BSON.ObjectID()))
     let temp = await(queryHangMucGiaoDich({tenhangmuc:'Default',loaihangmuc:'ThuNhap'}).then((tk)=>{
-        if (tk==[]){
+        if (!tk[0]){
             // let hangmuc={
             //     idhangmucgiaodich:new BSON.ObjectID(catid),
             //     idnguoidung:new BSON.ObjectID(userid),
@@ -173,12 +173,11 @@ export const createSavingWithdraw= ({for_wallet_id,from_saving_id,amount, note =
 
 
 export const createWalletTransfer= ({from_wallet_id,for_wallet_id,amount, note = ""}) => new Promise(async(resolve,reject) =>{
-    let userid = new BSON.ObjectID(sessionStore.activeWalletId)
+    let userid = new BSON.ObjectID(sessionStore.activeUserId)
     let catid =JSON.parse(JSON.stringify(new BSON.ObjectID()))
     let catid2 =JSON.parse(JSON.stringify(new BSON.ObjectID()))
     let temp =await( queryHangMucGiaoDich({tenhangmuc:'Default',loaihangmuc:'ThuNhap'}).then((tk)=>{
-        if (tk==[]){
-
+        if (!tk[0]){
             return reject({result:false,message:'khong tim thay hang muc giao dich'})
         }
         else {
@@ -188,8 +187,7 @@ export const createWalletTransfer= ({from_wallet_id,for_wallet_id,amount, note =
         reject(er)
     }))
     let temp2 = await(queryHangMucGiaoDich({tenhangmuc:'Default',loaihangmuc:'ChiTieu'}).then((tk)=>{
-        if (tk==[]){
-
+        if (!tk[0]){
             return reject({result:false,message:'khong tim thay hang muc giao dich'})
         }
         else {

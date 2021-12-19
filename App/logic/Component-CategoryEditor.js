@@ -14,7 +14,7 @@ export const saveCategory = ({category_id,userid,name,color,icon,loaihangmuc})=>
         {
             let hangmuc={
                 idhangmucgiaodich:new BSON.ObjectID(),
-                idnguoidung:(userid)?new BSON.ObjectID(userid):null,
+                idnguoidung:(userid)?new BSON.ObjectID(userid): new BSON.ObjectID(),
                 thoigiantao: new Date(Date.now()),
                 tenhangmuc:name,
                 iconhangmuc:icon,
@@ -38,7 +38,7 @@ export const saveCategory = ({category_id,userid,name,color,icon,loaihangmuc})=>
         {
             let hangmuc={
                 idhangmucgiaodich:(category_id)?new BSON.ObjectID(category_id):null,
-                idnguoidung:(userid)?new BSON.ObjectID(userid):null,
+                idnguoidung:(userid)?new BSON.ObjectID(userid): new BSON.ObjectID(),
                 tenhangmuc:name,
                 iconhangmuc:icon,
                 loaihangmuc:null,

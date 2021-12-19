@@ -3,9 +3,11 @@ import {BSON} from 'realm'
 import { updateTaiKhoan } from '../services/TaiKhoanCRUD';
 import sessionStore from './sessionStore';
 
-
 export const fetchSaving= (savingId) => new Promise((resolve, reject) => {
     queryTaiKhoan({idtaikhoan: new BSON.ObjectID(savingId)}).then((tk)=> {
+        if (!tk[0]) {
+            return reject("Không tìm thấy id tài khoản tiết kiệm")
+        }
         let rs =
         {
             savingId: JSON.parse(JSON.stringify(tk[0].idtaikhoan)),
@@ -22,7 +24,7 @@ export const fetchSaving= (savingId) => new Promise((resolve, reject) => {
     }), reason=> {reject(reason)}
 })
 export const saveSaving= ({savingId,savingName, color, amount, expire_on,interest,applied_wallet_id, early_interest, creationDate}) => new Promise((resolve, reject) => {
-    if(savingId ===undefined){
+    if(savingId === undefined){
         let newtaikhoansaving={
             idtaikhoan: new BSON.ObjectID(),
             tentaikhoan: savingName,        
@@ -47,6 +49,9 @@ export const saveSaving= ({savingId,savingName, color, amount, expire_on,interes
     else{
         let tempid = new BSON.ObjectID(savingId)
         queryTaiKhoan({taikhoantietkiem: true,idtaikhoan:tempid}).then((tk)=>{
+            if (!tk[0]) {
+                return reject("Không tìm thấy id tài khoản tiết kiệm")
+            }
             let rs =
             {
                 idtaikhoan:tk[0].idtaikhoan,
@@ -76,11 +81,10 @@ export const saveSaving= ({savingId,savingName, color, amount, expire_on,interes
             if(typeof early_interest!== 'undefined') rs.tietkiem.laisuattruochan = early_interest
             if(typeof expire_on!==  'undefined') rs.tietkiem.ngayrutdukien =expire_on
             //console.log(JSON.stringify(rs))
-            updateTaiKhoan(rs).then(tk=> resolve(true)), (reason)=> reject(reason)
+            updateTaiKhoan(rs).then(tk=> resolve(true), (reason)=> reject(reason))
         }, (reason) => {
             reject(reason)
-        }
-        )
+        })
     }
 })
 
@@ -110,12 +114,12 @@ export const querySaving=({savingName, minAmount, maxAmount, expire_in_days}) =>
         });
         //console.log(rsarr)
         return resolve(rsarr)
-    }), reason => {console.error(reason); return reject(reason)}
+    }, reason => {console.error(reason); return reject(reason)})
 })
-export const deleteSaving= (savingId) => new Promise((resolve, reject) => {
+export const deleteSaving= (savingId) => new Promise(async (resolve, reject) => {
     try {
         let id =new BSON.ObjectId(savingId)
-        let rs=deleteTaiKhoan(id)
+        let rs= await deleteTaiKhoan(id).catch((e) => {return reject(e)})
         resolve(rs)
         return true
     } catch (rs) {
@@ -124,10 +128,10 @@ export const deleteSaving= (savingId) => new Promise((resolve, reject) => {
     }
 })
 
-export const deactivateSaving= (savingId) => new Promise((resolve, reject) => {
+export const deactivateSaving= (savingId) => new Promise(async (resolve, reject) => {
     try {
         let id =new BSON.ObjectId(savingId)
-        let rs=deactiavteTaiKhoan(id)
+        let rs= await deactiavteTaiKhoan(id).catch((e) => {return reject(e)})
         resolve(rs)
         return true
     } catch (rs) {

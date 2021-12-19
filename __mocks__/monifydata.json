@@ -1,0 +1,70 @@
+{
+  "CaiDat": [],
+  "GiaoDich": [
+    {
+      "idgiaodich": "61b03a52451e46bccdd711a2",
+      "idnguoidung": "61b03a52451e46bccdd711a3",
+      "thoigian": "2021-12-08T04:53:38.590Z",
+      "sotientieudung": 120000,
+      "sotienthunhap": null,
+      "loaihangmucgd": "61b0231b451e46bccdd7119d",
+      "ghichu": "đi chợ",
+      "idtaikhoan": "61b03a52451e46bccdd711a5"
+    }
+  ],
+  "GiaoDichNoiBo": [],
+  "GiaoDichTheoCK": [],
+  "HangMucGiaoDich": [
+    {
+      "idhangmucgiaodich": "61b0231b451e46bccdd7119d",
+      "idnguoidung": "61b0231b451e46bccdd7119e",
+      "thoigiantao": "2021-12-08T03:14:35.669Z",
+      "tenhangmuc": "Grocery",
+      "loaihangmuc": {
+        "chitieu": true,
+        "thunhap": false
+      },
+      "iconhangmuc": "home",
+      "color": "#0033ff",
+      "invs": true
+    },
+    {
+      "idhangmucgiaodich": "61b038cd451e46bccdd7119f",
+      "idnguoidung": "61b038cd451e46bccdd711a0",
+      "thoigiantao": "2021-12-08T04:47:09.975Z",
+      "tenhangmuc": "ToBeDeleted",
+      "loaihangmuc": {
+        "chitieu": false,
+        "thunhap": true
+      },
+      "iconhangmuc": "food",
+      "color": "#ffffff",
+      "invs": true
+    }
+  ],
+  "LoaiHangMucConfig": [
+    {
+      "chitieu": false,
+      "thunhap": true
+    },
+    {
+      "chitieu": true,
+      "thunhap": false
+    }
+  ],
+  "LoaiMucTieuConfig": [],
+  "MucTieuCaNhan": [],
+  "NguoiDung": [
+    {
+      "idnguoidung": "61b00ff0451e46bccdd7119a",
+      "pass": "12345",
+      "deleted": false,
+      "username": "ngocdang",
+      "email": "testacc@hotmail.com"
+    }
+  ],
+  "TKNo": [],
+  "TKTietKiem": [],
+  "TKTieuDung": [],
+  "TaiKhoan": []
+}

@@ -13,6 +13,13 @@ export const saveSetting = (setting) =>
             chedonghiemngat: setting.chedonghiemngat,
         }
 
+        if (!['vnd', 'usd'].includes(sSet.loaitien.toLowerCase()) 
+            || !['light', 'dark'].includes(sSet.chedo.toLowerCase()) 
+            || !['vn', 'en'].includes(sSet.ngonngu.toLowerCase())) {
+                reject({ result: false, message: 'Lưu cài đặt thất bại' })
+                return
+            }
+
         insertCaiDat(sSet).then(set => {
             if (!set)
                 reject({ result: false, message: 'Lưu cài đặt thất bại' })
@@ -33,6 +40,14 @@ export const fetchSetting = () =>
         cd = cd.reduce((s1, s2) => {
             return s1.thoigiantao > s2.thoigiantao ? s1 : s2
         }, 0)
+        if (cd === 0) {
+            cd = {
+                loaitien: "usd",
+                chedo: "light",
+                ngonngu: "en",
+                chedonghiemngat: false,
+            }
+        }
         console.log(JSON.parse(JSON.stringify(cd)))
         resolve(cd)
     })
